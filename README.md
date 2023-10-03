@@ -105,49 +105,63 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
-### Prerequisites
+## Setup
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+Make sure to install the dependencies:
 
-### Installation
+```bash
+# npm
+npm install
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/github_username/repo_name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+# pnpm
+pnpm install
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+# yarn
+yarn install
+```
 
+## Development Server
 
+Start the development server on `http://localhost:3000`:
 
-<!-- USAGE EXAMPLES -->
-## Usage
+```bash
+# npm
+npm run dev
 
-Navigate into the folder
-  ```sh
-  cd smooserve-fe
-  ```
+# pnpm
+pnpm run dev
 
-* To run in development server
-  ```sh
-  npm run dev
-  ```
+# yarn
+yarn dev
+```
 
+## Production
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+Build the application for production:
+
+```bash
+# npm
+npm run build
+
+# pnpm
+pnpm run build
+
+# yarn
+yarn build
+```
+
+Locally preview production build:
+
+```bash
+# npm
+npm run preview
+
+# pnpm
+pnpm run preview
+
+# yarn
+yarn preview
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
