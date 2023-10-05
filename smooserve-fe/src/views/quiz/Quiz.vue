@@ -1,8 +1,6 @@
-<script setup>
-//remember to import boostrap script
-</script>
 <style>
 @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css');
+
 
 body {
   background-color: #7fcdff;
@@ -76,370 +74,71 @@ body {
   background-color: #76b6c4;
 }
 
-/* Add styles for the text box */
-.custom-radio-label input[type="text"] {
-  border: 1px solid #064273;
-  border-radius: 15px;
-  padding: 5px;
-}
-
 /* Add styles for the selected option */
 .custom-radio-label.selected {
   background-color: #4338ca;
   color: white;
 }
 </style>
+
 <template>
   <div class="container c1">
-    <form action="process_form.php" method="post">
+    <form @submit.prevent="submitForm">
       <div id="carouselExampleIndicators" class="carousel slide">
         <!-- Carousel indicators for questions -->
-        <div class="carousel-indicators">
-          <button
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide-to="0"
-            class="active"
-            aria-current="true"
-            aria-label="Slide 1"
-            onclick="goToQuestion(0)"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide-to="1"
-            aria-label="Slide 2"
-            onclick="goToQuestion(1)"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide-to="2"
-            aria-label="Slide 3"
-            onclick="goToQuestion(2)"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide-to="3"
-            aria-label="Slide 4"
-            onclick="goToQuestion(3)"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide-to="4"
-            aria-label="Slide 5"
-            onclick="goToQuestion(4)"
-          ></button>
-        </div>
+        <ol class="carousel-indicators">
+          <li
+            v-for="(question, index) in questions"
+            :key="index"
+            :class="{ active: index === currentQuestion }"
+            @click="goToQuestion(index)"
+          ></li>
+        </ol>
 
         <!-- Carousel items -->
         <div class="carousel-inner">
-          <!-- Question 1 -->
-          <div class="carousel-item active">
-            <h2>1. What Causes or Issues Are You Passionate About?</h2>
-            <div class="row">
-              <div class="col-6">
-                <div class="radio-group">
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="passionate_about"
-                    value="Environmental Conservation"
-                  >
-                    Environmental Conservation
-                  </label>
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="passionate_about"
-                    value="Education and Youth Development"
-                  >
-                    Education and Youth Development
-                  </label>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="radio-group">
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="passionate_about"
-                    value="Healthcare and Medical Services"
-                  >
-                    Healthcare and Medical Services
-                  </label>
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="passionate_about"
-                    value="Other"
-                  >
-                    Other:
-                    <input
-                      style="border: 1px solid #064273; border-radius: 5px"
-                      type="text"
-                      name="passionate_about_other_textbox"
-                    />
-                  </label>
-                </div>
-              </div>
+          <div
+            v-for="(question, index) in questions"
+            :key="index"
+            class="carousel-item"
+            :class="{ active: index === currentQuestion }"
+          >
+            <h2>{{ question.text }}</h2>
+            <div class="container w-100">
+              <table class="w-100">
+                <tr style="display: flex; flex-direction: row;">
+                  <td v-for="(option, optionIndex) in question.options.cols1" :key="optionIndex" class="wrapping custom-radio-label w-100" @click="updateRadioStyles(question.name, option)" :class="{ selected: selectedOptions[question.name] === option }">{{ option }}</td>
+                </tr>
+                <tr style="display: flex; flex-direction: row;">
+                  <td v-for="(option, optionIndex) in question.options.cols2" :key="optionIndex" class="wrapping custom-radio-label w-100" @click="updateRadioStyles(question.name, option)" :class="{ selected: selectedOptions[question.name] === option }">{{ option }}</td>
+                </tr>
+              </table>
             </div>
-            <!-- Back and Next buttons for Question 1 -->
+
+            <!-- Back and Next buttons for each question -->
             <div class="d-flex justify-content-between mt-3">
               <button
+                v-if="currentQuestion > 0"
                 type="button"
                 class="btn btn-secondary"
-                onclick="prevQuestion()"
+                @click="prevQuestion"
               >
                 Back
               </button>
               <button
+                v-if="currentQuestion < questions.length - 1"
                 type="button"
                 class="btn btn-primary"
-                onclick="nextQuestion()"
+                @click="nextQuestion"
               >
                 Next
               </button>
-            </div>
-          </div>
-
-          <!-- Question 2 -->
-          <div class="carousel-item">
-            <h2>2. What Skills or Talents Do You Have to Offer?</h2>
-            <div class="row">
-              <div class="col-6">
-                <div class="radio-group">
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="skills"
-                    value="Teaching or Tutoring"
-                  >
-                    Teaching or Tutoring
-                  </label>
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="skills"
-                    value="Writing and Communication"
-                  >
-                    Writing and Communication
-                  </label>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="radio-group">
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="skills"
-                    value="Event Planning and Coordination"
-                  >
-                    Event Planning and Coordination
-                  </label>
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="skills"
-                    value="Other"
-                  >
-                    Other:
-                    <input
-                      style="border: 1px solid #064273; border-radius: 5px"
-                      type="text"
-                      name="other_skills"
-                    />
-                  </label>
-                </div>
-              </div>
-            </div>
-            <!-- Back and Next buttons for Question 2 -->
-            <div class="d-flex justify-content-between mt-3">
               <button
-                type="button"
-                class="btn btn-secondary"
-                onclick="prevQuestion()"
-              >
-                Back
-              </button>
-              <button
-                type="button"
+                v-if="currentQuestion === questions.length - 1"
+                type="submit"
                 class="btn btn-primary"
-                onclick="nextQuestion()"
               >
-                Next
-              </button>
-            </div>
-          </div>
-
-          <!-- Question 3 -->
-          <div class="carousel-item">
-            <h2>3. How Much Time Can You Commit to Volunteering?</h2>
-            <div class="row">
-              <div class="col-6">
-                <div class="radio-group">
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="commitment"
-                    value="Less than 5 hours per week"
-                    >Less than 5 hours per week
-                  </label>
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="commitment"
-                    value="5-10 hours per week"
-                    >5-10 hours per week
-                  </label>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="radio-group">
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="commitment"
-                    value="10-20 hours per week"
-                  >
-                    10-20 hours per week
-                  </label>
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="commitment"
-                    value="More than 20 hours per week"
-                    >More than 20 hours per week
-                  </label>
-                </div>
-              </div>
-            </div>
-            <!-- Back and Next buttons for Question 3 -->
-            <div class="d-flex justify-content-between mt-3">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                onclick="prevQuestion()"
-              >
-                Back
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                onclick="nextQuestion()"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-
-          <!-- Question 4 -->
-          <div class="carousel-item">
-            <h2>4. Are You Interested in Local or Global Volunteering?</h2>
-            <div class="row">
-              <div class="col">
-                <div class="radio-group">
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="volunteering_location"
-                    value="Local"
-                  >
-                    Local (within Singapore)
-                  </label>
-                </div>
-              </div>
-              <div class="col">
-                <div class="radio-group">
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="volunteering_location"
-                    value="International"
-                  >
-                    International (outside Singapore)
-                  </label>
-                </div>
-              </div>
-            </div>
-            <!-- Back and Next buttons for Question 4 -->
-            <div class="d-flex justify-content-between mt-3">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                onclick="prevQuestion()"
-              >
-                Back
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                onclick="nextQuestion()"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-
-          <!-- Question 5 (Last Question) -->
-          <div class="carousel-item">
-            <h2>5. What Type of Volunteering Experience Are You Seeking?</h2>
-            <div class="row">
-              <div class="col-6">
-                <div class="radio-group">
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="volunteering_experience"
-                    value="Hands-On, Direct Interaction"
-                  >
-                    Hands-On, Direct Interaction
-                  </label>
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="volunteering_experience"
-                    value="Remote or Virtual Opportunities"
-                  >
-                    Remote or Virtual Opportunities
-                  </label>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="radio-group">
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="volunteering_experience"
-                    value="Administrative or Behind-the-Scenes Roles"
-                  >
-                    Administrative or Behind-the-Scenes Roles
-                  </label>
-                  <label
-                    class="wrapping custom-radio-label"
-                    onclick="updateRadioStyles(this)"
-                    name="volunteering_experience"
-                    value="No Preference"
-                  >
-                    No Preference
-                  </label>
-                </div>
-              </div>
-            </div>
-            <!-- Submit button for the last question -->
-            <div class="text-center mt-3">
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-            <!-- Back button for the last question -->
-            <div class="mt-3">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                onclick="prevQuestion()"
-              >
-                Back
+                Submit
               </button>
             </div>
           </div>
@@ -448,3 +147,102 @@ body {
     </form>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      currentQuestion: 0,
+      selectedOptions: {},
+      questions: [
+        {
+          name: "passionate_about",
+          text: "1. What Causes or Issues Are You Passionate About?",
+          options: {
+            cols1: [
+              "Environmental Conservation",
+              "Education and Youth Development",
+            ],
+            cols2: [
+              "Healthcare and Medical Services",
+              "Construction"
+            ]
+          },
+        },
+        {
+          name: "skills",
+          text: "2. What Skills or Talents Do You Have to Offer?",
+          options: {
+            cols1: [
+            "Teaching or Tutoring", "Writing and Communication"
+            ],
+            cols2: [
+            "Event Planning and Coordination","Building"
+            ]
+          },
+        },
+        {
+          name: "commitment",
+          text: "3. How Much Time Can You Commit to Volunteering?",
+          options: {
+            cols1: [
+            "Less than 5 hours per week", "5-10 hours per week"
+            ],
+            cols2: [
+            "10-20 hours per week","More than 20 hours per week"
+            ]
+          },
+        },
+        {
+          name: "volunteering_location",
+          text: "4. Are You Interested in Local or Global Volunteering?",
+          options: {
+            cols1: [
+              "Local (within Singapore)"
+            ],
+            cols2: [
+            "International (outside Singapore)"
+            ]
+          },
+        },
+        {
+          name: "volunteering_experience",
+          text: "5. What Type of Volunteering Experience Are You Seeking?",
+          options: {
+            cols1: [
+              "Hands-On, Direct Interaction",
+              "Remote or Virtual Opportunities",
+            ],
+            cols2: [
+              "Administrative or Behind-the-Scenes Roles",
+              "No Preference"
+            ]
+          },
+        },
+      ],
+    };
+  },
+  methods: {
+    prevQuestion() {
+      if (this.currentQuestion > 0) {
+        this.currentQuestion--;
+      }
+    },
+    nextQuestion() {
+      if (this.currentQuestion < this.questions.length - 1) {
+        this.currentQuestion++;
+      }
+    },
+    goToQuestion(questionIndex) {
+      this.currentQuestion = questionIndex;
+    },
+    updateRadioStyles(groupName, value) {
+      this.selectedOptions[groupName] = value;
+    },
+    submitForm() {
+      // Handle form submission here
+      console.log("Form submitted with selected options:", this.selectedOptions);
+    },
+  },
+};
+</script>
