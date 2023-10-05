@@ -25,17 +25,14 @@ const getAllStudents = async (req, res, next) => {
         }else {
             data.forEach(doc => {
                 const student = new Student(
-                    doc.id,
+                    doc.data().id,
                     doc.data().firstName,
                     doc.data().lastName,
-                    doc.data().fatherName,
-                    doc.data().class,
-                    doc.data().age,
-                    doc.data().phoneNumber,
-                    doc.data().subject,
-                    doc.data().year,
-                    doc.data().semester,
-                    doc.data().status
+                    doc.data().email,
+                    doc.data().quizPreference,
+                    doc.data().registeredCsps,
+                    doc.data().achievements,
+                    doc.data().statusOfCompletion,
                 );
                 studentsArray.push(student);
             });

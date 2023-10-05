@@ -1,18 +1,18 @@
 const express = require('express');
-const {addStudent, 
-       getAllStudents, 
-       getStudent,
-       updateStudent,
-       deleteStudent
+const {addCsp, 
+       getAllCsps, 
+       getCsp,
+       updateCsp,
+       deleteCsp
       } = require('../controllers/cspController');
 
 const router = express.Router();
 
-router.post('/csp', addStudent);
-router.get('/csps', getAllStudents);
-router.get('/csp/:id', getStudent);
-router.put('/csp/:id', updateStudent);
-router.delete('/csp/:id', deleteStudent);
+router.post('/csp', addCsp);
+router.get('/csps', getAllCsps);
+router.get('/csp/:id', getCsp);
+router.put('/csp/:id', updateCsp);
+router.delete('/csp/:id', deleteCsp);
 
 
 module.exports = {

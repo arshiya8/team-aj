@@ -1,17 +1,15 @@
 class Student {
-    constructor(id, firstName, lastName, fatherName, classEnrolled,
-        age, phoneNumber, subject, year, semester, status ) {
+    constructor(id, firstName, lastName, email, quizPreference, registeredCsps
+        , achievements, statusOfCompletion ) {
             this.id = id;
             this.firstName = firstName;
             this.lastName = lastName;
-            this.fatherName = fatherName;
-            this.classEnrolled = classEnrolled;
-            this.age = age;
-            this.phoneNumber = phoneNumber;
-            this.subject = subject;
-            this.year = year;
-            this.semester = semester;
-            this.status = status;
+            this.email = email;
+            this.quizPreference = quizPreference;
+            this.registeredCsps = registeredCsps;
+            this.achievements = achievements;
+            this.statusOfCompletion = statusOfCompletion;
+
     }
 }
 

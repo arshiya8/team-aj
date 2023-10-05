@@ -190,10 +190,6 @@ const logoUrl = computed(() => {
     color: rgba(6,66,115);
 }
 
-body{
-  background-color: rgb(240, 230, 230);
-}
-
 /* navbar */
 .navbar{
     width:100%;
