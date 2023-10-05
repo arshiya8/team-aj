@@ -19,7 +19,7 @@ onMounted(() => {
 
 const handleSignOut = () => {
     signOut(auth).then(()=>{
-        router.replace({name: "login"})
+        router.replace({name: "Login"})
     })
 }
 
@@ -66,8 +66,8 @@ const logoUrl = computed(() => {
                             <Button @click="handleSignOut" label="Sign out" class="p-button-rounded border-none ml-5 font-light text-white line-height-2 "></Button>
                         </div>
                         <div v-else>
-                            <router-link :to="{ name: 'login' }"><Button label="Log in" class="p-button-text p-button-rounded border-none font-light line-height-2"></Button></router-link>
-                            <router-link :to="{ name: 'register' }"><Button label="Sign up" class="p-button-rounded border-none ml-5 font-light text-white line-height-2 "></Button></router-link>
+                            <router-link :to="{ name: 'Login' }"><Button label="Log in" class="p-button-text p-button-rounded border-none font-light line-height-2"></Button></router-link>
+                            <router-link :to="{ name: 'Register' }"><Button label="Sign up" class="p-button-rounded border-none ml-5 font-light text-white line-height-2 "></Button></router-link>
                         </div>
                     </div>
                 </div>
