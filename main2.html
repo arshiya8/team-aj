@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Profile</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <img src="smoo.jpg" width="25%" height="25%">
+        <h1>Student Profile</h1>
+        <div class="profile-section">
+            <div class="interests-section">
+                <label for="interests">Select Interests:</label>
+                <select id="interests" class="select-box">
+                    <option value="Elderly">Elderly</option>
+                    <option value="Youth">Youth</option>
+                    <option value="Children">Children</option>
+                    <option value="Others">Others</option>
+                </select>
+                <ul id="interestList" class="info-list"></ul>
+            </div>
+
+            <div class="image-section">
+                <input type="file" id="profileImageUpload" accept="image/*" style="display: none;">
+                <button id="profileUploadButton" class="action-button">Upload Profile Picture</button>
+                <div id="profileImagePreview" class="circular-image-preview" style="display: none;">
+                    <img id="previewProfileImage" src="#" alt="Profile Picture" class="profile-image">
+                </div>
+            </div>
+        </div>
+
+        <div class="activities-section">
+            <h2>Past Volunteered Activities</h2>
+            <ul id="pastActivities" class="info-list">
+                <!-- Activities will be dynamically added here using JavaScript -->
+            </ul>
+
+            <h2>Registered Activities</h2>
+            <ul id="registeredActivities" class="info-list">
+                <!-- Activities will be dynamically added here using JavaScript -->
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

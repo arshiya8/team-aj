@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CSP Organization - Review Student Registrations</title>
+    <link rel="stylesheet" href="styles.css"> <!-- You can link your CSS file here -->
+    <style>
+        /* Your CSS styles here */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="smoo.jpg" width="25%" height="25%">
+            <h1>CSP Organization - Review Student Registrations</h1>
+        </header>
+
+        <main>
+            <section class="registration-list">
+                <h2>Student Registrations</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Name</th>
+                            <th>Interests</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentList"> <!-- Use an ID to select this element in JavaScript -->
+                        <!-- Populate this section with student registration data dynamically -->
+                        <tr>
+                            <td>1</td>
+                            <td>John Doe</td>
+                            <td>Youth</td>
+                            <td>
+                                <button class="accept-button">Accept</button>
+                                <button class="reject-button">Reject</button>
+                            </td>
+                        </tr>
+                        <!-- Repeat the above row structure for each registered student -->
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="accepted-list">
+                <h2>Accepted Students</h2>
+                <ul id="acceptedStudents"> <!-- Use an ID to select this element in JavaScript -->
+                    <!-- Accepted students will be dynamically added here using JavaScript -->
+                </ul>
+            </section>
+
+            <section class="rejected-list">
+                <h2>Rejected Students</h2>
+                <ul id="rejectedStudents"> <!-- Use an ID to select this element in JavaScript -->
+                    <!-- Rejected students will be dynamically added here using JavaScript -->
+                </ul>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2023 CSP Organization</p>
+        </footer>
+    </div>
+
+    <script>
+        // JavaScript code to handle accept and reject actions
+        document.addEventListener("DOMContentLoaded", function () {
+            const studentList = document.getElementById("studentList");
+            const acceptedStudents = document.getElementById("acceptedStudents");
+            const rejectedStudents = document.getElementById("rejectedStudents");
+
+            studentList.addEventListener("click", function (event) {
+                if (event.target.classList.contains("accept-button")) {
+                    // Handle Accept button click
+                    const studentRow = event.target.closest("tr");
+                    if (studentRow) {
+                        const studentName = studentRow.querySelector("td:nth-child(2)").textContent;
+                        const listItem = document.createElement("li");
+                        listItem.textContent = studentName;
+                        acceptedStudents.appendChild(listItem);
+
+                        // Remove the student from the original list
+                        studentRow.remove();
+                    }
+                } else if (event.target.classList.contains("reject-button")) {
+                    // Handle Reject button click
+                    const studentRow = event.target.closest("tr");
+                    if (studentRow) {
+                        const studentName = studentRow.querySelector("td:nth-child(2)").textContent;
+                        const listItem = document.createElement("li");
+                        listItem.textContent = studentName;
+                        rejectedStudents.appendChild(listItem);
+
+                        // Remove the student from the original list
+                        studentRow.remove();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
