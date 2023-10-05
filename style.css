@@ -1,0 +1,86 @@
+body{
+    background-color: #7fcdff;
+}
+.carousel-indicators .active {
+    background-color: #4338CA; 
+}
+
+.c1 {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    margin-top: 100px;
+    border: 2px solid #4338CA;
+    border-radius: 15px;
+    background-color: #def3f6;
+}
+.carousel {
+    padding:50px 0px;
+}
+
+.wrapping {
+    background-color: whitesmoke;
+    border: 2px solid #4338CA;
+    border-radius: 15px; 
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.c2 {
+    display: flex;
+    justify-content: center; /* Horizontal centering */
+    align-items: center; 
+    padding: 50px;
+}
+
+.carousel-item {
+    text-align: center;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.submit-button {
+background-color: #4338CA; 
+color: #ffffff; 
+border: none; 
+border-radius: 25px; 
+padding: 10px 20px; 
+font-size: 16px; 
+
+}
+
+.custom-textbox {
+    border: 1px solid #064273;
+    border-radius: 15px;
+    padding: 5px;
+}
+
+.custom-radio-label {
+    cursor: pointer;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    margin: 5px;
+    display: block;
+}
+
+.custom-radio-label:hover {
+    background-color: #76b6c4;
+}
+
+/* Add styles for the text box */
+.custom-radio-label input[type="text"] {
+    border: 1px solid #064273;
+    border-radius: 15px;
+    padding: 5px;
+}
+
+/* Add styles for the selected option */
+.custom-radio-label.selected {
+    background-color: #4338CA;
+    color: white;
+}
