@@ -1,32 +1,46 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import { getAuth, onAuthStateChanged} from 'firebase/auth'
-
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 //add your page route here
 const routes = [
   {
     path: "/",
-    name: "landing",
+    name: "Home",
     component: () => import("@/views/Landing.vue"),
   },
   {
     path: "/login",
-    name: "login",
+    name: "Login",
     component: () => import("@/views/auth/Login.vue"),
   },
   {
     path: "/register",
-    name: "register",
+    name: "Register",
     component: () => import("@/views/auth/Register.vue"),
   },
   {
     path: "/user",
-    name: "user",
+    name: "User",
     component: () => import("@/views/auth/User.vue"),
     meta: {
-      requiresAuth: true
-    }
+      requiresAuth: true,
+    },
   },
+  {
+    path: "/csp/all",
+    name: "AllCSP",
+    component: () => import("@/views/csp/CSPList.vue"),
+  },
+  {
+    path: "/csp/:id",
+    name: "CSP",
+    component: () => import("@/views/csp/CSP.vue"),
+  },
+  {
+    path: "/:catchAll(.*)",
+    name: "NotFound",
+    component: () => import("@/views/NotFound.vue"),
+  }
 ];
 
 const router = createRouter({
@@ -35,28 +49,31 @@ const router = createRouter({
 });
 
 const getCurrentUser = () => {
-  return new Promise((resolve, reject)=>{
+  return new Promise((resolve, reject) => {
     const removeListener = onAuthStateChanged(
       getAuth(),
       (user) => {
-        removeListener()
-        resolve(user)
+        removeListener();
+        resolve(user);
       },
       reject
-    )
-  })
-}
+    );
+  });
+};
 
-router.beforeEach(async (to, from, next)=>{
-  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
-  if (requiresAuth && !await getCurrentUser()){
-    next({ name: 'login'})
-  }else if((to.name=='login' || to.name=='register') && await getCurrentUser()){
-    next({ name: 'user'})
+router.beforeEach(async (to, from, next) => {
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+  document.title = `${import.meta.env.VITE_APP_TITLE} -  ${to.name}`;
+  if (requiresAuth && !(await getCurrentUser())) {
+    next({ name: "Login" });
+  } else if (
+    (to.name == "Login" || to.name == "Register") &&
+    (await getCurrentUser())
+  ) {
+    next({ name: "User" });
+  } else {
+    next();
   }
-  else{
-    next()
-  }
-})
+});
 
 export default router;

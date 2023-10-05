@@ -35,7 +35,7 @@ const submit = () => {
   signInWithEmailAndPassword(getAuth(), email.value, password.value)
     .then((data) => {
       console.log("Successfully registered");
-      router.replace({ name: "user" });
+      router.replace({ name: "User" });
     })
     .catch((error) => {
       errorMessage.value = error.message;
@@ -49,7 +49,7 @@ const googleSignIn = () => {
         // The signed-in user info.
         // const user = result.user;
       console.log("Successfully registered");
-      router.replace({ name: "user" });
+      router.replace({ name: "User" });
     })
     .catch((error) => {
       // Handle Errors here.
@@ -71,7 +71,7 @@ const googleSignIn = () => {
     class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden"
   >
     <div class="flex flex-column align-items-center justify-content-center">
-      <router-link :to="{ name: 'landing' }"><img :src="logoUrl" alt="SmooServe logo" class="mb-5 w-10rem flex-shrink-0" /></router-link>
+      <router-link :to="{ name: 'Home' }"><img :src="logoUrl" alt="SmooServe logo" class="mb-5 w-10rem flex-shrink-0" /></router-link>
       <div
         style="
           border-radius: 56px;

@@ -34,7 +34,7 @@
     <img src="smooserve-fe/public/layout/images/logo-white.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">SmooServe</h3>
+<h3 align="center">Smooserve</h3>
 
   <p align="center">
     Our project aims to address the inefficiencies in managing volunteer applications, caused by the current email-based system. This manual process results in a backlog of messages, hindering timely volunteer selection and potentially missing opportunities. To resolve these issues, we're developing a dedicated volunteer matching website. This platform will streamline application processing, reduce administrative burdens, and improve overall volunteer management. Additionally, it will feature event filtering based on user preferences. 
