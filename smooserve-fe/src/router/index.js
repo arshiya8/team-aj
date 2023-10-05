@@ -40,6 +40,29 @@ const routes = [
     path: "/:catchAll(.*)",
     name: "NotFound",
     component: () => import("@/views/NotFound.vue"),
+  },
+  //jessa
+  {
+    path: "/about",
+    name: "About",
+    component: () => import("@/views/AboutUs.vue"),
+  },
+  {
+    path: "/faq",
+    name: "FAQ",
+    component: () => import("@/views/FAQ.vue"),
+  },
+  //annette
+  {
+    path: "/quiz",
+    name: "Quiz",
+    component: () => import("@/views/quiz/Quiz.vue"),
+  },
+  //rayne
+  {
+    path: "/profile",
+    name: "Profile",
+    component: () => import("@/views/profile/Profile.vue"),
   }
 ];
 
