@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { getAuth,onAuthStateChanged, signOut } from 'firebase/auth'; 
+import { getAuth,onAuthStateChanged, signOut } from 'firebase/auth';
 
 //login and logout things
 const isLoggedIn = ref(false)
@@ -43,8 +43,8 @@ const logoUrl = computed(() => {
         </a>
 
         <!-- This is the hamburger menu that appears on mobile -->
-        <div class="align-items-center flex-grow-1 justify-content-center hidden lg:flex absolute lg:static w-fit h-min left-0 px-6 lg:px-0 z-2" style="top: 130px">
-            <ul class="list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row cursor-pointer justify-content-center">
+        <div class="align-items-center" style="top: 130px">
+            <ul class="list-none select-none justify-content-center">
                 <li>
                     <a @click="smoothScroll('#hero')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
                         <i class="navbar-icon pi pi-home"></i> <span>HOME</span>
