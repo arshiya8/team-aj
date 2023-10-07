@@ -1,9 +1,26 @@
 <style>
 @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css');
+
+.carousel-fluid {
+  position: relative;
+  max-width: 800px; /* Maximum width */
+  margin: 0 auto; /* Center it */
+}
+
+.carousel-inner .content {
+  position: absolute; /* Position the background text */
+  top: 0; /* At the bottom. Use top:0 to append it to the top */
+  background: rgb(0, 0, 0); /* Fallback color */
+  background: rgba(0, 0, 0, 0.196); /* Black background with 0.5 opacity */
+  width: 100%; /* Full width */
+  padding: 20px; /* Some padding */
+}
+
 </style>
 
 <template>
        <div class="container-fluid">
+
         <div id="carouselExampleIndicators" class="carousel slide"> 
             <ol class="carousel-indicators">
           <li
@@ -23,6 +40,9 @@
             :class="{ active: index === currentImage }"
           >
          <img :src="image" class="d-block w-100">
+         <div class="content">
+              <h1 style="color:white; font-weight: bold;">EMPOWER THE <br> PEOPLE AROUND YOU</h1>
+              </div>
         </div>
         </div>
 
