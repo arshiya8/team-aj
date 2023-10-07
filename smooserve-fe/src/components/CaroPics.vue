@@ -59,9 +59,9 @@ export default {
     return {
       currentImage: 0,
       images: [
-      "/public/layout/images/landing-img1.jpg",
-      "/public/layout/images/landing-img2.jpg",
-      "/public/layout/images/landing-img3.jpg",
+      "/layout/images/landing-img1.jpg",
+      "/layout/images/landing-img2.jpg",
+      "/layout/images/landing-img3.jpg",
       ]
     };
   },
