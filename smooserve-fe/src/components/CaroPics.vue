@@ -1,0 +1,89 @@
+<style>
+@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css');
+</style>
+
+<template>
+       <div class="container-fluid">
+        <div id="carouselExampleIndicators" class="carousel slide"> 
+            <ol class="carousel-indicators">
+          <li
+            v-for="(image, index) in images"
+            :key="index"
+            :class="{ active: index === currentImage }"
+            @click="goToImage(index)"
+          >
+        </li>
+        </ol>
+    <!-- Carousel Items -->
+        <div class="carousel-inner">
+          <div
+            v-for="(image, index) in images"
+            :key="index"
+            class="carousel-item"
+            :class="{ active: index === currentImage }"
+          >
+         <img :src="image" class="d-block w-100">
+        </div>
+        </div>
+
+        <!-- Previous Button -->
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="prev"
+        @click="prevImage"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+
+      <!-- Next Button -->
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="next"
+        @click="nextImage"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+        </div>
+       </div>
+</template>
+<script>
+
+export default {
+  data() {
+    return {
+      currentImage: 0,
+      images: [
+      "/public/layout/images/landing-img1.jpg",
+      "/public/layout/images/landing-img2.jpg",
+      "/public/layout/images/landing-img3.jpg",
+      ]
+    };
+  },
+  methods: {
+    prevImage() {
+      if (this.currentImage > 0) {
+        this.currentImage--;
+      }
+    },
+    nextImage() {
+      if (this.currentImage < this.images.length - 1) {
+        this.currentImage++;
+      }
+    },
+    goToImage(imageIndex) {
+      this.currentImage = imageIndex;
+    },
+  }
+};
+</script>
+
+
+
+
+
