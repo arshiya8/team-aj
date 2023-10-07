@@ -8,12 +8,9 @@
 }
 
 .carousel-inner .content {
-  position: absolute; /* Position the background text */
-  top: 0; /* At the bottom. Use top:0 to append it to the top */
-  background: rgb(0, 0, 0); /* Fallback color */
-  background: rgba(0, 0, 0, 0.196); /* Black background with 0.5 opacity */
-  width: 100%; /* Full width */
-  padding: 20px; /* Some padding */
+  position: absolute;
+  top: 8px;
+  left: 16px;
 }
 
 </style>
@@ -41,7 +38,7 @@
           >
          <img :src="image" class="d-block w-100">
          <div class="content">
-              <h1 style="color:white; font-weight: bold;">EMPOWER THE <br> PEOPLE AROUND YOU</h1>
+              <h1 style="color:rgb(254, 254, 254); font-weight: bold;">EMPOWER THE <br> PEOPLE AROUND YOU</h1>
               </div>
         </div>
         </div>

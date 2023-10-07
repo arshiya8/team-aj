@@ -16,31 +16,27 @@ export default {
 
   <div class="container-fluid" style="background-color: lightblue;">
     <div class="row">
-      <h2 style="color:black; font-weight: bold; text-align: center;">COMMUNITY SERVICE PROJECTS</h2><br>
-      <h2 style="color:red; font-weight: bold; text-align: center;">THIS MONTH</h2>
+      <h2 style="color:black; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">COMMUNITY SERVICE PROJECTS</h2><br>
+      <h2 style="color:red; font-weight: bold; text-align: center; font-size: 4rem;">THIS MONTH</h2>
     </div>
   </div>
 
-
-<div class="row">
-    <!-- row cards -->
-    <div class="col-md-3">
-        <div class="card">
-            <img class="card-img-top" src="layout/images/card1.jpg" alt="card1" style="transform:rotate(-20deg)">
+  <div class="ct">
+    <div class="card-container">
+        <div class="card rd">
+            <img style="border-radius: 15px;" src="layout/images/card1.jpg" >  
         </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card">
-            <img class="card-img-top" src="layout/images/card2.jpg" alt="card2">
+        <div class="card rd">
+            <img style="border-radius: 15px;" src="layout/images/card2.jpg" >
+            
         </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card">
-            <img class="card-img-top" src="layout/images/card3.jpg" alt="card3">
+        <div class="card rd">
+            <img style="border-radius: 15px;" src="layout/images/card3.jpg" >
         </div>
-    </div>
     </div>
 
+  </div>
+  
 
 
   <!-- body -->
@@ -103,8 +99,43 @@ export default {
 
 <style>
 @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css');
+ 
+.ct{
+  display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: lightblue;
+}
+.card-container {
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+} 
 
+.rd{
+  border-radius: 15px;
+    width: 30%;
+}
 
+.card:first-child {
+    transform: rotate(-20deg);
+    border:none;
+    margin-right: 60px;
+}
+
+.card:last-child {
+    transform: rotate(20deg);
+    border:none;
+    margin-left: 60px;
+    background-color: lightblue;
+}
+.card:nth-child(2) {
+    margin-top: -140px;
+    border:none;
+    background-color: lightblue;
+}
 *{
   margin: 0;
   padding: 0;
