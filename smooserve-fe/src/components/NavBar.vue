@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { getAuth,onAuthStateChanged, signOut } from 'firebase/auth';
+import { getAuth,onAuthStateChanged, signOut } from 'firebase/auth'; 
 
 //login and logout things
 const isLoggedIn = ref(false)
@@ -36,83 +36,52 @@ const logoUrl = computed(() => {
 </script>
 
 <template>
-  <div class="surface-0 flex justify-content-center items-center py-4">
-    <div id="home" class="landing-wrapper overflow-hidden">
-      <div class="py-4 px-4 mx-0 md:mx-6 lg:mx-8 lg:px-8 flex align-items-center justify-content-between relative lg:static">
-        <div class="d-flex align-items-center">
-          <!-- <a href="#">
-            <img :src="logoUrl" alt="Smooserve Logo" height="120" class="mr-0 lg:mr-2" />
-          </a> -->
-          <ul class="list-none p-0 m-0 flex lg:align-items-center select-none flex-row cursor-pointer">
-            <li>
-              <a href="#">
-            <img :src="logoUrl" alt="Smooserve Logo" height="120" class="mr-0 lg:mr-2" />
-          </a>
-            </li>
-            <li>
-              <a @click="smoothScroll('#hero')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
-                <i class="navbar-icon pi pi-home"></i> <span>HOME</span>
-              </a>
-            </li>
-            <li>
-              <a @click="smoothScroll('#about')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
-                <i class="navbar-icon pi pi-info-circle"></i> <span>ABOUT US</span>
-              </a>
-            </li>
-            <li>
-              <a @click="smoothScroll('#highlights')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple href="maps.vue">
-                <span>NEAR YOU</span>
-              </a>
-            </li>
-            <li>
-              <router-link to="/login" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
-                <i class="navbar-icon pi pi-sign-in"></i> <span>LOG IN</span>
-              </router-link>
-            </li>
-            <li>
-              <router-link to="/register" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
-                <i class="navbar-icon pi pi-user-plus"></i> <span>SIGN UP</span>
-              </router-link>
-            </li>
-              <div class="d-flex align-items-center ml-auto"> <!-- Push search and profile icons to the right -->
+    <nav id="home" class="surface-0 navbar navbar-expand-lg navbar-light bg-light px-5">
+        <!-- This is the logo -->
+        <a class="flex align-items-start" href="#">
+            <img :src="logoUrl" alt="Smooserve Logo" height="80" class="mr-0 lg:mr-2" />
+        </a>
+
+        <!-- This is the hamburger menu that appears on mobile -->
+        <div class="align-items-center flex-grow-1 justify-content-center hidden lg:flex absolute lg:static w-fit h-min left-0 px-6 lg:px-0 z-2" style="top: 130px">
+            <ul class="list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row cursor-pointer justify-content-center">
                 <li>
-                  <i class="pi pi-search" style="font-size: 1.5em; margin-right: 16px;"></i> <!-- Search icon -->
-                  <i class="pi pi-user" style="font-size: 1.5em;"></i> <!-- Profile icon -->
+                    <a @click="smoothScroll('#hero')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
+                        <i class="navbar-icon pi pi-home"></i> <span>HOME</span>
+                    </a>
                 </li>
-                   
+                <li>
+                    <a @click="smoothScroll('#about')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
+                        <i class="navbar-icon pi pi-info-circle"></i> <span>ABOUT US</span>
+                    </a>
+                </li>
+                <li>
+                    <a @click="smoothScroll('#highlights')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple href="maps.vue">
+                        <i class="navbar-icon pi pi-map-marker"></i><span>NEAR YOU</span>
+                    </a>
+                </li>
+            </ul>
         </div>
-          </ul>
+
+        <div v-if="isLoggedIn" class="align-items-end"> <!-- If the user is logged in, show the search and user icons -->
+            <!-- Search button currently does nothing -->
+            <Button class="p-button-text navbar-icon pi pi-search p-button-rounded border-none font-light line-height-2 pr-3"></Button>
+            <Button @click="handleSignOut" class="p-button-text navbar-icon pi pi-user p-button-rounded border-none font-light line-height-2"></Button>
         </div>
-        
-      </div>
-    </div>
-  </div>
+        <div v-else class="align-items-end"> <!-- If the user is not logged in, show the login and register buttons -->
+            <i class="navbar-icon pi pi-sign-in"></i><router-link :to="{ name: 'Login' }"><Button label="LOG IN" class="p-button-text p-button-rounded border-none font-light line-height-2 pr-3"></Button></router-link>
+            <i class="navbar-icon pi pi-user-plus"></i><router-link :to="{ name: 'Register' }"><Button label="SIGN UP" class="p-button-text p-button-rounded border-none font-light line-height-2"></Button></router-link>
+        </div>
+    </nav>
 </template>
 
-
-
+<!-- I've added some new styles and adjusted existing ones to better match the design -->
 <style>
+
 .navbar-icon {
-  margin-right: 8px; /* Spacing between the icon and the text */
-  font-size: 1.2em; /* Adjust icon size if needed */
+    margin-right: 8px; /* Spacing between the icon and the text */
+    font-size: 1.2em; /* Adjust icon size if needed */
 }
-
-/* Add styles for search and profile icons */
-.d-flex.align-items-center.ml-auto {
-  margin-left: auto; /* Push icons to the right */
-  margin-right: 16px; /* Add spacing between icons */
-}
-
-/* Style Sign Up button similar to other headers */
-.p-button-text.ml-5 {
-  font-weight: 400;
-  text-transform: uppercase;
-  color: #333; /* Change the color to match other headers */
-  border: none;
-  background-color: transparent;
-  margin-left: 16px; /* Add spacing between buttons */
-}
-
 
 #hero {
   background: linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), radial-gradient(77.36% 256.97% at 77.36% 57.52%, #eeefaf 0%, #c3e3fa 100%);
