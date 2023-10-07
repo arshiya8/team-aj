@@ -66,7 +66,9 @@ const logoUrl = computed(() => {
         <div v-if="isLoggedIn" class="align-items-end"> <!-- If the user is logged in, show the search and user icons -->
             <!-- Search button currently does nothing -->
             <Button class="p-button-text navbar-icon pi pi-search p-button-rounded border-none font-light line-height-2 pr-3"></Button>
-            <Button @click="handleSignOut" class="p-button-text navbar-icon pi pi-user p-button-rounded border-none font-light line-height-2"></Button>
+            <Button @click="handleSignOut" class="p-button-text navbar-icon pi pi-user p-button-rounded border-none font-light line-height-2"> 
+              <span style="padding-left: 10px; font-size: 0.9em;">LOG OUT</span>
+            </Button>
         </div>
         <div v-else class="align-items-end"> <!-- If the user is not logged in, show the login and register buttons -->
             <i class="navbar-icon pi pi-sign-in"></i><router-link :to="{ name: 'Login' }"><Button label="LOG IN" class="p-button-text p-button-rounded border-none font-light line-height-2 pr-3"></Button></router-link>

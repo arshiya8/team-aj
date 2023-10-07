@@ -116,9 +116,6 @@ export default {
   color: rgba(6,66,115);
 }
 
-body{
-  background-color: rgb(240, 230, 230);
-}
 
 /* navbar */
 .navbar{
