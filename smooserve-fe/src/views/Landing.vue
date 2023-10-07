@@ -14,6 +14,34 @@ export default {
   <NavBar />
   <CaroPics />
 
+  <div class="container-fluid" style="background-color: lightblue;">
+    <div class="row">
+      <h2 style="color:black; font-weight: bold; text-align: center;">COMMUNITY SERVICE PROJECTS</h2><br>
+      <h2 style="color:red; font-weight: bold; text-align: center;">THIS MONTH</h2>
+    </div>
+  </div>
+
+
+<div class="row">
+    <!-- row cards -->
+    <div class="col-md-3">
+        <div class="card">
+            <img class="card-img-top" src="layout/images/card1.jpg" alt="card1" style="transform:rotate(-20deg)">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <img class="card-img-top" src="layout/images/card2.jpg" alt="card2">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <img class="card-img-top" src="layout/images/card3.jpg" alt="card3">
+        </div>
+    </div>
+    </div>
+
+
 
   <!-- body -->
   <div class="container text-center">
