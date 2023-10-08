@@ -32,7 +32,7 @@ function save() {
   this.csp.urls = this.list;
 
   axios
-    .put("http://localhost:8080/api/csp/" + CSPid, this.csp)
+    .put("https://smooserve-be.vercel.app/api/csp/" + CSPid, this.csp)
     .then((response) => {
       toast.add({
         severity: "success",

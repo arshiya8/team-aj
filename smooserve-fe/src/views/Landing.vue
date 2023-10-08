@@ -33,14 +33,14 @@ export default {
   <div class="ct">
     <div class="card-container">
         <div class="card rd">
-            <img style="border-radius: 15px;" src="layout/images/card1.jpg" >  
+            <img style="border-radius: 15px;" src="/layout/images/card1.jpg" >  
         </div>
         <div class="card rd">
-            <img style="border-radius: 15px;" src="layout/images/card2.jpg" >
+            <img style="border-radius: 15px;" src="/layout/images/card2.jpg" >
             
         </div>
         <div class="card rd">
-            <img style="border-radius: 15px;" src="layout/images/card3.jpg" >
+            <img style="border-radius: 15px;" src="/layout/images/card3.jpg" >
         </div>
     </div>
 

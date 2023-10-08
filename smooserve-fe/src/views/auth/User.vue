@@ -32,7 +32,7 @@ const handleSignOut = () => {
 }
 
 const logoUrl = computed(() => {
-    return `layout/images/logo-white.png`;
+    return `/layout/images/logo-white.png`;
 });
 </script>
 

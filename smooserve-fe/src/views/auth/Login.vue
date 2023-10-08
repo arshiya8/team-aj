@@ -19,7 +19,7 @@ const password = ref("");
 const checked = ref(false);
 
 const logoUrl = computed(() => {
-  return `layout/images/logo-white.png`;
+  return `/layout/images/logo-white.png`;
 });
 
 const errorMessage = ref("");
