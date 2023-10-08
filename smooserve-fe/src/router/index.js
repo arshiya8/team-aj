@@ -37,6 +37,11 @@ const routes = [
     component: () => import("@/views/csp/CSP.vue"),
   },
   {
+    path: "/csp/settings/:id",
+    name: "CSPSetting",
+    component: () => import("@/views/csp/CSPSetting.vue"),
+  },
+  {
     path: "/:catchAll(.*)",
     name: "NotFound",
     component: () => import("@/views/NotFound.vue"),

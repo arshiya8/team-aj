@@ -37,6 +37,7 @@ const getAllCsps = async (req, res, next) => {
                     doc.data().noOfHours,
                     doc.data().causes,
                     doc.data().skills,
+                    doc.data().urls,
                 );
                 cspsArray.push(csp);
             });
