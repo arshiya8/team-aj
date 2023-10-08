@@ -9,6 +9,7 @@ import draggable from "vuedraggable";
 const toast = useToast();
 
 const route = useRoute();
+
 const CSPid = route.params.id;
 
 const list = ref([]);
@@ -24,13 +25,12 @@ function removeAt(idx) {
 }
 
 function add() {
-  this.list.push({ name: "paperclip", text: "" });
-  console.log(this.list);
+  list.value.push({ name: "paperclip", text: "" });
 }
 
 function save() {
-  this.csp.urls = this.list;
-
+  loading.value = true;
+  csp.urls = list.value;
   axios
     .put("https://smooserve-be.vercel.app/api/csp/" + CSPid, this.csp)
     .then((response) => {
@@ -67,7 +67,7 @@ onMounted(async () => {
     .get("http://localhost:8080/api/csp/" + CSPid)
     .then((response) => {
       csp.value = response.data;
-      response.data.urls ? list.value = response.data.urls : list.value;
+      response.data.urls ? list.value = response.data.urls : list.value = [];
     })
     .catch((error) => {
       console.log(error);
