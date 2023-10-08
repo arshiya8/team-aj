@@ -6,7 +6,16 @@ export default {
     NavBar,
     CaroPics,
   },
+
+  data() {
+    return {
+      selectedValue1: '', // Initialize with default values if needed
+      selectedValue2: '',
+      selectedValue3: '',
+    };
+  },
 };
+
 </script>
 
 <template>
@@ -40,17 +49,60 @@ export default {
 
 
   <!-- body -->
-  <div class="container text-center">
-    <h1 style="font-weight: bold; margin: 20px 0;">LIBRARY</h1>
-    <div>
-
-    </div>
-  </div>
-
-  <!--cards taken from w3schools-->
-  <div class="container">
+  <div class="container-fluid" style="background-color: navy">
     <div class="row">
       <div class="col">
+    <h1 style="font-weight: bold; text-align: center; color:white;">What's happening in Smooserve</h1>
+    <div>
+    </div>
+      <div class="row" style="text-align: center;">
+        <!-- First Dropdown List -->
+    <div class="dropdown">
+      <label for="dropdown1">Causes:</label>
+      <select id="dropdown1" v-model="selectedValue1">
+        <option value="option1">Option 1</option>
+        <option value="option2">Option 2</option>
+        <option value="option3">Option 3</option>
+      </select>
+    
+
+    <!-- Second Dropdown List -->
+    
+      <label for="dropdown2">Skills:</label>
+      <select id="dropdown2" v-model="selectedValue2">
+        <option value="optionA">Option A</option>
+        <option value="optionB">Option B</option>
+        <option value="optionC">Option C</option>
+      </select>
+    
+
+    <!-- Third Dropdown List -->
+    
+      <label for="dropdown3">Date:</label>
+      <select id="dropdown3" v-model="selectedValue3">
+        <option value="choiceX">Choice X</option>
+        <option value="choiceY">Choice Y</option>
+        <option value="choiceZ">Choice Z</option>
+      </select>
+    </div>
+
+
+    <!-- Display selected values -->
+    <div class="row justify-content-center" style="color:white; font-weight: bold; font-size: 20px;">
+      Selected Value 1: {{ selectedValue1 }}
+      Selected Value 2: {{ selectedValue2 }}
+      Selected Value 3: {{ selectedValue3 }}
+    </div>
+  </div>
+      </div>
+    </div>
+
+    </div>
+
+  <!--cards taken from w3schools-->
+  <div class="container-fluid" style="background-color: lightblue;">
+    <div class="row">
+      <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
@@ -64,11 +116,11 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP1" >
+              <img src="..." alt="CSP2" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -78,11 +130,137 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP1" >
+              <img src="..." alt="CSP3" >
+            </div>
+            <div class="flip-card-back">
+              <div class="text-center">
+                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img src="..." alt="CSP4" >
+            </div>
+            <div class="flip-card-back">
+              <div class="text-center">
+                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img src="..." alt="CSP5" >
+            </div>
+            <div class="flip-card-back">
+              <div class="text-center">
+                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img src="..." alt="CSP6" >
+            </div>
+            <div class="flip-card-back">
+              <div class="text-center">
+                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img src="..." alt="CSP7" >
+            </div>
+            <div class="flip-card-back">
+              <div class="text-center">
+                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img src="..." alt="CSP8" >
+            </div>
+            <div class="flip-card-back">
+              <div class="text-center">
+                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img src="..." alt="CSP9" >
+            </div>
+            <div class="flip-card-back">
+              <div class="text-center">
+                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img src="..." alt="CSP10" >
+            </div>
+            <div class="flip-card-back">
+              <div class="text-center">
+                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img src="..." alt="CSP11" >
+            </div>
+            <div class="flip-card-back">
+              <div class="text-center">
+                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img src="..." alt="CSP12" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -99,6 +277,33 @@ export default {
 
 <style>
 @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css');
+
+/* dropdown lists */
+
+.dropdown {
+  display: inline;
+  margin-right: 15px;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.dropdown label {
+  font-size: 25px;
+  padding: 5px;
+  color: white;
+  font-weight: bold;
+}
+
+.dropdown select {
+  font-size: 25px;
+  padding: 5px;
+  border-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  outline: none;
+  cursor: pointer;
+  text-align: justify;
+}
  
 .ct{
   display: flex;
