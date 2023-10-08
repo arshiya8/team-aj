@@ -311,7 +311,7 @@ body {
         >
           <img
             id="previewProfileImage"
-            src="#"
+            src="http://placehold.it/32x32"
             alt="Profile Picture"
             class="profile-image"
           />

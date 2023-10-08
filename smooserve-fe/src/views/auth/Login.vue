@@ -59,7 +59,7 @@ const googleSignIn = () => {
       const email = error.customData.email;
       // The AuthCredential type that was used.
       const credential = GoogleAuthProvider.credentialFromError(error);
-      // ...
+
       showErrorToast()
     });
 };
