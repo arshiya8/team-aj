@@ -64,7 +64,7 @@ const dragOptions = computed(() => {
 
 onMounted(async () => {
   axios
-    .get("http://localhost:8080/api/csp/" + CSPid)
+    .get("https://smooserve-be.vercel.app/api/csp/" + CSPid)
     .then((response) => {
       csp.value = response.data;
       response.data.urls ? list.value = response.data.urls : list.value = [];
