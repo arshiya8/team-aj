@@ -21,7 +21,7 @@ const loading = ref(true);
 const drag = ref(true);
 
 function removeAt(idx) {
-  this.list.splice(idx, 1);
+  list.value.splice(idx, 1);
 }
 
 function add() {
@@ -32,7 +32,7 @@ function save() {
   loading.value = true;
   csp.urls = list.value;
   axios
-    .put("https://smooserve-be.vercel.app/api/csp/" + CSPid, this.csp)
+    .put("https://smooserve-be.vercel.app/api/csp/" + CSPid, csp.value)
     .then((response) => {
       toast.add({
         severity: "success",
@@ -67,7 +67,9 @@ onMounted(async () => {
     .get("https://smooserve-be.vercel.app/api/csp/" + CSPid)
     .then((response) => {
       csp.value = response.data;
-      response.data.urls ? list.value = response.data.urls : list.value = [];
+      response.data.urls
+        ? (list.value = response.data.urls)
+        : (list.value = []);
     })
     .catch((error) => {
       console.log(error);
@@ -102,42 +104,49 @@ onMounted(async () => {
         </p>
       </div>
 
-      <Button rounded @click="add()" class="align-items-center justify-content-center"><i class="pi pi-plus px-2"></i>Add</Button>
-        <draggable
-          class="list-group mr-5"
-          tag="transition-group"
-          :component-data="{
-            tag: 'ul',
-            type: 'transition-group',
-            name: !drag ? 'flip-list' : null,
-          }"
-          v-model="list"
-          v-bind="dragOptions"
-          @start="drag = true"
-          @end="drag = false"
-          item-key="order"
-        >
-          <template #item="{ element, index }">
-            <li class="p-inputgroup mb-3">
-              <span class="p-inputgroup-addon">
-                <i :class="'pi pi-' + element.name"></i>
-              </span>
-              <span class="p-inputgroup-addon">
-                <i class="pi pi-sort-alt handle"></i>
-              </span>
+      <Button
+        rounded
+        @click="add()"
+        class="align-items-center justify-content-center"
+        ><i class="pi pi-plus px-2"></i>Add</Button
+      >
+      <draggable
+        class="list-group mr-5"
+        tag="transition-group"
+        :component-data="{
+          tag: 'ul',
+          type: 'transition-group',
+          name: !drag ? 'flip-list' : null,
+        }"
+        v-model="list"
+        v-bind="dragOptions"
+        @start="drag = true"
+        @end="drag = false"
+        item-key="order"
+      >
+        <template #item="{ element, index }">
+          <li class="p-inputgroup mb-3">
+            <span class="p-inputgroup-addon">
+              <i :class="'pi pi-' + element.name"></i>
+            </span>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-sort-alt handle"></i>
+            </span>
 
-              <InputText
-                type="text"
-                class="form-control"
-                v-model="element.url"
-              />
-              <span class="p-inputgroup-addon">
-                <i class="pi pi-times close" @click="removeAt(index)"></i>
-              </span>
-            </li>
-          </template>
-        </draggable>
-      <Button rounded label="Save" @click="save()" class="align-items-center justify-content-center"><i class="pi pi-save px-2"></i>Save</Button>
+            <InputText type="text" class="form-control" v-model="element.url" />
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-times close" @click="removeAt(index)"></i>
+            </span>
+          </li>
+        </template>
+      </draggable>
+      <Button
+        rounded
+        label="Save"
+        @click="save()"
+        class="align-items-center justify-content-center"
+        ><i class="pi pi-save px-2"></i>Save</Button
+      >
     </div>
   </div>
 </template>
