@@ -12,7 +12,14 @@ export default {
       selectedValue1: '', // Initialize with default values if needed
       selectedValue2: '',
       selectedValue3: '',
+      isHeartRed: false, // Initially, the heart is not red
     };
+  },
+  methods: {
+    toggleHeartColor() {
+      // Toggle the heart color between red and gray
+      this.isHeartRed = !this.isHeartRed;
+    },
   },
 };
 
@@ -23,13 +30,17 @@ export default {
   <NavBar />
   <CaroPics />
 
+
+  <!-- headers -->
   <div class="container-fluid" style="background-color: lightblue;">
-    <div class="row">
+    <div class="row pb-3">
       <h2 style="color:black; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">COMMUNITY SERVICE PROJECTS</h2><br>
-      <h2 style="color:red; font-weight: bold; text-align: center; font-size: 4rem;">THIS MONTH</h2>
+      <h2 style="color:red; font-weight: bold; text-align: center; font-size: 5rem;">THIS MONTH</h2>
     </div>
   </div>
 
+
+  <!-- tilted cards -->
   <div class="ct">
     <div class="card-container">
         <div class="card rd">
@@ -43,10 +54,8 @@ export default {
             <img style="border-radius: 15px;" src="/layout/images/card3.jpg" >
         </div>
     </div>
-
   </div>
   
-
 
   <!-- body -->
   <div class="container-fluid" style="background-color: navy">
@@ -96,8 +105,17 @@ export default {
   </div>
       </div>
     </div>
-
     </div>
+
+
+    <!-- font awesome library icons  -->
+    <div>
+      <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    />
+    </div>
+
 
   <!--cards taken from w3schools-->
   <div class="container-fluid" style="background-color: lightblue;">
@@ -110,7 +128,17 @@ export default {
               <img src="/layout/images/card1.jpg" alt="CSP1">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
+              <div class="heart-container">
+                <!-- Heart icon with click event -->
+                <i
+                  class="fas fa-heart"
+                  :class="{ 'heart-red': isHeartRed }"
+                  @click="toggleHeartColor"
+                ></i>
+              </div>
               <div class="text-center">
+                <h1>OTR LISTENS</h1>
+                <p>Keen to provide a listening ear for fellow peers?</p>
                 <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
@@ -127,7 +155,17 @@ export default {
               <img src="/layout/images/card2.jpg" alt="CSP2">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
+              <div class="heart-container">
+                <!-- Heart icon with click event -->
+                <i
+                  class="fas fa-heart"
+                  :class="{ 'heart-red': isHeartRed }"
+                  @click="toggleHeartColor"
+                ></i>
+              </div>
               <div class="text-center">
+                <h1>PROJECT BRIGHT 5</h1>
+                <p>Feel strongly about equal education for all?</p>
                 <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
@@ -143,7 +181,17 @@ export default {
                 <img src="/layout/images/card3.jpg" alt="CSP3">
               </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
+              <div class="heart-container">
+                <!-- Heart icon with click event -->
+                <i
+                  class="fas fa-heart"
+                  :class="{ 'heart-red': isHeartRed }"
+                  @click="toggleHeartColor"
+                ></i>
+              </div>
               <div class="text-center">
+                <h1>CAHAYA COMMUNITY</h1>
+                <p>Passionate about serving the underdeserved?</p>
                 <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
@@ -159,7 +207,17 @@ export default {
               <img src="/layout/images/card1.jpg" alt="CSP4">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
+              <div class="heart-container">
+                <!-- Heart icon with click event -->
+                <i
+                  class="fas fa-heart"
+                  :class="{ 'heart-red': isHeartRed }"
+                  @click="toggleHeartColor"
+                ></i>
+              </div>
               <div class="text-center">
+                <h1>OTR LISTENS</h1>
+                <p>Keen to provide a listening ear for fellow peers?</p>
                 <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
@@ -176,7 +234,17 @@ export default {
             </div>
 
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
+              <div class="heart-container">
+                <!-- Heart icon with click event -->
+                <i
+                  class="fas fa-heart"
+                  :class="{ 'heart-red': isHeartRed }"
+                  @click="toggleHeartColor"
+                ></i>
+              </div>
               <div class="text-center">
+                <h1>PROJECT BRIGHT 5</h1>
+                <p>Feel strongly about equal education for all?</p>
                 <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
@@ -192,7 +260,17 @@ export default {
               <img src="/layout/images/card3.jpg" alt="CSP6">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
+              <div class="heart-container">
+                <!-- Heart icon with click event -->
+                <i
+                  class="fas fa-heart"
+                  :class="{ 'heart-red': isHeartRed }"
+                  @click="toggleHeartColor"
+                ></i>
+              </div>
               <div class="text-center">
+                <h1>CAHAYA COMMUNITY</h1>
+                <p>Passionate about serving the underdeserved?</p>
                 <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
@@ -208,7 +286,17 @@ export default {
               <img src="/layout/images/card1.jpg" alt="CSP7">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
+              <div class="heart-container">
+                <!-- Heart icon with click event -->
+                <i
+                  class="fas fa-heart"
+                  :class="{ 'heart-red': isHeartRed }"
+                  @click="toggleHeartColor"
+                ></i>
+              </div>
               <div class="text-center">
+                <h1>OTR LISTENS</h1>
+                <p>Keen to provide a listening ear for fellow peers?</p>
                 <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
@@ -224,7 +312,17 @@ export default {
               <img src="/layout/images/card2.jpg" alt="CSP8">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
+              <div class="heart-container">
+                <!-- Heart icon with click event -->
+                <i
+                  class="fas fa-heart"
+                  :class="{ 'heart-red': isHeartRed }"
+                  @click="toggleHeartColor"
+                ></i>
+              </div>
               <div class="text-center">
+                <h1>PROJECT BRIGHT 5</h1>
+                <p>Feel strongly about equal education for all?</p>
                 <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
@@ -240,7 +338,17 @@ export default {
               <img src="/layout/images/card3.jpg" alt="CSP9">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
+              <div class="heart-container">
+                <!-- Heart icon with click event -->
+                <i
+                  class="fas fa-heart"
+                  :class="{ 'heart-red': isHeartRed }"
+                  @click="toggleHeartColor"
+                ></i>
+              </div>
               <div class="text-center">
+                <h1>CAHAYA COMMUNITY</h1>
+                <p>Passionate about serving the underdeserved?</p>
                 <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
@@ -253,10 +361,20 @@ export default {
           <div class="flip-card-inner">
             <div class="flip-card-front">
               
-              <img src="/layout/images/card2.jpg" alt="CSP10">
+              <img src="/layout/images/card1.jpg" alt="CSP10">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
+              <div class="heart-container">
+                <!-- Heart icon with click event -->
+                <i
+                  class="fas fa-heart"
+                  :class="{ 'heart-red': isHeartRed }"
+                  @click="toggleHeartColor"
+                ></i>
+              </div>
               <div class="text-center">
+                <h1>OTR LISTENS</h1>
+                <p>Keen to provide a listening ear for fellow peers?</p>
                 <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
@@ -269,10 +387,20 @@ export default {
           <div class="flip-card-inner">
             <div class="flip-card-front">
               
-              <img src="/layout/images/card3.jpg" alt="CSP11">
+              <img src="/layout/images/card2.jpg" alt="CSP11">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
+              <div class="heart-container">
+                <!-- Heart icon with click event -->
+                <i
+                  class="fas fa-heart"
+                  :class="{ 'heart-red': isHeartRed }"
+                  @click="toggleHeartColor"
+                ></i>
+              </div>
               <div class="text-center">
+                <h1>PROJECT BRIGHT 5</h1>
+                <p>Feel strongly about equal education for all?</p>
                 <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
@@ -284,10 +412,20 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="/layout/images/card1.jpg" alt="CSP12">
+              <img src="/layout/images/card3.jpg" alt="CSP12">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
+              <div class="heart-container">
+                <!-- Heart icon with click event -->
+                <i
+                  class="fas fa-heart"
+                  :class="{ 'heart-red': isHeartRed }"
+                  @click="toggleHeartColor"
+                ></i>
+              </div>
               <div class="text-center">
+                <h1>CAHAYA COMMUNITY</h1>
+                <p>Passionate about serving the underdeserved?</p>
                 <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
@@ -301,6 +439,20 @@ export default {
 
 <style>
 @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css');
+
+.heart-container {
+  position: absolute;
+  top: 10px; /* Adjust the top position as needed */
+  right: 10px; /* Adjust the right position as needed */
+  z-index: 1; /* Ensure the heart is above other content */
+}
+
+/* Define styles for the red heart */
+.heart-red {
+  color: red;
+  /* You can customize the red color as needed */
+}
+
 
 /* to have spacing between each card */
 .col-md-3{
