@@ -102,16 +102,16 @@ export default {
   <!--cards taken from w3schools-->
   <div class="container-fluid" style="background-color: lightblue;">
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-3">  <!-- Align-items-end requires col -->
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
               
               <img src="/layout/images/card1.jpg" alt="CSP1">
             </div>
-            <div class="flip-card-back justify-content-center">
+            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="text-center">
-                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
           </div>
@@ -126,9 +126,9 @@ export default {
               
               <img src="/layout/images/card2.jpg" alt="CSP2">
             </div>
-            <div class="flip-card-back justify-content-center">
+            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="text-center">
-                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
           </div>
@@ -142,9 +142,9 @@ export default {
                 
                 <img src="/layout/images/card3.jpg" alt="CSP3">
               </div>
-            <div class="flip-card-back justify-content-center">
+            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="text-center">
-                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
           </div>
@@ -158,9 +158,9 @@ export default {
               
               <img src="/layout/images/card1.jpg" alt="CSP4">
             </div>
-            <div class="flip-card-back justify-content-center">
+            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="text-center">
-                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
           </div>
@@ -172,12 +172,12 @@ export default {
           <div class="flip-card-inner">
             <div class="flip-card-front">
                 
-                <img src="/layout/images/card2.jpg" alt="CSP5">
-              </div>
+              <img src="/layout/images/card2.jpg" alt="CSP5">
+            </div>
 
-            <div class="flip-card-back justify-content-center">
+            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="text-center">
-                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
           </div>
@@ -191,9 +191,9 @@ export default {
               
               <img src="/layout/images/card3.jpg" alt="CSP6">
             </div>
-            <div class="flip-card-back justify-content-center">
+            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="text-center">
-                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
           </div>
@@ -207,9 +207,9 @@ export default {
               
               <img src="/layout/images/card1.jpg" alt="CSP7">
             </div>
-            <div class="flip-card-back justify-content-center">
+            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="text-center">
-                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
           </div>
@@ -223,9 +223,9 @@ export default {
               
               <img src="/layout/images/card2.jpg" alt="CSP8">
             </div>
-            <div class="flip-card-back justify-content-center">
+            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="text-center">
-                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
           </div>
@@ -239,9 +239,9 @@ export default {
               
               <img src="/layout/images/card3.jpg" alt="CSP9">
             </div>
-            <div class="flip-card-back justify-content-center">
+            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="text-center">
-                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
           </div>
@@ -255,9 +255,9 @@ export default {
               
               <img src="/layout/images/card2.jpg" alt="CSP10">
             </div>
-            <div class="flip-card-back justify-content-center">
+            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="text-center">
-                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
           </div>
@@ -271,9 +271,9 @@ export default {
               
               <img src="/layout/images/card3.jpg" alt="CSP11">
             </div>
-            <div class="flip-card-back justify-content-center">
+            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="text-center">
-                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
           </div>
@@ -286,9 +286,9 @@ export default {
             <div class="flip-card-front">
               <img src="/layout/images/card1.jpg" alt="CSP12">
             </div>
-            <div class="flip-card-back justify-content-center">
+            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="text-center">
-                <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
+                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
               </div>
             </div>
           </div>
