@@ -106,9 +106,9 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP1" >
+              <img src="/layout/images/card1.jpg" alt="CSP1" >
             </div>
-            <div class="flip-card-back">
+            <div class="flip-card-back justify-content-center">
               <div class="text-center">
                 <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
               </div>
@@ -323,7 +323,7 @@ export default {
 
 .rd{
   border-radius: 15px;
-    width: 30%;
+  width: 30%;
 }
 
 .card:first-child {
@@ -450,8 +450,8 @@ export default {
 
 .flip-card {
   background-color: transparent;
-  width: 350px;
-  height: 350px;
+  width: 280px;
+  height: 390px;
   border: 1px solid #f1f1f1;
   perspective: 1000px; /* Remove this if you don't want the 3D effect */
   border-radius: 15px;
@@ -477,15 +477,16 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
-  -webkit-backface-visibility: hidden; /* Safari */
+  -webkit-backface-visibility: hidden; 
   backface-visibility: hidden;
-  border-radius: 10px;
+  border-radius: 15px;
 }
 
 /* Style the front side (fallback if image is missing) */
 .flip-card-front {
   background-color: rgb(119, 166, 204);
   color: black;
+  
 }
 
 /* Style the back side */
@@ -493,6 +494,14 @@ export default {
   background-color: rgb(119, 166, 204);
   color: white;
   transform: rotateY(180deg);
+  display: flex;
+  justify-content: center;
+}
+
+.flip-card img {
+    max-width: 100%; /* Ensure the image doesn't exceed its container */
+    max-height: 100%; 
+    border-radius: 15px;
 }
 
 .centralise{
