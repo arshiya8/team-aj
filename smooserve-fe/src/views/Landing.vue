@@ -302,6 +302,11 @@ export default {
 <style>
 @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css');
 
+/* to have spacing between each card */
+.col-md-3{
+  margin: 20px 0;
+}
+
 
 .dropdown {
   display: inline;
@@ -473,7 +478,7 @@ export default {
   background-color: transparent;
   width: 280px;
   height: 390px;
-  border: 1px solid #f1f1f1;
+  border: none;
   perspective: 1000px; /* Remove this if you don't want the 3D effect */
   border-radius: 15px;
 }
@@ -505,7 +510,6 @@ export default {
 
 /* Style the front side (fallback if image is missing) */
 .flip-card-front {
-  background-color: rgb(119, 166, 204);
   color: black;
   
 }
