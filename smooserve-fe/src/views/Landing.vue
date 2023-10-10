@@ -33,14 +33,14 @@ export default {
   <div class="ct">
     <div class="card-container">
         <div class="card rd">
-            <img style="border-radius: 15px;" src="layout/images/card1.jpg" >  
+            <img style="border-radius: 15px;" src="/layout/images/card1.jpg" >  
         </div>
         <div class="card rd">
-            <img style="border-radius: 15px;" src="layout/images/card2.jpg" >
+            <img style="border-radius: 15px;" src="/layout/images/card2.jpg" >
             
         </div>
         <div class="card rd">
-            <img style="border-radius: 15px;" src="layout/images/card3.jpg" >
+            <img style="border-radius: 15px;" src="/layout/images/card3.jpg" >
         </div>
     </div>
 
@@ -106,7 +106,7 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP1">
+              <img src="..." alt="CSP1" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -122,7 +122,6 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              
               <img src="..." alt="CSP2" >
             </div>
             <div class="flip-card-back">
@@ -137,7 +136,7 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP3" >
+              <img src="http://placehold.it/32x32" alt="CSP3" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -151,7 +150,7 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP4" >
+              <img src="http://placehold.it/32x32" alt="CSP4" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -165,7 +164,7 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP5" >
+              <img src="http://placehold.it/32x32" alt="CSP5" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -179,7 +178,7 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP6" >
+              <img src="http://placehold.it/32x32" alt="CSP6" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -193,7 +192,7 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP7" >
+              <img src="http://placehold.it/32x32" alt="CSP7" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -207,7 +206,7 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP8" >
+              <img src="http://placehold.it/32x32" alt="CSP8" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -221,7 +220,7 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP9" >
+              <img src="http://placehold.it/32x32" alt="CSP9" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -235,7 +234,7 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP10" >
+              <img src="http://placehold.it/32x32" alt="CSP10" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -249,7 +248,7 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP11" >
+              <img src="http://placehold.it/32x32" alt="CSP11" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -263,7 +262,7 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP12" >
+              <img src="http://placehold.it/32x32" alt="CSP12" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">

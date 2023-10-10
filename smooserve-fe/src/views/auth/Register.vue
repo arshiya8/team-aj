@@ -7,7 +7,7 @@ const router = useRouter()
 const checked = ref(false)
 
 const logoUrl = computed(() => {
-    return `layout/images/logo-white.png`;
+    return `/layout/images/logo-white.png`;
 });
 
 const registerData = reactive({

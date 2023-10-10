@@ -11,7 +11,7 @@ const toast = useToast();
 const router = useRouter();
 
 const logoUrl = computed(() => {
-  return `layout/images/logo-white.png`;
+  return `/layout/images/logo-white.png`;
 });
 
 const csps = ref([
