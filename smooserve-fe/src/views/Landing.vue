@@ -102,11 +102,11 @@ export default {
   <!--cards taken from w3schools-->
   <div class="container-fluid" style="background-color: lightblue;">
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-3 mx-auto">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP1" >
+              <img src="..." alt="CSP1">
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -116,10 +116,13 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+          
+
+      <div class="col-md-3 mx-auto">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
+              
               <img src="..." alt="CSP2" >
             </div>
             <div class="flip-card-back">
@@ -130,7 +133,7 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-3 mx-auto">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
@@ -144,7 +147,7 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-3 mx-auto">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
@@ -158,7 +161,7 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-3 mx-auto">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
@@ -172,7 +175,7 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-3 mx-auto">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
@@ -186,7 +189,7 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-3 mx-auto">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
@@ -200,7 +203,7 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-3 mx-auto">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
@@ -214,7 +217,7 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-3 mx-auto">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
@@ -228,7 +231,7 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-3 mx-auto">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
@@ -242,7 +245,7 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-3 mx-auto">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
@@ -256,7 +259,7 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-3 mx-auto">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
@@ -448,8 +451,8 @@ export default {
 
 .flip-card {
   background-color: transparent;
-  width: 350px;
-  height: 350px;
+  width: 250px;
+  height: 250px;
   border: 1px solid #f1f1f1;
   perspective: 1000px; /* Remove this if you don't want the 3D effect */
   border-radius: 15px;
