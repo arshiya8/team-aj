@@ -16,6 +16,14 @@ export default {
   },
 };
 
+const heartIcon = document.getElementById('heart-icon');
+
+  // Add a click event listener to the heart icon
+  heartIcon.addEventListener('click', function () {
+    // Toggle the 'liked' class to change the color
+    this.classList.toggle('liked');
+  });
+
 </script>
 
 <template>
@@ -106,7 +114,10 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="/layout/images/card1.jpg" alt="CSP1" >
+              <div class="heart-icon" id="heart-icon">
+                <i class="fas fa-heart"></i>
+              </div>
+              <img src="/layout/images/card1.jpg" alt="CSP1">
             </div>
             <div class="flip-card-back justify-content-center">
               <div class="text-center">
@@ -122,9 +133,12 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP2" >
+              <div class="heart-icon" id="heart-icon">
+                <i class="fas fa-heart"></i>
+              </div>
+              <img src="/layout/images/card2.jpg" alt="CSP2">
             </div>
-            <div class="flip-card-back">
+            <div class="flip-card-back justify-content-center">
               <div class="text-center">
                 <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
               </div>
@@ -132,13 +146,17 @@ export default {
           </div>
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP3" >
-            </div>
-            <div class="flip-card-back">
+                <div class="heart-icon" id="heart-icon">
+                  <i class="fas fa-heart"></i>
+                </div>
+                <img src="/layout/images/card3.jpg" alt="CSP3">
+              </div>
+            <div class="flip-card-back justify-content-center">
               <div class="text-center">
                 <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
               </div>
@@ -146,13 +164,17 @@ export default {
           </div>
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP4" >
+              <div class="heart-icon" id="heart-icon">
+                <i class="fas fa-heart"></i>
+              </div>
+              <img src="/layout/images/card1.jpg" alt="CSP4">
             </div>
-            <div class="flip-card-back">
+            <div class="flip-card-back justify-content-center">
               <div class="text-center">
                 <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
               </div>
@@ -160,13 +182,18 @@ export default {
           </div>
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP5" >
-            </div>
-            <div class="flip-card-back">
+                <div class="heart-icon" id="heart-icon">
+                  <i class="fas fa-heart"></i>
+                </div>
+                <img src="/layout/images/card2.jpg" alt="CSP5">
+              </div>
+
+            <div class="flip-card-back justify-content-center">
               <div class="text-center">
                 <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
               </div>
@@ -174,13 +201,17 @@ export default {
           </div>
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP6" >
+              <div class="heart-icon" id="heart-icon">
+                <i class="fas fa-heart"></i>
+              </div>
+              <img src="/layout/images/card3.jpg" alt="CSP6">
             </div>
-            <div class="flip-card-back">
+            <div class="flip-card-back justify-content-center">
               <div class="text-center">
                 <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
               </div>
@@ -188,13 +219,17 @@ export default {
           </div>
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP7" >
+              <div class="heart-icon" id="heart-icon">
+                <i class="fas fa-heart"></i>
+              </div>
+              <img src="/layout/images/card1.jpg" alt="CSP7">
             </div>
-            <div class="flip-card-back">
+            <div class="flip-card-back justify-content-center">
               <div class="text-center">
                 <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
               </div>
@@ -202,13 +237,17 @@ export default {
           </div>
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP8" >
+              <div class="heart-icon" id="heart-icon">
+                <i class="fas fa-heart"></i>
+              </div>
+              <img src="/layout/images/card2.jpg" alt="CSP8">
             </div>
-            <div class="flip-card-back">
+            <div class="flip-card-back justify-content-center">
               <div class="text-center">
                 <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
               </div>
@@ -216,13 +255,17 @@ export default {
           </div>
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP9" >
+              <div class="heart-icon" id="heart-icon">
+                <i class="fas fa-heart"></i>
+              </div>
+              <img src="/layout/images/card3.jpg" alt="CSP9">
             </div>
-            <div class="flip-card-back">
+            <div class="flip-card-back justify-content-center">
               <div class="text-center">
                 <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
               </div>
@@ -230,13 +273,17 @@ export default {
           </div>
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP10" >
+              <div class="heart-icon" id="heart-icon">
+                <i class="fas fa-heart"></i>
+              </div>
+              <img src="/layout/images/card2.jpg" alt="CSP10">
             </div>
-            <div class="flip-card-back">
+            <div class="flip-card-back justify-content-center">
               <div class="text-center">
                 <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
               </div>
@@ -244,13 +291,17 @@ export default {
           </div>
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP11" >
+              <div class="heart-icon" id="heart-icon">
+                <i class="fas fa-heart"></i>
+              </div>
+              <img src="/layout/images/card3.jpg" alt="CSP11">
             </div>
-            <div class="flip-card-back">
+            <div class="flip-card-back justify-content-center">
               <div class="text-center">
                 <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
               </div>
@@ -258,13 +309,17 @@ export default {
           </div>
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="..." alt="CSP12" >
+              <div class="heart-icon" id="heart-icon">
+                <i class="fas fa-heart"></i>
+              </div>
+              <img src="/layout/images/card1.jpg" alt="CSP12">
             </div>
-            <div class="flip-card-back">
+            <div class="flip-card-back justify-content-center">
               <div class="text-center">
                 <a class="btn btn-primary centralise" href="csp.page" role="button">See more!</a>
               </div>
@@ -279,8 +334,25 @@ export default {
 
 <style>
 @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css');
+/* @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css'); */
 
 /* dropdown lists */
+
+/* Initial style for the heart icon */
+.heart-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: red;
+  z-index: 1;
+  cursor: pointer; /* Add cursor pointer to indicate it's clickable */
+}
+
+/* Style when the heart is clicked (change the color) */
+.heart-icon.liked {
+  color: purple; /* Change to your preferred color */
+}
+
 
 .dropdown {
   display: inline;
