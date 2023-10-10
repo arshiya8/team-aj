@@ -102,7 +102,7 @@ export default {
   <!--cards taken from w3schools-->
   <div class="container-fluid" style="background-color: lightblue;">
     <div class="row">
-      <div class="col-md-3 mx-auto">
+      <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
@@ -118,7 +118,7 @@ export default {
       </div>
           
 
-      <div class="col-md-3 mx-auto">
+      <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
@@ -132,11 +132,11 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3 mx-auto">
+      <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="http://placehold.it/32x32" alt="CSP3" >
+              <img src="..." alt="CSP3" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -146,11 +146,11 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3 mx-auto">
+      <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="http://placehold.it/32x32" alt="CSP4" >
+              <img src="..." alt="CSP4" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -160,11 +160,11 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3 mx-auto">
+      <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="http://placehold.it/32x32" alt="CSP5" >
+              <img src="..." alt="CSP5" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -174,11 +174,11 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3 mx-auto">
+      <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="http://placehold.it/32x32" alt="CSP6" >
+              <img src="..." alt="CSP6" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -188,11 +188,11 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3 mx-auto">
+      <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="http://placehold.it/32x32" alt="CSP7" >
+              <img src="..." alt="CSP7" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -202,11 +202,11 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3 mx-auto">
+      <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="http://placehold.it/32x32" alt="CSP8" >
+              <img src="..." alt="CSP8" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -216,11 +216,11 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3 mx-auto">
+      <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="http://placehold.it/32x32" alt="CSP9" >
+              <img src="..." alt="CSP9" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -230,11 +230,11 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3 mx-auto">
+      <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="http://placehold.it/32x32" alt="CSP10" >
+              <img src="..." alt="CSP10" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -244,11 +244,11 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3 mx-auto">
+      <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="http://placehold.it/32x32" alt="CSP11" >
+              <img src="..." alt="CSP11" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -258,11 +258,11 @@ export default {
           </div>
         </div>
       </div>
-      <div class="col-md-3 mx-auto">
+      <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="http://placehold.it/32x32" alt="CSP12" >
+              <img src="..." alt="CSP12" >
             </div>
             <div class="flip-card-back">
               <div class="text-center">
@@ -450,8 +450,8 @@ export default {
 
 .flip-card {
   background-color: transparent;
-  width: 250px;
-  height: 250px;
+  width: 350px;
+  height: 350px;
   border: 1px solid #f1f1f1;
   perspective: 1000px; /* Remove this if you don't want the 3D effect */
   border-radius: 15px;
