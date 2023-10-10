@@ -1,155 +1,5 @@
-<style>
-@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css');
-
-
-body {
-  background-color: #7fcdff;
-}
-.carousel-indicators .active {
-  background-color: #4338ca;
-}
-
-.c1 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 100px;
-  border: 2px solid #4338ca;
-  border-radius: 15px;
-  background-color: #def3f6;
-}
-.carousel {
-  padding: 50px 0px;
-}
-
-.wrapping {
-  background-color: whitesmoke;
-  border: 2px solid #4338ca;
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 30px;
-}
-
-.c2 {
-  display: flex;
-  justify-content: center; /* Horizontal centering */
-  align-items: center;
-  padding: 50px;
-}
-
-.carousel-item {
-  text-align: center;
-}
-
-.radio-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.submit-button {
-  background-color: #4338ca;
-  color: #ffffff;
-  border: none;
-  border-radius: 25px;
-  padding: 10px 20px;
-  font-size: 16px;
-}
-
-.custom-textbox {
-  border: 1px solid #064273;
-  border-radius: 15px;
-  padding: 5px;
-}
-
-.custom-radio-label {
-  cursor: pointer;
-  padding: 10px 20px;
-  border: 1px solid #ccc;
-  border-radius: 15px;
-  margin: 5px;
-  display: block;
-}
-
-.custom-radio-label:hover {
-  background-color: #76b6c4;
-}
-
-/* Add styles for the selected option */
-.custom-radio-label.selected {
-  background-color: #4338ca;
-  color: white;
-}
-</style>
-
-<template>
-  <div class="container c1">
-    <form @submit.prevent="submitForm">
-      <div id="carouselExampleIndicators" class="carousel slide">
-        <!-- Carousel indicators for questions -->
-        <ol class="carousel-indicators">
-          <li
-            v-for="(question, index) in questions"
-            :key="index"
-            :class="{ active: index === currentQuestion }"
-            @click="goToQuestion(index)"
-          ></li>
-        </ol>
-
-        <!-- Carousel items -->
-        <div class="carousel-inner">
-          <div
-            v-for="(question, index) in questions"
-            :key="index"
-            class="carousel-item"
-            :class="{ active: index === currentQuestion }"
-          >
-            <h2>{{ question.text }}</h2>
-            <div class="container w-100">
-              <table class="w-100">
-                <tr style="display: flex; flex-direction: row;">
-                  <td v-for="(option, optionIndex) in question.options.cols1" :key="optionIndex" class="wrapping custom-radio-label w-100" @click="updateRadioStyles(question.name, option)" :class="{ selected: selectedOptions[question.name] === option }">{{ option }}</td>
-                </tr>
-                <tr style="display: flex; flex-direction: row;">
-                  <td v-for="(option, optionIndex) in question.options.cols2" :key="optionIndex" class="wrapping custom-radio-label w-100" @click="updateRadioStyles(question.name, option)" :class="{ selected: selectedOptions[question.name] === option }">{{ option }}</td>
-                </tr>
-              </table>
-            </div>
-
-            <!-- Back and Next buttons for each question -->
-            <div class="d-flex justify-content-between mt-3">
-              <button
-                v-if="currentQuestion > 0"
-                type="button"
-                class="btn btn-secondary"
-                @click="prevQuestion"
-              >
-                Back
-              </button>
-              <button
-                v-if="currentQuestion < questions.length - 1"
-                type="button"
-                class="btn btn-primary"
-                @click="nextQuestion"
-              >
-                Next
-              </button>
-              <button
-                v-if="currentQuestion === questions.length - 1"
-                type="submit"
-                class="btn btn-primary"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
-</template>
-
 <script>
-import NavBar from "@/components/NavBar.vue"
+import NavBar from "/src/components/NavBar.vue";
 
 export default {
   components: {
@@ -252,3 +102,158 @@ export default {
   },
 };
 </script>
+
+
+
+<template>
+  <NavBar />
+
+  <div class="container c1">
+    <form @submit.prevent="submitForm">
+      <div id="carouselExampleIndicators" class="carousel slide">
+        <!-- Carousel indicators for questions -->
+        <ol class="carousel-indicators">
+          <li
+            v-for="(question, index) in questions"
+            :key="index"
+            :class="{ active: index === currentQuestion }"
+            @click="goToQuestion(index)"
+          ></li>
+        </ol>
+
+        <!-- Carousel items -->
+        <div class="carousel-inner">
+          <div
+            v-for="(question, index) in questions"
+            :key="index"
+            class="carousel-item"
+            :class="{ active: index === currentQuestion }"
+          >
+            <h2>{{ question.text }}</h2>
+            <div class="container w-100">
+              <table class="w-100">
+                <tr style="display: flex; flex-direction: row;">
+                  <td v-for="(option, optionIndex) in question.options.cols1" :key="optionIndex" class="wrapping custom-radio-label w-100" @click="updateRadioStyles(question.name, option)" :class="{ selected: selectedOptions[question.name] === option }">{{ option }}</td>
+                </tr>
+                <tr style="display: flex; flex-direction: row;">
+                  <td v-for="(option, optionIndex) in question.options.cols2" :key="optionIndex" class="wrapping custom-radio-label w-100" @click="updateRadioStyles(question.name, option)" :class="{ selected: selectedOptions[question.name] === option }">{{ option }}</td>
+                </tr>
+              </table>
+            </div>
+
+            <!-- Back and Next buttons for each question -->
+            <div class="d-flex justify-content-between mt-3">
+              <button
+                v-if="currentQuestion > 0"
+                type="button"
+                class="btn btn-secondary"
+                @click="prevQuestion"
+              >
+                Back
+              </button>
+              <button
+                v-if="currentQuestion < questions.length - 1"
+                type="button"
+                class="btn btn-primary"
+                @click="nextQuestion"
+              >
+                Next
+              </button>
+              <button
+                v-if="currentQuestion === questions.length - 1"
+                type="submit"
+                class="btn btn-primary"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</template>
+
+
+<style>
+@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css');
+
+
+body {
+  background-color: #7fcdff;
+}
+.carousel-indicators .active {
+  background-color: #4338ca;
+}
+
+.c1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+  border: 2px solid #4338ca;
+  border-radius: 15px;
+  background-color: #def3f6;
+}
+.carousel {
+  padding: 50px 0px;
+}
+
+.wrapping {
+  background-color: whitesmoke;
+  border: 2px solid #4338ca;
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.c2 {
+  display: flex;
+  justify-content: center; /* Horizontal centering */
+  align-items: center;
+  padding: 50px;
+}
+
+.carousel-item {
+  text-align: center;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.submit-button {
+  background-color: #4338ca;
+  color: #ffffff;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+.custom-textbox {
+  border: 1px solid #064273;
+  border-radius: 15px;
+  padding: 5px;
+}
+
+.custom-radio-label {
+  cursor: pointer;
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  margin: 5px;
+  display: block;
+}
+
+.custom-radio-label:hover {
+  background-color: #76b6c4;
+}
+
+/* Add styles for the selected option */
+.custom-radio-label.selected {
+  background-color: #4338ca;
+  color: white;
+}
+</style>
