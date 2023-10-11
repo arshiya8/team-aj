@@ -67,8 +67,8 @@ onMounted(async () => {
     .get("https://smooserve-be.vercel.app/api/csp/" + CSPid)
     .then((response) => {
       csp.value = response.data;
-      response.data.urls
-        ? (list.value = response.data.urls)
+      response.data.settings.urls
+        ? (list.value = response.data.settings.urls)
         : (list.value = []);
     })
     .catch((error) => {
@@ -90,19 +90,32 @@ onMounted(async () => {
   >
     <ProgressSpinner v-if="loading"></ProgressSpinner>
     <div v-else class="flex flex-column text-center w-10 sm:w-8 md:w-5">
-      <Image
-        :src="csp.imageURL"
-        width="250"
-        preview
-        class="mb-2 flex-shrink-0"
-      />
+      <Card class="mt-4 mb-4">
+        <template #title> CSP Profile </template>
+        <template #content>
+          <Image
+            :src="csp.imageURL"
+            width="250"
+            preview
+            class="mb-2 flex-shrink-0"
+          />
+          <div class="card flex justify-content-center">
+            <div class="flex flex-column gap-2 mb-3">
+              <label for="title">Username</label>
+              <InputText id="title" :value="csp.title" v-model="title" />
 
-      <div class="mb-3">
-        <h1>{{ csp.title }}</h1>
-        <p>
-          {{ csp.desc }}
-        </p>
-      </div>
+              <label for="desc">Description</label>
+              <Textarea
+                id="desc"
+                :value="csp.desc"
+                v-model="desc"
+                rows="5"
+                cols="30"
+              />
+            </div>
+          </div>
+        </template>
+      </Card>
 
       <Button
         rounded
