@@ -1,4 +1,4 @@
-<script >
+<script>
 import NavBar from "../components/NavBar.vue"
 import CaroPics from "../components/CaroPics.vue";
 export default {
