@@ -43,78 +43,78 @@ export default {
   <!-- tilted cards -->
   <div class="ct">
     <div class="card-container">
-        <div class="card rd">
-            <img style="border-radius: 15px;" src="/layout/images/card1.jpg" >  
-        </div>
-        <div class="card rd">
-            <img style="border-radius: 15px;" src="/layout/images/card2.jpg" >
-            
-        </div>
-        <div class="card rd">
-            <img style="border-radius: 15px;" src="/layout/images/card3.jpg" >
-        </div>
+      <div class="card rd">
+        <img style="border-radius: 15px;" src="/layout/images/card1.jpg" >
+      </div>
+      <div class="card rd">
+        <img style="border-radius: 15px;" src="/layout/images/card2.jpg" >
+
+      </div>
+      <div class="card rd">
+        <img style="border-radius: 15px;" src="/layout/images/card3.jpg" >
+      </div>
     </div>
   </div>
-  
+
 
   <!-- body -->
   <div class="container-fluid" style="background-color: navy">
     <div class="row">
       <div class="col">
-    <h1 style="font-weight: bold; text-align: center; color:white;">What's happening in Smooserve</h1>
-    <div>
-    </div>
-      <div class="row" style="text-align: center;">
-        <!-- First Dropdown List -->
-    <div class="dropdown">
-      <label for="dropdown1">Causes:</label>
-      <select id="dropdown1" v-model="selectedValue1">
-        <option value="option1">Option 1</option>
-        <option value="option2">Option 2</option>
-        <option value="option3">Option 3</option>
-      </select>
-    
-
-    <!-- Second Dropdown List -->
-    
-      <label for="dropdown2">Skills:</label>
-      <select id="dropdown2" v-model="selectedValue2">
-        <option value="optionA">Option A</option>
-        <option value="optionB">Option B</option>
-        <option value="optionC">Option C</option>
-      </select>
-    
-
-    <!-- Third Dropdown List -->
-    
-      <label for="dropdown3">Date:</label>
-      <select id="dropdown3" v-model="selectedValue3">
-        <option value="choiceX">Choice X</option>
-        <option value="choiceY">Choice Y</option>
-        <option value="choiceZ">Choice Z</option>
-      </select>
-    </div>
+        <h1 style="font-weight: bold; text-align: center; color:white;">What's happening in Smooserve</h1>
+        <div>
+        </div>
+        <div class="row" style="text-align: center;">
+          <!-- First Dropdown List -->
+          <div class="dropdown">
+            <label for="dropdown1">Causes:</label>
+            <select id="dropdown1" v-model="selectedValue1">
+              <option value="option1">Option 1</option>
+              <option value="option2">Option 2</option>
+              <option value="option3">Option 3</option>
+            </select>
 
 
-    <!-- Display selected values -->
-    <div class="row justify-content-center" style="color:white; font-weight: bold; font-size: 20px;">
-      Selected Value 1: {{ selectedValue1 }}
-      Selected Value 2: {{ selectedValue2 }}
-      Selected Value 3: {{ selectedValue3 }}
-    </div>
-  </div>
+            <!-- Second Dropdown List -->
+
+            <label for="dropdown2">Skills:</label>
+            <select id="dropdown2" v-model="selectedValue2">
+              <option value="optionA">Option A</option>
+              <option value="optionB">Option B</option>
+              <option value="optionC">Option C</option>
+            </select>
+
+
+            <!-- Third Dropdown List -->
+
+            <label for="dropdown3">Date:</label>
+            <select id="dropdown3" v-model="selectedValue3">
+              <option value="choiceX">Choice X</option>
+              <option value="choiceY">Choice Y</option>
+              <option value="choiceZ">Choice Z</option>
+            </select>
+          </div>
+
+
+          <!-- Display selected values -->
+          <div class="row justify-content-center" style="color:white; font-weight: bold; font-size: 20px;">
+            Selected Value 1: {{ selectedValue1 }}
+            Selected Value 2: {{ selectedValue2 }}
+            Selected Value 3: {{ selectedValue3 }}
+          </div>
+        </div>
       </div>
     </div>
-    </div>
+  </div>
 
 
-    <!-- font awesome library icons  -->
-    <div>
-      <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+  <!-- font awesome library icons  -->
+  <div>
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
     />
-    </div>
+  </div>
 
 
   <!--cards taken from w3schools-->
@@ -124,16 +124,16 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              
+
               <img src="/layout/images/card1.jpg" alt="CSP1">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="heart-container">
                 <!-- Heart icon with click event -->
                 <i
-                  class="fas fa-heart"
-                  :class="{ 'heart-red': isHeartRed }"
-                  @click="toggleHeartColor"
+                    class="fas fa-heart"
+                    :class="{ 'heart-red': isHeartRed }"
+                    @click="toggleHeartColor"
                 ></i>
               </div>
               <div class="text-center">
@@ -145,22 +145,22 @@ export default {
           </div>
         </div>
       </div>
-          
+
 
       <div class="col-md-3">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              
+
               <img src="/layout/images/card2.jpg" alt="CSP2">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="heart-container">
                 <!-- Heart icon with click event -->
                 <i
-                  class="fas fa-heart"
-                  :class="{ 'heart-red': isHeartRed }"
-                  @click="toggleHeartColor"
+                    class="fas fa-heart"
+                    :class="{ 'heart-red': isHeartRed }"
+                    @click="toggleHeartColor"
                 ></i>
               </div>
               <div class="text-center">
@@ -177,16 +177,16 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-                
-                <img src="/layout/images/card3.jpg" alt="CSP3">
-              </div>
+
+              <img src="/layout/images/card3.jpg" alt="CSP3">
+            </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="heart-container">
                 <!-- Heart icon with click event -->
                 <i
-                  class="fas fa-heart"
-                  :class="{ 'heart-red': isHeartRed }"
-                  @click="toggleHeartColor"
+                    class="fas fa-heart"
+                    :class="{ 'heart-red': isHeartRed }"
+                    @click="toggleHeartColor"
                 ></i>
               </div>
               <div class="text-center">
@@ -203,16 +203,16 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              
+
               <img src="/layout/images/card1.jpg" alt="CSP4">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="heart-container">
                 <!-- Heart icon with click event -->
                 <i
-                  class="fas fa-heart"
-                  :class="{ 'heart-red': isHeartRed }"
-                  @click="toggleHeartColor"
+                    class="fas fa-heart"
+                    :class="{ 'heart-red': isHeartRed }"
+                    @click="toggleHeartColor"
                 ></i>
               </div>
               <div class="text-center">
@@ -229,7 +229,7 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-                
+
               <img src="/layout/images/card2.jpg" alt="CSP5">
             </div>
 
@@ -237,9 +237,9 @@ export default {
               <div class="heart-container">
                 <!-- Heart icon with click event -->
                 <i
-                  class="fas fa-heart"
-                  :class="{ 'heart-red': isHeartRed }"
-                  @click="toggleHeartColor"
+                    class="fas fa-heart"
+                    :class="{ 'heart-red': isHeartRed }"
+                    @click="toggleHeartColor"
                 ></i>
               </div>
               <div class="text-center">
@@ -256,16 +256,16 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              
+
               <img src="/layout/images/card3.jpg" alt="CSP6">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="heart-container">
                 <!-- Heart icon with click event -->
                 <i
-                  class="fas fa-heart"
-                  :class="{ 'heart-red': isHeartRed }"
-                  @click="toggleHeartColor"
+                    class="fas fa-heart"
+                    :class="{ 'heart-red': isHeartRed }"
+                    @click="toggleHeartColor"
                 ></i>
               </div>
               <div class="text-center">
@@ -282,16 +282,16 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              
+
               <img src="/layout/images/card1.jpg" alt="CSP7">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="heart-container">
                 <!-- Heart icon with click event -->
                 <i
-                  class="fas fa-heart"
-                  :class="{ 'heart-red': isHeartRed }"
-                  @click="toggleHeartColor"
+                    class="fas fa-heart"
+                    :class="{ 'heart-red': isHeartRed }"
+                    @click="toggleHeartColor"
                 ></i>
               </div>
               <div class="text-center">
@@ -308,16 +308,16 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              
+
               <img src="/layout/images/card2.jpg" alt="CSP8">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="heart-container">
                 <!-- Heart icon with click event -->
                 <i
-                  class="fas fa-heart"
-                  :class="{ 'heart-red': isHeartRed }"
-                  @click="toggleHeartColor"
+                    class="fas fa-heart"
+                    :class="{ 'heart-red': isHeartRed }"
+                    @click="toggleHeartColor"
                 ></i>
               </div>
               <div class="text-center">
@@ -334,16 +334,16 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              
+
               <img src="/layout/images/card3.jpg" alt="CSP9">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="heart-container">
                 <!-- Heart icon with click event -->
                 <i
-                  class="fas fa-heart"
-                  :class="{ 'heart-red': isHeartRed }"
-                  @click="toggleHeartColor"
+                    class="fas fa-heart"
+                    :class="{ 'heart-red': isHeartRed }"
+                    @click="toggleHeartColor"
                 ></i>
               </div>
               <div class="text-center">
@@ -360,16 +360,16 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              
+
               <img src="/layout/images/card1.jpg" alt="CSP10">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="heart-container">
                 <!-- Heart icon with click event -->
                 <i
-                  class="fas fa-heart"
-                  :class="{ 'heart-red': isHeartRed }"
-                  @click="toggleHeartColor"
+                    class="fas fa-heart"
+                    :class="{ 'heart-red': isHeartRed }"
+                    @click="toggleHeartColor"
                 ></i>
               </div>
               <div class="text-center">
@@ -386,16 +386,16 @@ export default {
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              
+
               <img src="/layout/images/card2.jpg" alt="CSP11">
             </div>
             <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
               <div class="heart-container">
                 <!-- Heart icon with click event -->
                 <i
-                  class="fas fa-heart"
-                  :class="{ 'heart-red': isHeartRed }"
-                  @click="toggleHeartColor"
+                    class="fas fa-heart"
+                    :class="{ 'heart-red': isHeartRed }"
+                    @click="toggleHeartColor"
                 ></i>
               </div>
               <div class="text-center">
@@ -418,9 +418,9 @@ export default {
               <div class="heart-container">
                 <!-- Heart icon with click event -->
                 <i
-                  class="fas fa-heart"
-                  :class="{ 'heart-red': isHeartRed }"
-                  @click="toggleHeartColor"
+                    class="fas fa-heart"
+                    :class="{ 'heart-red': isHeartRed }"
+                    @click="toggleHeartColor"
                 ></i>
               </div>
               <div class="text-center">
@@ -484,20 +484,20 @@ export default {
   cursor: pointer;
   text-align: justify;
 }
- 
+
 .ct{
   display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: lightblue;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: lightblue;
 }
 .card-container {
-    display: flex;
-    justify-content: space-around;
-    width: 80%;
-} 
+  display: flex;
+  justify-content: space-around;
+  width: 80%;
+}
 
 .rd{
   border-radius: 15px;
@@ -505,21 +505,21 @@ export default {
 }
 
 .card:first-child {
-    transform: rotate(-20deg);
-    border:none;
-    margin-right: 60px;
+  transform: rotate(-20deg);
+  border:none;
+  margin-right: 60px;
 }
 
 .card:last-child {
-    transform: rotate(20deg);
-    border:none;
-    margin-left: 60px;
-    background-color: lightblue;
+  transform: rotate(20deg);
+  border:none;
+  margin-left: 60px;
+  background-color: lightblue;
 }
 .card:nth-child(2) {
-    margin-top: -140px;
-    border:none;
-    background-color: lightblue;
+  margin-top: -140px;
+  border:none;
+  background-color: lightblue;
 }
 *{
   margin: 0;
@@ -655,7 +655,7 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
-  -webkit-backface-visibility: hidden; 
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   border-radius: 15px;
 }
@@ -663,7 +663,7 @@ export default {
 /* Style the front side (fallback if image is missing) */
 .flip-card-front {
   color: black;
-  
+
 }
 
 /* Style the back side */
@@ -676,9 +676,9 @@ export default {
 }
 
 .flip-card img {
-    max-width: 100%; /* Ensure the image doesn't exceed its container */
-    max-height: 100%; 
-    border-radius: 15px;
+  max-width: 100%; /* Ensure the image doesn't exceed its container */
+  max-height: 100%;
+  border-radius: 15px;
 }
 
 .centralise{

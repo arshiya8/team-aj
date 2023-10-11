@@ -108,6 +108,10 @@ export default {
 <template>
   <NavBar />
 
+  <div class="container-fluid" style="text-align: center; color:black; font-size: 50px;">
+    <h1>VOLUNTEER PERSONALITY TEST</h1>
+  </div>
+
   <div class="container c1">
     <form @submit.prevent="submitForm">
       <div id="carouselExampleIndicators" class="carousel slide">
