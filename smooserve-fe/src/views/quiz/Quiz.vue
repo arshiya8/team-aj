@@ -1,11 +1,6 @@
 <script>
-import NavBar from "/src/components/NavBar.vue";
 
 export default {
-  components: {
-    NavBar,
-  },
-
   data() {
     return {
       currentQuestion: 0,
@@ -106,9 +101,13 @@ export default {
 
 
 <template>
-  <NavBar />
 
-  <div class="container-fluid" style="text-align: center; color:black; font-size: 50px;">
+  <!-- smooserve logo -->
+  <a href="#" style="display: flex; justify-content: center; align-items: center;">
+    <img src="layout/images/logo-white.png" height="80" class="mr-0 lg:mr-2" />
+  </a>
+
+  <div class="container" style="text-align: center; color:black; font-size: 50px;">
     <h1>VOLUNTEER PERSONALITY TEST</h1>
   </div>
 
@@ -184,7 +183,8 @@ export default {
 
 
 body {
-  background-color: #7fcdff;
+  /* background-color: #7fcdff; */
+  background-color: white;
 }
 .carousel-indicators .active {
   background-color: #4338ca;
