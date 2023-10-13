@@ -14,6 +14,8 @@ const router = useRouter();
 const route = useRoute();
 const id = route.params.id;
 
+// const qrCodeLink = "https://smooserve-fe.vercel.app/#/csp/" + id;  
+
 const csp = ref([]);
 const btncolour = ref('');
 
@@ -104,7 +106,7 @@ const goToCSPSetting = (CSPid) => {
       <div class="card">
         <div class="flex flex-wrap justify-content-center gap-3 mb-4">
           <vue-qrcode
-            value="https://fengyuanchen.github.io/vue-qrcode"
+            :value=qrCodeLink
           ></vue-qrcode>
         </div>
         <div class="flex flex-wrap justify-content-center gap-3">
