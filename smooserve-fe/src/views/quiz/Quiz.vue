@@ -1,76 +1,51 @@
 <script>
-
 export default {
   data() {
     return {
       currentQuestion: 0,
-      selectedOptions: {},
       questions: [
         {
           name: "passionate_about",
           text: "1. What Causes or Issues Are You Passionate About?",
           options: {
-            cols1: [
-              "Environmental Conservation",
-              "Education and Youth Development",
-            ],
-            cols2: [
-              "Healthcare and Medical Services",
-              "Construction"
-            ]
+            cols1: ["Environmental Conservation", "Education and Youth Development"],
+            cols2: ["Healthcare and Medical Services", "Construction"],
           },
         },
         {
           name: "skills",
           text: "2. What Skills or Talents Do You Have to Offer?",
           options: {
-            cols1: [
-              "Teaching or Tutoring", "Writing and Communication"
-            ],
-            cols2: [
-              "Event Planning and Coordination","Building"
-            ]
+            cols1: ["Teaching or Tutoring", "Writing and Communication"],
+            cols2: ["Event Planning and Coordination", "Building"],
           },
         },
         {
           name: "commitment",
           text: "3. How Much Time Can You Commit to Volunteering?",
           options: {
-            cols1: [
-              "Less than 5 hours per week", "5-10 hours per week"
-            ],
-            cols2: [
-              "10-20 hours per week","More than 20 hours per week"
-            ]
+            cols1: ["Less than 5 hours per week", "5-10 hours per week"],
+            cols2: ["10-20 hours per week", "More than 20 hours per week"],
           },
         },
         {
           name: "volunteering_location",
           text: "4. Are You Interested in Local or Global Volunteering?",
           options: {
-            cols1: [
-              "Local (within Singapore)"
-            ],
-            cols2: [
-              "International (outside Singapore)"
-            ]
+            cols1: ["Local (within Singapore)"],
+            cols2: ["International (outside Singapore)"],
           },
         },
         {
           name: "volunteering_experience",
           text: "5. What Type of Volunteering Experience Are You Seeking?",
           options: {
-            cols1: [
-              "Hands-On, Direct Interaction",
-              "Remote or Virtual Opportunities",
-            ],
-            cols2: [
-              "Administrative or Behind-the-Scenes Roles",
-              "No Preference"
-            ]
+            cols1: ["Hands-On, Direct Interaction", "Remote or Virtual Opportunities"],
+            cols2: ["Administrative or Behind-the-Scenes Roles", "No Preference"],
           },
         },
       ],
+      selectedOptions: {}, // Object to store selected options
     };
   },
   methods: {
@@ -87,8 +62,16 @@ export default {
     goToQuestion(questionIndex) {
       this.currentQuestion = questionIndex;
     },
-    updateRadioStyles(groupName, value) {
-      this.selectedOptions[groupName] = value;
+    updateCheckboxStyles(groupName, value) {
+      if (!this.selectedOptions[groupName]) {
+        this.selectedOptions[groupName] = [];
+      }
+      const index = this.selectedOptions[groupName].indexOf(value);
+      if (index === -1) {
+        this.selectedOptions[groupName].push(value);
+      } else {
+        this.selectedOptions[groupName].splice(index, 1);
+      }
     },
     submitForm() {
       // Handle form submission here
@@ -97,7 +80,6 @@ export default {
   },
 };
 </script>
-
 
 
 <template>
@@ -111,35 +93,64 @@ export default {
     <h1>VOLUNTEER PERSONALITY TEST</h1>
   </div>
 
-  <div class="container c1">
-    <form @submit.prevent="submitForm">
-      <div id="carouselExampleIndicators" class="carousel slide">
-        <!-- Carousel indicators for questions -->
-        <ol class="carousel-indicators">
-          <li
+
+  <div>
+    <div class="container c1">
+      <form @submit.prevent="submitForm">
+        <div id="carouselExampleIndicators" class="carousel slide">
+          <!-- Carousel indicators for questions -->
+          <ol class="carousel-indicators">
+            <li
               v-for="(question, index) in questions"
               :key="index"
               :class="{ active: index === currentQuestion }"
               @click="goToQuestion(index)"
-          ></li>
-        </ol>
+            ></li>
+          </ol>
 
-        <!-- Carousel items -->
-        <div class="carousel-inner">
+          <!-- Carousel items -->
           <div
-              v-for="(question, index) in questions"
-              :key="index"
-              class="carousel-item"
-              :class="{ active: index === currentQuestion }"
+            v-for="(question, index) in questions"
+            :key="index"
+            class="carousel-item"
+            :class="{ active: index === currentQuestion }"
           >
             <h2>{{ question.text }}</h2>
             <div class="container w-100">
               <table class="w-100">
                 <tr style="display: flex; flex-direction: row;">
-                  <td v-for="(option, optionIndex) in question.options.cols1" :key="optionIndex" class="wrapping custom-radio-label w-100" @click="updateRadioStyles(question.name, option)" :class="{ selected: selectedOptions[question.name] === option }">{{ option }}</td>
+                  <td
+                    v-for="(option, optionIndex) in question.options.cols1"
+                    :key="optionIndex"
+                    class="wrapping custom-checkbox-label w-100"
+                  >
+                    <label>
+                      <input
+                        type="checkbox"
+                        :value="option"
+                        :id="option"
+                        @click="updateCheckboxStyles(question.name, option)"
+                      />
+                      {{ option }}
+                    </label>
+                  </td>
                 </tr>
                 <tr style="display: flex; flex-direction: row;">
-                  <td v-for="(option, optionIndex) in question.options.cols2" :key="optionIndex" class="wrapping custom-radio-label w-100" @click="updateRadioStyles(question.name, option)" :class="{ selected: selectedOptions[question.name] === option }">{{ option }}</td>
+                  <td
+                    v-for="(option, optionIndex) in question.options.cols2"
+                    :key="optionIndex"
+                    class="wrapping custom-checkbox-label w-100"
+                  >
+                    <label>
+                      <input
+                        type="checkbox"
+                        :value="option"
+                        :id="option"
+                        @click="updateCheckboxStyles(question.name, option)"
+                      />
+                      {{ option }}
+                    </label>
+                  </td>
                 </tr>
               </table>
             </div>
@@ -147,33 +158,33 @@ export default {
             <!-- Back and Next buttons for each question -->
             <div class="d-flex justify-content-between mt-3">
               <button
-                  v-if="currentQuestion > 0"
-                  type="button"
-                  class="btn btn-secondary"
-                  @click="prevQuestion"
+                v-if="currentQuestion > 0"
+                type="button"
+                class="btn btn-secondary"
+                @click="prevQuestion"
               >
                 Back
               </button>
               <button
-                  v-if="currentQuestion < questions.length - 1"
-                  type="button"
-                  class="btn btn-primary"
-                  @click="nextQuestion"
+                v-if="currentQuestion < questions.length - 1"
+                type="button"
+                class="btn btn-primary"
+                @click="nextQuestion"
               >
                 Next
               </button>
               <button
-                  v-if="currentQuestion === questions.length - 1"
-                  type="submit"
-                  class="btn btn-primary"
+                v-if="currentQuestion === questions.length - 1"
+                type="submit"
+                class="btn btn-primary"
               >
                 Submit
               </button>
             </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -222,11 +233,6 @@ body {
   text-align: center;
 }
 
-.radio-group {
-  display: flex;
-  flex-direction: column;
-}
-
 .submit-button {
   background-color: #4338ca;
   color: #ffffff;
@@ -236,28 +242,27 @@ body {
   font-size: 16px;
 }
 
-.custom-textbox {
-  border: 1px solid #064273;
-  border-radius: 15px;
-  padding: 5px;
-}
-
-.custom-radio-label {
+/* Add custom styles for checkboxes */
+.custom-checkbox-label {
+  display: flex;
+  align-items: center;
   cursor: pointer;
   padding: 10px 20px;
   border: 1px solid #ccc;
   border-radius: 15px;
   margin: 5px;
-  display: block;
+  text-align: center;
+  justify-content: center;
 }
 
-.custom-radio-label:hover {
-  background-color: #76b6c4;
+.custom-checkbox-label input {
+  margin-right: 10px; /* Add some spacing between the checkbox and label */
 }
 
-/* Add styles for the selected option */
-.custom-radio-label.selected {
+/* Style the selected checkboxes */
+.custom-checkbox-label.selected {
   background-color: #4338ca;
   color: white;
 }
+
 </style>
