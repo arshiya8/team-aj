@@ -59,19 +59,20 @@ export default {
 
   <!-- body -->
   <div class="container-fluid" style="background-color: navy">
-    <div class="row">
+    <div class="row " style="padding-top: 10px;">
       <div class="col">
         <h1 style="font-weight: bold; text-align: center; color:white;">What's happening in Smooserve</h1>
         <div>
         </div>
-        <div class="row" style="text-align: center;">
+        <div class="row" style="text-align: center; padding-top: 10px;">
           <!-- First Dropdown List -->
           <div class="dropdown">
             <label for="dropdown1">Causes:</label>
             <select id="dropdown1" v-model="selectedValue1">
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
+              <option value="Environmental Conservation">Environmental Conservation</option>
+              <option value="Education and Youth Development">Education and Youth Development</option>
+              <option value="Healthcare and Medical Services">Healthcare and Medical Services</option>
+              <option value="Construction">Construction</option>
             </select>
 
 
@@ -79,15 +80,17 @@ export default {
 
             <label for="dropdown2">Skills:</label>
             <select id="dropdown2" v-model="selectedValue2">
-              <option value="optionA">Option A</option>
-              <option value="optionB">Option B</option>
-              <option value="optionC">Option C</option>
+              <option value="Teaching">Teaching</option>
+              <option value="Writing and Communication">Writing and Communication</option>
+              <option value="Event Planning and Coordination">Event Planning and Coordination</option>
+              <option value="Building">Building</option>
             </select>
 
 
             <!-- Third Dropdown List -->
+            <!-- must change this to a toggle button -->
 
-            <label for="dropdown3">Date:</label>
+            <label for="dropdown3" >Date:</label>
             <select id="dropdown3" v-model="selectedValue3">
               <option value="choiceX">Choice X</option>
               <option value="choiceY">Choice Y</option>
@@ -97,10 +100,10 @@ export default {
 
 
           <!-- Display selected values -->
-          <div class="row justify-content-center" style="color:white; font-weight: bold; font-size: 20px;">
+          <!-- once csp backend is fixed this one needs to be customized -->
+          <div class="row justify-content-center" style="color:white; font-weight: bold; font-size: 20px; padding-top: 10px;">
             Selected Value 1: {{ selectedValue1 }}
             Selected Value 2: {{ selectedValue2 }}
-            Selected Value 3: {{ selectedValue3 }}
           </div>
         </div>
       </div>
