@@ -1,7 +1,34 @@
 <script>
 import NavBar from "../components/NavBar.vue"
 import CaroPics from "../components/CaroPics.vue";
+import { onMounted, ref } from "vue";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/firebase";
+
+
 export default {
+  // take info from database for CSP
+  setup() {
+    const csps = ref([]);
+    onMounted(async () => {
+      const fbCSP = []; 
+      const querySnapshot = await getDocs(collection(db, "CSPs"));
+
+      querySnapshot.forEach((doc) => {
+        const CSP = {
+          id: doc.id,
+          title: doc.data().title,
+          desc: doc.data().desc,
+          imageURL: doc.data().imageURL,
+        };
+        fbCSP.push(CSP);
+      });
+
+      csps.value = fbCSP;
+      console.log(fbCSP);
+    });
+    return { csps };
+  },
   components: {
     NavBar,
     CaroPics,
@@ -22,7 +49,8 @@ export default {
     },
   },
 };
-</script>
+
+</script> 
 
 <template>
   <!-- navbar component -->
@@ -33,7 +61,8 @@ export default {
   <!-- headers -->
   <div class="container-fluid" style="background-color: lightblue;">
     <div class="row pb-3">
-      <h2 style="color:black; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">COMMUNITY SERVICE PROJECTS</h2><br>
+      <h2 style="color:black; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">COMMUNITY SERVICE
+        PROJECTS</h2><br>
       <h2 style="color:red; font-weight: bold; text-align: center; font-size: 5rem;">THIS MONTH</h2>
     </div>
   </div>
@@ -43,14 +72,14 @@ export default {
   <div class="ct">
     <div class="card-container">
       <div class="card rd">
-        <img style="border-radius: 15px;" src="/layout/images/card1.jpg" >
+        <img style="border-radius: 15px;" src="/layout/images/card1.jpg">
       </div>
       <div class="card rd">
-        <img style="border-radius: 15px;" src="/layout/images/card2.jpg" >
+        <img style="border-radius: 15px;" src="/layout/images/card2.jpg">
 
       </div>
       <div class="card rd">
-        <img style="border-radius: 15px;" src="/layout/images/card3.jpg" >
+        <img style="border-radius: 15px;" src="/layout/images/card3.jpg">
       </div>
     </div>
   </div>
@@ -109,323 +138,42 @@ export default {
 
   <!-- font awesome library icons  -->
   <div>
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
   </div>
 
+  <!-- <div class="container">
+    <div class="row">
+      <div class="col">
+        <ul>
+          <li v-for="csp in csps" :key="csp.id">
+            {{ csp.title }} - {{ csp.desc }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div> -->
 
   <!--cards taken from w3schools-->
   <div class="container-fluid" style="background-color: lightblue;">
     <div class="row">
-      <div class="col-md-3">  <!-- Align-items-end requires col -->
+      <div class="col-md-3" v-for="csp in csps" :key="csp.id">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-
-              <img src="/layout/images/card1.jpg" alt="CSP1">
+              <!-- Use csp.imageURL dynamically for the image source -->
+              
+              <img :src='csp.imageURL' :alt="`CSP ${csp.id}`">
             </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
+            <div class="flip-card-back align-items-end">
               <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
+                <i class="fas fa-heart" :class="{ 'heart-red': isHeartRed }" @click="toggleHeartColor"></i>
               </div>
               <div class="text-center">
-                <h1>OTR LISTENS</h1>
-                <p>Keen to provide a listening ear for fellow peers?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card2.jpg" alt="CSP2">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>PROJECT BRIGHT 5</h1>
-                <p>Feel strongly about equal education for all?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card3.jpg" alt="CSP3">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>CAHAYA COMMUNITY</h1>
-                <p>Passionate about serving the underdeserved?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card1.jpg" alt="CSP4">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>OTR LISTENS</h1>
-                <p>Keen to provide a listening ear for fellow peers?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card2.jpg" alt="CSP5">
-            </div>
-
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>PROJECT BRIGHT 5</h1>
-                <p>Feel strongly about equal education for all?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card3.jpg" alt="CSP6">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>CAHAYA COMMUNITY</h1>
-                <p>Passionate about serving the underdeserved?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card1.jpg" alt="CSP7">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>OTR LISTENS</h1>
-                <p>Keen to provide a listening ear for fellow peers?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card2.jpg" alt="CSP8">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>PROJECT BRIGHT 5</h1>
-                <p>Feel strongly about equal education for all?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card3.jpg" alt="CSP9">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>CAHAYA COMMUNITY</h1>
-                <p>Passionate about serving the underdeserved?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card1.jpg" alt="CSP10">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>OTR LISTENS</h1>
-                <p>Keen to provide a listening ear for fellow peers?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card2.jpg" alt="CSP11">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>PROJECT BRIGHT 5</h1>
-                <p>Feel strongly about equal education for all?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <img src="/layout/images/card3.jpg" alt="CSP12">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>CAHAYA COMMUNITY</h1>
-                <p>Passionate about serving the underdeserved?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
+                <!-- Use csp.title and csp.desc for card content -->
+                <h1>{{ csp.title }}</h1>
+                <p>{{ csp.desc }}</p>
+                <!-- Assuming you have a route named 'csp.page', replace it with the appropriate route -->
+                <router-link :to="'/csp/' + csp.id" class="btn btn-primary m-3" role="button">See more!</router-link>
               </div>
             </div>
           </div>
@@ -433,7 +181,6 @@ export default {
       </div>
     </div>
   </div>
-
 </template>
 
 <style>
@@ -441,9 +188,12 @@ export default {
 
 .heart-container {
   position: absolute;
-  top: 10px; /* Adjust the top position as needed */
-  right: 10px; /* Adjust the right position as needed */
-  z-index: 1; /* Ensure the heart is above other content */
+  top: 10px;
+  /* Adjust the top position as needed */
+  right: 10px;
+  /* Adjust the right position as needed */
+  z-index: 1;
+  /* Ensure the heart is above other content */
 }
 
 /* Define styles for the red heart */
@@ -454,7 +204,7 @@ export default {
 
 
 /* to have spacing between each card */
-.col-md-3{
+.col-md-3 {
   margin: 20px 0;
 }
 
@@ -484,7 +234,7 @@ export default {
   text-align: justify;
 }
 
-.ct{
+.ct {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -492,46 +242,49 @@ export default {
   margin: 0;
   background-color: lightblue;
 }
+
 .card-container {
   display: flex;
   justify-content: space-around;
   width: 80%;
 }
 
-.rd{
+.rd {
   border-radius: 15px;
   width: 30%;
 }
 
 .card:first-child {
   transform: rotate(-20deg);
-  border:none;
+  border: none;
   margin-right: 60px;
 }
 
 .card:last-child {
   transform: rotate(20deg);
-  border:none;
+  border: none;
   margin-left: 60px;
   background-color: lightblue;
 }
+
 .card:nth-child(2) {
   margin-top: -140px;
-  border:none;
+  border: none;
   background-color: lightblue;
 }
-*{
+
+* {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  color: rgba(6,66,115);
+  color: rgba(6, 66, 115);
 }
 
 
 /* navbar */
-.navbar{
-  width:100%;
-  margin:auto;
+.navbar {
+  width: 100%;
+  margin: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -539,8 +292,8 @@ export default {
 
 
 /* logo */
-.logo{
-  width:250px;
+.logo {
+  width: 250px;
   cursor: pointer;
 
 }
@@ -561,22 +314,23 @@ export default {
 
 /* search button */
 .search-button {
-  background-color: rgba(6,66,115);
-  color:white;
+  background-color: rgba(6, 66, 115);
+  color: white;
   border: none;
   border-radius: 25px;
   padding: 5px 5px;
   font-size: 16pm;
 }
 
-.search{
+.search {
   border-radius: 10px;
   padding: 5px 5px;
-  border: 2px solid rgba(6,66,115);;
+  border: 2px solid rgba(6, 66, 115);
+  ;
 }
 
-.navbar-toggler{
-  background-color: rgba(6,66,115);
+.navbar-toggler {
+  background-color: rgba(6, 66, 115);
 
 }
 
@@ -585,33 +339,37 @@ export default {
 
 .navbar-list {
   display: flex;
-  padding-left: 190px; /* Align items to the left by default */
+  padding-left: 190px;
+  /* Align items to the left by default */
 }
 
 @media (max-width: 991.98px) {
   .navbar-list {
-    padding-left: 0px; /* Align items to the right when the page is collapsed */
+    padding-left: 0px;
+    /* Align items to the right when the page is collapsed */
   }
 }
+
 .list-inline-item a {
   text-decoration: none;
   text-transform: uppercase;
-  color:  rgba(6,66,115);
+  color: rgba(6, 66, 115);
   font-weight: bold;
   font-size: larger;
   padding: 5px;
 }
 
-.list-inline-item::after{
+.list-inline-item::after {
   content: '';
   height: 3px;
   width: 0;
-  background: rgba(6,66,115);
+  background: rgba(6, 66, 115);
   position: absolute;
   left: 0;
   bottom: 8;
   transition: 0.5s;
 }
+
 @media (min-width: 992px) {
   .list-inline-item:hover::after {
     width: 100%;
@@ -630,7 +388,8 @@ export default {
   width: 280px;
   height: 390px;
   border: none;
-  perspective: 1000px; /* Remove this if you don't want the 3D effect */
+  perspective: 1000px;
+  /* Remove this if you don't want the 3D effect */
   border-radius: 15px;
 }
 
@@ -650,7 +409,8 @@ export default {
 }
 
 /* Position the front and back side */
-.flip-card-front, .flip-card-back {
+.flip-card-front,
+.flip-card-back {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -675,14 +435,14 @@ export default {
 }
 
 .flip-card img {
-  max-width: 100%; /* Ensure the image doesn't exceed its container */
+  max-width: 100%;
+  /* Ensure the image doesn't exceed its container */
   max-height: 100%;
   border-radius: 15px;
 }
 
-.centralise{
-  margin:150px;
+.centralise {
+  margin: 150px;
 }
-
 </style>
 
