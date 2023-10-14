@@ -50,7 +50,7 @@ const logoUrl = computed(() => {
             <ul class="list-none select-none justify-content-center">
                 <li>
                     <a @click="smoothScroll('#hero')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
-                        <i class="navbar-icon pi pi-home"></i> <span>HOME</span>
+                      <router-link :to="{ name: 'Home' }"><i class="navbar-icon pi pi-home"></i> <span>HOME</span></router-link>
                     </a>
                 </li>
                 <li>

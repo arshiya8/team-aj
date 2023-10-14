@@ -72,7 +72,8 @@ const signInWithGoogle = () => {
                         <Button @submit="register" type="submit" label="Sign Up" class="w-full p-3 text-xl"></Button>
                     </form>
                     <br/>
-                    <!-- <Button @click="signInWithGoogle" type="submit" label="Sign up with Google" class="w-full p-3 text-xl"></Button> -->
+                    <Button @click="signInWithGoogle" type="submit" label="Sign up with Google" class="w-full p-3 text-xl"></Button>
+                    
                     </div>
                 </div>
             </div>
