@@ -69,7 +69,7 @@ const signInWithGoogle = () => {
                                 Have an account? <router-link :to="{ name: 'Login' }"><a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Login</a></router-link>
                             </div>
                         </div>
-                        <Button @submit="register" type="submit" label="Sign Up" class="w-full p-3 text-xl"></Button>
+                        <router-link :to="{ name: 'Quiz' }"><Button @submit="register" type="submit" label="Sign Up" class="w-full p-3 text-xl"></Button></router-link>
                     </form>
                     <br/>
                     <!-- <Button @click="signInWithGoogle" type="submit" label="Sign up with Google" class="w-full p-3 text-xl"></Button> -->
