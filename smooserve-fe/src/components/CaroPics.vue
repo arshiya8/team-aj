@@ -5,6 +5,7 @@
   position: relative;
   max-width: 800px; /* Maximum width */
   margin: 0 auto; /* Center it */
+
 }
 
 .carousel-inner .content {
@@ -12,6 +13,7 @@
   top: 8px;
   left: 16px;
 }
+
 
 </style>
 

@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { getAuth,onAuthStateChanged, signOut } from 'firebase/auth';
 
+
 //login and logout things
 const isLoggedIn = ref(false)
 
@@ -30,6 +31,8 @@ const smoothScroll = (id) => {
   });
 };
 
+
+
 const logoUrl = computed(() => {
   return `layout/images/logo-white.png`;
 });
@@ -52,12 +55,12 @@ const logoUrl = computed(() => {
                 </li>
                 <li>
                     <a @click="smoothScroll('#about')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
-                        <i class="navbar-icon pi pi-info-circle"></i> <span>ABOUT US</span>
+                      <router-link :to="{ name: 'About' }"> <i class="navbar-icon pi pi-info-circle"></i> <span>ABOUT US</span></router-link>
                     </a>
                 </li>
                 <li>
-                    <a @click="smoothScroll('#highlights')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple href="maps.vue">
-                        <i class="navbar-icon pi pi-map-marker"></i><span>NEAR YOU</span>
+                    <a @click="smoothScroll('#nearYou')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
+                      <router-link :to="{ name: 'NearYou' }"> <i class="navbar-icon pi pi-map-marker"></i><span>NEAR YOU</span></router-link> 
                     </a>
                 </li>
             </ul>

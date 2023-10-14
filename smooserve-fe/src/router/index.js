@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
+
 //add your page route here
 const routes = [
   {
@@ -51,6 +52,11 @@ const routes = [
     path: "/about",
     name: "About",
     component: () => import("@/views/AboutUs.vue"),
+  },
+  {
+    path: "/nearYou",
+    name: "NearYou",
+    component: () => import("@/views/NearYou.vue"),
   },
   {
     path: "/faq",
