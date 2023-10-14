@@ -8,18 +8,6 @@
       <h1>VOLUNTEER PERSONALITY TEST</h1>
     </div>
 
-    <!-- Images -->
-    <div>
-      <div
-        v-for="(question, index) in questions"
-        :key="index"
-        class="carousel-item"
-        :class="{ active: index === currentQuestion }"
-      >
-        <img :src="question.image" class="d-block w-100" style="max-height: 80vh;">
-      </div>
-    </div>
-
     <!-- Carousel with quiz -->
     <div class="container c1">
       <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
@@ -79,6 +67,15 @@
                 </tr>
               </table>
             </div>
+          <!-- Open-ended text input for questions 6-8 -->
+          <div v-if="index >= 5" class="mt-3">
+              <textarea
+                v-model="selectedOptions[question.name]"
+                class="form-control"
+                rows="4"
+                placeholder="Your answer..."
+              ></textarea>
+            </div>
           </div>
         </div>
 
@@ -109,6 +106,11 @@
           </button>
         </div>
       </div>
+    </div>
+
+    <!-- Image -->
+    <div style="display: flex; justify-content: center; align-items: center;">
+      <img :src="questions[currentQuestion].image" style="max-width: 100%;" alt="Image">
     </div>
   </div>
 </template>
@@ -164,6 +166,30 @@ export default {
             cols2: ["Administrative or Behind-the-Scenes Roles", "No Preference"],
           },
           image: "/layout/images/quiz5.png", // Add the path to the image
+        },
+        {
+          name: "describe",
+          text: "6. Describe yourself in 100 words.",
+          options: {
+            cols1: [],
+          },
+          image: "/layout/images/quiz6.png",
+        },
+        {
+          name: "strengths_weakness",
+          text: "7. What are your strengths and weaknesses?",
+          options: {
+            cols1: [],
+          },
+          image: "/layout/images/quiz7.png",
+        },
+        {
+          name: "purpose",
+          text: "8. Why do you want to join this CSP?",
+          options: {
+            cols1: [],
+          },
+          image: "/layout/images/quiz8.png",
         },
       ],
       selectedOptions: {},
