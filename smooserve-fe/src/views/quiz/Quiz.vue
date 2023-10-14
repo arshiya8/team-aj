@@ -25,10 +25,10 @@ export default {
           text: "2. What Skills or Talents Do You Have to Offer?",
           options: {
             cols1: [
-            "Teaching or Tutoring", "Writing and Communication"
+              "Teaching or Tutoring", "Writing and Communication"
             ],
             cols2: [
-            "Event Planning and Coordination","Building"
+              "Event Planning and Coordination","Building"
             ]
           },
         },
@@ -37,10 +37,10 @@ export default {
           text: "3. How Much Time Can You Commit to Volunteering?",
           options: {
             cols1: [
-            "Less than 5 hours per week", "5-10 hours per week"
+              "Less than 5 hours per week", "5-10 hours per week"
             ],
             cols2: [
-            "10-20 hours per week","More than 20 hours per week"
+              "10-20 hours per week","More than 20 hours per week"
             ]
           },
         },
@@ -52,7 +52,7 @@ export default {
               "Local (within Singapore)"
             ],
             cols2: [
-            "International (outside Singapore)"
+              "International (outside Singapore)"
             ]
           },
         },
@@ -117,20 +117,20 @@ export default {
         <!-- Carousel indicators for questions -->
         <ol class="carousel-indicators">
           <li
-            v-for="(question, index) in questions"
-            :key="index"
-            :class="{ active: index === currentQuestion }"
-            @click="goToQuestion(index)"
+              v-for="(question, index) in questions"
+              :key="index"
+              :class="{ active: index === currentQuestion }"
+              @click="goToQuestion(index)"
           ></li>
         </ol>
 
         <!-- Carousel items -->
         <div class="carousel-inner">
           <div
-            v-for="(question, index) in questions"
-            :key="index"
-            class="carousel-item"
-            :class="{ active: index === currentQuestion }"
+              v-for="(question, index) in questions"
+              :key="index"
+              class="carousel-item"
+              :class="{ active: index === currentQuestion }"
           >
             <h2>{{ question.text }}</h2>
             <div class="container w-100">
@@ -147,25 +147,25 @@ export default {
             <!-- Back and Next buttons for each question -->
             <div class="d-flex justify-content-between mt-3">
               <button
-                v-if="currentQuestion > 0"
-                type="button"
-                class="btn btn-secondary"
-                @click="prevQuestion"
+                  v-if="currentQuestion > 0"
+                  type="button"
+                  class="btn btn-secondary"
+                  @click="prevQuestion"
               >
                 Back
               </button>
               <button
-                v-if="currentQuestion < questions.length - 1"
-                type="button"
-                class="btn btn-primary"
-                @click="nextQuestion"
+                  v-if="currentQuestion < questions.length - 1"
+                  type="button"
+                  class="btn btn-primary"
+                  @click="nextQuestion"
               >
                 Next
               </button>
               <button
-                v-if="currentQuestion === questions.length - 1"
-                type="submit"
-                class="btn btn-primary"
+                  v-if="currentQuestion === questions.length - 1"
+                  type="submit"
+                  class="btn btn-primary"
               >
                 Submit
               </button>
