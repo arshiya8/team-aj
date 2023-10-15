@@ -311,6 +311,7 @@ body {
 /* Style the carousel items */
 .carousel-item {
   text-align: center;
+  justify-content: center;
 }
 
 /* Customize the submit button */
@@ -359,7 +360,7 @@ body {
 
 /* Add styles for the selected option */
 .custom-radio-label.selected {
-  background-color: #4338ca;
+  background-color: lightblue;
   /* Dark purple for selected option */
   color: #ffffff;
 }
