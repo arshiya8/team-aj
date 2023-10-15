@@ -14,35 +14,35 @@
         <!-- Carousel indicators for questions -->
         <ol class="carousel-indicators">
           <li
-            v-for="(question, index) in questions"
-            :key="index"
-            :class="{ active: index === currentQuestion }"
-            @click="goToQuestion(index)"
+              v-for="(question, index) in questions"
+              :key="index"
+              :class="{ active: index === currentQuestion }"
+              @click="goToQuestion(index)"
           ></li>
         </ol>
 
         <div class="carousel-inner">
           <div
-            v-for="(question, index) in questions"
-            :key="index"
-            class="carousel-item"
-            :class="{ active: index === currentQuestion }"
+              v-for="(question, index) in questions"
+              :key="index"
+              class="carousel-item"
+              :class="{ active: index === currentQuestion }"
           >
             <h2>{{ question.text }}</h2>
             <div class="container w-100">
               <table class="w-100">
                 <tr style="display: flex; flex-direction: row;">
                   <td
-                    v-for="(option, optionIndex) in question.options.cols1"
-                    :key="optionIndex"
-                    class="wrapping custom-checkbox-label w-100"
+                      v-for="(option, optionIndex) in question.options.cols1"
+                      :key="optionIndex"
+                      class="wrapping custom-checkbox-label w-100"
                   >
                     <label>
                       <input
-                        type="checkbox"
-                        :value="option"
-                        :id="option"
-                        @click="updateCheckboxStyles(question.name, option)"
+                          type="checkbox"
+                          :value="option"
+                          :id="option"
+                          @click="updateCheckboxStyles(question.name, option)"
                       />
                       {{ option }}
                     </label>
@@ -50,16 +50,16 @@
                 </tr>
                 <tr style="display: flex; flex-direction: row;">
                   <td
-                    v-for="(option, optionIndex) in question.options.cols2"
-                    :key="optionIndex"
-                    class="wrapping custom-checkbox-label w-100"
+                      v-for="(option, optionIndex) in question.options.cols2"
+                      :key="optionIndex"
+                      class="wrapping custom-checkbox-label w-100"
                   >
                     <label>
                       <input
-                        type="checkbox"
-                        :value="option"
-                        :id="option"
-                        @click="updateCheckboxStyles(question.name, option)"
+                          type="checkbox"
+                          :value="option"
+                          :id="option"
+                          @click="updateCheckboxStyles(question.name, option)"
                       />
                       {{ option }}
                     </label>
@@ -67,13 +67,13 @@
                 </tr>
               </table>
             </div>
-          <!-- Open-ended text input for questions 6-8 -->
-          <div v-if="index >= 5" class="mt-3">
+            <!-- Open-ended text input for questions 6-8 -->
+            <div v-if="index >= 5" class="mt-3">
               <textarea
-                v-model="selectedOptions[question.name]"
-                class="form-control"
-                rows="4"
-                placeholder="Your answer..."
+                  v-model="selectedOptions[question.name]"
+                  class="form-control"
+                  rows="4"
+                  placeholder="Your answer..."
               ></textarea>
             </div>
           </div>
@@ -82,25 +82,25 @@
         <!-- Back and Next buttons for each question -->
         <div class="d-flex justify-content-between mt-3">
           <button
-            v-if="currentQuestion > 0"
-            type="button"
-            class="btn btn-secondary"
-            @click="prevQuestion"
+              v-if="currentQuestion > 0"
+              type="button"
+              class="btn btn-secondary"
+              @click="prevQuestion"
           >
             Back
           </button>
           <button
-            v-if="currentQuestion < questions.length - 1"
-            type="button"
-            class="btn btn-primary"
-            @click="nextQuestion"
+              v-if="currentQuestion < questions.length - 1"
+              type="button"
+              class="btn btn-primary"
+              @click="nextQuestion"
           >
             Next
           </button>
           <button
-            v-if="currentQuestion === questions.length - 1"
-            type="submit"
-            class="btn btn-primary"
+              v-if="currentQuestion === questions.length - 1"
+              type="submit"
+              class="btn btn-primary"
           >
             Submit
           </button>
@@ -267,7 +267,7 @@ body {
 }
 
 .custom-checkbox-label.selected {
-  background-color: #4338ca;
+  background-color: lightblue;
   color: white;
 }
 </style>
