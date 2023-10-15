@@ -96,17 +96,17 @@ export default {
       <div class="dropdown">
         <label for="dropdown1">Causes:</label>
         <select id="dropdown1" v-model="selectedValue1">
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
-          <option value="option3">Option 3</option>
+          <option value="Environment">Environmental Conservation</option>
+          <option value="Education">Education</option>
+          <option value="Youth Development">Youth Development</option>
         </select>
 
         <!-- Second Dropdown List -->
         <label for="dropdown2">Skills:</label>
         <select id="dropdown2" v-model="selectedValue2">
-          <option value="optionA">Option A</option>
-          <option value="optionB">Option B</option>
-          <option value="optionC">Option C</option>
+          <option value="Teaching">Teaching</option>
+          <option value="Event Planning">Event Planning</option>
+          <option value="Building">Building</option>
         </select>
 
         <!-- Third Dropdown List -->
