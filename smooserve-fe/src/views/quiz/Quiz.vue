@@ -360,7 +360,7 @@ body {
 
 /* Add styles for the selected option */
 .custom-radio-label.selected {
-  background-color: lightblue;
+  background-color: rgb(107, 161, 237);
   /* Dark purple for selected option */
   color: #ffffff;
 }
