@@ -77,7 +77,6 @@ const logoUrl = computed(() => {
     </nav>
 </template>
 
-<!-- I've added some new styles and adjusted existing ones to better match the design -->
 <style>
 
 .navbar-icon {
