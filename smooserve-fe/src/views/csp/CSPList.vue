@@ -32,27 +32,27 @@ const csps = ref([
 const loading = ref(true);
 
 onMounted(async () => {
-  // axios
-  // .get('https://smooserve-be.vercel.app/api/csps')
-  // .then(response => (csps.value = response.data))
-  // .catch((error) => {
-  //       console.log(error);
-  //       toast.add({ severity: 'info', summary: 'Info', detail: error, life: 3000 });
-  //     })
-  // .finally(() => loading.value = false)
+  axios
+  .get('https://smooserve-be.vercel.app/api/csps')
+  .then(response => (csps.value = response.data))
+  .catch((error) => {
+        console.log(error);
+        toast.add({ severity: 'info', summary: 'Info', detail: error, life: 3000 });
+      })
+  .finally(() => loading.value = false)
 
-  onSnapshot(collection(db, "CSPs"), (querySnapshot) => {
-    const fbCSP = [];
-    querySnapshot.forEach((doc) => {
-      const CSP = {
-        id: doc.id,
-        title: doc.data().title,
-        desc: doc.data().desc,
-      };
-      fbCSP.push(CSP);
-    });
-    csps.value = fbCSP
-  });
+  // onSnapshot(collection(db, "CSPs"), (querySnapshot) => {
+  //   const fbCSP = [];
+  //   querySnapshot.forEach((doc) => {
+  //     const CSP = {
+  //       id: doc.id,
+  //       title: doc.data().title,
+  //       desc: doc.data().desc,
+  //     };
+  //     fbCSP.push(CSP);
+  //   });
+  //   csps.value = fbCSP
+  // });
 });
 
 const goToCSP = (CSPid) => {

@@ -9,15 +9,17 @@ import VueQrcode from "@chenfengyuan/vue-qrcode";
 const toast = useToast();
 const visibleShare = ref(false);
 
-
 const router = useRouter();
 const route = useRoute();
 const id = route.params.id;
 
-// const qrCodeLink = "https://smooserve-fe.vercel.app/#/csp/" + id;  
+const qrCodeLink = "https://smooserve-fe.vercel.app/#/csp/" + id;
 
 const csp = ref([]);
-const btncolour = ref('');
+const btncolour = ref("");
+const btnFontcolour = ref("");
+const CSPImage = ref("");
+const backgroundColor = ref("");
 
 const loading = ref(true);
 
@@ -29,20 +31,22 @@ const copyFunc = async () => {
   try {
     copy.value = true;
     copyBtnValue.value = "Copied";
-    await navigator.clipboard.writeText("https://smooserve-fe.vercel.app/#/csp/" + id);
+    await navigator.clipboard.writeText(
+      "https://smooserve-fe.vercel.app/#/csp/" + id
+    );
     toast.add({
-        severity: "success",
-        summary: "Copied",
-        detail: "",
-        life: 3000,
-      });
+      severity: "success",
+      summary: "Copied",
+      detail: "",
+      life: 3000,
+    });
   } catch ($e) {
     toast.add({
-        severity: "error",
-        summary: "Error",
-        detail: "Cannot copy",
-        life: 3000,
-      });
+      severity: "error",
+      summary: "Error",
+      detail: "Cannot copy",
+      life: 3000,
+    });
   }
 };
 
@@ -51,7 +55,12 @@ onMounted(async () => {
     .get("https://smooserve-be.vercel.app/api/csp/" + id)
     .then((response) => {
       csp.value = response.data;
-      btncolour.value = response.data.settings.buttons.colour;
+      btncolour.value = '#' + response.data.settings.buttons['button-colour'];
+      btnFontcolour.value = '#' + response.data.settings.buttons['button-font-colour'];
+      CSPImage.value = csp.value.imageURL;
+      backgroundColor.value = '#' + response.data.settings.background['bg-colour'];
+      console.log(backgroundColor.value);
+      document.body.style.backgroundColor = backgroundColor.value;
     })
     .catch((error) => {
       console.log(error);
@@ -68,11 +77,10 @@ onMounted(async () => {
 const goToCSPSetting = (CSPid) => {
   router.push({ name: "CSPSetting", params: { id: CSPid } });
 };
-
 </script>
 <template>
   <Toast></Toast>
-  <Toolbar>
+  <Toolbar :style="{ backgroundColor: backgroundColor }">
     <template #start> </template>
     <template #end>
       <Button
@@ -86,7 +94,6 @@ const goToCSPSetting = (CSPid) => {
       <Button
         class="mr-2"
         icon="pi pi-share-alt"
-        severity="primary"
         rounded
         aria-label="Bookmark"
         @click="visibleShare = true"
@@ -105,9 +112,7 @@ const goToCSPSetting = (CSPid) => {
     >
       <div class="card">
         <div class="flex flex-wrap justify-content-center gap-3 mb-4">
-          <vue-qrcode
-            :value=qrCodeLink
-          ></vue-qrcode>
+          <vue-qrcode :value="qrCodeLink"></vue-qrcode>
         </div>
         <div class="flex flex-wrap justify-content-center gap-3">
           <Button
@@ -117,11 +122,9 @@ const goToCSPSetting = (CSPid) => {
             class="w-5 p-3 text-xl mb-3"
             rounded
             raised
+            :style="{ backgroundColor: 'black', color: 'white' }"
           ></Button>
         </div>
-        <!-- <div class="flex flex-wrap justify-content-center gap-3">
-          <small v-if="copy">Copied</small>
-        </div> -->
       </div>
     </Dialog>
   </div>
@@ -131,12 +134,28 @@ const goToCSPSetting = (CSPid) => {
   >
     <ProgressSpinner v-if="loading"></ProgressSpinner>
     <div v-else class="flex flex-column text-center w-10 sm:w-8 md:w-5">
-      <Image
-        :src="csp.imageURL"
-        width="250"
-        preview
-        class="mb-2 flex-shrink-0"
-      />
+      <div class="flex align-items-center justify-content-center">
+        <Avatar
+          v-if="CSPImage != ''"
+          class="mb-2"
+          shape="circle"
+          size="xlarge"
+          :image="CSPImage"
+          :style="{ width: '8rem', height: '8rem' }"
+        />
+        <Avatar
+          v-else
+          :label="Array.from(csp.title)[0]"
+          shape="circle"
+          size="xlarge"
+          :style="{
+            backgroundColor: '#3F51B5',
+            color: '#ffffff',
+            width: '6rem',
+            height: '6rem',
+          }"
+        />
+      </div>
 
       <div class="mb-3">
         <h1>{{ csp.title }}</h1>
@@ -148,7 +167,7 @@ const goToCSPSetting = (CSPid) => {
       <div v-for="url in csp.settings.urls">
         <a :href="url.url">
           <Button
-            :icon="'pi pi-'+url.name"
+            :icon="'pi pi-' + url.name"
             type="submit"
             :label="url.name"
             class="w-full p-3 text-xl mb-3"
@@ -159,8 +178,13 @@ const goToCSPSetting = (CSPid) => {
     </div>
   </div>
 </template>
-<style>
-Button{
-  background-color: v-bind(btncolour);
+<style scoped>
+Button {
+  background-color: v-bind('btncolour');
+  color: v-bind('btnFontcolour');
+}
+
+html {
+  background-color: v-bind('backgroundColor') !important;
 }
 </style>
