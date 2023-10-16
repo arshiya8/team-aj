@@ -21,7 +21,9 @@ export default {
       selectedValue3.value = selectedValue3.value === '' ? 'choiceX' : '';
     };
 
-    onMounted(async () => {
+    
+   
+   onMounted(async () => {
       const fbCSP = [];
       const querySnapshot = await getDocs(collection(db, "CSPs"));
 
@@ -31,13 +33,23 @@ export default {
           title: doc.data().title,
           desc: doc.data().desc,
           imageURL: doc.data().imageURL,
+          cause: doc.data().cause,
+          skills: doc.data().skills,
         };
         fbCSP.push(CSP);
       });
-
       csps.value = fbCSP;
     });
-
+    
+    const filterCsp = () => {
+      const filteredCsps = csps.value.filter(csp => {
+        const causeMatch = selectedValue1.value === '' || selectedValue1.value === csp.cause;
+        const skillsMatch = selectedValue2.value === '' || selectedValue2.value === csp.skills;
+        return causeMatch || skillsMatch;
+      });
+      csps.value = filteredCsps;
+    };
+    
     return {
       csps,
       isHeartRed,
@@ -46,7 +58,10 @@ export default {
       selectedValue3,
       toggleHeartColor,
       toggleAutoFilter,
+      filterCsp,
     };
+
+    
   },
   components: {
     NavBar,
@@ -63,7 +78,8 @@ export default {
   <!-- headers -->
   <div class="container-fluid" style="background-color: lightblue;">
     <div class="row pb-3">
-      <h2 style="color:black; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">COMMUNITY SERVICE PROJECTS</h2>
+      <h2 style="color:black; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">COMMUNITY SERVICE
+        PROJECTS</h2>
       <br>
       <h2 style="color:red; font-weight: bold; text-align: center; font-size: 5rem;">THIS MONTH</h2>
     </div>
@@ -95,18 +111,18 @@ export default {
       <!-- First Dropdown List -->
       <div class="dropdown">
         <label for="dropdown1">Causes:</label>
-        <select id="dropdown1" v-model="selectedValue1">
-          <option value="Environment">Environmental Conservation</option>
+        <select id="dropdown1" v-model="selectedValue1" @change="filterCsp">
+          <option value="Environment">Environment</option>
           <option value="Education">Education</option>
           <option value="Youth Development">Youth Development</option>
         </select>
 
         <!-- Second Dropdown List -->
         <label for="dropdown2">Skills:</label>
-        <select id="dropdown2" v-model="selectedValue2">
+        <select id="dropdown2" v-model="selectedValue2" @change="filterCsp">
           <option value="Teaching">Teaching</option>
           <option value="Event Planning">Event Planning</option>
-          <option value="Building">Building</option>
+          <option value="Communication">Communication</option>
         </select>
 
         <!-- Third Dropdown List -->
@@ -130,24 +146,23 @@ export default {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
   </div>
 
+
   <div class="container-fluid" style="background-color: lightblue;">
     <div class="row">
       <div class="col-md-3" v-for="(csp, index) in csps" :key="csp.id">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <!-- Use csp.imageURL dynamically for the image source -->
               <img :src="csp.imageURL" :alt="`CSP ${csp.id}`">
             </div>
             <div class="flip-card-back align-items-end">
               <div class="heart-container">
-                <i class="fas fa-heart clickable" :class="{ 'heart-red': isHeartRed[index] }" @click="toggleHeartColor(index)"></i>
+                <i class="fas fa-heart clickable" :class="{ 'heart-red': isHeartRed[index] }"
+                  @click="toggleHeartColor(index)"></i>
               </div>
               <div class="text-center">
-                <!-- Use csp.title and csp.desc for card content -->
                 <h1>{{ csp.title }}</h1>
                 <p class="card-description">{{ csp.desc }}</p>
-                <!-- Assuming you have a route named 'csp.page', replace it with the appropriate route -->
                 <router-link :to="'/csp/' + csp.id" class="btn btn-primary m-3" role="button">See more!</router-link>
               </div>
             </div>
@@ -164,7 +179,8 @@ export default {
 
 .toggle-button button {
   display: inline-block;
-  background-color: #007ad9; /* Set the desired background color */
+  background-color: #007ad9;
+  /* Set the desired background color */
   color: white;
   border: none;
   border-radius: 20px;
@@ -173,15 +189,18 @@ export default {
 }
 
 .toggle-button button:hover {
-  background-color: #0053a6; /* Set the desired hover color */
+  background-color: #0053a6;
+  /* Set the desired hover color */
 }
 
 .toggle-button button.on {
-  background-color: #007ad9; /* Set the background color when it's turned on */
+  background-color: #007ad9;
+  /* Set the background color when it's turned on */
 }
 
 .toggle-button button.off {
-  background-color: #ccc; /* Set the background color when it's turned off */
+  background-color: #ccc;
+  /* Set the background color when it's turned off */
 }
 
 .heart-container {
@@ -327,7 +346,7 @@ export default {
   border-radius: 10px;
   padding: 5px 5px;
   border: 2px solid rgba(6, 66, 115);
-;
+  ;
 }
 
 .navbar-toggler {
@@ -433,8 +452,10 @@ export default {
   transform: rotateY(180deg);
   display: flex;
   justify-content: center;
-  font-size: 14px; /* Adjust the font size as needed */
-  padding: 10px; /* Add some padding for readability */
+  font-size: 14px;
+  /* Adjust the font size as needed */
+  padding: 10px;
+  /* Add some padding for readability */
 }
 
 .flip-card img {
@@ -446,6 +467,5 @@ export default {
 
 .centralise {
   margin: 150px;
-}
-</style>
+}</style>
 
