@@ -1,10 +1,12 @@
 <script>
 import NavBar from "../components/NavBar.vue"
 import CaroPics from "../components/CaroPics.vue";
+import Footer from "../components/Footer.vue";
 export default {
   components: {
     NavBar,
     CaroPics,
+    Footer,
   },
 
   data() {
@@ -434,7 +436,7 @@ export default {
       </div>
     </div>
   </div>
-
+  <Footer/>
 </template>
 
 <style>
