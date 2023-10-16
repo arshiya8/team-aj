@@ -4,6 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/firebase";
 import NavBar from "../components/NavBar.vue";
 import CaroPics from "../components/CaroPics.vue";
+import Footer from "../components/Footer.vue";
 
 export default {
   setup() {
@@ -66,6 +67,7 @@ export default {
   components: {
     NavBar,
     CaroPics,
+    Footer,
   },
 };
 </script>
@@ -171,6 +173,7 @@ export default {
       </div>
     </div>
   </div>
+<Footer/>
 </template>
 
 
