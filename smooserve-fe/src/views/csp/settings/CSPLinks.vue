@@ -3,7 +3,6 @@ import { ref, computed, onMounted, watch } from "vue";
 import axios from "axios";
 import { useRoute } from "vue-router";
 import { useToast } from "primevue/usetoast";
-import ProgressSpinner from "primevue/progressspinner";
 import draggable from "vuedraggable";
 import CSPNavBar from "../CSPNavBar.vue";
 
@@ -11,28 +10,9 @@ const toast = useToast();
 
 const route = useRoute();
 
-//menu
-const items = ref([
-  {
-    label: "Links",
-    icon: "pi pi-fw pi-link",
-    routeName: "CSPLinks",
-  },
-  {
-    label: "Appearance",
-    icon: "pi pi-fw pi-bolt",
-    routeName: "CSPApperance"
-  },
-  {
-    label: "Settings",
-    icon: "pi pi-fw pi-cog",
-    routeName: "CSPSetting",
-  },
-]);
-
 const CSPid = route.params.id;
 
-const list = ref([]);
+const urlList = ref([]);
 
 const csp = ref([]);
 
@@ -40,27 +20,55 @@ const loading = ref(true);
 
 const drag = ref(true);
 
-const fontColor = ref("");
 const buttonColor = ref("");
 
-// options for button type
-const value = ref(null);
-const options = ref([
-  { icon: "outlined", value: "outlined", outlined: true, rounded: false },
-  { icon: "rounded", value: "rounded", outlined: false, rounded: true },
+//dialog
+const visible = ref(false);
+
+const currentIcon = ref();
+const currentIndex = ref();
+
+//icons
+const selectedIcon = ref();
+const icons = ref([
+  { name: "facebook" },
+  { name: "instagram" },
+  { name: "info" },
+  { name: "info-circle" },
+  { name: "reddit" },
+  { name: "google" },
+  { name: "android" },
+  { name: "apple" },
+  { name: "microsoft" },
+  { name: "heart" },
+  { name: "home" },
+  { name: "pencil" },
+  { name: "user" },
+  { name: "star-fill" },
+  { name: "arrow-right" },
+  { name: "star-fill" },
 ]);
 
 function removeAt(idx) {
-  list.value.splice(idx, 1);
+  urlList.value.splice(idx, 1);
 }
 
 function add() {
-  list.value.push({ name: "paperclip", text: "" });
+  urlList.value.push({ name: "paperclip", text: "" });
+}
+
+function passIcon(name, index) {
+  currentIcon.value = name;
+  currentIndex.value = index;
+}
+
+function changeIcon(name, index) {
+  urlList.value[index].name = name.name;
 }
 
 function save() {
   loading.value = true;
-  csp.urls = list.value;
+  csp.urls = urlList.value;
   axios
     .put("https://smooserve-be.vercel.app/api/csp/" + CSPid, csp.value)
     .then((response) => {
@@ -98,8 +106,8 @@ onMounted(async () => {
     .then((response) => {
       csp.value = response.data;
       response.data.settings.urls
-        ? (list.value = response.data.settings.urls)
-        : (list.value = []);
+        ? (urlList.value = response.data.settings.urls)
+        : (urlList.value = []);
     })
     .catch((error) => {
       console.log(error);
@@ -126,13 +134,49 @@ watch(
 </script>
 <template>
   <Toast></Toast>
+  <Dialog
+    v-model:visible="visible"
+    modal
+    header="Add Icon"
+    :style="{ width: '50vw' }"
+    :breakpoints="{ '960px': '75vw', '641px': '100vw' }"
+  >
+    <div class="card flex justify-content-center">
+      <Listbox
+        filter
+        v-model="selectedIcon"
+        :options="icons"
+        optionLabel="name"
+        :style="{ width: '100vw' }"
+        listStyle="max-height:250px"
+      >
+        <template #option="slotProps">
+          <div class="flex align-items-center">
+            <i :class="'pi pi-' + slotProps.option.name + ' px-2'"></i>
+            <div>{{ slotProps.option.name }}</div>
+          </div>
+        </template>
+      </Listbox>
+    </div>
+    <template #footer>
+      <div class="card flex justify-content-center">
+        <Button
+          rounded
+          label="Add"
+          icon="pi pi-plus"
+          @click="(visible = false), changeIcon(selectedIcon, currentIndex)"
+          autofocus
+        />
+      </div>
+    </template>
+  </Dialog>
 
   <div v-if="loading" class="card">
-        <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
-    </div>
+    <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
+  </div>
   <div v-else class="surface-ground flex flex-column w-full h-screen">
     <!-- menu -->
-   <CSPNavBar />
+    <CSPNavBar />
 
     <!-- Links -->
     <div class="grid align-items-center justify-content-center">
@@ -140,7 +184,7 @@ watch(
         <Card class="p-2 mt-4 mb-4 card">
           <template #title> <span class="px-5">Links </span></template>
           <template #content>
-            <div class="mx-5">
+            <div class="md:mx-5 ">
               <Button
                 rounded
                 @click="add()"
@@ -148,28 +192,31 @@ watch(
                 ><i class="pi pi-plus px-2"></i
                 ><span class="px-2">Add Link</span></Button
               >
-            </div>
             <draggable
-              class="list-group mr-5"
+              class="list-group"
               tag="transition-group"
               :component-data="{
                 tag: 'ul',
                 type: 'transition-group',
                 name: !drag ? 'flip-list' : null,
               }"
-              v-model="list"
+              v-model="urlList"
               v-bind="dragOptions"
               @start="drag = true"
               @end="drag = false"
               item-key="order"
+              handle=".handle"
             >
               <template #item="{ element, index }">
                 <li class="p-inputgroup mb-3">
                   <span class="p-inputgroup-addon">
-                    <i :class="'pi pi-' + element.name"></i>
-                  </span>
-                  <span class="p-inputgroup-addon">
                     <i class="pi pi-sort-alt handle"></i>
+                  </span>
+                  <span
+                    class="p-inputgroup-addon"
+                    @click="(visible = true), passIcon(element, index)"
+                  >
+                    <i :class="'pi pi-' + element.name"></i>
                   </span>
 
                   <InputText
@@ -183,16 +230,16 @@ watch(
                 </li>
               </template>
             </draggable>
-            <div class="mx-5">
-            <Button
-              text
-              rounded
-              label="Save"
-              @click="save()"
-              class="w-full align-items-center justify-content-center"
-              ><i class="pi pi-save px-2"></i>Save</Button
-            >
-        </div>
+
+              <Button
+                text
+                rounded
+                label="Save"
+                @click="save()"
+                class="w-full align-items-center justify-content-center"
+                ><i class="pi pi-save px-2"></i>Save</Button
+              >
+            </div>
           </template>
         </Card>
       </div>
@@ -201,9 +248,8 @@ watch(
 </template>
 
 <style>
-
 .card {
-    border-radius: 12px;
+  border-radius: 12px;
 }
 
 .flip-list-move {
@@ -220,7 +266,11 @@ watch(
 }
 
 .list-group {
-  min-height: 20px;
+  min-height: 25px;
+}
+
+ul.list-group{
+  padding: 0;
 }
 
 .list-group-item {

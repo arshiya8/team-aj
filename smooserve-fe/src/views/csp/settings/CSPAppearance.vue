@@ -43,12 +43,11 @@ const options = ref([
 
 function save() {
   loading.value = true;
-  csp.value.settings.font['font-family'] = selectedFont.value;
-  csp.value.settings.font['font-colour'] = fontColor.value;
-  csp.value.settings.buttons['button-colour'] = buttonColor.value;
-  csp.value.settings.buttons['button-font-colour'] = buttonFontColor.value;
-  csp.value.settings.background['bg-colour'] = bgColor.value;
-
+  csp.value.settings.font["font-family"] = selectedFont.value.name;
+  csp.value.settings.font["font-colour"] = fontColor.value;
+  csp.value.settings.buttons["button-colour"] = buttonColor.value;
+  csp.value.settings.buttons["button-font-colour"] = buttonFontColor.value;
+  csp.value.settings.background["bg-colour"] = bgColor.value;
 
   axios
     .put("https://smooserve-be.vercel.app/api/csp/" + CSPid, csp.value)
@@ -80,11 +79,11 @@ onMounted(async () => {
       response.data.settings.urls
         ? (list.value = response.data.settings.urls)
         : (list.value = []);
-      selectedFont.value = { name: csp.value.settings.font['font-family'] } ;
-      fontColor.value = csp.value.settings.font['font-colour'];
-      buttonColor.value = csp.value.settings.buttons['button-colour'];
-      buttonFontColor.value = csp.value.settings.buttons['button-font-colour'];
-      bgColor.value = csp.value.settings.background['bg-colour'];
+      selectedFont.value = { name: csp.value.settings.font["font-family"] };
+      fontColor.value = csp.value.settings.font["font-colour"];
+      buttonColor.value = csp.value.settings.buttons["button-colour"];
+      buttonFontColor.value = csp.value.settings.buttons["button-font-colour"];
+      bgColor.value = csp.value.settings.background["bg-colour"];
     })
     .catch((error) => {
       console.log(error);
@@ -125,7 +124,6 @@ watch(
         <div class="card">
           <Fieldset legend="Background" :toggleable="true">
             <div class="flex flex-wrap gap-5 align-items-center p-4">
-              
               <div class="flex flex-wrap gap-5 align-items-center">
                 <div class="flex flex-column align-items-center">
                   <label for="cp-hex" class="font-bold block mb-3">
@@ -179,6 +177,16 @@ watch(
                     }),
                   }"
                 >
+                  <template #value="slotProps">
+                    <div v-if="slotProps.value" class="flex align-items-center">
+                      <div :style="{ fontFamily: slotProps.value.name }">
+                        {{ slotProps.value.name }}
+                      </div>
+                    </div>
+                    <span v-else>
+                      {{ slotProps.placeholder }}
+                    </span>
+                  </template>
                   <template #option="slotProps">
                     <div class="flex align-items-center">
                       <div :style="{ fontFamily: slotProps.option.name }">
