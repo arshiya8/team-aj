@@ -62,9 +62,9 @@ onMounted(async () => {
       btnFontcolour.value =
         "#" + response.data.settings.buttons["button-font-colour"];
 
-        //font color
-        fontStyle.value.family = response.data.settings.font["font-family"];
-        fontStyle.value.color = response.data.settings.font["font-colour"];  
+      //font color
+      fontStyle.value.family = response.data.settings.font["font-family"];
+      fontStyle.value.color = response.data.settings.font["font-colour"];
 
       // bg color
       backgroundColor.value =
@@ -185,11 +185,11 @@ const goToCSPSetting = (CSPid) => {
         </div>
 
         <div v-for="url in csp.settings.urls">
-          <a :href="url.url">
+          <a v-if="url.url && url.active" :href="url.url">
             <Button
-              :icon="'pi pi-' + url.name"
+              :icon="'pi pi-' + url.icon"
               type="submit"
-              :label="url.name"
+              :label="url.title ? url.title : url.url"
               class="w-full p-3 text-xl mb-3"
               v-bind="csp.settings.buttons.type"
             ></Button

@@ -19,6 +19,7 @@ const csp = ref([]);
 const loading = ref(true);
 
 const drag = ref(true);
+const active = ref(true);
 
 const buttonColor = ref("");
 
@@ -33,6 +34,7 @@ const selectedIcon = ref();
 const icons = ref([
   { name: "facebook" },
   { name: "instagram" },
+  { name: "paperclip" },
   { name: "info" },
   { name: "info-circle" },
   { name: "reddit" },
@@ -54,7 +56,7 @@ function removeAt(idx) {
 }
 
 function add() {
-  urlList.value.push({ name: "paperclip", text: "" });
+  urlList.value.unshift({ title: "", url: "", icon: "paperclip" });
 }
 
 function passIcon(name, index) {
@@ -63,12 +65,13 @@ function passIcon(name, index) {
 }
 
 function changeIcon(name, index) {
-  urlList.value[index].name = name.name;
+  urlList.value[index].icon = name.name;
 }
 
 function save() {
   loading.value = true;
-  csp.urls = urlList.value;
+  csp.value.settings.urls = urlList.value;
+  console.log(csp.value);
   axios
     .put("https://smooserve-be.vercel.app/api/csp/" + CSPid, csp.value)
     .then((response) => {
@@ -105,7 +108,7 @@ onMounted(async () => {
     .get("https://smooserve-be.vercel.app/api/csp/" + CSPid)
     .then((response) => {
       csp.value = response.data;
-      response.data.settings.urls
+      response.data.settings.urls != null
         ? (urlList.value = response.data.settings.urls)
         : (urlList.value = []);
     })
@@ -165,7 +168,6 @@ watch(
           label="Add"
           icon="pi pi-plus"
           @click="(visible = false), changeIcon(selectedIcon, currentIndex)"
-          autofocus
         />
       </div>
     </template>
@@ -174,62 +176,108 @@ watch(
   <div v-if="loading" class="card">
     <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
   </div>
-  <div v-else class="surface-ground flex flex-column w-full h-screen">
+  <div v-else class="surface-ground flex flex-column w-full h-full">
     <!-- menu -->
     <CSPNavBar />
 
     <!-- Links -->
     <div class="grid align-items-center justify-content-center">
       <div class="col-12 md:col-12 lg:col-6">
-        <Card class="p-2 mt-4 mb-4 card">
+        <Card class="shadow-none surface-ground p-2 mt-4 mb-4 card">
           <template #title> <span class="px-5">Links </span></template>
           <template #content>
-            <div class="md:mx-5 ">
+            <div class="md:mx-5">
               <Button
                 rounded
                 @click="add()"
-                class="w-full align-items-center justify-content-center"
+                class="w-full align-items-center justify-content-center mb-3"
                 ><i class="pi pi-plus px-2"></i
                 ><span class="px-2">Add Link</span></Button
               >
-            <draggable
-              class="list-group"
-              tag="transition-group"
-              :component-data="{
-                tag: 'ul',
-                type: 'transition-group',
-                name: !drag ? 'flip-list' : null,
-              }"
-              v-model="urlList"
-              v-bind="dragOptions"
-              @start="drag = true"
-              @end="drag = false"
-              item-key="order"
-              handle=".handle"
-            >
-              <template #item="{ element, index }">
-                <li class="p-inputgroup mb-3">
-                  <span class="p-inputgroup-addon">
+              <draggable
+                class="list-group"
+                tag="transition-group"
+                :component-data="{
+                  tag: 'ul',
+                  type: 'transition-group',
+                  name: !drag ? 'flip-list' : null,
+                }"
+                v-model="urlList"
+                v-bind="dragOptions"
+                @start="drag = true"
+                @end="drag = false"
+                item-key="order"
+                handle=".handle"
+              >
+                <template #item="{ element, index }">
+                  <li class="mb-3" style="list-style-type: none">
+                    <div class="bg-white p-2 mt-4 mb-4 card cardLink">
+                      <div class="grid gap-3 align-items-center">
+                        <div class="col-1 text-center handle h-full">
+                          <i
+                            class="pi pi-sort-alt"
+                            v-tooltip.top="'Drag to re-arrange your links'"
+                          ></i>
+                        </div>
+                        <div class="col-1 text-center">
+                          <i
+                            :class="
+                              'hover:bg-primary-100 p-inputgroup-addon pi pi-' +
+                              element.icon
+                            "
+                            @click="(visible = true), passIcon(element, index)"
+                          ></i>
+                        </div>
+                        <div class="col">
+                          <div class="grid">
+                            <div class="col-12">
+                              <div class="flex flex-column gap-3">
+                                <label class="font-bold">Title</label>
+                                <InputText id="title" v-model="element.title" />
+                                <label class="font-bold">URL</label>
+                                <InputText id="link" v-model="element.url" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-1 text-center">
+                          <div class="grid gap-3">
+                            <div class="col-12">
+                              <InputSwitch v-model="element.active" v-tooltip.top="element.active ? 'This link is active' : 'This link is not active'" />
+                            </div>
+                            <div class="col-12">
+                              <i
+                                class="pi pi-trash close"
+                                @click="removeAt(index)"
+                              ></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <span class="p-inputgroup-addon">
                     <i class="pi pi-sort-alt handle"></i>
                   </span>
                   <span
                     class="p-inputgroup-addon"
                     @click="(visible = true), passIcon(element, index)"
                   >
-                    <i :class="'pi pi-' + element.name"></i>
+                    <i :class="'pi pi-' + element.icon"></i>
                   </span>
+                  
 
                   <InputText
                     type="text"
                     class="form-control"
                     v-model="element.url"
                   />
+                  
                   <span class="p-inputgroup-addon">
                     <i class="pi pi-times close" @click="removeAt(index)"></i>
-                  </span>
-                </li>
-              </template>
-            </draggable>
+                  </span> -->
+                  </li>
+                </template>
+              </draggable>
 
               <Button
                 text
@@ -252,6 +300,10 @@ watch(
   border-radius: 12px;
 }
 
+.cardLink {
+  border-radius: 30px;
+}
+
 .flip-list-move {
   transition: transform 0.5s;
 }
@@ -269,7 +321,7 @@ watch(
   min-height: 25px;
 }
 
-ul.list-group{
+ul.list-group {
   padding: 0;
 }
 
