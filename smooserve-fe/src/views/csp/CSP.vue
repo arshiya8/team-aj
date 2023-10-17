@@ -18,6 +18,8 @@ const qrCodeLink = "https://smooserve-fe.vercel.app/#/csp/" + id;
 const csp = ref([]);
 const btncolour = ref("");
 const btnFontcolour = ref("");
+
+
 const CSPImage = ref("");
 const backgroundColor = ref("");
 const fontStyle = ref({ family: "", color: "" });
@@ -203,6 +205,7 @@ const goToCSPSetting = (CSPid) => {
 Button {
   background-color: v-bind("btncolour");
   color: v-bind("btnFontcolour");
+  font-family: v-bind("fontStyle.family");
 }
 
 .roundBtn {
