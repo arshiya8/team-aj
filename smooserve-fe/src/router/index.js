@@ -27,6 +27,11 @@ const routes = [
     },
   },
   {
+    path: "/csp/dashboard",
+    name: "CspDashboard",
+    component: () => import("@/views/csp/CspDashboard.vue"),
+  },
+  {
     path: "/csp/all",
     name: "AllCSP",
     component: () => import("@/views/csp/CSPList.vue"),
