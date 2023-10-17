@@ -1,5 +1,5 @@
 <script>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/firebase";
 import NavBar from "../components/NavBar.vue";
@@ -22,9 +22,35 @@ export default {
       selectedValue3.value = selectedValue3.value === '' ? 'choiceX' : '';
     };
 
-    
-   
-   onMounted(async () => {
+    const itemsPerPage = 6;
+    const currentPage = ref(1);
+
+    // pagination tools //
+    const totalPages = computed(() => Math.ceil(csps.value.length / itemsPerPage));
+
+    const getVisibleCsps = computed(() => {
+      const start = (currentPage.value - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      return csps.value.slice(start, end);
+    });
+
+    const prevPage = () => {
+      if (currentPage.value > 1) {
+        currentPage.value--;
+      }
+    };
+
+    const nextPage = () => {
+      if (currentPage.value < totalPages.value) {
+        currentPage.value++;
+      }
+    };
+
+    const goToPage = (page) => {
+      currentPage.value = page;
+    };
+
+    onMounted(async () => {
       const fbCSP = [];
       const querySnapshot = await getDocs(collection(db, "CSPs"));
 
@@ -41,16 +67,16 @@ export default {
       });
       csps.value = fbCSP;
     });
-    
+
     const filterCsp = () => {
-      const filteredCsp = csps.value.filter(csp => {
+      const filteredCsps = csps.value.filter(csp => {
         const causeMatch = selectedValue1.value === '' || selectedValue1.value === csp.cause;
         const skillsMatch = selectedValue2.value === '' || selectedValue2.value === csp.skills;
         return causeMatch || skillsMatch;
       });
       csps.value = filteredCsps;
     };
-    
+
     return {
       csps,
       isHeartRed,
@@ -60,9 +86,16 @@ export default {
       toggleHeartColor,
       toggleAutoFilter,
       filterCsp,
-    };
 
-    
+      // pagination tools //
+      itemsPerPage,
+      currentPage,
+      totalPages,
+      getVisibleCsps,
+      prevPage,
+      nextPage,
+      goToPage,
+    };
   },
   components: {
     NavBar,
@@ -71,6 +104,7 @@ export default {
   },
 };
 </script>
+
 
 <template>
   <!-- navbar component -->
@@ -153,8 +187,9 @@ font-weight: normal;">
 
 
   <div class="container-fluid" style="background-color: lightblue;">
-    <div class="row">
-      <div class="col-md-3" v-for="(csp, index) in csps" :key="csp.id">
+  <div class="row">
+    <div class="card-container">
+      <div class="col-md-4" v-for="(csp, index) in getVisibleCsps" :key="csp.id">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
@@ -176,12 +211,62 @@ font-weight: normal;">
       </div>
     </div>
   </div>
+  </div>
+
+    <!-- Pagination Controls with Styling -->
+  <div class="pagination">
+    <button @click="prevPage" :disabled="currentPage === 1" class="pagination-button">Prev</button>
+    <span v-for="page in totalPages" :key="page">
+      <button @click="goToPage(page)" :class="{ active: page === currentPage }" class="pagination-button">{{ page }}</button>
+    </span>
+    <button @click="nextPage" :disabled="currentPage === totalPages" class="pagination-button">Next</button>
+  </div>
+
 <Footer/>
 </template>
 
 
 <style>
 @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css');
+
+/* pagination tool */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  align-items: center;
+}
+
+.pagination-button {
+  /* Your button styles here */
+  background-color: #007ad9;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  margin: 0 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination-button:hover {
+  background-color: #0053a6;
+}
+
+.pagination-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.active {
+  background-color: #0053a6;
+  font-weight: bold;
+}
+
+
+
+
 .dropdown select {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: normal;
@@ -279,8 +364,15 @@ font-weight: normal;">
 
 .card-container {
   display: flex;
-  justify-content: space-around;
+  flex-wrap: wrap;  /* Allow cards to wrap to the next line */
+  justify-content: space-between;  /* Distribute cards evenly within each row */
   width: 80%;
+  margin: 0 auto;
+}
+
+.col-md-4 {
+  width: calc(33.33% - 20px);  /* 3 columns with spacing between */
+  margin-bottom: 20px;  /* Add vertical spacing between rows */
 }
 
 .rd {
