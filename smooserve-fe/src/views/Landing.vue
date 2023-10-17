@@ -9,13 +9,23 @@ import Footer from "../components/Footer.vue";
 export default {
   setup() {
     const csps = ref([]);
-    const isHeartRed = ref([]);
+    const favoriteCSPs = ref([]);
     const selectedValue1 = ref('');
     const selectedValue2 = ref('');
     const selectedValue3 = ref('');
 
-    const toggleHeartColor = (index) => {
-      isHeartRed.value[index] = !isHeartRed.value[index];
+    const toggleHeartColor = (csp) => {
+      const index = favoriteCSPs.value.findIndex((favCSP) => favCSP.id === csp.id);
+      
+      if (index === -1) {
+        favoriteCSPs.value.push(csp);
+      } else {
+        favoriteCSPs.value.splice(index, 1);
+      }
+    };
+
+    const isCSPFavorite = (csp) => {
+      return favoriteCSPs.value.some((favCSP) => favCSP.id === csp.id);
     };
 
     const toggleAutoFilter = () => {
@@ -79,13 +89,14 @@ export default {
 
     return {
       csps,
-      isHeartRed,
+      favoriteCSPs,
       selectedValue1,
       selectedValue2,
       selectedValue3,
       toggleHeartColor,
       toggleAutoFilter,
       filterCsp,
+      isCSPFavorite,
 
       // pagination tools //
       itemsPerPage,
@@ -179,7 +190,7 @@ font-weight: normal;">
       </div> -->
     </div>
   </div>
-  
+
 
   <!-- font awesome library icons  -->
   <div>
@@ -188,23 +199,27 @@ font-weight: normal;">
 
 
   <div class="container-fluid" style="background-color: lightblue;">
-  <div class="row">
-    <div class="card-container">
-      <div class="col-md-4" v-for="(csp, index) in getVisibleCsps" :key="csp.id">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <img :src="csp.imageURL" :alt="`CSP ${csp.id}`">
-            </div>
-            <div class="flip-card-back align-items-end">
-              <div class="heart-container">
-                <i class="fas fa-heart clickable" :class="{ 'heart-red': isHeartRed[index] }"
-                  @click="toggleHeartColor(index)"></i>
+    <div class="row">
+      <div class="card-container">
+        <div class="col-md-4" v-for="(csp, index) in getVisibleCsps" :key="csp.id">
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <img :src="csp.imageURL" :alt="`CSP ${csp.id}`">
               </div>
-              <div class="text-center">
-                <h1>{{ csp.title }}</h1>
-                <p class="card-description">{{ csp.desc }}</p>
-                <router-link :to="'/csp/' + csp.id" class="btn btn-primary m-3" role="button">See more!</router-link>
+              <div class="flip-card-back align-items-end">
+                <div class="heart-container">
+                  <i
+                    class="fas fa-heart clickable"
+                    :class="{ 'heart-red': isCSPFavorite(csp) }"
+                    @click="toggleHeartColor(csp)"
+                  ></i>
+                </div>
+                <div class="text-center">
+                  <h1>{{ csp.title }}</h1>
+                  <p class="card-description">{{ csp.desc }}</p>
+                  <!-- Add more content for your CSP card here -->
+                </div>
               </div>
             </div>
           </div>
@@ -212,9 +227,8 @@ font-weight: normal;">
       </div>
     </div>
   </div>
-  </div>
 
-    <!-- Pagination Controls with Styling -->
+  <!-- Pagination Controls with Styling -->
   <div class="pagination">
     <button @click="prevPage" :disabled="currentPage === 1" class="pagination-button">Prev</button>
     <span v-for="page in totalPages" :key="page">
@@ -223,7 +237,7 @@ font-weight: normal;">
     <button @click="nextPage" :disabled="currentPage === totalPages" class="pagination-button">Next</button>
   </div>
 
-<Footer/>
+  <Footer/>
 </template>
 
 
@@ -283,8 +297,8 @@ font-weight: normal;">
   border-radius: 20px;
   padding: 5px 20px;
   cursor: pointer;
-  text-align: center; 
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+  text-align: center;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: normal;
 }
 
@@ -453,7 +467,7 @@ font-weight: normal;">
   border-radius: 10px;
   padding: 5px 5px;
   border: 2px solid rgba(6, 66, 115);
-  ;
+;
 }
 
 .navbar-toggler {
