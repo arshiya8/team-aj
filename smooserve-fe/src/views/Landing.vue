@@ -83,7 +83,7 @@ export default {
       <h2 style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">COMMUNITY SERVICE
         PROJECTS</h2>
       <br>
-      <h2 style="color:rgb(252,84,84); font-family: 'Helvetica Neue Condensed Bold', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; text-align: center; font-size: 4rem;">THIS MONTH</h2>
+      <h2 style="color:rgb(252,84,84); font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; font-size: 4rem;">THIS MONTH</h2>
     </div>
   </div>
 
@@ -106,8 +106,7 @@ export default {
   <div class="container-fluid" style="background-color: navy">
     <div class="row">
       <div class="col">
-        <h1 style="font-family: 'Helvetica Neue Medium', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-font-weight: normal; text-align: center; color:white;">What's happening in Smooserve</h1>
+        <h1 style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; color:white;">What's happening in Smooserve</h1>
       </div>
     </div>
     <div class="row" style="padding-left: 10px; padding-bottom:20px; text-align: center;display: flex; align-items: center; font-family: 'Helvetica Neue Medium', 'Helvetica Neue', Helvetica, Arial, sans-serif;

@@ -38,7 +38,7 @@
           >
          <img :src="image" class="d-block w-100">
          <div class="content">
-              <h1 style="color:rgb(254, 254, 254); font-weight: bold;">EMPOWER THE <br> PEOPLE AROUND YOU</h1>
+              <h1 style="color:rgb(254, 254, 254); font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold;">EMPOWER THE <br> PEOPLE AROUND YOU</h1>
               </div>
         </div>
         </div>
