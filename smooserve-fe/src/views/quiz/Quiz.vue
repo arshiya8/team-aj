@@ -163,7 +163,7 @@ export default {
     </a>
 
     <!-- Container for header -->
-    <div class="container" style="text-align: center; color:black; font-size: 50px;">
+    <div class="header-container">
       <h1>VOLUNTEER PERSONALITY TEST</h1>
     </div>
 
@@ -175,13 +175,13 @@ export default {
           <!-- Carousel indicators for questions -->
           <ol class="carousel-indicators">
             <li v-for="(question, index) in questions" :key="index" :class="{ active: index === currentQuestion }"
-              @click="goToQuestion(index)"></li>
+                @click="goToQuestion(index)"></li>
           </ol>
 
           <!-- Carousel items -->
           <div class="carousel-inner">
             <div v-for="(question, index) in questions" :key="index" class="carousel-item"
-              :class="{ active: index === currentQuestion }">
+                 :class="{ active: index === currentQuestion }">
 
               <div class="container justify-content-start" style="display: flex; flex-direction: row;">
                 <h2 style="text-align: left;" class="pl-3">{{ question.text }}</h2>
@@ -191,22 +191,22 @@ export default {
                 <!-- Display this table if question is multi-select -->
                 <table v-if="question.type === 'multi-select'" class="w-100">
                   <tr class="wrapping custom-radio-label" @click="updateResponse(question.name, option, question.type)"
-                    :class="{
+                      :class="{
                       selected: question.name in selectedOptions
                         && selectedOptions[question.name].indexOf(option) >= 0
                     }" v-for="(option, optionIndex) in question.options.cols"
-                    style="display: flex; flex-direction: row;">
+                      style="display: flex; flex-direction: row;">
                     <td :key="optionIndex" class="w-100 row-option text-align-start">{{ option }}</td>
                     <td class="row-checkbox text-align-end">{{ question.name in selectedOptions &&
-                      selectedOptions[question.name].indexOf(option) >= 0 ? '✓' : '' }}</td>
+                    selectedOptions[question.name].indexOf(option) >= 0 ? '✓' : '' }}</td>
                   </tr>
                 </table>
 
                 <!-- Display this table if question is single-select -->
                 <table v-else-if="question.type === 'single-select'" class="w-100">
                   <tr class="wrapping custom-radio-label" @click="updateResponse(question.name, option, question.type)"
-                    :class="{ selected: selectedOptions[question.name] === option }"
-                    v-for="(option, optionIndex) in question.options.cols" style="display: flex; flex-direction: row;">
+                      :class="{ selected: selectedOptions[question.name] === option }"
+                      v-for="(option, optionIndex) in question.options.cols" style="display: flex; flex-direction: row;">
                     <td :key="optionIndex" class="w-100 row-option text-align-start">{{ option }}</td>
                     <td class="row-checkbox text-align-end">{{ selectedOptions[question.name] === option ? '✓' : '' }}
                     </td>
@@ -217,7 +217,7 @@ export default {
                 <div v-else style="display: flex; flex-direction: row;">
                   <span class="p-float-label w-100 mt-3 mx-2">
                     <Textarea v-model="question.response" :rows="10" :maxlength="question.character_limit" class="w-100"
-                      style="resize: none;" @mouseout="updateResponse(question.name, index, question.type)" />
+                              style="resize: none;" @mouseout="updateResponse(question.name, index, question.type)" />
                     <label>Enter response here</label>
                   </span>
                 </div>
@@ -230,7 +230,7 @@ export default {
                   <div v-else> <!-- Empty div to force the next button to row end -->
                   </div>
                   <button v-if="currentQuestion < questions.length - 1" type="button" class="btn btn-primary"
-                    @click="nextQuestion">
+                          @click="nextQuestion">
                     Next
                   </button>
                   <router-link v-else :to="{ name: 'Home' }"> <!-- Move v-else to router-link -->
@@ -254,11 +254,17 @@ export default {
 
 #bg {
   background-size: auto 100%;
-  background-position: center;
-  /* Adjust the position as needed */
-  /* Other styles for the element */
+  background-position: center top;
   width: 100%;
   height: 100vh;
+  position: relative; /* Ensure proper positioning of the header */
+}
+
+.header-container {
+  text-align: center;
+  color: black;
+  font-size: 50px;
+  background-color: rgba(255, 255, 255, 0.7); /* Add a semi-transparent background color */
 }
 
 /* Adjust the background color of the body */
