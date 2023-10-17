@@ -43,7 +43,7 @@ export default {
     });
     
     const filterCsp = () => {
-      const filteredCsps = csps.value.filter(csp => {
+      const filteredCsp = csps.value.filter(csp => {
         const causeMatch = selectedValue1.value === '' || selectedValue1.value === csp.cause;
         const skillsMatch = selectedValue2.value === '' || selectedValue2.value === csp.skills;
         return causeMatch || skillsMatch;
@@ -80,10 +80,10 @@ export default {
   <!-- headers -->
   <div class="container-fluid" style="background-color: lightblue;">
     <div class="row pb-3">
-      <h2 style="color:black; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">COMMUNITY SERVICE
+      <h2 style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">COMMUNITY SERVICE
         PROJECTS</h2>
       <br>
-      <h2 style="color:red; font-weight: bold; text-align: center; font-size: 5rem;">THIS MONTH</h2>
+      <h2 style="color:rgb(252,84,84); font-family: 'Helvetica Neue Condensed Bold', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; text-align: center; font-size: 4rem;">THIS MONTH</h2>
     </div>
   </div>
 
@@ -106,40 +106,44 @@ export default {
   <div class="container-fluid" style="background-color: navy">
     <div class="row">
       <div class="col">
-        <h1 style="font-weight: bold; text-align: center; color:white;">What's happening in Smooserve</h1>
+        <h1 style="font-family: 'Helvetica Neue Medium', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+font-weight: normal; text-align: center; color:white;">What's happening in Smooserve</h1>
       </div>
     </div>
-    <div class="row" style="text-align: center;">
+    <div class="row" style="padding-left: 10px; padding-bottom:20px; text-align: center;display: flex; align-items: center; font-family: 'Helvetica Neue Medium', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+font-weight: normal;">
       <!-- First Dropdown List -->
-      <div class="dropdown">
-        <label for="dropdown1">Causes:</label>
+      <div class="dropdown" style="display: inline-block; margin-right: 10px;" >
+        <label for="dropdown1"></label>
         <select id="dropdown1" v-model="selectedValue1" @change="filterCsp">
+          <option value="" selected>Causes</option>
           <option value="Environment">Environment</option>
           <option value="Education">Education</option>
           <option value="Youth Development">Youth Development</option>
         </select>
 
         <!-- Second Dropdown List -->
-        <label for="dropdown2">Skills:</label>
+        <label for="dropdown2"></label>
         <select id="dropdown2" v-model="selectedValue2" @change="filterCsp">
+          <option value="" selected>Skills</option>
           <option value="Teaching">Teaching</option>
           <option value="Event Planning">Event Planning</option>
           <option value="Communication">Communication</option>
         </select>
 
-        <!-- Third Dropdown List -->
-        <div class="toggle-button">
-          <label>Auto-filter:</label>
+
+        <div class="toggle-button" style="display: inline-block; text-align: center; padding-left: 10px;">
+          <label style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">Auto-filter:</label>
           <button @click="toggleAutoFilter">{{ selectedValue3 === '' ? 'Off' : 'On' }}</button>
         </div>
       </div>
 
       <!-- Display selected values -->
-      <div class="row justify-content-center" style="color:white; font-weight: bold; font-size: 20px;">
+      <!-- <div class="row justify-content-center" style="color:white; font-weight: bold; font-size: 20px;">
         Selected Value 1: {{ selectedValue1 }}
         Selected Value 2: {{ selectedValue2 }}
         Selected Value 3: {{ selectedValue3 }}
-      </div>
+      </div> -->
     </div>
   </div>
 
@@ -179,6 +183,11 @@ export default {
 
 <style>
 @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css');
+.dropdown select {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  /* Add any other styles you want to apply to the dropdowns here */
+}
 
 .toggle-button button {
   display: inline-block;
@@ -189,6 +198,9 @@ export default {
   border-radius: 20px;
   padding: 5px 20px;
   cursor: pointer;
+  text-align: center; 
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+  font-weight: normal;
 }
 
 .toggle-button button:hover {
