@@ -12,6 +12,13 @@ const route = useRoute();
 const id = route.params.id;
 
 const csp = ref([]);
+const btncolour = ref("");
+const btnFontcolour = ref("");
+
+
+const CSPImage = ref("");
+const backgroundColor = ref("");
+const fontStyle = ref({ family: "", color: "" });
 
 const loading = ref(true);
 
@@ -20,6 +27,23 @@ onMounted(async () => {
     .get("https://smooserve-be.vercel.app/api/csp/" + id)
     .then((response) => {
       csp.value = response.data;
+
+      // btn color
+      btncolour.value = "#" + response.data.settings.buttons["button-colour"];
+      btnFontcolour.value =
+        "#" + response.data.settings.buttons["button-font-colour"];
+
+      //font color
+      fontStyle.value.family = response.data.settings.font["font-family"];
+      fontStyle.value.color = "#" + response.data.settings.font["font-colour"];
+
+      // bg color
+      backgroundColor.value =
+        "#" + response.data.settings.background["bg-colour"];
+      console.log(backgroundColor.value);
+      document.body.style.backgroundColor = backgroundColor.value;
+
+      CSPImage.value = csp.value.imageURL;
     })
     .catch((error) => {
       console.log(error);
@@ -118,3 +142,20 @@ const goToCSPSetting = (CSPid) => {
     </div>
   </div>
 </template>
+<style scoped>
+Button {
+  background-color: v-bind("btncolour");
+  color: v-bind("btnFontcolour");
+  font-family: v-bind("fontStyle.family");
+}
+
+.roundBtn {
+  background-color: white;
+  color: black;
+}
+
+.fontStyle {
+  font-family: v-bind("fontStyle.family");
+  color: v-bind("fontStyle.color");
+}
+</style>
