@@ -295,7 +295,7 @@ watch(
   </div>
 </template>
 
-<style>
+<style scoped>
 .card {
   border-radius: 12px;
 }

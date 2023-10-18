@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
@@ -53,6 +53,10 @@ const copyFunc = async () => {
   }
 };
 
+onUnmounted(async () => {
+  document.body.style.backgroundColor = null;
+});
+
 onMounted(async () => {
   axios
     .get("https://smooserve-be.vercel.app/api/csp/" + id)
@@ -71,7 +75,7 @@ onMounted(async () => {
       // bg color
       backgroundColor.value =
         "#" + response.data.settings.background["bg-colour"];
-      console.log(backgroundColor.value);
+
       document.body.style.backgroundColor = backgroundColor.value;
 
       CSPImage.value = csp.value.imageURL;
