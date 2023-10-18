@@ -46,8 +46,8 @@ onMounted(async () => {
   //   querySnapshot.forEach((doc) => {
   //     const CSP = {
   //       id: doc.id,
-  //       title: doc.data().title,
-  //       desc: doc.data().desc,
+  //       country: doc.data().country,
+  //       content: doc.data().content,
   //     };
   //     fbCSP.push(CSP);
   //   });
