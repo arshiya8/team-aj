@@ -66,7 +66,7 @@ onMounted(async () => {
 
       //font color
       fontStyle.value.family = response.data.settings.font["font-family"];
-      fontStyle.value.color = response.data.settings.font["font-colour"];
+      fontStyle.value.color = "#" + response.data.settings.font["font-colour"];
 
       // bg color
       backgroundColor.value =
@@ -215,5 +215,6 @@ Button {
 
 .fontStyle {
   font-family: v-bind("fontStyle.family");
+  color: v-bind("fontStyle.color");
 }
 </style>
