@@ -3,8 +3,8 @@
 
     <div>
 
-        <!-- <NavBar />-->
-        <!-- <Footer />-->
+        <NavBar />
+        <Footer />
 
         <!-- Jumbotron -->
         <div class="relative py-16">
@@ -54,13 +54,15 @@
 </template>
   
 <script>
-// import NavBar from "../components/NavBar.vue";
-// import Footer from "../components/Footer.vue";
-// import Button 'primevue/button';
+import NavBar from "../components/NavBar.vue";
+import Footer from "../components/Footer.vue";
+
 
 export default {
     data() {
         return {
+            showingTooltip: false,
+            tooltipText: '',
             products: [
                 {
                     id: 1,
@@ -198,9 +200,9 @@ export default {
         },
     },
     components: {
-        // Button,
-        //     NavBar,
-        //     Footer,
+        Button,
+        NavBar,
+        Footer,
     },
 };
 </script>
