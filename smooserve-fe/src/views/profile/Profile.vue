@@ -1,11 +1,11 @@
 <template>
-<head>
+<!-- 
     <title>Student Profile</title>
-    <link rel="stylesheet" href="styles2.css">
-</head>
-<body>
+    <link rel="stylesheet" href="styles2.css"> -->
+
     <!-- Navigation Bar -->
     <!-- Include your navigation bar component here -->
+    <NavBar/>
     <!-- User Profile Form -->
     <div class="user-profile">
         <h1>Student Profile</h1>
@@ -122,10 +122,10 @@
             </tbody>
         </table>
     </section>
-    <a href="quiz.html" class="quiz-button">Take Quiz Again</a>
+    <router-link :to="{ name: 'Quiz' }"><a class="quiz-button">Take Quiz Again</a></router-link>
 
-    <script src="script2.js"></script>
-</body>
+    <!-- <script src="script2.js"></script> -->
+</template>
 <script>
 function addCommitment() {
     // Get the selected commitment value
@@ -300,6 +300,8 @@ fetch('get_registered_csp_data.php') // Replace with your actual data source URL
         }
     });
 </script>
+
+<style>
 /* styles.css */
 
 /* Style the tab buttons */
@@ -464,4 +466,5 @@ fetch('get_registered_csp_data.php') // Replace with your actual data source URL
 th,tr,td{
   border:1px solid black;
 }
-</template>
+</style>
+
