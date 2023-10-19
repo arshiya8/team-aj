@@ -1,133 +1,8 @@
-<template>
-  <!-- 
-      <title>Student Profile</title>
-      <link rel="stylesheet" href="styles2.css"> -->
-  
-      <!-- Navigation Bar -->
-      <!-- Include your navigation bar component here -->
-      <NavBar/>
-      <!-- User Profile Form -->
-      <div class="user-profile">
-          <h1>Student Profile</h1>
-          <form id="userDetailsForm" action="submit.php" method="POST">
-              <label for="name">Name:</label>
-              <input type="text" id="name" name="name" required><br><br>
-  
-              <label for="email">Email:</label>
-              <input type="email" id="email" name="email" required><br><br>
-  
-              <label for="contact">Contact Number:</label>
-              <input type="tel" id="contact" name="contact" required><br><br>
-  
-              <label for="commitment">Commitment:</label>
-              <select id="commitment" name="commitment">
-                  <option value="Monday">Monday</option>
-                  <option value="Tuesday">Tuesday</option>
-                  <option value="Wednesday">Wednesday</option>
-                  <option value="Thursday">Thursday</option>
-                  <option value="Friday">Friday</option>
-              </select>
-              <button type="button" onclick="addCommitment()">Add</button><br><br>
-  
-              <!-- Commitment Table -->
-              <table id="commitmentTable" style="display: none; border: 1px solid black;">
-                  <thead>
-                      <tr style="border: 1 px solid black;">
-                          <th>Selected</th>
-                          <th>Action</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <!-- toadd to DB -->
-                  </tbody>
-              </table>
-              <input type="submit" value="Submit">
-          </form>
-      </div>
-  
-      
-          <!-- Favourites Tab with CSP Integration -->
-          <h2>Favourites</h2>
-  <div class="favourites-tab">
-      <div class="tab-buttons">
-          <button class="tab-button" onclick="showTab('shops')" data-tab="shops">SmooServe Shops</button>
-          <button class="tab-button" onclick="showTab('csps')" data-tab="csps">CSPs</button>
-      </div>
-  
-      <section class="favorite-cards">
-          <div id="shopContent" class="card-grid"></div>
-          <div id="cspContent" class="card-grid"></div>
-      </section>
-  
-      <!-- Add the "noFavoritesMessage" here, and initially set it to display: none -->
-      <div id="noFavoritesMessage" style="display: none;">You have no favorites currently.</div>
-  </div>
-  
-          
-  
-      <!-- to change with Card Carousel Component -->
-      
-  
-      
-          <h2>Registered-CSP</h2>
-          <div id="noRegisteredCspMessage" style="display: none;">There are no registered CSPs.</div>
-          <section class="registered-CSP">
-          <table class="registered-CSP-table">
-              <thead>
-                  <tr>
-                      <th>Registered CSP </th>
-                      <th>Registered Date</th>
-                      <th>CSP Contact</th>
-                      <th>Status</th>
-                      <th>Schedule Interview</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <!-- Example CSP entry -->
-                  <tr>
-                      <td>CSP Name</td>
-                      <td>Registration Date</td>
-                      <td>CSP Contact Information</td>
-                      <td>Pending</td>
-                      <td>
-                          <button onclick="showScheduleDropdown(this)">Schedule Interview</button>
-                          <div class="schedule-dropdown" style="display: none;">
-                              <label for="interviewTime">Select Time Slot:</label>
-                              <select id="interviewTime">
-                                  <option value="9:00 AM">9:00 AM</option>
-                                  <option value="10:00 AM">10:00 AM</option>
-                                  <!-- Add more time slots as needed -->
-                              </select>
-                              <button onclick="scheduleInterview(this)">Schedule</button>
-                          </div>
-                      </td>
-                  </tr>
-                  <!-- More CSP entries... -->
-              </tbody>
-          </table>
-                  
-           <table>
-              <tbody>
-                  <!-- Add upcoming interview data here -->
-              </tbody>
-          </table>
-      </section>
-  
-      <!-- "Take Quiz Again" button -->
-      <section class="quiz-data">
-          <h2>Quiz Results</h2>
-          <table class="quiz-table">
-              <tbody>
-                  <!-- tochange Add quiz data here from db -->
-              </tbody>
-          </table>
-      </section>
-      <router-link :to="{ name: 'Quiz' }"><a class="quiz-button">Take Quiz Again</a></router-link>
-  
-      <!-- <script src="script2.js"></script> -->
-  </template>
-  <script>
-  function addCommitment() {
+<script>
+import NavBar from "../../components/NavBar.vue";
+export default {
+    setup() {
+        function addCommitment() {
       // Get the selected commitment value
       const commitmentSelect = document.getElementById("commitment");
       const selectedValue = commitmentSelect.value;
@@ -299,7 +174,142 @@
               buttonCell.innerHTML = ""; // Remove the button
           }
       });
+    },
+    components: {
+    NavBar,
+  },
+}
+  
   </script>
+  
+<template>
+  <!-- 
+      <title>Student Profile</title>
+      <link rel="stylesheet" href="styles2.css"> -->
+  
+      <!-- Navigation Bar -->
+      <!-- Include your navigation bar component here -->
+      
+      <!-- User Profile Form -->
+      <div class="user-profile">
+          <h1>Student Profile</h1>
+          <form id="userDetailsForm" action="submit.php" method="POST">
+              <label for="name">Name:</label>
+              <input type="text" id="name" name="name" required><br><br>
+  
+              <label for="email">Email:</label>
+              <input type="email" id="email" name="email" required><br><br>
+  
+              <label for="contact">Contact Number:</label>
+              <input type="tel" id="contact" name="contact" required><br><br>
+  
+              <label for="commitment">Commitment:</label>
+              <select id="commitment" name="commitment">
+                  <option value="Monday">Monday</option>
+                  <option value="Tuesday">Tuesday</option>
+                  <option value="Wednesday">Wednesday</option>
+                  <option value="Thursday">Thursday</option>
+                  <option value="Friday">Friday</option>
+              </select>
+              <button type="button" onclick="addCommitment()">Add</button><br><br>
+  
+              <!-- Commitment Table -->
+              <table id="commitmentTable" style="display: none; border: 1px solid black;">
+                  <thead>
+                      <tr style="border: 1 px solid black;">
+                          <th>Selected</th>
+                          <th>Action</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <!-- toadd to DB -->
+                  </tbody>
+              </table>
+              <input type="submit" value="Submit">
+          </form>
+      </div>
+  
+      
+          <!-- Favourites Tab with CSP Integration -->
+          <h2>Favourites</h2>
+  <div class="favourites-tab">
+      <div class="tab-buttons">
+          <button class="tab-button" onclick="showTab('shops')" data-tab="shops">SmooServe Shops</button>
+          <button class="tab-button" onclick="showTab('csps')" data-tab="csps">CSPs</button>
+      </div>
+  
+      <section class="favorite-cards">
+          <div id="shopContent" class="card-grid"></div>
+          <div id="cspContent" class="card-grid"></div>
+      </section>
+  
+      <!-- Add the "noFavoritesMessage" here, and initially set it to display: none -->
+      <div id="noFavoritesMessage" style="display: none;">You have no favorites currently.</div>
+  </div>
+  
+          
+  
+      <!-- to change with Card Carousel Component -->
+      
+  
+      
+          <h2>Registered-CSP</h2>
+          <div id="noRegisteredCspMessage" style="display: none;">There are no registered CSPs.</div>
+          <section class="registered-CSP">
+          <table class="registered-CSP-table">
+              <thead>
+                  <tr>
+                      <th>Registered CSP </th>
+                      <th>Registered Date</th>
+                      <th>CSP Contact</th>
+                      <th>Status</th>
+                      <th>Schedule Interview</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <!-- Example CSP entry -->
+                  <tr>
+                      <td>CSP Name</td>
+                      <td>Registration Date</td>
+                      <td>CSP Contact Information</td>
+                      <td>Pending</td>
+                      <td>
+                          <button onclick="showScheduleDropdown(this)">Schedule Interview</button>
+                          <div class="schedule-dropdown" style="display: none;">
+                              <label for="interviewTime">Select Time Slot:</label>
+                              <select id="interviewTime">
+                                  <option value="9:00 AM">9:00 AM</option>
+                                  <option value="10:00 AM">10:00 AM</option>
+                                  <!-- Add more time slots as needed -->
+                              </select>
+                              <button onclick="scheduleInterview(this)">Schedule</button>
+                          </div>
+                      </td>
+                  </tr>
+                  <!-- More CSP entries... -->
+              </tbody>
+          </table>
+                  
+           <table>
+              <tbody>
+                  <!-- Add upcoming interview data here -->
+              </tbody>
+          </table>
+      </section>
+  
+      <!-- "Take Quiz Again" button -->
+      <section class="quiz-data">
+          <h2>Quiz Results</h2>
+          <table class="quiz-table">
+              <tbody>
+                  <!-- tochange Add quiz data here from db -->
+              </tbody>
+          </table>
+      </section>
+      <router-link :to="{ name: 'Quiz' }"><a class="quiz-button">Take Quiz Again</a></router-link>
+  
+      <!-- <script src="script2.js"></script> -->
+  </template>
   
   <style>
   /* styles.css */
