@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { getAuth,onAuthStateChanged, signOut } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
 //login and logout things
 const isLoggedIn = ref(false)
@@ -9,17 +9,17 @@ const auth = getAuth()
 
 onMounted(() => {
   onAuthStateChanged(auth, (user) => {
-    if(user) {
+    if (user) {
       isLoggedIn.value = true;
-    }else{
+    } else {
       isLoggedIn.value = false;
     }
   })
 })
 
 const handleSignOut = () => {
-  signOut(auth).then(()=>{
-    router.replace({name: "Login"})
+  signOut(auth).then(() => {
+    router.replace({ name: "Login" })
   })
 }
 
@@ -36,57 +36,69 @@ const logoUrl = computed(() => {
 </script>
 
 <template>
-    <nav id="home" class="surface-0 navbar navbar-expand-lg navbar-light bg-light px-5">
-        <!-- This is the logo -->
-        <a class="flex align-items-start" href="#">
-            <img :src="logoUrl" alt="Smooserve Logo" height="80" class="mr-0 lg:mr-2" />
-        </a>
+  <nav id="home" class="surface-0 navbar navbar-expand-lg navbar-light bg-light px-5">
+    <!-- This is the logo -->
+    <a class="flex align-items-start" href="#">
+      <img :src="logoUrl" alt="Smooserve Logo" height="80" class="mr-0 lg:mr-2" />
+    </a>
 
-        <!-- This is the hamburger menu that appears on mobile -->
-        <div class="align-items-center" style="top: 130px">
-            <ul class="list-none select-none justify-content-center">
-                <li>
-                    <a @click="smoothScroll('#hero')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
-                        <i class="navbar-icon pi pi-home"></i> <span>HOME</span>
-                    </a>
-                </li>
-                <li>
-                    <a @click="smoothScroll('#about')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
-                        <i class="navbar-icon pi pi-info-circle"></i> <span>ABOUT US</span>
-                    </a>
-                </li>
-                <li>
-                    <a @click="smoothScroll('#highlights')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple href="maps.vue">
-                        <i class="navbar-icon pi pi-map-marker"></i><span>NEAR YOU</span>
-                    </a>
-                </li>
-                <li>
-                    <a @click="smoothScroll('#highlights')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple href="shop.vue">
-                        <i class="navbar-icon pi pi-id-card"></i><span>SMOOSERVE SHOP</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
+    <!-- This is the hamburger menu that appears on mobile -->
+    <div class="align-items-center" style="top: 130px">
+      <ul class="list-none select-none justify-content-center">
+        <li>
+          <a @click="smoothScroll('#hero')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple"
+            v-ripple>
+            <i class="navbar-icon pi pi-home"></i> <span>HOME</span>
+          </a>
+        </li>
+        <li>
+          <a @click="smoothScroll('#about')"
+            class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
+            <i class="navbar-icon pi pi-info-circle"></i> <span>ABOUT US</span>
+          </a>
+        </li>
+        <li>
+          <a @click="smoothScroll('#highlights')"
+            class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple href="maps.vue">
+            <i class="navbar-icon pi pi-map-marker"></i><span>NEAR YOU</span>
+          </a>
+        </li>
+        <li>
+          <a @click="smoothScroll('#highlights')"
+            class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple href="shop.vue">
+            <i class="navbar-icon pi pi-id-card"></i><span>SMOOSERVE SHOP</span>
+          </a>
+        </li>
+      </ul>
+    </div>
 
-        <div v-if="isLoggedIn" class="align-items-end"> <!-- If the user is logged in, show the search and user icons -->
-            <!-- Search button currently does nothing -->
-            <Button class="p-button-text navbar-icon pi pi-search p-button-rounded border-none font-light line-height-2 pr-3"></Button>
-            <Button @click="handleSignOut" class="p-button-text navbar-icon pi pi-user p-button-rounded border-none font-light line-height-2"> 
-              <span style="padding-left: 10px; font-size: 0.9em;">LOG OUT</span>
-            </Button>
-        </div>
-        <div v-else class="align-items-end"> <!-- If the user is not logged in, show the login and register buttons -->
-            <i class="navbar-icon pi pi-sign-in"></i><router-link :to="{ name: 'Login' }"><Button label="LOG IN" class="p-button-text p-button-rounded border-none font-light line-height-2 pr-3"></Button></router-link>
-            <i class="navbar-icon pi pi-user-plus"></i><router-link :to="{ name: 'Register' }"><Button label="SIGN UP" class="p-button-text p-button-rounded border-none font-light line-height-2"></Button></router-link>
-        </div>
-    </nav>
+    <div v-if="isLoggedIn" class="align-items-end"> <!-- If the user is logged in, show the search and user icons -->
+      <!-- Search button currently does nothing -->
+      <Button
+        class="p-button-text navbar-icon pi pi-search p-button-rounded border-none font-light line-height-2 pr-3"></Button>
+      <Button @click="handleSignOut" class="p-button-text p-button-rounded border-none font-light line-height-2 pr-3">
+        <span class="icon-label-container" >
+          <i class="pi pi-sign-out icon-spacing" ></i> 
+          LOG OUT
+        </span>
+      </Button>
+      <router-link :to="{ name: 'Profile' }"><i class="pi pi-user" style="font-size: 1.2rem"></i></router-link>
+    </div>
+    <div v-else class="align-items-end"> <!-- If the user is not logged in, show the login and register buttons -->
+      <i class="navbar-icon pi pi-sign-in"></i><router-link :to="{ name: 'Login' }"><Button label="LOG IN"
+          class="p-button-text p-button-rounded border-none font-light line-height-2 pr-3"></Button></router-link>
+      <i class="navbar-icon pi pi-user-plus"></i><router-link :to="{ name: 'Register' }"><Button label="SIGN UP"
+          class="p-button-text p-button-rounded border-none font-light line-height-2"></Button></router-link>
+    </div>
+  </nav>
 </template>
 
 <style>
-
 .navbar-icon {
-    margin-right: 8px; /* Spacing between the icon and the text */
-    font-size: 1.2em; /* Adjust icon size if needed */
+  margin-right: 8px;
+  /* Spacing between the icon and the text */
+  font-size: 1.2em;
+  /* Adjust icon size if needed */
 }
 
 #hero {
@@ -104,11 +116,11 @@ const logoUrl = computed(() => {
 }
 
 @media screen and (min-width: 1300px) {
-  #hero > img {
+  #hero>img {
     position: absolute;
   }
 
-  #hero > div > p {
+  #hero>div>p {
     max-width: 450px;
   }
 }
@@ -118,19 +130,18 @@ const logoUrl = computed(() => {
     height: 600px;
   }
 
-  #hero > img {
+  #hero>img {
     position: static;
     transform: scale(1);
     margin-left: auto;
   }
 
-  #hero > div {
+  #hero>div {
     width: 100%;
   }
 
-  #hero > div > p {
+  #hero>div>p {
     width: 100%;
     max-width: 100%;
   }
-}
-</style>
+}</style>
