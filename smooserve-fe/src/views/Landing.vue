@@ -17,20 +17,29 @@ export default {
     const selectedValue2 = ref('');
     const selectedValue3 = ref('');
     const auth = getAuth();
-
     const router = useRouter();
+    let studentId = null; 
+
+    onAuthStateChanged(auth, (student) => {
+      if (student) {
+        studentId = student.uid;
+        // console.log(studentId);
+      } else {
+        studentId = null
+      }
+    });
 
     const toggleHeartColor = (csp) => {
       const index = favoriteCSPs.value.findIndex((favCSP) => favCSP.id === csp.id);
       if (index === -1) {
         // CSP is not in favorites, add it
         favoriteCSPs.value.push(csp);
-        // Update the student's favorite CSPs in the database
+        // // Update the student's favorite CSPs in the database
         updateStudentFavoriteCSPs(favoriteCSPs.value);
       } else {
         // CSP is already in favorites, remove it
         favoriteCSPs.value.splice(index, 1);
-        // Update the student's favorite CSPs in the database
+        // // Update the student's favorite CSPs in the database
         updateStudentFavoriteCSPs(favoriteCSPs.value);
       }
     };
@@ -44,18 +53,33 @@ export default {
     //   }
     // };
 
-    const updateStudentFavoriteCSPs = async (favoriteCSPs) => {
+    // const updateStudentFavoriteCSPs = async (favoriteCSPs) => {
+    //   try {
+    //     // Get the current authenticated user
+    //     const user = auth.currentUser;
+
+    //     if (user) {
+    //       const studentId = user.uid; // Get the authenticated user's ID
+    //       await axios.post(`https://smooserve-be.vercel.app/api/students/${studentId}/favorite-csps`, { favoriteCSPs });
+
+    //       console.log('Favorite CSPs updated successfully.');
+    //     } else {
+    //       console.log('User not authenticated.');
+    //     }
+    //   } catch (error) {
+    //     console.error('Error updating favorite CSPs:', error);
+    //   }
+    // };
+    const updateStudentFavoriteCSPs = async () => {
       try {
-        // Get the current authenticated user
-        const user = auth.currentUser;
-
-        if (user) {
-          const studentId = user.uid; // Get the authenticated user's ID
-          await axios.post(`https://smooserve-be.vercel.app/api/students/${studentId}/favorite-csps`, { favoriteCSPs });
-
-          console.log('Favorite CSPs updated successfully.');
+        // Ensure userId is not null before making the API request
+        if (studentId != null) {
+          const response = await axios.post(`https://smooserve-be.vercel.app/api/student/${studentId}/favorite-csps`, {
+            favoriteCSPs: favoriteCSPs.value,
+          });
+          console.log(response.data); 
         } else {
-          console.log('User not authenticated.');
+          console.error('User is not authenticated.');
         }
       } catch (error) {
         console.error('Error updating favorite CSPs:', error);
@@ -135,6 +159,9 @@ export default {
       toggleAutoFilter,
       filterCsp,
       isCSPFavorite,
+      studentId,
+      favoriteCSPs,
+      updateStudentFavoriteCSPs,
 
       // pagination tools //
       itemsPerPage,

@@ -82,7 +82,7 @@ const deleteStudent = async (req, res, next) => {
 
 const updateStudentFavoriteCSPs = async (req, res, next) => {
     try {
-      const { studentId } = req.params;
+      const { studentId } = req.params.id;
       const { favoriteCSPs } = req.body;
       // Reference to the specific student document in Firestore
     const studentRef = firestore.collection('students').doc(studentId);
