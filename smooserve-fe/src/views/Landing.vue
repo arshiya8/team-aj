@@ -5,6 +5,9 @@ import { db } from "@/firebase";
 import NavBar from "../components/NavBar.vue";
 import CaroPics from "../components/CaroPics.vue";
 import Footer from "../components/Footer.vue";
+import axios from 'axios';
+import { useRouter } from "vue-router";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 export default {
   setup() {
@@ -13,14 +16,49 @@ export default {
     const selectedValue1 = ref('');
     const selectedValue2 = ref('');
     const selectedValue3 = ref('');
+    const auth = getAuth();
+
+    const router = useRouter();
 
     const toggleHeartColor = (csp) => {
       const index = favoriteCSPs.value.findIndex((favCSP) => favCSP.id === csp.id);
-      
       if (index === -1) {
+        // CSP is not in favorites, add it
         favoriteCSPs.value.push(csp);
+        // Update the student's favorite CSPs in the database
+        updateStudentFavoriteCSPs(favoriteCSPs.value);
       } else {
+        // CSP is already in favorites, remove it
         favoriteCSPs.value.splice(index, 1);
+        // Update the student's favorite CSPs in the database
+        updateStudentFavoriteCSPs(favoriteCSPs.value);
+      }
+    };
+
+    // const updateStudentFavoriteCSPs = async (favoriteCSPs) => {
+    //   try {
+    //     await axios.post(`https://smooserve-be.vercel.app/api/students/:studentId/favorite-csps`, { favoriteCSPs });
+    //     console.log('Favorite CSPs updated successfully.');
+    //   } catch (error) {
+    //     console.error('Error updating favorite CSPs:', error);
+    //   }
+    // };
+
+    const updateStudentFavoriteCSPs = async (favoriteCSPs) => {
+      try {
+        // Get the current authenticated user
+        const user = auth.currentUser;
+
+        if (user) {
+          const studentId = user.uid; // Get the authenticated user's ID
+          await axios.post(`https://smooserve-be.vercel.app/api/students/${studentId}/favorite-csps`, { favoriteCSPs });
+
+          console.log('Favorite CSPs updated successfully.');
+        } else {
+          console.log('User not authenticated.');
+        }
+      } catch (error) {
+        console.error('Error updating favorite CSPs:', error);
       }
     };
 
@@ -125,10 +163,14 @@ export default {
   <!-- headers -->
   <div class="container-fluid" style="background-color: lightblue;">
     <div class="row pb-3">
-      <h2 style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">COMMUNITY SERVICE
+      <h2
+        style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">
+        COMMUNITY SERVICE
         PROJECTS</h2>
       <br>
-      <h2 style="color:rgb(252,84,84); font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; font-size: 4rem;">THIS MONTH</h2>
+      <h2
+        style="color:rgb(252,84,84); font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; font-size: 4rem;">
+        THIS MONTH</h2>
     </div>
   </div>
 
@@ -151,13 +193,15 @@ export default {
   <div class="container-fluid" style="background-color: navy">
     <div class="row">
       <div class="col">
-        <h1 style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; color:white;">What's happening in Smooserve</h1>
+        <h1
+          style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; color:white;">
+          What's happening in Smooserve</h1>
       </div>
     </div>
     <div class="row" style="padding-left: 10px; padding-bottom:20px; text-align: center;display: flex; align-items: center; font-family: 'Helvetica Neue Medium', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 font-weight: normal;">
       <!-- First Dropdown List -->
-      <div class="dropdown" style="display: inline-block; margin-right: 10px;" >
+      <div class="dropdown" style="display: inline-block; margin-right: 10px;">
         <label for="dropdown1"></label>
         <select id="dropdown1" v-model="selectedValue1" @change="filterCsp">
           <option value="" selected>Causes</option>
@@ -177,7 +221,8 @@ font-weight: normal;">
 
 
         <div class="toggle-button" style="display: inline-block; text-align: center; padding-left: 10px;">
-          <label style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">Auto-filter:</label>
+          <label
+            style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">Auto-filter:</label>
           <button @click="toggleAutoFilter">{{ selectedValue3 === '' ? 'Off' : 'On' }}</button>
         </div>
       </div>
@@ -209,11 +254,8 @@ font-weight: normal;">
               </div>
               <div class="flip-card-back align-items-end">
                 <div class="heart-container">
-                  <i
-                    class="fas fa-heart clickable"
-                    :class="{ 'heart-red': isCSPFavorite(csp) }"
-                    @click="toggleHeartColor(csp)"
-                  ></i>
+                  <i class="fas fa-heart clickable" :class="{ 'heart-red': isCSPFavorite(csp) }"
+                    @click="toggleHeartColor(csp)"></i>
                 </div>
                 <div class="text-center">
                   <h1>{{ csp.title }}</h1>
@@ -232,12 +274,13 @@ font-weight: normal;">
   <div class="pagination">
     <button @click="prevPage" :disabled="currentPage === 1" class="pagination-button">Prev</button>
     <span v-for="page in totalPages" :key="page">
-      <button @click="goToPage(page)" :class="{ active: page === currentPage }" class="pagination-button">{{ page }}</button>
+      <button @click="goToPage(page)" :class="{ active: page === currentPage }" class="pagination-button">{{ page
+      }}</button>
     </span>
     <button @click="nextPage" :disabled="currentPage === totalPages" class="pagination-button">Next</button>
   </div>
 
-  <Footer/>
+  <Footer />
 </template>
 
 
@@ -379,15 +422,19 @@ font-weight: normal;">
 
 .card-container {
   display: flex;
-  flex-wrap: wrap;  /* Allow cards to wrap to the next line */
-  justify-content: space-between;  /* Distribute cards evenly within each row */
+  flex-wrap: wrap;
+  /* Allow cards to wrap to the next line */
+  justify-content: space-between;
+  /* Distribute cards evenly within each row */
   width: 80%;
   margin: 0 auto;
 }
 
 .col-md-4 {
-  width: calc(33.33% - 20px);  /* 3 columns with spacing between */
-  margin-bottom: 20px;  /* Add vertical spacing between rows */
+  width: calc(33.33% - 20px);
+  /* 3 columns with spacing between */
+  margin-bottom: 20px;
+  /* Add vertical spacing between rows */
 }
 
 .rd {
@@ -467,7 +514,7 @@ font-weight: normal;">
   border-radius: 10px;
   padding: 5px 5px;
   border: 2px solid rgba(6, 66, 115);
-;
+  ;
 }
 
 .navbar-toggler {
@@ -588,5 +635,6 @@ font-weight: normal;">
 
 .centralise {
   margin: 150px;
-}</style>
+}
+</style>
 

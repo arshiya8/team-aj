@@ -1,6 +1,6 @@
 class Student {
     constructor(id, firstName, lastName, email, quizPreference, registeredCsps
-        , achievements, statusOfCompletion ) {
+        , achievements, statusOfCompletion, favouriteCsps) {
             this.id = id;
             this.firstName = firstName;
             this.lastName = lastName;
@@ -9,6 +9,7 @@ class Student {
             this.registeredCsps = registeredCsps;
             this.achievements = achievements;
             this.statusOfCompletion = statusOfCompletion;
+            this.favouriteCsps = favouriteCsps
 
     }
 }
