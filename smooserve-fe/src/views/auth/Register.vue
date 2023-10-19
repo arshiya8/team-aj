@@ -2,8 +2,8 @@
 import { ref, computed, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "@/firebase";
+// import { collection, addDoc } from "firebase/firestore";
+// import { db } from "@/firebase";
 
 const logoUrl = computed(() => {
     return `/layout/images/logo-white.png`;
@@ -28,28 +28,55 @@ const register = async () => {
             registerData.email,
             registerData.password
         );
-        const user = userCredential.user;
-        const userData = {
-            username: registerData.username,
-            email: registerData.email,
-            first_name: registerData.first_name,
-            last_name: registerData.last_name
-        };
+        const response = await fetch('https://smooserve-be.vercel.app/api/student', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(registerData),
+        });
 
-        await saveUserDataToFirestore(userData);
-
-        console.log('User data saved to Firestore');
-        router.replace({ name: 'Login' });
+        if (response.ok) {
+            // Redirect to a success page 
+            console.log('User data saved to Firestore');
+            router.replace({ name: 'Login' });
+        } else {
+            const errorMessage = await response.text();
+            throw new Error(errorMessage);
+        }
     } catch (error) {
         errorMessage.value = error.message;
     }
 };
+// const register = async () => {
+//     try {
+//         const userCredential = await createUserWithEmailAndPassword(
+//             getAuth(),
+//             registerData.email,
+//             registerData.password
+//         );
+//         const user = userCredential.user;
+//         const userData = {
+//             username: registerData.username,
+//             email: registerData.email,
+//             first_name: registerData.first_name,
+//             last_name: registerData.last_name
+//         };
 
-const saveUserDataToFirestore = async (userData) => {
-    // Access Firestore and add data to 'Students' collection
-    const studentsCollectionRef = collection(db, 'Students');
-    await addDoc(studentsCollectionRef, userData);
-};
+//         await saveUserDataToFirestore(userData);
+
+//         console.log('User data saved to Firestore');
+//         router.replace({ name: 'Login' });
+//     } catch (error) {
+//         errorMessage.value = error.message;
+//     }
+// };
+
+// const saveUserDataToFirestore = async (userData) => {
+//     // Access Firestore and add data to 'Students' collection
+//     const studentsCollectionRef = collection(db, 'Students');
+//     await addDoc(studentsCollectionRef, userData);
+// };
 
 const signInWithGoogle = () => {
     // Implement Google Sign In logic here
