@@ -18,14 +18,41 @@ export default {
     const selectedValue3 = ref('');
     const auth = getAuth();
     const router = useRouter();
-    let studentId = null; 
+    let studentId = null;
 
-    onAuthStateChanged(auth, (student) => {
+    // onAuthStateChanged(auth, async (student) => {
+    //   if (student) {
+    //     const querySnapshot = await getDocs(collection(db, "students"));
+    //     querySnapshot.forEach((doc) => {
+    //       studentId = doc.id
+    //     });
+    //     // studentId = student.uid;
+    //     console.log(student.email);
+    //   } else {
+    //     studentId = null
+    //   }
+    // });
+    onAuthStateChanged(auth, async (student) => {
       if (student) {
-        studentId = student.uid;
-        console.log(student);
+        try {
+          const querySnapshot = await getDocs(collection(db, "students"));
+          querySnapshot.forEach((doc) => {
+            const studentEmail = doc.data().email;
+            if (studentEmail === student.email) {
+              studentId = doc.id;
+            }
+          });
+          // If studentId is still null, no matching email was found in the collection
+          if (studentId === null) {
+            console.log("No matching email found in the database.");
+          } else {
+            console.log("Student ID found:", studentId);
+          }
+        } catch (error) {
+          console.error(error);
+        }
       } else {
-        studentId = null
+        studentId = null;
       }
     });
 
@@ -74,10 +101,10 @@ export default {
       try {
         // Ensure userId is not null before making the API request
         if (studentId != null) {
-          const response = await axios.post(`https://localhost:8080/api/student/${studentId}`, {
+          const response = await axios.post(`https://smooserve-be.vercel.app/api/student/${studentId}`, {
             favoriteCsps: favoriteCSPs.value,
           });
-          console.log(response.data); 
+          console.log(response.data);
         } else {
           console.error('User is not authenticated.');
         }
