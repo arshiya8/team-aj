@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, reactive } from 'vue';
+import { ref, computed, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
@@ -28,7 +28,7 @@ const register = () => {
             router.replace({name: "Login"})
         }).catch((error) => {
             errorMessage.value = error.message
-        })
+        })    
 }
 
 const signInWithGoogle = () => {
@@ -72,7 +72,7 @@ const signInWithGoogle = () => {
                         <router-link :to="{ name: 'Quiz' }"><Button @submit="register" type="submit" label="Sign Up" class="w-full p-3 text-xl"></Button></router-link>
                     </form>
                     <br/>
-                    <!-- <Button @click="signInWithGoogle" type="submit" label="Sign up with Google" class="w-full p-3 text-xl"></Button> -->
+                    <Button @click="signInWithGoogle" type="submit" label="Sign up with Google" class="w-full p-3 text-xl"></Button>
                     </div>
                 </div>
             </div>
