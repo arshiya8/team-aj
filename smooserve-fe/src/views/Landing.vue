@@ -20,18 +20,6 @@ export default {
     const router = useRouter();
     let studentId = null;
 
-    // onAuthStateChanged(auth, async (student) => {
-    //   if (student) {
-    //     const querySnapshot = await getDocs(collection(db, "students"));
-    //     querySnapshot.forEach((doc) => {
-    //       studentId = doc.id
-    //     });
-    //     // studentId = student.uid;
-    //     console.log(student.email);
-    //   } else {
-    //     studentId = null
-    //   }
-    // });
     onAuthStateChanged(auth, async (student) => {
       if (student) {
         try {
@@ -71,32 +59,6 @@ export default {
       }
     };
 
-    // const updateStudentFavoriteCSPs = async (favoriteCSPs) => {
-    //   try {
-    //     await axios.post(`https://smooserve-be.vercel.app/api/students/:studentId/favorite-csps`, { favoriteCSPs });
-    //     console.log('Favorite CSPs updated successfully.');
-    //   } catch (error) {
-    //     console.error('Error updating favorite CSPs:', error);
-    //   }
-    // };
-
-    // const updateStudentFavoriteCSPs = async (favoriteCSPs) => {
-    //   try {
-    //     // Get the current authenticated user
-    //     const user = auth.currentUser;
-
-    //     if (user) {
-    //       const studentId = user.uid; // Get the authenticated user's ID
-    //       await axios.post(`https://smooserve-be.vercel.app/api/students/${studentId}/favorite-csps`, { favoriteCSPs });
-
-    //       console.log('Favorite CSPs updated successfully.');
-    //     } else {
-    //       console.log('User not authenticated.');
-    //     }
-    //   } catch (error) {
-    //     console.error('Error updating favorite CSPs:', error);
-    //   }
-    // };
     const updateStudent = async () => {
       try {
         // Ensure userId is not null before making the API request
