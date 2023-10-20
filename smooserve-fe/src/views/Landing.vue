@@ -23,7 +23,7 @@ export default {
     onAuthStateChanged(auth, (student) => {
       if (student) {
         studentId = student.uid;
-        console.log(studentId);
+        console.log(student);
       } else {
         studentId = null
       }
@@ -35,12 +35,12 @@ export default {
         // CSP is not in favorites, add it
         favoriteCSPs.value.push(csp);
         // // Update the student's favorite CSPs in the database
-        updateStudentFavoriteCSPs(favoriteCSPs.value);
+        updateStudent(favoriteCSPs.value);
       } else {
         // CSP is already in favorites, remove it
         favoriteCSPs.value.splice(index, 1);
         // // Update the student's favorite CSPs in the database
-        updateStudentFavoriteCSPs(favoriteCSPs.value);
+        updateStudent(favoriteCSPs.value);
       }
     };
 
@@ -70,11 +70,11 @@ export default {
     //     console.error('Error updating favorite CSPs:', error);
     //   }
     // };
-    const updateStudentFavoriteCSPs = async () => {
+    const updateStudent = async () => {
       try {
         // Ensure userId is not null before making the API request
         if (studentId != null) {
-          const response = await axios.post(`https://localhost:8080/api/student/${studentId}/favouriteCsps`, {
+          const response = await axios.post(`https://localhost:8080/api/student/${studentId}`, {
             favoriteCsps: favoriteCSPs.value,
           });
           console.log(response.data); 
@@ -161,7 +161,7 @@ export default {
       isCSPFavorite,
       studentId,
       favoriteCSPs,
-      updateStudentFavoriteCSPs,
+      updateStudent,
 
       // pagination tools //
       itemsPerPage,

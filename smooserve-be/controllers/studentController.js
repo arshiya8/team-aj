@@ -80,23 +80,23 @@ const deleteStudent = async (req, res, next) => {
     }
 }
 
-const updateStudentFavoriteCSPs = async (req, res, next) => {
-    try {
-      const { studentId } = req.params.id;
-      const { favoriteCSPs } = req.body;
-      // Reference to the specific student document in Firestore
-    const studentRef = firestore.collection('students').doc(studentId);
+// const updateStudentFavoriteCSPs = async (req, res, next) => {
+//     try {
+//       const { studentId } = req.params.id;
+//       const { favoriteCSPs } = req.body;
+//       // Reference to the specific student document in Firestore
+//     const studentRef = firestore.collection('students').doc(studentId);
 
-    // Update the 'favoriteCSPs' field in the student document
-    await studentRef.update({
-      favoriteCsps: favoriteCSPs,
-    });
-      res.status(200).send('Favorite CSPs updated successfully.');
-    } catch (error) {
-      console.error('Error updating favorite CSPs:', error);
-      res.status(500).send('Internal Server Error');
-    }
-  };
+//     // Update the 'favoriteCSPs' field in the student document
+//     await studentRef.update({
+//       favoriteCsps: favoriteCSPs,
+//     });
+//       res.status(200).send('Favorite CSPs updated successfully.');
+//     } catch (error) {
+//       console.error('Error updating favorite CSPs:', error);
+//       res.status(500).send('Internal Server Error');
+//     }
+//   };
   
 
 
@@ -106,5 +106,5 @@ module.exports = {
     getStudent,
     updateStudent,
     deleteStudent,
-    updateStudentFavoriteCSPs
+    // updateStudentFavoriteCSPs
 }

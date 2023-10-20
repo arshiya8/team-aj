@@ -4,13 +4,13 @@ const {addStudent,
        getStudent,
        updateStudent,
        deleteStudent, 
-       updateStudentFavoriteCSPs
+    //    updateStudentFavoriteCSPs
       } = require('../controllers/studentController');
 
 const router = express.Router();
 
 router.post('/student', addStudent);
-router.post('/student/:id/favouriteCsps', updateStudentFavoriteCSPs);
+// router.post('/student/:id/favorite-csps', updateStudentFavoriteCSPs);
 router.get('/students', getAllStudents);
 router.get('/student/:id', getStudent);
 router.put('/student/:id', updateStudent);
