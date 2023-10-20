@@ -131,6 +131,7 @@ export default {
                 product.quantity++;
             }
             this.cart.push(product);
+            this.$emit('add-to-cart', product);
         },
         showTooltip(product) {
             this.showingTooltip = true;
