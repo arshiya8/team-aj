@@ -163,6 +163,8 @@ export default {
     };
 
     onAuthStateChanged(auth, async (student) => {
+      studentId = null;
+      selectedOptions.value = {};
       if (student) {
         try {
           const querySnapshot = await getDocs(collection(db, "students"));
@@ -302,12 +304,15 @@ export default {
                     @click="nextQuestion">
                     Next
                   </button>
-                  <router-link v-else :to="{ name: 'Home' }">
+                  <div v-else>
+                    <!-- <router-link v-else :to="{ name: 'Home' }"> -->
                     <button type="submit" class="btn btn-primary">
                       Submit
                     </button>
-                  </router-link>
+                  <!-- </router-link> -->
 
+                  </div>
+                 
 
 
                 </div>
