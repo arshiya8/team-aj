@@ -123,6 +123,7 @@ export default {
                 product.quantity++;
             }
             this.cart.push(product);
+            this.$emit('add-to-cart', product);
         },
         
     },
