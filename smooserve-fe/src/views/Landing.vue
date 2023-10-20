@@ -12,7 +12,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 export default {
   setup() {
     const csps = ref([]);
-    const favoriteCSPs = ref([]);
+    const favoriteCSPs = ref([{}]);
     const selectedValue1 = ref('');
     const selectedValue2 = ref('');
     const selectedValue3 = ref('');
@@ -23,7 +23,7 @@ export default {
     onAuthStateChanged(auth, (student) => {
       if (student) {
         studentId = student.uid;
-        // console.log(studentId);
+        console.log(studentId);
       } else {
         studentId = null
       }
@@ -74,8 +74,8 @@ export default {
       try {
         // Ensure userId is not null before making the API request
         if (studentId != null) {
-          const response = await axios.post(`https://smooserve-be.vercel.app/api/student/${studentId}`, {
-            favoriteCSPs: favoriteCSPs.value,
+          const response = await axios.post(`https://localhost:8080/api/student/${studentId}/favouriteCsps`, {
+            favoriteCsps: favoriteCSPs.value,
           });
           console.log(response.data); 
         } else {

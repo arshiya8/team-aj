@@ -10,7 +10,7 @@ const {addStudent,
 const router = express.Router();
 
 router.post('/student', addStudent);
-router.post('/student/:id', updateStudentFavoriteCSPs);
+router.post('/student/:id/favouriteCsps', updateStudentFavoriteCSPs);
 router.get('/students', getAllStudents);
 router.get('/student/:id', getStudent);
 router.put('/student/:id', updateStudent);
