@@ -1,3 +1,4 @@
+import Vue3Geolocation from 'vue3-geolocation'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
@@ -101,6 +102,7 @@ import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 import VirtualScroller from 'primevue/virtualscroller';
 
+
 //primevue things
 import 'primevue/resources/themes/md-light-indigo/theme.css';
 import 'primevue/resources/primevue.min.css';
@@ -124,6 +126,7 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig);
 
+app.use(Vue3Geolocation);
 app.use(router);
 
 app.use(PrimeVue, { ripple: true });

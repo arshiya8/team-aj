@@ -1,45 +1,11 @@
 <script>
-/* eslint-disable no-undef */
-import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
-import { useGeolocation } from '../useGeolocation'
-import { Loader } from '@googlemaps/js-api-loader'
-import NavBar from "../components/NavBar.vue"
-
-const GOOGLE_MAPS_API_KEY = 'AIzaSyDiX0loPVlIkq1M5ujXrbaK3DdL3eBCFio'
+import NavBar from "../../components/NavBar.vue";
+import GoogleMaps from "../../components/GoogleMaps.vue";
 
 export default {
-  setup() {
-    const { coords } = useGeolocation()
-    const currPos = computed(() => ({
-      lat: coords.value.latitude,
-      lng: coords.value.longitude
-    }))
-   
-
-    const loader = new Loader({ apiKey: GOOGLE_MAPS_API_KEY })
-    const mapDiv = ref(null)
-    let map = ref(null)
-    let clickListener = null
-    onMounted(async () => {
-      await loader.load()
-      map.value = new google.maps.Map(mapDiv.value, {
-        center: currPos.value,
-        zoom: 7
-      })
-      clickListener = map.value.addListener(
-        'click',
-        ({ latLng: { lat, lng } }) =>
-          (otherPos.value = { lat: lat(), lng: lng() })
-      )
-    })
-    onUnmounted(async () => {
-      if (clickListener) clickListener.remove()
-    })
-
-    return { currPos, mapDiv }
-  },
   components: {
     NavBar,
+    GoogleMaps,
   },
 
   data() {
@@ -55,17 +21,16 @@ export default {
       // Toggle the heart color between red and gray
       this.isHeartRed = !this.isHeartRed;
     },
-  }
-}
+  },
+};
+
 </script>
 
 <template>
   <!-- navbar component -->
   <NavBar />
-  
-    <!-- Google Maps -->
+  <GoogleMaps />
 
-    <div ref="mapDiv" style="width: 100%; height: 80vh" />
 
   <!-- headers -->
   <div class="container-fluid" style="background-color: lightblue;">

@@ -59,8 +59,8 @@ const logoUrl = computed(() => {
                     </a>
                 </li>
                 <li>
-                    <a @click="smoothScroll('#nearYou')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
-                      <router-link :to="{ name: 'NearYou' }"> <i class="navbar-icon pi pi-map-marker"></i><span>NEAR YOU</span></router-link> 
+                    <a @click="smoothScroll('#map')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
+                      <router-link :to="{ name: 'Map' }"> <i class="navbar-icon pi pi-map-marker"></i><span>NEAR YOU</span></router-link> 
                     </a>
                 </li>
             </ul>

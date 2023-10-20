@@ -54,9 +54,9 @@ const routes = [
     component: () => import("@/views/AboutUs.vue"),
   },
   {
-    path: "/nearYou",
-    name: "NearYou",
-    component: () => import("@/views/NearYou.vue"),
+    path: "/maps",
+    name: "Map",
+    component: () => import("@/views/maps/Map.vue"),
   },
   {
     path: "/faq",
