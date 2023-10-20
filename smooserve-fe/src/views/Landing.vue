@@ -101,7 +101,7 @@ export default {
       try {
         // Ensure userId is not null before making the API request
         if (studentId != null) {
-          const response = await axios.post(`https://smooserve-be.vercel.app/api/student/${studentId}`, {
+          const response = await axios.put(`http://localhost:8080/api/student/${studentId}`, {
             favoriteCsps: favoriteCSPs.value,
           });
           console.log(response.data);
