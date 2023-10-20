@@ -12,7 +12,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 export default {
   setup() {
     const csps = ref([]);
-    const favoriteCSPs = ref([{}]);
+    const favoriteCSPs = ref([]);
     const selectedValue1 = ref('');
     const selectedValue2 = ref('');
     const selectedValue3 = ref('');
@@ -28,8 +28,11 @@ export default {
             const studentEmail = doc.data().email;
             if (studentEmail === student.email) {
               studentId = doc.id;
+              favoriteCSPs.value = doc.data().favoriteCsps || [];
             }
           });
+
+      
           // If studentId is still null, no matching email was found in the collection
           if (studentId === null) {
             console.log("No matching email found in the database.");
@@ -49,14 +52,19 @@ export default {
       if (index === -1) {
         // CSP is not in favorites, add it
         favoriteCSPs.value.push(csp);
-        // // Update the student's favorite CSPs in the database
-        updateStudent(favoriteCSPs.value);
+        // // // Update the student's favorite CSPs in the database
+        // updateStudent(favoriteCSPs.value);
       } else {
         // CSP is already in favorites, remove it
         favoriteCSPs.value.splice(index, 1);
-        // // Update the student's favorite CSPs in the database
-        updateStudent(favoriteCSPs.value);
+        // // // Update the student's favorite CSPs in the database
+        // updateStudent(favoriteCSPs.value);
       }
+      // Update localStorage with the updated favorite CSPs list
+      localStorage.setItem('favoriteCSPs', JSON.stringify(favoriteCSPs.value));
+
+      // Also, update the student's favorite CSPs in the database
+      updateStudent(favoriteCSPs.value);
     };
 
     const updateStudent = async () => {
@@ -127,6 +135,12 @@ export default {
         fbCSP.push(CSP);
       });
       csps.value = fbCSP;
+
+      const storedFavoriteCSPs = localStorage.getItem('favoriteCSPs');
+      if (storedFavoriteCSPs) {
+        favoriteCSPs.value = JSON.parse(storedFavoriteCSPs);
+      }
+
     });
 
     const filterCsp = () => {
