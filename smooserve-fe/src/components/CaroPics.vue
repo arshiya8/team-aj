@@ -16,40 +16,40 @@
 </style>
 
 <template>
-       <div class="container-fluid">
+  <div class="container-fluid">
 
-        <div id="carouselExampleIndicators" class="carousel slide"> 
-            <ol class="carousel-indicators">
-          <li
+    <div id="carouselExampleIndicators" class="carousel slide">
+      <ol class="carousel-indicators">
+        <li
             v-for="(image, index) in images"
             :key="index"
             :class="{ active: index === currentImage }"
             @click="goToImage(index)"
-          >
+        >
         </li>
-        </ol>
-    <!-- Carousel Items -->
-        <div class="carousel-inner">
-          <div
+      </ol>
+      <!-- Carousel Items -->
+      <div class="carousel-inner">
+        <div
             v-for="(image, index) in images"
             :key="index"
             class="carousel-item"
             :class="{ active: index === currentImage }"
-          >
-         <img :src="image" class="d-block w-100">
-         <div class="content">
-              <h1 style="color:rgb(254, 254, 254); font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold;">EMPOWER THE <br> PEOPLE AROUND YOU</h1>
-              </div>
+        >
+          <img :src="image" class="d-block w-100" style="height: 750px; width:100%;">
+          <div class="content" style="margin-top: 40px;">
+            <h1 style="color:rgb(254, 254, 254); font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold;">EMPOWER THE <br> PEOPLE AROUND YOU</h1>
+          </div>
         </div>
-        </div>
+      </div>
 
-        <!-- Previous Button -->
+      <!-- Previous Button -->
       <button
-        class="carousel-control-prev"
-        type="button"
-        data-bs-target="#carouselExampleIndicators"
-        data-bs-slide="prev"
-        @click="prevImage"
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExampleIndicators"
+          data-bs-slide="prev"
+          @click="prevImage"
       >
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
@@ -57,17 +57,17 @@
 
       <!-- Next Button -->
       <button
-        class="carousel-control-next"
-        type="button"
-        data-bs-target="#carouselExampleIndicators"
-        data-bs-slide="next"
-        @click="nextImage"
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExampleIndicators"
+          data-bs-slide="next"
+          @click="nextImage"
       >
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
-        </div>
-       </div>
+    </div>
+  </div>
 </template>
 <script>
 
@@ -76,9 +76,9 @@ export default {
     return {
       currentImage: 0,
       images: [
-      "/layout/images/landing-img1.jpg",
-      "/layout/images/landing-img2.jpg",
-      "/layout/images/landing-img3.jpg",
+        "/layout/images/landing-img4.jpg",
+        "/layout/images/landing-img5.jpg",
+        "/layout/images/landing-img6.jpg",
       ]
     };
   },
