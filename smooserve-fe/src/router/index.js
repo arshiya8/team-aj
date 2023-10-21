@@ -32,6 +32,11 @@ const routes = [
     component: () => import("@/views/csp/CspDashboard.vue"),
   },
   {
+    path: "/csp/calender",
+    name: "CspCalender",
+    component: () => import("@/views/csp/CSPCalender.vue"),
+  },
+  {
     path: "/csp/all",
     name: "AllCSP",
     component: () => import("@/views/csp/CSPList.vue"),
