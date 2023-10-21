@@ -45,7 +45,10 @@ const logoUrl = computed(() => {
                     <div class="text-center mb-5">
                         <div class="text-900 text-3xl font-medium mb-3">Welcome{{ ', ' + user?.displayName }}!</div>
                         <span class="text-600 font-medium">Email: {{user?.email}}</span>
-                        <Button @click="handleSignOut" v-if="isLoggedIn" label="Sign Out" class="w-full p-3 text-xl"></Button>
+                        <!-- <Button @click="handleSignOut" v-if="isLoggedIn" label="Sign Out" class="w-full p-3 text-xl"></Button> -->
+
+                        <router-link :to="{ name: 'Quiz'}">
+                        <Button v-if="isLoggedIn" label="Set Up Your Account" class="w-full p-3 text-xl"></Button></router-link>
                     </div>
                 </div>
             </div>

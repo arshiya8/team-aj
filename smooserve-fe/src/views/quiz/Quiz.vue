@@ -312,8 +312,6 @@ export default {
                   <!-- </router-link> -->
 
                   </div>
-                 
-
 
                 </div>
               </div>

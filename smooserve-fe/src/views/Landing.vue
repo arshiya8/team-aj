@@ -32,7 +32,6 @@ export default {
             }
           });
 
-      
           // If studentId is still null, no matching email was found in the collection
           if (studentId === null) {
             console.log("No matching email found in the database.");
@@ -44,35 +43,35 @@ export default {
         }
       } else {
         studentId = null;
+        favoriteCSPs.value = []; // Clear favorites for non-authenticated users
       }
     });
 
     const toggleHeartColor = (csp) => {
-      const index = favoriteCSPs.value.findIndex((favCSP) => favCSP.id === csp.id);
-      if (index === -1) {
-        // CSP is not in favorites, add it
-        favoriteCSPs.value.push(csp);
-        // // // Update the student's favorite CSPs in the database
-        // updateStudent(favoriteCSPs.value);
+      if (auth.currentUser) {
+        const index = favoriteCSPs.value.findIndex((favCSP) => favCSP.id === csp.id);
+        if (index === -1) {
+          // CSP is not in favorites, add it
+          favoriteCSPs.value.push(csp);
+        } else {
+          // CSP is already in favorites, remove it
+          favoriteCSPs.value.splice(index, 1);
+        }
+        // Update the student's favorite CSPs in the database
+        updateStudent(favoriteCSPs.value);
+        // Update localStorage with the updated favorite CSPs list
+        localStorage.setItem('favoriteCSPs', JSON.stringify(favoriteCSPs.value));
       } else {
-        // CSP is already in favorites, remove it
-        favoriteCSPs.value.splice(index, 1);
-        // // // Update the student's favorite CSPs in the database
-        // updateStudent(favoriteCSPs.value);
+        console.error('User is not authenticated.');
       }
-      // Update localStorage with the updated favorite CSPs list
-      localStorage.setItem('favoriteCSPs', JSON.stringify(favoriteCSPs.value));
-
-      // Also, update the student's favorite CSPs in the database
-      updateStudent(favoriteCSPs.value);
     };
 
-    const updateStudent = async () => {
+    const updateStudent = async (updatedFavorites) => {
       try {
         // Ensure userId is not null before making the API request
         if (studentId != null) {
           const response = await axios.put(`http://localhost:8080/api/student/${studentId}`, {
-            favoriteCsps: favoriteCSPs.value,
+            favoriteCsps: updatedFavorites,
           });
           console.log(response.data);
         } else {
@@ -165,6 +164,7 @@ export default {
       studentId,
       favoriteCSPs,
       updateStudent,
+      
 
       // pagination tools //
       itemsPerPage,
@@ -194,12 +194,12 @@ export default {
   <div class="container-fluid" style="background-color: lightblue;">
     <div class="row pb-3">
       <h2
-        style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">
+          style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">
         COMMUNITY SERVICE
         PROJECTS</h2>
       <br>
       <h2
-        style="color:rgb(252,84,84); font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; font-size: 4rem;">
+          style="color:rgb(252,84,84); font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; font-size: 4rem;">
         THIS MONTH</h2>
     </div>
   </div>
@@ -224,7 +224,7 @@ export default {
     <div class="row">
       <div class="col">
         <h1
-          style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; color:white;">
+            style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; color:white;">
           What's happening in Smooserve</h1>
       </div>
     </div>
@@ -252,7 +252,7 @@ font-weight: normal;">
 
         <div class="toggle-button" style="display: inline-block; text-align: center; padding-left: 10px;">
           <label
-            style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">Auto-filter:</label>
+              style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">Auto-filter:</label>
           <button @click="toggleAutoFilter">{{ selectedValue3 === '' ? 'Off' : 'On' }}</button>
         </div>
       </div>
@@ -285,12 +285,14 @@ font-weight: normal;">
               <div class="flip-card-back align-items-end">
                 <div class="heart-container">
                   <i class="fas fa-heart clickable" :class="{ 'heart-red': isCSPFavorite(csp) }"
-                    @click="toggleHeartColor(csp)"></i>
+                     @click="toggleHeartColor(csp)"></i>
                 </div>
                 <div class="text-center">
                   <h1>{{ csp.title }}</h1>
                   <p class="card-description">{{ csp.desc }}</p>
-                  <!-- Add more content for your CSP card here -->
+
+                  <!-- see more button link to linktree -->
+                  <router-link :to="{ name: 'CSP', params: { id: csp.id } }" class="btn btn-primary">See more</router-link>
                 </div>
               </div>
             </div>
@@ -305,7 +307,7 @@ font-weight: normal;">
     <button @click="prevPage" :disabled="currentPage === 1" class="pagination-button">Prev</button>
     <span v-for="page in totalPages" :key="page">
       <button @click="goToPage(page)" :class="{ active: page === currentPage }" class="pagination-button">{{ page
-      }}</button>
+        }}</button>
     </span>
     <button @click="nextPage" :disabled="currentPage === totalPages" class="pagination-button">Next</button>
   </div>
@@ -351,9 +353,6 @@ font-weight: normal;">
   background-color: #0053a6;
   font-weight: bold;
 }
-
-
-
 
 .dropdown select {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -513,7 +512,6 @@ font-weight: normal;">
 .logo {
   width: 250px;
   cursor: pointer;
-
 }
 
 /* the search and login */
@@ -526,8 +524,6 @@ font-weight: normal;">
 
 .navbar ul li a {
   text-decoration: none;
-
-
 }
 
 /* search button */
@@ -544,16 +540,11 @@ font-weight: normal;">
   border-radius: 10px;
   padding: 5px 5px;
   border: 2px solid rgba(6, 66, 115);
-  ;
 }
 
 .navbar-toggler {
   background-color: rgba(6, 66, 115);
-
 }
-
-
-/* body */
 
 .navbar-list {
   display: flex;
@@ -640,7 +631,6 @@ font-weight: normal;">
 /* Style the front side (fallback if image is missing) */
 .flip-card-front {
   color: black;
-
 }
 
 /* Style the back side */
