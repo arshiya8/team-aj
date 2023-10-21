@@ -36,8 +36,8 @@
             class="carousel-item"
             :class="{ active: index === currentImage }"
         >
-          <img :src="image" class="d-block w-100" style="height: 750px; width:100%;">
-          <div class="content" style="margin-top: 40px;">
+          <img :src="image" class="d-block w-100" style="height: 600px; width:100%;">
+          <div class="content">
             <h1 style="color:rgb(254, 254, 254); font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold;">EMPOWER THE <br> PEOPLE AROUND YOU</h1>
           </div>
         </div>
@@ -76,9 +76,9 @@ export default {
     return {
       currentImage: 0,
       images: [
-        "/layout/images/landing-img4.jpg",
-        "/layout/images/landing-img5.jpg",
-        "/layout/images/landing-img6.jpg",
+        "/layout/images/landing-img1.jpg",
+        "/layout/images/landing-img2.jpg",
+        "/layout/images/landing-img3.jpg",
       ]
     };
   },
