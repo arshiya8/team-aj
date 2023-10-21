@@ -87,6 +87,7 @@ onMounted(async () => {
 });
 
 const goToCSPSetting = (CSPid) => {
+  localStorage.setItem("CSPid", id);
   router.push({ name: "CSPSetting", params: { id: CSPid } });
 };
 </script>
