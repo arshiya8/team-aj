@@ -9,12 +9,53 @@ export default {
       backgroundImage: {  // Set background of webpage
         backgroundImage: `url(../../layout/images/quiz1.png)`
       },
+      submitted: false, // Add this property to track form submission
+      showHomepageButton: false, // Add this property to control button visibility
+
       questions: [
         {
-          name: "passionate_about",
-          text: "1. What Causes or Issues Are You Passionate About?",
-          type: "multi-select",
+          name: "first_name",
+          text: "1. What is your first name?",
+          type: "open-ended",
           background: "../../layout/images/quiz1.png",
+          character_limit: 1000,
+          response: ''
+        },
+        {
+          name: "last_name",
+          text: "2. What is your last name?",
+          type: "open-ended",
+          background: "../../layout/images/quiz2.png",
+          character_limit: 1000,
+          response: ''
+        },
+        {
+          name: "telegram",
+          text: "3. What is your telegram handle? Eg. @donald",
+          type: "open-ended",
+          background: "../../layout/images/quiz3.png",
+          character_limit: 1000,
+          response: ''
+        },
+        {
+          name: "year_of_study",
+          text: "4. What is your year of study?",
+          type: "single-select",
+          background: "../../layout/images/quiz4.png",
+          options: {
+            cols: [
+              "Year 1",
+              "Year 2",
+              "Year 3",
+              "Year 4"
+            ],
+          },
+        },
+        {
+          name: "passionate_about",
+          text: "5. What Causes or Issues Are You Passionate About?",
+          type: "multi-select",
+          background: "../../layout/images/quiz5.png",
           options: {
             cols: [
               "Environmental Conservation",
@@ -26,9 +67,9 @@ export default {
         },
         {
           name: "skills",
-          text: "2. What Skills or Talents Do You Have to Offer?",
+          text: "6. What Skills or Talents Do You Have to Offer?",
           type: "multi-select",
-          background: "../../layout/images/quiz2.png",
+          background: "../../layout/images/quiz6.png",
           options: {
             cols: [
               "Teaching or Tutoring",
@@ -40,9 +81,9 @@ export default {
         },
         {
           name: "commitment",
-          text: "3. How Much Time Can You Commit to Volunteering?",
+          text: "7. How Much Time Can You Commit to Volunteering?",
           type: "single-select",
-          background: "../../layout/images/quiz3.png",
+          background: "../../layout/images/quiz7.png",
           options: {
             cols: [
               "Less than 5 hours per week",
@@ -54,9 +95,9 @@ export default {
         },
         {
           name: "volunteering_location",
-          text: "4. Are You Interested in Local or Global Volunteering?",
+          text: "8. Are You Interested in Local or Global Volunteering?",
           type: "multi-select",
-          background: "../../layout/images/quiz4.png",
+          background: "../../layout/images/quiz8.png",
           options: {
             cols: [
               "Local (within Singapore)",
@@ -66,9 +107,9 @@ export default {
         },
         {
           name: "volunteering_experience",
-          text: "5. What Type of Volunteering Experience Are You Seeking?",
+          text: "9. What Type of Volunteering Experience Are You Seeking?",
           type: "multi-select",
-          background: "../../layout/images/quiz5.png",
+          background: "../../layout/images/quiz9.png",
           options: {
             cols: [
               "Hands-On, Direct Interaction",
@@ -80,17 +121,17 @@ export default {
         },
         {
           name: "self_description",
-          text: "6. Describe yourself in 100 words.",
+          text: "10. Describe yourself in 100 words.",
           type: "open-ended",
-          background: "../../layout/images/quiz6.png",
+          background: "../../layout/images/quiz10.png",
           character_limit: 1000,
           response: ''
         },
         {
           name: "self_awareness",
-          text: "7. What are your strengths and weaknesses?",
+          text: "11. What are your strengths and weaknesses?",
           type: "open-ended",
-          background: "../../layout/images/quiz7.png",
+          background: "../../layout/images/quiz11.png",
           character_limit: 1000,
           response: ''
         },
@@ -145,10 +186,14 @@ export default {
       console.log("Form submitted with selected options:");
 
       Object.entries(this.selectedOptions).forEach(([k, v]) => {
-        console.log("The key: ", k)
-        console.log("The value: ", v)
-      })
-    }
+        console.log("The key: ", k);
+        console.log("The value: ", v);
+      });
+
+      // Set submitted to true and show the button
+      this.submitted = true;
+      this.showHomepageButton = true;
+    },
   },
 };
 </script>
@@ -164,7 +209,7 @@ export default {
 
     <!-- Container for header -->
     <div class="header-container">
-      <h1>VOLUNTEER PERSONALITY TEST</h1>
+      <h1>CSP PREFERENCE QUIZ</h1>
     </div>
 
     <!-- Container for carousel -->
@@ -229,17 +274,19 @@ export default {
                   </button>
                   <div v-else> <!-- Empty div to force the next button to row end -->
                   </div>
-                  <button v-if="currentQuestion < questions.length - 1" type="button" class="btn btn-primary"
-                          @click="nextQuestion">
+                  <button v-if="currentQuestion < questions.length - 1" type="button" class="btn btn-primary" @click="nextQuestion">
                     Next
                   </button>
-                  <router-link v-else :to="{ name: 'Home' }"> <!-- Move v-else to router-link -->
-                    <button type="submit" class="btn btn-primary">
-                      Submit
-                    </button>
-                  </router-link>
-
+                  <!-- Display "Submit" button only on the last question -->
+                  <button v-if="currentQuestion === questions.length - 1" type="submit" class="btn btn-primary">
+                    Submit
+                  </button>
                 </div>
+
+                <!-- "Take Me to Homepage" button -->
+                <router-link v-if="showHomepageButton" :to="{ name: 'Home' }">
+                  <button class="btn btn-primary">Take Me to Homepage</button>
+                </router-link>
               </div>
             </div>
           </div>
