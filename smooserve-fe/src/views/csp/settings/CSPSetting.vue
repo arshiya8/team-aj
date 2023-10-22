@@ -25,6 +25,7 @@ const list = ref([]);
 const csp = ref([]);
 
 const loading = ref(true);
+const registerChecked = ref(false);
 
 const buttonColor = ref("");
 
@@ -77,6 +78,7 @@ function save() {
   loading.value = true;
   csp.value.title = title.value;
   csp.value.desc = desc.value;
+  csp.value.settings.registerActive = registerChecked.value;
   console.log(csp.value);
   axios
     .put("https://smooserve-be.vercel.app/api/csp/" + CSPid, csp.value)
@@ -109,6 +111,9 @@ onMounted(async () => {
         ? (list.value = response.data.settings.urls)
         : (list.value = []);
       CSPImage.value = csp.value.imageURL;
+      response.data.settings.registerActive
+        ? (registerChecked.value = response.data.settings.registerActive)
+        : (registerChecked.value = false);
     })
     .catch((error) => {
       console.log(error);
@@ -154,14 +159,23 @@ watch(
                   shape="circle"
                   size="xlarge"
                   :image="CSPImage"
-                  :style="{ backgroundColor: '#fafafa', width: '6rem', height:'6rem' }"
+                  :style="{
+                    backgroundColor: '#fafafa',
+                    width: '6rem',
+                    height: '6rem',
+                  }"
                 />
                 <Avatar
                   v-else
                   :label="Array.from(csp.title)[0]"
                   shape="circle"
                   size="xlarge"
-                  :style="{ backgroundColor: '#3F51B5', color: '#ffffff', width: '6rem', height:'6rem'}"
+                  :style="{
+                    backgroundColor: '#3F51B5',
+                    color: '#ffffff',
+                    width: '6rem',
+                    height: '6rem',
+                  }"
                 />
               </div>
               <div class="col-12 md:col-8 lg:col-9 mb-3">
@@ -186,6 +200,8 @@ watch(
             </div>
 
             <div class="flex flex-column gap-3 mb-3">
+              <label for="title">Registration</label>
+              <InputSwitch v-model="registerChecked" />
               <label for="title">Username</label>
               <InputText id="title" :value="csp.title" v-model="title" />
 

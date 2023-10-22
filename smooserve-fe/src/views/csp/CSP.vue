@@ -101,7 +101,7 @@ const goToCSPSetting = (CSPid) => {
   <div v-if="loading" class="card">
     <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
   </div>
-  <div v-else>
+  <div v-else class="overflow-x-hidden">
     <Toolbar
       :style="{ backgroundColor: backgroundColor }"
       class="w-full md:w-10 lg:w-9"
@@ -188,10 +188,13 @@ const goToCSPSetting = (CSPid) => {
           <p>
             {{ csp.desc }}
           </p>
+
+            <Button v-if="csp.settings.registerActive" rounded class="roundBtn">Register</Button>
+
         </div>
 
         <div v-for="url in csp.settings.urls">
-          <a v-if="url.url && url.active" :href="url.url">
+          <a v-if="url.url && url.active" :href="'http://'+ url.url">
             <Button
               :icon="'pi pi-' + url.icon"
               type="submit"
