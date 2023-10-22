@@ -1,208 +1,168 @@
 <template>
-    <header>
-        <h1>Event Scheduler</h1>
-        <nav>
-            <div class="card">
-                <h5>TabView</h5>
-                <!-- You should include the necessary scripts for Vue.js and TabView here -->
-                <TabView>
-                    <TabPanel header="Dashboard">
-                        <p class="line-height-3 m-0">
-                        <section id="dashboard">
-                            <h2>Dashboard</h2>
-                            <div id="volunteerSignups">
-                                <h3>Volunteer Sign-ups</h3>
-                                <table id="volunteerTable">
-                                    <tr>
-                                        <th>Student Name</th>
-                                        <th>Profile</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div id="volunteerPieChart">
-                                <h3>Volunteer Status</h3>
-                                <canvas id="pieChart"></canvas>
-                            </div>
-                        </section>
-                        </p>
-                    </TabPanel>
-                    <TabPanel header="Views">
-                        <p class="line-height-3 m-0">
-                        <section id="views">
-                            <h2>Views</h2>
-                            <p>Number of views: <span id="viewCount">0</span></p>
-                        </section>
-                        </p>
-                    </TabPanel>
-                    <TabPanel header="Signups">
-                        <p class="line-height-3 m-0">
-                        <section id="signups">
-                            <h2>Sign Ups</h2>
-                            <table id="studentTable">
-                                <tr>
-                                    <th>Student Name</th>
-                                    <th>Profile</th>
-                                    <th>Status</th>
-                                </tr>
-                            </table>
-                        </section>
-                        </p>
-                    </TabPanel>
-                    <TabPanel header="Schedule">
-                        <p class="line-height-3 m-0">
-                        <section id="schedule">
-                            <h2>Schedule</h2>
-                            <div id="calendar">
-                                <!-- Event calendar -->
-                                <h1>Interview Scheduler</h1>
-                                <label for="event">Event Name:</label>
-                                <input type="text" id="event" placeholder="Event name">
-                                <label for="date">Date:</label>
-                                <input type="date" id="date">
-                                <label for="startTime">Start Time:</label>
-                                <input type="time" id="startTime">
-                                <label for="endTime">End Time:</label>
-                                <input type="time" id="endTime">
-                                <button onclick="addEvent()">Add Event</button>
-                                <table>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Event</th>
-                                        <th>Start Time</th>
-                                        <th>End Time</th>
-                                    </tr>
-                                </table>
-                            </div>
-                        </section>
-                        </p>
-                    </TabPanel>
-                </TabView>
-            </div>
-        </nav>
-    </header>
+  <header>
+    <h1>Volunteer Organizations</h1>
+    <nav>
+      <div class="card" style="background-color: #76c6b4">
+        <TabView>
+          <TabPanel header="Dashboard">
+            <p class="line-height-3 m-0">
+              <section id="dashboard">
+                <h2>Dashboard</h2>
+                <div id="dashboard">
+                  <!-- Import calendar Vue component here -->
+                  <CalendarComponent />
+                </div>
+              </section>
+            </p>
+          </TabPanel>
+          <TabPanel header="Views">
+            <p class="line-height-3 m-0">
+              <section id="views">
+                <h2>Views</h2>
+                <p>Number of views: <span id="viewCount">0</span></p>
+              </section>
+            </p>
+          </TabPanel>
+          <TabPanel header="Signups">
+            <section id="signups">
+              <h2>Sign Ups</h2>
+              <table id="studentTable">
+                <tr>
+                  <th>Student Name</th>
+                  <th>Status</th>
+                </tr>
+                  <tr v-for="student in students" :key="student.id">
+                    <td @mouseover="showStudentProfile(student)" @mouseout="clearStudentProfile">{{ student.name }}</td>
+                    <td>{{ student.status }}</td>
+                </tr>
+              </table>
+              <StudentProfile :student="showProfile" />
+            </section>
+          </TabPanel>
+          <TabPanel header="Schedule">
+            <section id="schedule">
+              <h2>Schedule</h2>
+              <div id="calendar">
+                <h1>Interview Scheduler</h1>
+                <label for="event">Event Name:</label>
+                <input v-model="newEvent.eventName" type="text" id="event" placeholder="Event name">
+                <label for="date">Date:</label>
+                <input v-model="newEvent.date" type="date" id="date">
+                <label for="startTime">Start Time:</label>
+                <input v-model="newEvent.startTime" type="time" id="startTime">
+                <label for="endTime">End Time:</label>
+                <input v-model="newEvent.endTime" type="time" id="endTime">
+                <button @click="addEvent">Add Event</button>
+                <table>
+                  <tr>
+                    <th>Date</th>
+                    <th>Event</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                  </tr>
+                  <tr v-for="event in events" :key="event.id">
+                    <td>{{ event.date }}</td>
+                    <td>{{ event.eventName }}</td>
+                    <td>{{ event.startTime }}</td>
+                    <td>{{ event.endTime }}</td>
+                  </tr>
+                </table>
+              </div>
+            </section>
+          </TabPanel>
+        </TabView>
+      </div>
+    </nav>
+  </header>
 </template>
-
 <script>
-const events = [];
+import { ref } from 'vue';
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
+import CalendarComponent from './CSPCalender.vue';
+import StudentProfile from './StudentProfile.vue'; // Adjust the path if needed
 
-function addEvent() {
-    const eventName = document.getElementById("event").value;
-    const eventDate = document.getElementById("date").value;
-    const startTime = document.getElementById("startTime").value;
-    const endTime = document.getElementById("endTime").value;
 
-    // Check for clashes
-    if (isClash(eventDate, startTime, endTime)) {
-        alert("Event time clashes with an existing event.");
+export default {
+  components: {
+    CalendarComponent,
+    StudentProfile,
+  },
+  data() {
+    return {
+      students: [
+        { id: 1, name: 'John Doe', status: 'Enrolled' },
+        { id: 2, name: 'Jane Smith', status: 'Pending' },
+        { id: 3, name: 'Bob Johnson', status: 'Rejected' },
+        // Add more dummy data as needed
+      ],
+      students_Profile: [
+        { id: 1, name: 'John Doe', contact: '91234568', email: 'johndoe@gmail.com', desc: 'I am John' },
+        { id: 2, name: 'Jane Smith', contact: '81234567', email: 'johndoe@gmail.com', desc: 'I am John' },
+        { id: 3, name: 'Bob Johnson', contact: '98765432', email: 'johndoe@gmail.com', desc: 'I am John' },
+        // Add more dummy data as needed
+      ],
+      newEvent: {
+        eventName: '',
+        date: '',
+        startTime: '',
+        endTime: '',
+      },
+      events: [],
+      showProfile: null, // Added showProfile data
+    };
+  },
+  methods: {
+    addEvent() {
+      if (this.isClash(this.newEvent.date, this.newEvent.startTime, this.newEvent.endTime)) {
+        alert('Event time clashes with an existing event.');
         return;
-    }
+      }
 
-    // Add the event to the array
-    events.push({
-        date: eventDate,
-        name: eventName,
-        start: startTime,
-        end: endTime
-    });
+      // Generate a unique event ID
+      this.newEvent.id = this.events.length + 1;
 
-    // Add the event to the table
-    const table = document.querySelector("table");
-    const newRow = table.insertRow(-1);
-    const cell1 = newRow.insertCell(0);
-    const cell2 = newRow.insertCell(1);
-    const cell3 = newRow.insertCell(2);
-    const cell4 = newRow.insertCell(3);
-    cell1.innerHTML = eventDate;
-    cell2.innerHTML = eventName;
-    cell3.innerHTML = startTime;
-    cell4.innerHTML = endTime;
-}
+      // Add the new event to the events array
+      this.events.push({ ...this.newEvent });
 
-function isClash(date, start, end) {
-    for (const event of events) {
+      // Clear the input fields
+      this.newEvent = {
+        eventName: '',
+        date: '',
+        startTime: '',
+        endTime: '',
+      };
+    },
+    isClash(date, start, end) {
+      for (const event of this.events) {
         if (event.date === date) {
-            if ((start >= event.start && start < event.end) || (end > event.start && end <= event.end)) {
-                return true;
-            }
+          if (
+            (start >= event.startTime && start < event.endTime) ||
+            (end > event.startTime && end <= event.endTime) ||
+            (start <= event.startTime && end >= event.endTime)
+          ) {
+            // Notify the user of the clash
+            return true;
+          }
         }
-    }
-    return false;
+      }
+      return false;
+    },
+    showStudentProfile(student) {
+    this.showProfile = this.showProfile = {
+  name: 'John Doe',
+  email: 'johndoe@gmail.com',
+  contact: '91234568',
+  description: 'I am John',
+  commitments: ['Commitment1', 'Commitment2'],
+};
+
+  },
+  clearStudentProfile() {
+    this.showProfile = null;
+  }
+  },
 }
-document.addEventListener("DOMContentLoaded", function () {
-    // Initialize your data and implement the requested functionalities here.
-
-    // Example: To add a student to the table:
-    function addStudentToTable(student) {
-        const table = document.getElementById("studentTable");
-        const row = table.insertRow(-1);
-        const cell1 = row.insertCell(0);
-        const cell2 = row.insertCell(1);
-        const cell3 = row.insertCell(2);
-
-        cell1.innerHTML = student.name;
-        cell2.innerHTML = `<a href="${student.profile}" target="_blank">Profile</a>`;
-        cell3.innerHTML = `
-        <select class="status" data-name="${student.name}">
-            <option value="registered">Registered</option>
-            <option value="scheduled">Scheduled</option>
-            <option value="accepted">Accepted</option>
-            <option value="rejected">Rejected</option>
-        </select>
-    `;
-
-        // Handle status changes and pop-up profile here
-        // You can add event listeners for status changes and profile pop-ups
-    }
-
-    // Example: To update the volunteer pie chart:
-    function updatePieChart(data) {
-        const ctx = document.getElementById("pieChart").getContext("2d");
-        const chart = new Chart(ctx, {
-            type: "pie",
-            data: {
-                labels: ["Accepted", "Rejected"],
-                datasets: [{
-                    data: data,
-                    backgroundColor: ["#064273", "#76b6c4"],
-                }],
-            },
-        });
-    }
-
-    // Example: To update view count:
-    function updateViewCount(count) {
-        document.getElementById("viewCount").textContent = count;
-    }
-
-    // Example: Sample data for demonstration
-    const students = [
-        {
-            name: "John Doe",
-            profile: "https://example.com/johndoe",
-            status: "registered",
-        },
-        {
-            name: "Jane Smith",
-            profile: "https://example.com/janesmith",
-            status: "scheduled",
-        },
-        // Add more students here
-    ];
-
-    const volunteerData = [70, 30]; // Example pie chart data (Accepted, Rejected)
-    const viewCount = 1000; // Example view count
-
-    // Populate the student table
-    students.forEach(student => {
-        addStudentToTable(student);
-    });
-
-    // Update the pie chart
-    updatePieChart(volunteerData);
-    // Update the view count
-    updateViewCount(viewCount);
-});
 </script>
 
 <style>
@@ -210,168 +170,64 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /* Style the tab buttons */
 .tab-button {
-    cursor: pointer;
-    padding: 10px 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin: 5px;
+  cursor: pointer;
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 5px;
 }
 
 .tab-button.active {
-    background-color: #3498db;
-    color: #fff;
+  background-color: #3498db;
+  color: #fff;
 }
 
 /* Style the cards */
 .card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin: 10px;
-    padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
 }
 
 /* styles.css */
 
 /* Add this CSS rule for the "Take Quiz Again" button */
 .quiz-button {
-    display: inline-block;
-    padding: 10px 20px;
-    border-radius: 25px;
-    background-color: #064273;
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    margin: 10px;
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 25px;
+  background-color: #064273;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 10px;
 }
 
 .quiz-button:hover {
-    background-color: #042c4c;
+  background-color: #042c4c;
 }
 
 /* styles.css */
 
 /* Add this CSS rule for the selected card */
 .selected-card {
-    background-color: #76b6c4;
-    color: #fff;
+  background-color: #76b6c4;
+  color: #fff;
 }
 
 /* Style the cards */
 .card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin: 10px;
-    padding: 10px;
-    cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+  cursor: pointer;
 }
-
+th,tr,td {
+  border:1px solid black;
+}
 .card:hover {
-    background-color: #f0f0f0;
-}
-
-.flip-card {
-    background-color: transparent;
-    width: 280px;
-    height: 390px;
-    border: none;
-    perspective: 1000px;
-    /* Remove this if you don't want the 3D effect */
-    border-radius: 15px;
-}
-
-/* This container is needed to position the front and back side */
-.flip-card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    transition: transform 0.8s;
-    transform-style: preserve-3d;
-}
-
-/* Do an horizontal flip when you move the mouse over the flip box container */
-.flip-card:hover .flip-card-inner {
-    transform: rotateY(180deg);
-}
-
-/* Position the front and back side */
-.flip-card-front,
-.flip-card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    border-radius: 15px;
-}
-
-/* Style the front side (fallback if image is missing) */
-.flip-card-front {
-    color: black;
-
-}
-
-/* Style the back side */
-.flip-card-back {
-    background-color: rgb(119, 166, 204);
-    color: white;
-    transform: rotateY(180deg);
-    display: flex;
-    justify-content: center;
-}
-
-.flip-card img {
-    max-width: 100%;
-    /* Ensure the image doesn't exceed its container */
-    max-height: 100%;
-    border-radius: 15px;
-}
-
-.centralise {
-    margin: 150px;
-}
-
-/* Additional CSS for grid layout */
-.favorite-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-    /* Adjust the width as needed */
-    gap: 20px;
-    /* Adjust the gap between cards */
-}
-
-.flip-card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
-}
-
-/* Your existing CSS styles... */
-
-/* Style for the card grid layout */
-.card-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    /* Adjust the number of columns as needed */
-    gap: 20px;
-    /* Adjust the gap between cards */
-}
-
-/* Style the flip cards */
-.flip-card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
-}
-
-/* Additional CSS for grid layout */
-.favorite-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    /* Adjust the width as needed */
-    gap: 20px;
-    /* Adjust the gap between cards */
+  background-color: #f0f0f0;
 }
 </style>
