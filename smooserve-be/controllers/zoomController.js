@@ -64,6 +64,40 @@ const getZoomRedirect = async (req, res) => {
     );
   }
 };
+const getNewAccessToken = async (req, res) => {
+    var data = {
+        grant_type: "refresh_token",
+        refresh_token: req.params.id,
+    };
+
+    var config = {
+      method: "post",
+      url: "https://zoom.us/oauth/token",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization:
+          "Basic " +
+          Buffer.from(
+            "DgWlPZgGSrGcJOBMXERH2w:UjVGte9FWBtP3AhzdAjiYXnsyRRHDK2Z"
+          ).toString("base64"),
+      },
+      data: data,
+    };
+
+    var result = await axios(config)
+      .then(function (response) {
+        console.log("NEW TOKEN" + response.data);
+        // res.redirect(
+        //   `http://localhost:5173/#/csp/zoom?&access_token=${response.data.access_token}&refresh_token=${response.data.refresh_token}`
+        // );
+        return response.data
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    return res.json(result);
+};
 
 const createMeeting = async (req, res) => {
   try {
@@ -71,10 +105,11 @@ const createMeeting = async (req, res) => {
 
     const apiUrl = "https://api.zoom.us/v2/users/me/meetings"; // Zoom API endpoint
     const meetingData = {
-      topic: "My Scheduled Meeting", // Meeting title
+      topic: data.topic, // Meeting title
       type: 2, // Scheduled meeting
-      start_time: "2023-12-31T12:00:00", // Set your desired start time
-      duration: 60, // Meeting duration in minutes
+      start_time: data.start_time, // Set your desired start time
+      duration: data.duration, // Meeting duration in minutes
+      timezone: 'Asia/Singapore'
     };
 
     const headers = {
@@ -99,81 +134,37 @@ const createMeeting = async (req, res) => {
   }
 };
 
-const getAllCsps = async (req, res, next) => {
+const getMeetings = async (req, res) => {
   try {
-    const csps = await firestore.collection("CSPs");
-    const data = await csps.get();
-    const cspsArray = [];
-    if (data.empty) {
-      res.status(404).send("No CSP record found");
-    } else {
-      data.forEach((doc) => {
-        const csp = new Csp(
-          doc.id,
-          doc.data().title,
-          doc.data().desc,
-          doc.data().imageURL,
-          doc.data().igURL,
-          doc.data().telehandle,
-          doc.data().signupFormURL,
-          doc.data().signupDeadline,
-          doc.data().isLocal,
-          doc.data().noOfHours,
-          doc.data().causes,
-          doc.data().skills,
-          doc.data().settings
-        );
-        cspsArray.push(csp);
-      });
-      res.send(cspsArray);
-    }
-  } catch (error) {
-    res.status(400).send(error.message);
-  }
-};
-
-const getCsp = async (req, res, next) => {
-  try {
-    const id = req.params.id;
-    const csp = await firestore.collection("CSPs").doc(id);
-    const data = await csp.get();
-    if (!data.exists) {
-      res.status(404).send("CSP with the given ID not found");
-    } else {
-      res.send(data.data());
-    }
-  } catch (error) {
-    res.status(400).send(error.message);
-  }
-};
-
-const updateCsp = async (req, res, next) => {
-  try {
-    const id = req.params.id;
     const data = req.body;
-    const csp = await firestore.collection("CSPs").doc(id);
-    await csp.update(data);
-    res.send("CSP record updated successfuly");
-  } catch (error) {
-    res.status(400).send(error.message);
-  }
-};
 
-const deleteCsp = async (req, res, next) => {
-  try {
-    const id = req.params.id;
-    await firestore.collection("CSPs").doc(id).delete();
-    res.send("Record deleted successfuly");
+    const apiUrl = "https://api.zoom.us/v2/users/me/meetings"; // Zoom API endpoint
+
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${data.accessToken}`, // Include the access token
+    };
+
+    // Make an authenticated POST request to create the meeting
+    const response = await axios.get(apiUrl, { headers });
+
+    if (response.status === 201) {
+      const meetings = response.data;
+      res.send(meetings);
+    } else {
+        // Handle any errors or validation issues
+        res.status(response.status).send(response.data);
+    }
   } catch (error) {
-    res.status(400).send(error.message);
+    console.error("Error creating Zoom meeting:", error);
+    res.send(error);
   }
 };
 
 module.exports = {
   getZoomAuth,
   getZoomRedirect,
+  getNewAccessToken,
   createMeeting,
-  getCsp,
-  updateCsp,
-  deleteCsp,
+  getMeetings
 };
