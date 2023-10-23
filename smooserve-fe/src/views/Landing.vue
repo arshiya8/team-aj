@@ -188,12 +188,21 @@ export default {
     });
 
     const filterCsp = () => {
-      const filteredCsps = csps.value.filter(csp => {
+      if (!csps.original) {
+        // Store the original csps array if it's not already stored
+        csps.original = csps.value.slice();
+      }
+      if (csps.value.length === csps.original.length) {
+        const filteredCsps = csps.value.filter(csp => {
         const causeMatch = selectedValue1.value === '' || selectedValue1.value === csp.cause;
         const skillsMatch = selectedValue2.value === '' || selectedValue2.value === csp.skills;
         return causeMatch || skillsMatch;
       });
       csps.value = filteredCsps;
+      } else {
+        // Restore the original csps array if it's already filtered
+        csps.value = csps.original.slice();
+      }      
     };
 
 
@@ -284,7 +293,7 @@ export default {
         <label for="dropdown1"></label>
         <select id="dropdown1" v-model="selectedValue1" @change="filterCsp">
           <option value="" selected>Causes</option>
-          <option value="Environment">Environment</option>
+          <option value="Environmental Conservation">Environment</option>
           <option value="Education">Education</option>
           <option value="Youth Development">Youth Development</option>
         </select>
@@ -295,7 +304,7 @@ export default {
           <option value="" selected>Skills</option>
           <option value="Teaching">Teaching</option>
           <option value="Event Planning">Event Planning</option>
-          <option value="Communication">Communication</option>
+          <option value="Wrting and Communication">Communication</option>
         </select>
 
 
