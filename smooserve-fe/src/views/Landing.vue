@@ -12,6 +12,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 export default {
   setup() {
     const csps = ref([]);
+    csps.original = null;
     const favoriteCSPs = ref([]);
     const selectedValue1 = ref('');
     const selectedValue2 = ref('');
@@ -106,20 +107,30 @@ export default {
       return favoriteCSPs.value.some((favCSP) => favCSP.id === csp.id);
     };
 
-    const toggleAutoFilter = () => {
+
     const toggleAutoFilter = async () => {
       const response = await axios.get(`http://localhost:8080/api/student/${studentId}`, {
-      }); console.log(response.data.quizPreference)
+      });
+      // console.log(response.data.quizPreference)
       const causes = response.data.quizPreference.passionate_about
       const skills = response.data.quizPreference.skills
-      const auto_filter = csps.value.filter(csp => {
-        // Check if csp.cause or csp.skills match any cause or skill from the API response
-        return causes.includes(csp.cause) || skills.includes(csp.skills);
-      });
 
-      // Now filteredCsps contains the filtered items based on causes and skills
-      console.log(auto_filter);
-      csps.value = auto_filter;
+      if (!csps.original) {
+        // Store the original csps array if it's not already stored
+        csps.original = csps.value.slice();
+      }
+      if (csps.value.length === csps.original.length) {
+        const auto_filter = csps.value.filter(csp => {
+          return causes.includes(csp.cause) || skills.includes(csp.skills);
+        });
+        csps.value = auto_filter;
+      } else {
+        // Restore the original csps array if it's already filtered
+        csps.value = csps.original.slice();
+      }
+
+      // console.log(auto_filter);
+
 
       selectedValue3.value = selectedValue3.value === '' ? 'choiceX' : '';
     };
