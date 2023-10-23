@@ -66,7 +66,7 @@ const logoUrl = computed(() => {
         <li>
           <a @click="smoothScroll('#highlights')"
             class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple href="shop.vue">
-            <i class="navbar-icon pi pi-id-card"></i><span>SMOOSERVE SHOP</span>
+            <i class="navbar-icon pi pi-shopping-cart"></i><span>SMOOSERVE SHOP</span>
           </a>
         </li>
       </ul>

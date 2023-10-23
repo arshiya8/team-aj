@@ -164,7 +164,7 @@ export default {
       studentId,
       favoriteCSPs,
       updateStudent,
-      
+
 
       // pagination tools //
       itemsPerPage,
@@ -229,7 +229,9 @@ export default {
       </div>
     </div>
     <div class="row" style="padding-left: 10px; padding-bottom:20px; text-align: center;display: flex; align-items: center; font-family: 'Helvetica Neue Medium', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-font-weight: normal;">
+    font-weight: normal;">
+
+
       <!-- First Dropdown List -->
       <div class="dropdown" style="display: inline-block; margin-right: 10px;">
         <label for="dropdown1"></label>
@@ -272,11 +274,11 @@ font-weight: normal;">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
   </div>
 
-
+  <!-- CSP flip cards -->
   <div class="container-fluid" style="background-color: lightblue;">
     <div class="row">
       <div class="card-container">
-        <div class="col-md-4" v-for="(csp, index) in getVisibleCsps" :key="csp.id">
+        <div class="col-md-6 col-sm-12 col-lg-4" v-for="(csp, index) in getVisibleCsps" :key="csp.id">
           <div class="flip-card">
             <div class="flip-card-inner">
               <div class="flip-card-front">
@@ -357,13 +359,11 @@ font-weight: normal;">
 .dropdown select {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: normal;
-  /* Add any other styles you want to apply to the dropdowns here */
 }
 
 .toggle-button button {
   display: inline-block;
   background-color: #007ad9;
-  /* Set the desired background color */
   color: white;
   border: none;
   border-radius: 20px;
@@ -376,44 +376,30 @@ font-weight: normal;">
 
 .toggle-button button:hover {
   background-color: #0053a6;
-  /* Set the desired hover color */
 }
 
 .toggle-button button.on {
   background-color: #007ad9;
-  /* Set the background color when it's turned on */
 }
 
 .toggle-button button.off {
   background-color: #ccc;
-  /* Set the background color when it's turned off */
 }
 
 .heart-container {
   position: absolute;
   top: 10px;
-  /* Adjust the top position as needed */
   right: 10px;
-  /* Adjust the right position as needed */
   z-index: 1;
-  /* Ensure the heart is above other content */
 }
 
-/* Define styles for the red heart */
 .heart-red {
   color: red;
-  /* You can customize the red color as needed */
 }
 
 .clickable {
   cursor: pointer;
 }
-
-/* to have spacing between each card */
-.col-md-3 {
-  margin: 20px 0;
-}
-
 
 .dropdown {
   display: inline;
@@ -459,13 +445,6 @@ font-weight: normal;">
   margin: 0 auto;
 }
 
-.col-md-4 {
-  width: calc(33.33% - 20px);
-  /* 3 columns with spacing between */
-  margin-bottom: 20px;
-  /* Add vertical spacing between rows */
-}
-
 .rd {
   border-radius: 15px;
   width: 30%;
@@ -506,7 +485,6 @@ font-weight: normal;">
   align-items: center;
   justify-content: space-between;
 }
-
 
 /* logo */
 .logo {
