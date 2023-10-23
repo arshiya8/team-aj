@@ -34,7 +34,7 @@ export default {
 
           // If studentId is still null, no matching email was found in the collection
           if (studentId === null) {
-            console.log("No matching email found in the database.");
+            console.log("No matching id found in the database.");
           } else {
             console.log("Student ID found:", studentId);
           }
@@ -63,8 +63,28 @@ export default {
         localStorage.setItem('favoriteCSPs', JSON.stringify(favoriteCSPs.value));
       } else {
         console.error('User is not authenticated.');
+        alert("Sign in first!");
       }
     };
+    // const toggleHeartColor = (csp) => {
+    //   const index = favoriteCSPs.value.findIndex((favCSP) => favCSP.id === csp.id);
+    //   if (index === -1) {
+    //     // CSP is not in favorites, add it
+    //     favoriteCSPs.value.push(csp);
+    //     // // // Update the student's favorite CSPs in the database
+    //     // updateStudent(favoriteCSPs.value);
+    //   } else {
+    //     // CSP is already in favorites, remove it
+    //     favoriteCSPs.value.splice(index, 1);
+    //     // // // Update the student's favorite CSPs in the database
+    //     // updateStudent(favoriteCSPs.value);
+    //   }
+    //   // Update localStorage with the updated favorite CSPs list
+    //   localStorage.setItem('favoriteCSPs', JSON.stringify(favoriteCSPs.value));
+
+    //   // Also, update the student's favorite CSPs in the database
+    //   updateStudent(favoriteCSPs.value);
+    // };
 
     const updateStudent = async (updatedFavorites) => {
       try {
@@ -87,6 +107,20 @@ export default {
     };
 
     const toggleAutoFilter = () => {
+    const toggleAutoFilter = async () => {
+      const response = await axios.get(`http://localhost:8080/api/student/${studentId}`, {
+      }); console.log(response.data.quizPreference)
+      const causes = response.data.quizPreference.passionate_about
+      const skills = response.data.quizPreference.skills
+      const auto_filter = csps.value.filter(csp => {
+        // Check if csp.cause or csp.skills match any cause or skill from the API response
+        return causes.includes(csp.cause) || skills.includes(csp.skills);
+      });
+
+      // Now filteredCsps contains the filtered items based on causes and skills
+      console.log(auto_filter);
+      csps.value = auto_filter;
+
       selectedValue3.value = selectedValue3.value === '' ? 'choiceX' : '';
     };
 
@@ -151,6 +185,8 @@ export default {
       csps.value = filteredCsps;
     };
 
+
+
     return {
       csps,
       favoriteCSPs,
@@ -164,7 +200,7 @@ export default {
       studentId,
       favoriteCSPs,
       updateStudent,
-      
+
 
       // pagination tools //
       itemsPerPage,
@@ -194,12 +230,12 @@ export default {
   <div class="container-fluid" style="background-color: lightblue;">
     <div class="row pb-3">
       <h2
-          style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">
+        style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">
         COMMUNITY SERVICE
         PROJECTS</h2>
       <br>
       <h2
-          style="color:rgb(252,84,84); font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; font-size: 4rem;">
+        style="color:rgb(252,84,84); font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; font-size: 4rem;">
         THIS MONTH</h2>
     </div>
   </div>
@@ -224,7 +260,7 @@ export default {
     <div class="row">
       <div class="col">
         <h1
-            style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; color:white;">
+          style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; color:white;">
           What's happening in Smooserve</h1>
       </div>
     </div>
@@ -252,7 +288,7 @@ font-weight: normal;">
 
         <div class="toggle-button" style="display: inline-block; text-align: center; padding-left: 10px;">
           <label
-              style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">Auto-filter:</label>
+            style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">Auto-filter:</label>
           <button @click="toggleAutoFilter">{{ selectedValue3 === '' ? 'Off' : 'On' }}</button>
         </div>
       </div>
@@ -285,14 +321,15 @@ font-weight: normal;">
               <div class="flip-card-back align-items-end">
                 <div class="heart-container">
                   <i class="fas fa-heart clickable" :class="{ 'heart-red': isCSPFavorite(csp) }"
-                     @click="toggleHeartColor(csp)"></i>
+                    @click="toggleHeartColor(csp)"></i>
                 </div>
                 <div class="text-center">
                   <h1>{{ csp.title }}</h1>
                   <p class="card-description">{{ csp.desc }}</p>
 
                   <!-- see more button link to linktree -->
-                  <router-link :to="{ name: 'CSP', params: { id: csp.id } }" class="btn btn-primary">See more</router-link>
+                  <router-link :to="{ name: 'CSP', params: { id: csp.id } }" class="btn btn-primary">See
+                    more</router-link>
                 </div>
               </div>
             </div>
@@ -307,7 +344,7 @@ font-weight: normal;">
     <button @click="prevPage" :disabled="currentPage === 1" class="pagination-button">Prev</button>
     <span v-for="page in totalPages" :key="page">
       <button @click="goToPage(page)" :class="{ active: page === currentPage }" class="pagination-button">{{ page
-        }}</button>
+      }}</button>
     </span>
     <button @click="nextPage" :disabled="currentPage === totalPages" class="pagination-button">Next</button>
   </div>
