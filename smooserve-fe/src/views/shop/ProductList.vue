@@ -8,8 +8,10 @@ export default {
     data() {
         return {
 
-            visible: false,
-
+            Cartvisible: false,
+            wishlist: [],
+            showWishlist: false,
+            success: false,
             //products- dummy data
             products: [
                 {
@@ -110,7 +112,7 @@ export default {
     methods: {
 
         toggleCart() {
-            this.visible = !this.visible;
+            this.Cartvisible = !this.Cartvisible;
             console.log("Modal opened")
         },
         addToCart(product) {
@@ -127,23 +129,29 @@ export default {
             this.cart.splice(index, 1);
 
         },
-        showCartModal() {
 
-
-            // Optionally, you can add an event listener to detect outside clicks
-            document.addEventListener('click', this.closeCartModalOnOutsideClick);
-            console.log("Show Cart Modal Ended");
-        },
 
         closeCartModalOnOutsideClick(event) {
             // Check if the click event occurred outside of the modal
             const modalElement = document.getElementById('cartModal');
             if (modalElement && !modalElement.contains(event.target)) {
                 // Update the component's data property to hide the modal
-                this.showCart = false;
+                this.Cartvisible = false;
 
                 // Remove the event listener to stop listening for clicks outside the modal
                 document.removeEventListener('click', this.closeCartModalOnOutsideClick);
+            }
+
+        },
+        closeWishlistModalOnOutsideClick(event) {
+            // Check if the click event occurred outside of the modal
+            const modalElement = document.getElementById('wishlistModal');
+            if (modalElement && !modalElement.contains(event.target)) {
+                // Update the component's data property to hide the modal
+                this.showWishlist = false;
+
+                // Remove the event listener to stop listening for clicks outside the modal
+                document.removeEventListener('click', this.closeWishlistModalOnOutsideClick);
             }
 
         },
@@ -157,7 +165,55 @@ export default {
                 product.quantity--;
             }
         },
+        addToWishlist(product) {
+            // Check if the product is already in the wishlist
+            const existingProduct = this.wishlist.find(item => item.id === product.id);
+            if (!existingProduct) {
+                this.wishlist.push(product);
+            }
+        },
+        toggleWishlistModal() {
+            this.showWishlist = !this.showWishlist;
+            console.log("Modalll opened")
+        },
+        removeFromWishlist(index) {
+            this.wishlist.splice(index, 1);
+        },
+        // Method to show the success notification
+
+
+        // Method to add the item to the cart and show success notification
+        addToCartAndShowSuccess(item) {
+            this.addToCart(item);
+            this.showSuccess();
+            this.removeFromWishlist(this.wishlist.indexOf(item));
+        },
+        showSuccess() {
+            this.$toast.add({ severity: 'success', summary: 'Added to Cart', detail: 'Message Content', life: 3000 });
+        },
+        addAllToCart() {
+            for (const item of this.wishlist) {
+                // Check if the item is already in the cart
+                const existingProduct = this.cart.find(cartItem => cartItem.id === item.id);
+                if (existingProduct) {
+                    existingProduct.quantity++;
+                } else {
+                    // If the item is not in the cart, add it
+                    this.cart.push(Object.assign({}, item, { quantity: 1 }));
+                }
+            }
+
+            // Clear the wishlist after adding items to the cart
+            this.wishlist = [];
+
+            // Optionally, you can show a success notification here
+            this.showSuccess();
+
+            // Close the wishlist modal
+            this.showWishlist = false;
+        }
     },
+
     computed: {
         totalCartItems() {
             return this.cart.reduce((accumulator, item) => {
@@ -182,30 +238,72 @@ export default {
 };
 </script>
 
+
 <template>
     <div class="container-fluid">
-        <NavBar :cart-items="totalCartItems" @toggle-cart="toggleCart" />
+        <NavBar />
         <div class="bg-img relative">
             <img src="https://orientation.smu.edu.sg/sites/vivace.smu.edu.sg/files/styles/coverphoto/public/vivace/coverphotos/Verts%20Banner.jpeg?itok=HWSA3IuM"
                 alt="Jumbotron Image" class="w-full h-auto" />
             <div
                 class="bg-text flex flex-column justify-center items-center text-center absolute top-0 left-0 right-0 bottom-0">
-                <h1 class="text-5xl mb-4 font-bold text-white"
-                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Smooserve Shop</h1>
-                <p class="text-lg font-italic text-white"
-                    style="position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%);">Support your
-                    favourite
-                    CSP's today by purchasing merchandise</p>
+                <div class="title-container mt-4">
+                    <h1 class="text-5xl mb-4 font-bold text-white">Smooserve Shop</h1>
+                </div>
+                <div class="subtitle-container">
+                    <p class="text-lg font-italic text-white">Support your favourite CSP's today by purchasing merchandise
+                    </p>
+                </div>
             </div>
         </div>
     </div>
+
     <div class="container">
         <!-- Badge and Cart Dialog -->
         <i v-badge.danger="totalCartItems" icon="p-overlay-badge" style="font-size: 2.5rem">
             <Button icon="pi pi-shopping-cart" style="font-size:3rem" @click="toggleCart" />
         </i>
+        <!-- wishlist button -->
+        <Button label="&nbsp Wishlist &nbsp" icon="pi pi-heart" iconPos="right" @click="toggleWishlistModal" />
 
-        <Dialog v-model:visible="visible" modal header="&nbsp     Cart" :style="{ width: '50vw' }"
+
+        <Dialog v-model:visible="showWishlist" modal header="&nbsp Wishlist" :style="{ width: '50vw' }"
+            :breakpoints="{ '960px': '75vw', '641px': '100vw' }">
+            <!-- Content for the Wishlist Dialog -->
+            <div class="wishlist-dialog-content">
+                <div v-for="(item, index) in wishlist" :key="item.id">
+                    <div class="product-details">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <!-- product image  -->
+                            <div>
+                                <img :src="item.imageSrc" :alt="item.imageAlt" class="product-image"
+                                    style="width: 225px; height: 225px;" />
+                            </div>
+                            <!-- Product info -->
+                            <div>
+
+                                <p>{{ item.name }}</p>
+                                <p>{{ item.price }}</p>
+                            </div>
+
+                            <!-- Remove button -->
+                            <Button icon="pi pi-trash" @click="removeFromWishlist(index)" />
+                            <!-- add to cart -->
+                            <Button label="Add To Cart" @click="addToCartAndShowSuccess(item)" />
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <p>&nbsp Total items in wishlist: {{ wishlist.length }}</p>
+                    <p >
+                        <Button label="Add All to Cart &nbsp" icon="pi pi-cart-plus " iconPos="right" style="margin-right: 10px;" @click="addAllToCart" />
+                    </p>
+                </div>
+            </div>
+        </Dialog>
+        <!-- cart modal -->
+        <Dialog v-model:visible="Cartvisible" modal header="&nbsp     Cart" :style="{ width: '50vw' }"
             :breakpoints="{ '960px': '75vw', '641px': '100vw' }">
             <!-- Content for the Cart Dialog -->
             <div class="cart-dialog-content">
@@ -248,22 +346,32 @@ export default {
         <div class="row justify-content-center">
             <div class="col-md-3 mb-4" v-for="product in products" :key="product.id">
                 <div class="p-card">
+                    <div class="wishlist-button">
+                        <button @click="addToWishlist(product)">
+                            <i class="pi pi-heart-fill"></i>
+                        </button>
+                    </div>
+
                     <div class="overflow-hidden rounded-lg bg-gray-200 product-image">
                         <img :src="product.imageSrc" :alt="product.imageAlt" class="card-image" />
                     </div>
                     <div class="p-card-title mt-4 text-sm text-gray-700">{{ product.name }}</div>
                     <div class="p-card-subtitle mt-1 text-lg font-medium text-gray-900">{{ product.price }}</div>
-                    <div class="p-card-subtitle mt-1 text-lg font-medium" style="color: #8c8a85">{{ product.CSPName }}</div>
+                    <div class="p-card-subtitle mt-1 text-lg font-medium" style="color: #8c8a85">{{ product.CSPName }}
+                    </div>
                     <div class="p-card-body">
                         <i class="pi pi-cart-plus">
                             <button @click="addToCart(product)" class="p-button p-button-info p-button-raised"
-                                style="font-family:Arial, Helvetica, sans-serif; color:blue ">&nbspAdd to Cart</button>
+                                style="font-family: Arial, Helvetica, sans-serif; color: blue ">&nbspAdd to
+                                Cart</button>
                         </i>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
+
 
 
     <!-- Footer -->
@@ -271,6 +379,42 @@ export default {
 </template>
   
 <style scoped>
+.wishlist-button {
+
+    top: 20px;
+    /* Adjust the top margin as needed */
+    right: 20px;
+    /* Adjust the right margin as needed */
+}
+
+.wishlist-icon {
+    outline: none;
+    /* Remove the outline */
+    border: none;
+    /* Remove the border */
+    /* Other styles for the heart icon can be retained or modified as needed */
+}
+
+.title-container {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.subtitle-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.quantity-display {
+    margin-top: 10px;
+    /* Adjust the value as needed */
+}
 
 .quantity-box {
     padding: 4px 8px;
