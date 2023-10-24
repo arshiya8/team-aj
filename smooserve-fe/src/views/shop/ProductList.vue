@@ -7,9 +7,10 @@ import Footer from "../../components/Footer.vue";
 export default {
     data() {
         return {
-            showCart: false,
 
+            visible: false,
 
+            //products- dummy data
             products: [
                 {
                     id: 1,
@@ -100,58 +101,90 @@ export default {
 
                 },
 
-                // M
-                // More products...
             ],
+            // array of products(dictionary) that the user adds to cart
             cart: [],
         };
     },
-    
-        methods: {
-            toggleCart() {
-                this.showCart = !this.showCart;
-            },
-            addToCart(product) {
-                if (product.quantity === undefined) {
-                    this.$set(product, "quantity", 1);
-                } else {
-                    product.quantity++;
-                }
-                this.cart.push(product);
-                this.$emit("item-added-to-cart", product);
-            },
-            removeFromCart(productId) {
-                const index = this.cart.findIndex((item) => item.id === productId);
-                if (index !== -1) {
-                    this.cart.splice(index, 1);
-                }
-            },
+
+    methods: {
+
+        toggleCart() {
+            this.visible = !this.visible;
+            console.log("Modal opened")
         },
-        computed: {
-            totalCartItems() {
-                return this.cart.reduce((total, product) => total + product.quantity, 0);
-            },
+        addToCart(product) {
+            const existingProduct = this.cart.find(item => item.id === product.id);
+            if (existingProduct) {
+                existingProduct.quantity++;
+            } else {
+                // if the product is already in the cart, the quantity increases
+                this.cart.push(Object.assign({}, product, { quantity: 1 }));
+            }
+            this.$emit("item-added-to-cart", product);
         },
-        components: {
-            NavBar,
-            Footer,
-            // ScrollTop,
+        removeFromCart(index) {
+            this.cart.splice(index, 1);
+
+        },
+        showCartModal() {
+
+
+            // Optionally, you can add an event listener to detect outside clicks
+            document.addEventListener('click', this.closeCartModalOnOutsideClick);
+            console.log("Show Cart Modal Ended");
         },
 
-        props: {
-            cardTitle: String,
-            cardSubtitle: String,
-            cardDescription: String,
+        closeCartModalOnOutsideClick(event) {
+            // Check if the click event occurred outside of the modal
+            const modalElement = document.getElementById('cartModal');
+            if (modalElement && !modalElement.contains(event.target)) {
+                // Update the component's data property to hide the modal
+                this.showCart = false;
+
+                // Remove the event listener to stop listening for clicks outside the modal
+                document.removeEventListener('click', this.closeCartModalOnOutsideClick);
+            }
+
         },
-        };
-    
+        incrementQuantity(product, index) {
+            // Increment the quantity of the selected product in the cart
+            product.quantity++;
+        },
+        decrementQuantity(product, index) {
+            // Decrement the quantity of the selected product in the cart
+            if (product.quantity > 1) {
+                product.quantity--;
+            }
+        },
+    },
+    computed: {
+        totalCartItems() {
+            return this.cart.reduce((accumulator, item) => {
+                return accumulator + item.quantity;
+            }, 0);
+        },
+        totalCartPrice() {
+            return this.cart.reduce((total, item) => {
+                // Calculate the total price of each item (price * quantity)
+                const itemPrice = parseFloat(item.price.slice(1)); // Convert price from string to number
+                const totalPriceForItem = itemPrice * item.quantity;
+
+                // Add the total price for this item to the running total
+                return total + totalPriceForItem;
+            }, 0);
+        },
+    },
+    components: {
+        NavBar,
+        Footer,
+    },
+};
 </script>
 
 <template>
     <div class="container-fluid">
-        <!-- adding a cart to the nav bar -->
         <NavBar :cart-items="totalCartItems" @toggle-cart="toggleCart" />
-        <!-- Image with overlay -->
         <div class="bg-img relative">
             <img src="https://orientation.smu.edu.sg/sites/vivace.smu.edu.sg/files/styles/coverphoto/public/vivace/coverphotos/Verts%20Banner.jpeg?itok=HWSA3IuM"
                 alt="Jumbotron Image" class="w-full h-auto" />
@@ -160,12 +193,58 @@ export default {
                 <h1 class="text-5xl mb-4 font-bold text-white"
                     style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Smooserve Shop</h1>
                 <p class="text-lg font-italic text-white"
-                    style="position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%);">Support your favorite
+                    style="position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%);">Support your
+                    favourite
                     CSP's today by purchasing merchandise</p>
             </div>
         </div>
     </div>
     <div class="container">
+        <!-- Badge and Cart Dialog -->
+        <i v-badge.danger="totalCartItems" icon="p-overlay-badge" style="font-size: 2.5rem">
+            <Button icon="pi pi-shopping-cart" style="font-size:3rem" @click="toggleCart" />
+        </i>
+
+        <Dialog v-model:visible="visible" modal header="&nbsp     Cart" :style="{ width: '50vw' }"
+            :breakpoints="{ '960px': '75vw', '641px': '100vw' }">
+            <!-- Content for the Cart Dialog -->
+            <div class="cart-dialog-content">
+                <div v-for="(product, index) in cart" :key="product.id">
+                    <div class="product-details">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <!-- Product info -->
+                            <div>
+                                <p>{{ product.name }}</p>
+                                <p>{{ product.price }}</p>
+                            </div>
+
+                            <!-- Quantity adjustment buttons -->
+                            <div class="d-flex align-items-center quantity-box">
+                                <!-- Minus quantity -->
+                                <Button icon="pi pi-minus quantity-box" @click="decrementQuantity(product, index)" />
+                                <!-- Quantity display -->
+                                <div class="quantity-display">
+                                    <p>{{ product.quantity }}</p>
+                                </div>
+                                <!-- Plus quantity -->
+                                <Button icon="pi pi-plus quantity-box" @click="incrementQuantity(product, index)" />
+                            </div>
+
+                            <!-- Remove button -->
+                            <Button icon="pi pi-trash" @click="removeFromCart(index)" />
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <p>&nbsp Total items in cart: {{ totalCartItems }}</p>
+                    <p>&nbsp Total price :${{ totalCartPrice }}</p>
+                    <Button icon="pi pi-arrow-right" label="&nbsp Checkout &nbsp" severity="info" rounded />
+                </div>
+            </div>
+        </Dialog>
+
+        <!-- Product Cards -->
         <div class="row justify-content-center">
             <div class="col-md-3 mb-4" v-for="product in products" :key="product.id">
                 <div class="p-card">
@@ -175,54 +254,32 @@ export default {
                     <div class="p-card-title mt-4 text-sm text-gray-700">{{ product.name }}</div>
                     <div class="p-card-subtitle mt-1 text-lg font-medium text-gray-900">{{ product.price }}</div>
                     <div class="p-card-subtitle mt-1 text-lg font-medium" style="color: #8c8a85">{{ product.CSPName }}</div>
-
                     <div class="p-card-body">
-                        <button @click="addToCart(product)" class="p-button p-button-info p-button-raised">
-                            Add to Cart
-                        </button>
+                        <i class="pi pi-cart-plus">
+                            <button @click="addToCart(product)" class="p-button p-button-info p-button-raised"
+                                style="font-family:Arial, Helvetica, sans-serif; color:blue ">&nbspAdd to Cart</button>
+                        </i>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
-    <!-- cart preview -->
-    <div class="cart-preview" v-if="showCart">
-        <div class="cart-items">
-            <div v-for="item in cart" :key="item.id">
-                <p>{{ item.name }} - {{ item.price }}</p>
-                <button @click="removeFromCart(item.id)">Remove</button>
-            </div>
-        </div>
-        <p>Total items in cart: {{ totalCartItems }}</p>
-    </div>
-    <!-- scroll to the top  -->
-    <ScrollTop :target="`.container-fluid`" :threshold="100" class="custom-scrolltop" icon="pi pi-arrow-up" />
+
+
+    <!-- Footer -->
     <Footer />
 </template>
   
-
-  
 <style scoped>
-/* @import 'primevue/resources/primevue.min.css';
-@import 'primeicons/primeicons.css'; */
 
-/* Add your custom styles here */
-/* ::v-deep(.custom-scrolltop) {
-    width: 2rem;
-    height: 2rem;
+.quantity-box {
+    padding: 4px 8px;
+    /* Adjust the padding as needed */
+    border: 1px solid #ccc;
+    /* Border style */
     border-radius: 4px;
-    background-color: var(--primary-color);
+    /* Rounded corners */
 }
-
-::v-deep(.custom-scrolltop:hover) {
-    background-color: var(--primary-color);
-}
-
-::v-deep(.custom-scrolltop .p-scrolltop-icon) {
-    font-size: 1rem;
-    color: var(--primary-color-text); */
-/* } */
 
 .bg-img {
     position: relative;
@@ -248,6 +305,17 @@ export default {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
+}
+
+.product-details {
+    border: 1px solid #ccc;
+    /* Add a border around the container */
+    padding: 8px;
+    /* Add padding for spacing */
+    margin: 8px 0;
+    /* Add margin to separate each product */
+    border-radius: 5px;
+    /* Rounded corners */
 }
 
 .card-image {
