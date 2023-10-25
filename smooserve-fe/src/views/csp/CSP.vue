@@ -4,7 +4,7 @@ import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import VueQrcode from "@chenfengyuan/vue-qrcode";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const toast = useToast();
 const visibleShare = ref(false);
@@ -32,9 +32,11 @@ const copyBtnValue = ref("Copy");
 //check if csp owner
 const auth = getAuth();
 const cspOwner = ref(false);
+const loggedIn = ref(false);
+
 
 async function checkIfOwner(email) {
-  if (auth.currentUser.email){
+  if (loggedIn.value) {
     var userEmail = auth.currentUser.email;
     if (userEmail == email) {
       cspOwner.value = true;
@@ -42,12 +44,33 @@ async function checkIfOwner(email) {
   }
 }
 
+//check if logged in
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+   // User is signed in
+   loggedIn.value = true
+   
+  } else {
+    // User is signed out  
+    loggedIn.value = false
+
+  }
+});
+
 //Register student
 function registerStudent() {
-  if (!cspOwner) {
+  //if is not cspOwner and first time registered
+  if (
+    !cspOwner.value &&
+    !checkIfStudentRegistered() &&
+    loggedIn.value
+  ) {
     var studentEmail = auth.currentUser.email;
     loading.value = true;
-    csp.value.registration.registeredStudents.push({email: studentEmail, status: "registered"});
+    csp.value.registration.registeredStudents.push({
+      email: studentEmail,
+      status: "registered",
+    });
     axios
       .put("https://smooserve-be.vercel.app/api/csp/" + id, csp.value)
       .then((response) => {
@@ -69,12 +92,48 @@ function registerStudent() {
       })
       .finally(() => (loading.value = false));
   } else {
-    toast.add({
-      severity: "error",
-      summary: "Error",
-      detail: "Cannot register your own CSP!",
-      life: 3000,
-    });
+    //if owner
+    if (cspOwner.value) {
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: "Cannot register your own CSP!",
+        life: 3000,
+      });
+      //if registered
+    } else if (checkIfStudentRegistered()) {
+      toast.add({
+        severity: "info",
+        summary: "Info",
+        detail: "Already registered!",
+        life: 3000,
+      });
+    } else if (!loggedIn.value) {
+      toast.add({
+        severity: "info",
+        summary: "Info",
+        detail: "Please login first",
+        life: 3000,
+      });
+    }
+  }
+}
+
+function checkIfStudentRegistered() {
+  var studentEmail = "";
+  if (loggedIn.value) {
+    studentEmail = auth.currentUser.email;
+    csp.value.registration.registeredStudents;
+    const found = csp.value.registration.registeredStudents.some(
+      (el) => el.email === studentEmail
+    );
+    if (found) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
   }
 }
 
