@@ -132,7 +132,7 @@
                   <td>CSP Contact Information</td>
                   <td>Pending</td>
                   <td>
-                      <button @click="showScheduleDropdown(this)">Schedule Interview</button>
+                      <Button @click="showScheduleDropdown(this)">Schedule Interview</button>
                       <div class="schedule-dropdown" style="display: none;">
                           <label for="interviewTime">Select Time Slot:</label>
                           <select id="interviewTime">
@@ -340,8 +340,12 @@ fetch('get_registered_csp_data.php') // Replace with your actual data source URL
 
 <style scoped>
 .crypto_bg {
+<<<<<<< Updated upstream
    background: #064273;
  }
+=======
+   background: linear-gradient(#064273,white)}
+>>>>>>> Stashed changes
  .flex-container {
     display: flex;
     padding-top: 3%;

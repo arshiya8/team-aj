@@ -1,6 +1,6 @@
 <template>
     <div class="student-profile" v-if="student">
-      <div class="card align-items-center justify-content-center">
+      <div class="card align-items-center justify-content-center" style="border:transparent">
         <Card style="width: 25em">
           <template #header>
             <img :src="student.profilePicture" class="circular-crop" alt="Profile Picture" />
@@ -13,7 +13,10 @@
             <p><strong>Commitments:</strong> {{ student.commitments.join(', ') }}</p>
           </template>
           <template #footer>
-            <Button icon="pi pi-times" label="Reject" @click="deleteProfile" />
+            {{ student.interviewTiming }}
+        <Button severity="success" @click="acceptInterview(student)">Accept Interview</button>
+        <Button severity="danger" @click="rejectInterview(student)">Reject Interview</button>
+          <Button @click="closeProfile">Close Profile</button>
           </template>
         </Card>
       </div>
@@ -26,10 +29,12 @@
       student: Object, // The student profile data passed as a prop
     },
     methods: {
-      deleteProfile() {
-        // Implement the logic to delete a student profile here
-      },
+      closeProfile() {
+      // Emit an event to notify the parent component to hide the profile
+      this.$emit('close-profile');
     },
+  },
+
   };
   </script>
   

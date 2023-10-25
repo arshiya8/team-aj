@@ -6,21 +6,21 @@
         <TabView>
           <TabPanel header="Dashboard">
             <p class="line-height-3 m-0">
-              <section id="dashboard">
-                <h2>Dashboard</h2>
-                <div id="dashboard">
-                  <!-- Import calendar Vue component here -->
-                  <CalendarComponent />
-                </div>
-              </section>
+            <section id="dashboard">
+              <h2>Dashboard</h2>
+              <div id="dashboard">
+                <!-- Import calendar Vue component here -->
+                <CalendarComponent />
+              </div>
+            </section>
             </p>
           </TabPanel>
           <TabPanel header="Views">
             <p class="line-height-3 m-0">
-              <section id="views">
-                <h2>Views</h2>
-                <p>Number of views: <span id="viewCount">0</span></p>
-              </section>
+            <section id="views">
+              <h2>Views</h2>
+              <p>Number of views: <span>{{ pageViewCount }}</span></p>
+            </section>
             </p>
           </TabPanel>
           <TabPanel header="Signups">
@@ -30,19 +30,27 @@
                 <tr>
                   <th>Student Name</th>
                   <th>Status</th>
+                  <th>Action</th>
                 </tr>
-                  <tr v-for="student in students" :key="student.id">
-                    <td @mouseover="showStudentProfile(student)" @mouseout="clearStudentProfile">{{ student.name }}</td>
-                    <td>{{ student.status }}</td>
+                <tr v-for="student in students" :key="student.id">
+                  <td @click="showStudentProfile(student)" @close-profile="clearStudentProfile">{{ student.name }}</td>
+                  <td>
+                    <span v-if="student.status === 'Enrolled'">{{ student.status }}</span>
+                    <span v-else-if="student.status === 'Pending'">{{ student.status }}</span>
+                    <span v-else>{{ student.status }}</span>
+                  </td>
+                  <td>
+                    <Button @click="rejectStudent(student)">Reject</button>
+                  </td>
                 </tr>
               </table>
-              <StudentProfile :student="showProfile" />
+              <StudentProfile :student="showProfile" @close-profile="clearStudentProfile" />
             </section>
           </TabPanel>
           <TabPanel header="Schedule">
             <section id="schedule">
               <h2>Schedule</h2>
-              <div id="calendar">
+              <div id="calendar" style="background-color: #def3f6;">
                 <h1>Interview Scheduler</h1>
                 <label for="event">Event Name:</label>
                 <input v-model="newEvent.eventName" type="text" id="event" placeholder="Event name">
@@ -77,6 +85,7 @@
 </template>
 <script>
 import { ref } from 'vue';
+import Button from 'primevue/button';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import CalendarComponent from './CSPCalender.vue';
@@ -88,8 +97,12 @@ export default {
     CalendarComponent,
     StudentProfile,
   },
+  created() {
+    this.incrementViewCount();
+  },
   data() {
     return {
+      pageViewCount: 0,
       students: [
         { id: 1, name: 'John Doe', status: 'Enrolled' },
         { id: 2, name: 'Jane Smith', status: 'Pending' },
@@ -98,8 +111,8 @@ export default {
       ],
       students_Profile: [
         { id: 1, name: 'John Doe', contact: '91234568', email: 'johndoe@gmail.com', desc: 'I am John' },
-        { id: 2, name: 'Jane Smith', contact: '81234567', email: 'johndoe@gmail.com', desc: 'I am John' },
-        { id: 3, name: 'Bob Johnson', contact: '98765432', email: 'johndoe@gmail.com', desc: 'I am John' },
+        { id: 2, name: 'Jane Smith', contact: '81234567', email: 'janesmith@gmail.com', desc: 'I am Jane' },
+        { id: 3, name: 'Bob Johnson', contact: '98765432', email: 'bobjohnson@gmail.com', desc: 'I am Bob' },
         // Add more dummy data as needed
       ],
       newEvent: {
@@ -113,6 +126,23 @@ export default {
     };
   },
   methods: {
+    
+    // Function to increment the view count
+    incrementPageViewCount() {
+      this.pageViewCount += 1;
+    },
+
+    acceptInterview(student) {
+      console.log(`${student.name} has accepted the interview.`);
+    },
+
+    rejectStudent(student) {
+      const index = this.students.findIndex((s) => s.id === student.id);
+      if (index !== -1) {
+        this.students.splice(index, 1);
+      }
+      console.log(`${student.name} has been rejected.`);
+    },
     addEvent() {
       if (this.isClash(this.newEvent.date, this.newEvent.startTime, this.newEvent.endTime)) {
         alert('Event time clashes with an existing event.');
@@ -148,21 +178,40 @@ export default {
       }
       return false;
     },
-    showStudentProfile(student) {
-    this.showProfile = this.showProfile = {
-  name: 'John Doe',
-  email: 'johndoe@gmail.com',
-  contact: '91234568',
-  description: 'I am John',
-  commitments: ['Commitment1', 'Commitment2'],
-};
 
+
+    showStudentProfile(student) {
+      // Implement your logic to show the student's profile
+      const studentProfile = this.students_Profile.find(profile => profile.name === student.name);
+
+      if (studentProfile) {
+        this.showProfile = {
+          name: studentProfile.name,
+          email: studentProfile.email,
+          contact: studentProfile.contact,
+          description: studentProfile.desc,
+          commitments: [], // You can populate this if needed
+        };
+      } else {
+        // Handle the case when no matching profile is found
+        this.showProfile = null;
+      }
+    },
+    clearStudentProfile() {
+      this.showProfile = null;
+    }
   },
-  clearStudentProfile() {
-    this.showProfile = null;
-  }
+  rejectStudent(student) {
+    student.status = 'Rejected';
+
+    // Remove the student from the list
+    const index = this.students.findIndex((s) => s.id === student.id);
+    if (index !== -1) {
+      this.students.splice(index, 1);
+    }
+    console.log(`${student.name} has been rejected.`);
   },
-}
+};
 </script>
 
 <style>
@@ -224,10 +273,13 @@ export default {
   padding: 10px;
   cursor: pointer;
 }
-th,tr,td {
-  border:1px solid black;
+
+th,
+tr,
+td {
+  border: 1px solid black;
 }
+
 .card:hover {
   background-color: #f0f0f0;
-}
-</style>
+}</style>
