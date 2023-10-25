@@ -3,8 +3,8 @@ import { ref, computed, onMounted, onUnmounted } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
-import ProgressSpinner from "primevue/progressspinner";
 import VueQrcode from "@chenfengyuan/vue-qrcode";
+import { getAuth } from "firebase/auth";
 
 const toast = useToast();
 const visibleShare = ref(false);
@@ -19,7 +19,6 @@ const csp = ref([]);
 const btncolour = ref("");
 const btnFontcolour = ref("");
 
-
 const CSPImage = ref("");
 const backgroundColor = ref("");
 const fontStyle = ref({ family: "", color: "" });
@@ -29,6 +28,55 @@ const loading = ref(true);
 //copy var and functions
 const copy = ref(false);
 const copyBtnValue = ref("Copy");
+
+//check if csp owner
+const auth = getAuth();
+const cspOwner = ref(false);
+
+async function checkIfOwner(email) {
+  if (auth.currentUser.email){
+    var userEmail = auth.currentUser.email;
+    if (userEmail == email) {
+      cspOwner.value = true;
+    }
+  }
+}
+
+//Register student
+function registerStudent() {
+  if (!cspOwner) {
+    var studentEmail = auth.currentUser.email;
+    loading.value = true;
+    csp.value.registration.registeredStudents.push({email: studentEmail, status: "registered"});
+    axios
+      .put("https://smooserve-be.vercel.app/api/csp/" + id, csp.value)
+      .then((response) => {
+        toast.add({
+          severity: "success",
+          summary: "Done",
+          detail: response.statusText,
+          life: 3000,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: error,
+          life: 3000,
+        });
+      })
+      .finally(() => (loading.value = false));
+  } else {
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Cannot register your own CSP!",
+      life: 3000,
+    });
+  }
+}
 
 const copyFunc = async () => {
   try {
@@ -79,6 +127,8 @@ onMounted(async () => {
       document.body.style.backgroundColor = backgroundColor.value;
 
       CSPImage.value = csp.value.imageURL;
+
+      checkIfOwner(response.data.email);
     })
     .catch((error) => {
       console.log(error);
@@ -109,6 +159,7 @@ const goToCSPSetting = (CSPid) => {
       <template #start> </template>
       <template #end>
         <Button
+          v-if="cspOwner"
           @click="goToCSPSetting(csp.id)"
           class="mr-2 roundBtn"
           icon="pi pi-pencil"
@@ -189,12 +240,21 @@ const goToCSPSetting = (CSPid) => {
             {{ csp.desc }}
           </p>
 
-            <Button v-if="csp.settings.registerActive" rounded class="roundBtn">Register</Button>
-
+          <Button
+            v-if="csp.registration.active"
+            rounded
+            class="roundBtn"
+            @click="registerStudent()"
+            >Register</Button
+          >
         </div>
 
         <div v-for="url in csp.settings.urls">
-          <a v-if="url.url && url.active" :href="'http://'+ url.url">
+          <a
+            v-if="url.url && url.active"
+            :href="'http://' + url.url"
+            target="_blank"
+          >
             <Button
               :icon="'pi pi-' + url.icon"
               type="submit"

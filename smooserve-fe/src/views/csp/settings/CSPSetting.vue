@@ -78,7 +78,7 @@ function save() {
   loading.value = true;
   csp.value.title = title.value;
   csp.value.desc = desc.value;
-  csp.value.settings.registerActive = registerChecked.value;
+  csp.value.registration.active = registerChecked.value;
   console.log(csp.value);
   axios
     .put("https://smooserve-be.vercel.app/api/csp/" + CSPid, csp.value)
@@ -111,8 +111,8 @@ onMounted(async () => {
         ? (list.value = response.data.settings.urls)
         : (list.value = []);
       CSPImage.value = csp.value.imageURL;
-      response.data.settings.registerActive
-        ? (registerChecked.value = response.data.settings.registerActive)
+      response.data.registration.active
+        ? (registerChecked.value = response.data.registration.active)
         : (registerChecked.value = false);
     })
     .catch((error) => {
@@ -202,6 +202,7 @@ watch(
             <div class="flex flex-column gap-3 mb-3">
               <label for="title">Registration</label>
               <InputSwitch v-model="registerChecked" />
+
               <label for="title">Username</label>
               <InputText id="title" :value="csp.title" v-model="title" />
 
