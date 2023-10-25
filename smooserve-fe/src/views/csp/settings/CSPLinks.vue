@@ -176,15 +176,16 @@ watch(
   <div v-if="loading" class="card">
     <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
   </div>
-  <div v-else class="surface-ground flex flex-column w-full h-full">
+  <div v-else class="surface-ground flex flex-column w-full h-screen">
     <!-- menu -->
     <CSPNavBar />
 
     <!-- Links -->
     <div class="grid align-items-center justify-content-center">
-      <div class="col-12 md:col-12 lg:col-6">
+      <div class="col-12 md:col-12 lg:col-7">
+        <!-- <iframe width="390" height="844" src="https://smooserve-fe.vercel.app/#/csp/3m4Ve00zxGcbeD0J98xi"></iframe> -->
         <Card class="shadow-none surface-ground p-2 mt-4 mb-4 card">
-          <template #title> <span class="px-5">Links </span></template>
+          <template #title> <span class="px-5">Links</span></template>
           <template #content>
             <div class="md:mx-5">
               <Button
@@ -219,7 +220,7 @@ watch(
                             v-tooltip.top="'Drag to re-arrange your links'"
                           ></i>
                         </div>
-                        <div class="col-1 text-center">
+                        <!-- <div class="col-1 text-center">
                           <i
                             :class="
                               'hover:bg-primary-100 p-inputgroup-addon pi pi-' +
@@ -227,8 +228,8 @@ watch(
                             "
                             @click="(visible = true), passIcon(element, index)"
                           ></i>
-                        </div>
-                        <div class="col">
+                        </div> -->
+                        <div class="col-7 lg:col-9">
                           <div class="grid">
                             <div class="col-12">
                               <div class="flex flex-column gap-3">
@@ -240,10 +241,28 @@ watch(
                             </div>
                           </div>
                         </div>
-                        <div class="col-1 text-center">
-                          <div class="grid gap-3">
+                        <div class="col-1 lg:col-1 text-center">
+                          <div class="grid gap-1">
                             <div class="col-12">
-                              <InputSwitch v-model="element.active" v-tooltip.top="element.active ? 'This link is active' : 'This link is not active'" />
+                              <i
+                                :class="
+                                  'hover:bg-primary-100 p-inputgroup-addon pi pi-' +
+                                  element.icon
+                                "
+                                @click="
+                                  (visible = true), passIcon(element, index)
+                                "
+                              ></i>
+                            </div>
+                            <div class="col-12">
+                              <InputSwitch
+                                v-model="element.active"
+                                v-tooltip.top="
+                                  element.active
+                                    ? 'This link is active'
+                                    : 'This link is not active'
+                                "
+                              />
                             </div>
                             <div class="col-12">
                               <i
@@ -295,7 +314,7 @@ watch(
   </div>
 </template>
 
-<style>
+<style scoped>
 .card {
   border-radius: 12px;
 }

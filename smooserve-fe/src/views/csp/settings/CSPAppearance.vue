@@ -35,10 +35,10 @@ const fontOptions = ref([
 ]);
 
 // options for button type
-const value = ref(null);
+const buttonValue = ref(null);
 const options = ref([
-  { icon: "outlined", value: "outlined", outlined: true, rounded: false },
-  { icon: "rounded", value: "rounded", outlined: false, rounded: true },
+  { value: "outlined", outlined: true, rounded: false },
+  { value: "rounded", outlined: false, rounded: true },
 ]);
 
 function save() {
@@ -48,6 +48,9 @@ function save() {
   csp.value.settings.buttons["button-colour"] = buttonColor.value;
   csp.value.settings.buttons["button-font-colour"] = buttonFontColor.value;
   csp.value.settings.background["bg-colour"] = bgColor.value;
+  // csp.value.settings.buttons.
+  console.log(buttonValue.value);
+  csp.value.settings.buttons.type = buttonValue.value;
 
   axios
     .put("https://smooserve-be.vercel.app/api/csp/" + CSPid, csp.value)
@@ -84,6 +87,8 @@ onMounted(async () => {
       buttonColor.value = csp.value.settings.buttons["button-colour"];
       buttonFontColor.value = csp.value.settings.buttons["button-font-colour"];
       bgColor.value = csp.value.settings.background["bg-colour"];
+      buttonValue.value = csp.value.settings.buttons.type;
+
     })
     .catch((error) => {
       console.log(error);
@@ -230,7 +235,7 @@ watch(
             <div class="flex flex-wrap gap-5 align-items-center p-4">
               <div class="flex flex-column gap-3 mb-3 w-full">
                 <SelectButton
-                  v-model="value"
+                  v-model="buttonValue"
                   :options="options"
                   optionLabel="value"
                   dataKey="value"
@@ -243,9 +248,6 @@ watch(
                       :outlined="slotProps.option.outlined"
                       class="align-items-center justify-content-center selectBtns"
                     >
-                      <span :style="{ backgroundColor: buttonColor }">
-                        <i :class="'pi pi-' + slotProps.option.icon"></i>
-                      </span>
                     </Button>
                   </template>
                 </SelectButton>

@@ -25,6 +25,9 @@ const list = ref([]);
 const csp = ref([]);
 
 const loading = ref(true);
+const registerChecked = ref(false);
+
+const buttonColor = ref("");
 
 const CSPImage = ref("");
 
@@ -74,7 +77,7 @@ const uploadImage = async (file) => {
     console.error("Error uploading image:", error);
     toast.add({
       severity: "error",
-      summary: "Error",
+      summary: "Error Uploading Image",
       detail: error,
       life: 3000,
     });
@@ -85,6 +88,7 @@ function save() {
   loading.value = true;
   csp.value.title = title.value;
   csp.value.desc = desc.value;
+  csp.value.registration.active = registerChecked.value;
   console.log(csp.value);
   axios
     .put("https://smooserve-be.vercel.app/api/csp/" + CSPid, csp.value)
@@ -123,6 +127,9 @@ onMounted(async () => {
         ? (list.value = response.data.settings.urls)
         : (list.value = []);
       CSPImage.value = csp.value.imageURL;
+      response.data.registration.active
+        ? (registerChecked.value = response.data.registration.active)
+        : (registerChecked.value = false);
     })
     .catch((error) => {
       console.log(error);
@@ -325,6 +332,7 @@ function formatDateTimeToISOString(dateTime) {
                     backgroundColor: '#fafafa',
                     width: '6rem',
                     height: '6rem',
+                    border: '2px solid #d5d9ef',
                   }"
                 />
                 <Avatar
@@ -362,6 +370,9 @@ function formatDateTimeToISOString(dateTime) {
             </div>
 
             <div class="flex flex-column gap-3 mb-3">
+              <label for="title">Registration</label>
+              <InputSwitch v-model="registerChecked" />
+
               <label for="title">Username</label>
               <InputText id="title" :value="csp.title" v-model="title" />
 
