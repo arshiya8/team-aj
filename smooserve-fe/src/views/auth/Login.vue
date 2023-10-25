@@ -10,7 +10,7 @@ import {
 } from "firebase/auth";
 import { useToast } from "primevue/usetoast";
 import { db } from "@/firebase";
-import { collection, query, where, getDocs, limit } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, doc, limit } from "firebase/firestore";
 
 const toast = useToast();
 
@@ -53,14 +53,14 @@ const studGoogleSignIn = async () => {
     
     let id = await getDocumentIdByEmail(result.user.email, "students");
 
-    // Check if `id` is defined before redirecting
     if (id) {
+      //existing user
       router.replace({ name: "User" });
     } else {
-      // Handle the case where `id` is not available
-
+      //first time login
       //redirecting to User page in addStudent function
       addStudent(result);
+      addToUserDB(result.user.displayName, result.user.email, "student")
     }
   } catch (error) {
     // Handle Errors
@@ -76,15 +76,14 @@ const cspGoogleSignIn = async () => {
     
     let id = await getDocumentIdByEmail(result.user.email, "CSPs");
 
-    // Check if `id` is defined before redirecting
     if (id) {
+      //existing user
       router.replace({ name: "CSP", params: { id } });
     } else {
-      // Handle the case where `id` is not available
-
+      //first time login
       //redirecting to CSP page in addCSP function
-      addCSP(result);
-
+      await addCSP(result);
+      await addToUserDB(result.user.displayName, result.user.email, "csp")
     }
   } catch (error) {
     // Handle Errors
@@ -106,6 +105,15 @@ async function getDocumentIdByEmail(email, collectionName) {
     // No matching document found
     return null;
   }
+}
+
+async function addToUserDB(name, email, role){
+  // Add a new document with a generated id.
+const docRef = await addDoc(collection(db, "Users"), {
+  name: name,
+  country: email,
+  role: role
+});
 }
 
 //To add CSP into db
@@ -148,14 +156,8 @@ async function addCSP(result) {
     signupDeadline: "",
   };
   axios
-    .post("http://localhost:8080/api/csp/", data)
+    .post("https://smooserve-be.vercel.app/api/csp/", data)
     .then(async (response) => {
-      toast.add({
-        severity: "success",
-        summary: "Done",
-        detail: response.statusText,
-        life: 3000,
-      });
       let id = await getDocumentIdByEmail(result.user.email, "CSPs");
       console.log("add csp: ");
       console.log(id);
@@ -202,14 +204,8 @@ async function addStudent(result) {
     },
   };
   axios
-    .post("http://localhost:8080/api/student/", data)
+    .post("https://smooserve-be.vercel.app/api/student/", data)
     .then(async (response) => {
-      toast.add({
-        severity: "success",
-        summary: "Done",
-        detail: response.statusText,
-        life: 3000,
-      });
 
       // redirect to User page
       router.replace({ name: "User" });
