@@ -67,7 +67,7 @@ const uploadImage = async (file) => {
     console.error("Error uploading image:", error);
     toast.add({
       severity: "error",
-      summary: "Error",
+      summary: "Error Uploading Image",
       detail: error,
       life: 3000,
     });
@@ -163,6 +163,7 @@ watch(
                     backgroundColor: '#fafafa',
                     width: '6rem',
                     height: '6rem',
+                    border: '2px solid #d5d9ef',
                   }"
                 />
                 <Avatar

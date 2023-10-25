@@ -176,7 +176,7 @@ watch(
   <div v-if="loading" class="card">
     <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
   </div>
-  <div v-else class="surface-ground flex flex-column w-full h-full">
+  <div v-else class="surface-ground flex flex-column w-full h-screen">
     <!-- menu -->
     <CSPNavBar />
 
@@ -185,7 +185,7 @@ watch(
       <div class="col-12 md:col-12 lg:col-7">
         <!-- <iframe width="390" height="844" src="https://smooserve-fe.vercel.app/#/csp/3m4Ve00zxGcbeD0J98xi"></iframe> -->
         <Card class="shadow-none surface-ground p-2 mt-4 mb-4 card">
-          <template #title> <span class="px-5">Links </span></template>
+          <template #title> <span class="px-5">Links</span></template>
           <template #content>
             <div class="md:mx-5">
               <Button
