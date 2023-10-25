@@ -25,10 +25,21 @@ const list = ref([]);
 const csp = ref([]);
 
 const loading = ref(true);
+const registerChecked = ref(false);
 
 const buttonColor = ref("");
 
 const CSPImage = ref("");
+
+const datetime12h = ref();
+
+// zoom things
+const zoomTimeSelected = ref(60);
+const zoomTimeOptions = ref([30, 60]);
+const dbAccessToken = ref("");
+const dbRefreshToken = ref("");
+const meetingsList = ref();
+
 
 function add() {
   const input = document.createElement("input");
@@ -66,7 +77,7 @@ const uploadImage = async (file) => {
     console.error("Error uploading image:", error);
     toast.add({
       severity: "error",
-      summary: "Error",
+      summary: "Error Uploading Image",
       detail: error,
       life: 3000,
     });
@@ -77,6 +88,7 @@ function save() {
   loading.value = true;
   csp.value.title = title.value;
   csp.value.desc = desc.value;
+  csp.value.registration.active = registerChecked.value;
   console.log(csp.value);
   axios
     .put("https://smooserve-be.vercel.app/api/csp/" + CSPid, csp.value)
@@ -101,6 +113,12 @@ function save() {
 }
 
 onMounted(async () => {
+  // check if db have access/refresh token
+  const cspTokens = await getTokens();
+  dbAccessToken.value = cspTokens.settings.zoomAccessToken;
+  dbRefreshToken.value = cspTokens.settings.zoomRefreshToken;
+  checkIfAccessTokenValid(cspTokens.settings.zoomTokenIssueDT);
+  await getZoomMeetings();
   axios
     .get("https://smooserve-be.vercel.app/api/csp/" + CSPid)
     .then((response) => {
@@ -109,6 +127,9 @@ onMounted(async () => {
         ? (list.value = response.data.settings.urls)
         : (list.value = []);
       CSPImage.value = csp.value.imageURL;
+      response.data.registration.active
+        ? (registerChecked.value = response.data.registration.active)
+        : (registerChecked.value = false);
     })
     .catch((error) => {
       console.log(error);
@@ -122,23 +143,176 @@ onMounted(async () => {
     .finally(() => (loading.value = false));
 });
 
-watch(
-  () => buttonColor,
-  (newColor) => {
-    // Watch for changes in the buttonColor value and update the button background color
-    const buttons = document.querySelectorAll(".selectBtns");
-    buttons.forEach((button) => {
-      button.style.backgroundColor = newColor;
+function scheduleZoomMeeting() {
+  axios
+    .post("http://localhost:8080/api/createMeeting", {
+      accessToken: dbAccessToken.value,
+      topic: topic.value,
+      duration: zoomTimeSelected.value,
+      start_time: formatDateTimeToISOString(datetime12h.value),
+    })
+    .then((response) => {
+      toast.add({
+        severity: "success",
+        summary: "Done",
+        detail: response.statusText,
+        life: 3000,
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: error,
+        life: 3000,
+      });
+    });
+}
+
+const getZoomMeetings = async () => {
+  // Access the access token from your data source, e.g., Vuex or a ref
+  const accessToken = dbAccessToken.value;
+  console.log(accessToken);
+
+  try {
+    const response = await axios.post("http://localhost:8080/api/getMeetings", {
+      accessToken: accessToken,
+    });
+
+    // Handle a successful response
+    console.log(response);
+    meetingsList.value = response.data;
+  } catch (error) {
+    // Handle any errors
+    console.error(error);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: error,
+      life: 3000,
     });
   }
-);
+}
+
+const getTokens = async () => {
+  const cspTokens = await axios
+    .get("https://smooserve-be.vercel.app/api/csp/" + CSPid)
+    .then((response) => {
+      const cspData = response.data;
+      return cspData;
+    })
+    .catch((error) => {
+      console.log(error);
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: error,
+        life: 3000,
+      });
+    });
+  return cspTokens;
+};
+
+function checkIfAccessTokenValid(issuedTimestamp) {
+  // Sample access token and expires_in values from your response
+  const expiresInSeconds = 3600; // Replace with the actual expires_in value from your token
+
+  // Calculate the token's expiration timestamp (in milliseconds)
+  const expirationTimestamp = issuedTimestamp + expiresInSeconds * 1000;
+
+  // Get the current timestamp (in milliseconds)
+  const currentTimestamp = Date.now();
+
+  if (currentTimestamp < expirationTimestamp) {
+    console.log("Access token is still valid.");
+  } else {
+    console.log("Access token has expired.");
+    updateTokens();
+  }
+}
+
+const updateTokens = async () => {
+  const csp = [];
+
+  const CSPid = localStorage.getItem("CSPid");
+  console.log("fetching new tokens...");
+  axios
+    .get("http://localhost:8080/api/getNewAccessToken/" + dbRefreshToken.value)
+    .then((response) => {
+      toast.add({
+        severity: "success",
+        summary: "Done",
+        detail: response.statusText,
+        life: 3000,
+      });
+      dbAccessToken.value = response.data.access_token;
+      dbRefreshToken.value = response.data.refresh_token;
+      axios
+        .get("https://smooserve-be.vercel.app/api/csp/" + CSPid)
+        .then((response) => {
+          csp.value = response.data;
+
+          csp.value.settings.zoomAccessToken = dbAccessToken.value;
+          csp.value.settings.zoomRefreshToken = dbRefreshToken.value;
+          csp.value.settings.zoomTokenIssueDT = Date.now();
+
+          axios
+            .put("https://smooserve-be.vercel.app/api/csp/" + CSPid, csp.value)
+            .then((response) => {
+              toast.add({
+                severity: "success",
+                summary: "Done",
+                detail: response.statusText,
+                life: 3000,
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: error,
+                life: 3000,
+              });
+            })
+            .finally(() => {
+              loading.value = false;
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: error,
+            life: 3000,
+          });
+        });
+    });
+};
+
+function formatDateTimeToISOString(dateTime) {
+  const date = new Date(dateTime);
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+
+  const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+
+  return formattedDate;
+}
 </script>
 <template>
   <Toast></Toast>
   <div v-if="loading" class="card">
     <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
   </div>
-  <div v-else class="surface-ground flex flex-column w-full h-screen">
+  <div v-else class="surface-ground flex flex-column w-full h-full">
     <CSPNavbar />
 
     <!-- profile -->
@@ -154,14 +328,24 @@ watch(
                   shape="circle"
                   size="xlarge"
                   :image="CSPImage"
-                  :style="{ backgroundColor: '#fafafa', width: '6rem', height:'6rem' }"
+                  :style="{
+                    backgroundColor: '#fafafa',
+                    width: '6rem',
+                    height: '6rem',
+                    border: '2px solid #d5d9ef',
+                  }"
                 />
                 <Avatar
                   v-else
                   :label="Array.from(csp.title)[0]"
                   shape="circle"
                   size="xlarge"
-                  :style="{ backgroundColor: '#3F51B5', color: '#ffffff', width: '6rem', height:'6rem'}"
+                  :style="{
+                    backgroundColor: '#3F51B5',
+                    color: '#ffffff',
+                    width: '6rem',
+                    height: '6rem',
+                  }"
                 />
               </div>
               <div class="col-12 md:col-8 lg:col-9 mb-3">
@@ -186,6 +370,9 @@ watch(
             </div>
 
             <div class="flex flex-column gap-3 mb-3">
+              <label for="title">Registration</label>
+              <InputSwitch v-model="registerChecked" />
+
               <label for="title">Username</label>
               <InputText id="title" :value="csp.title" v-model="title" />
 
@@ -206,6 +393,56 @@ watch(
               class="w-full align-items-center justify-content-center"
               ><i class="pi pi-save px-2"></i>Save</Button
             >
+          </template>
+        </Card>
+        <Card class="p-3 mt-5 mb-4 card">
+          <template #title>Zoom Schedule</template>
+          <template #content>
+            <div
+              class="grid align-items-center justify-content-center mb-3"
+            ></div>
+
+            <div class="flex flex-column gap-3 mb-3">
+              <label for="topic">Meeting Topic</label>
+              <InputText id="topic" v-model="topic" />
+
+              <label for="calendar-12h" class="font-bold block">
+                12h Format
+              </label>
+              <Calendar
+                id="calendar-12h"
+                v-model="datetime12h"
+                showTime
+                hourFormat="12"
+              />
+
+              <SelectButton
+                v-model="zoomTimeSelected"
+                :options="zoomTimeOptions"
+                aria-labelledby="basic"
+              >
+                <template #option="slotProps">
+                  {{ slotProps.option + " min" }}
+                </template>
+              </SelectButton>
+            </div>
+            <Button
+              text
+              rounded
+              label="Save"
+              @click="scheduleZoomMeeting()"
+              class="w-full align-items-center justify-content-center"
+              ><i class="pi pi-save px-2"></i>Schedule</Button
+            >
+
+            <div class="card">
+        <DataTable :value="meetingsList.meetings" tableStyle="min-width: 50rem">
+            <Column field="id" header="ID"></Column>
+            <Column field="topic" header="Topic"></Column>
+            <Column field="start_time" header="Time"></Column>
+            <Column field="join_url" header="Link"></Column>
+        </DataTable>
+    </div>
           </template>
         </Card>
       </div>

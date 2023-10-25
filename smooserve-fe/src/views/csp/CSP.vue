@@ -1,10 +1,10 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
-import ProgressSpinner from "primevue/progressspinner";
 import VueQrcode from "@chenfengyuan/vue-qrcode";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const toast = useToast();
 const visibleShare = ref(false);
@@ -18,6 +18,7 @@ const qrCodeLink = "https://smooserve-fe.vercel.app/#/csp/" + id;
 const csp = ref([]);
 const btncolour = ref("");
 const btnFontcolour = ref("");
+
 const CSPImage = ref("");
 const backgroundColor = ref("");
 const fontStyle = ref({ family: "", color: "" });
@@ -27,6 +28,114 @@ const loading = ref(true);
 //copy var and functions
 const copy = ref(false);
 const copyBtnValue = ref("Copy");
+
+//check if csp owner
+const auth = getAuth();
+const cspOwner = ref(false);
+const loggedIn = ref(false);
+
+
+async function checkIfOwner(email) {
+  if (loggedIn.value) {
+    var userEmail = auth.currentUser.email;
+    if (userEmail == email) {
+      cspOwner.value = true;
+    }
+  }
+}
+
+//check if logged in
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+   // User is signed in
+   loggedIn.value = true
+   
+  } else {
+    // User is signed out  
+    loggedIn.value = false
+
+  }
+});
+
+//Register student
+function registerStudent() {
+  //if is not cspOwner and first time registered
+  if (
+    !cspOwner.value &&
+    !checkIfStudentRegistered() &&
+    loggedIn.value
+  ) {
+    var studentEmail = auth.currentUser.email;
+    loading.value = true;
+    csp.value.registration.registeredStudents.push({
+      email: studentEmail,
+      status: "registered",
+    });
+    axios
+      .put("https://smooserve-be.vercel.app/api/csp/" + id, csp.value)
+      .then((response) => {
+        toast.add({
+          severity: "success",
+          summary: "Done",
+          detail: response.statusText,
+          life: 3000,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: error,
+          life: 3000,
+        });
+      })
+      .finally(() => (loading.value = false));
+  } else {
+    //if owner
+    if (cspOwner.value) {
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: "Cannot register your own CSP!",
+        life: 3000,
+      });
+      //if registered
+    } else if (checkIfStudentRegistered()) {
+      toast.add({
+        severity: "info",
+        summary: "Info",
+        detail: "Already registered!",
+        life: 3000,
+      });
+    } else if (!loggedIn.value) {
+      toast.add({
+        severity: "info",
+        summary: "Info",
+        detail: "Please login first",
+        life: 3000,
+      });
+    }
+  }
+}
+
+function checkIfStudentRegistered() {
+  var studentEmail = "";
+  if (loggedIn.value) {
+    studentEmail = auth.currentUser.email;
+    csp.value.registration.registeredStudents;
+    const found = csp.value.registration.registeredStudents.some(
+      (el) => el.email === studentEmail
+    );
+    if (found) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
 
 const copyFunc = async () => {
   try {
@@ -51,6 +160,10 @@ const copyFunc = async () => {
   }
 };
 
+onUnmounted(async () => {
+  document.body.style.backgroundColor = null;
+});
+
 onMounted(async () => {
   axios
     .get("https://smooserve-be.vercel.app/api/csp/" + id)
@@ -69,10 +182,12 @@ onMounted(async () => {
       // bg color
       backgroundColor.value =
         "#" + response.data.settings.background["bg-colour"];
-      console.log(backgroundColor.value);
+
       document.body.style.backgroundColor = backgroundColor.value;
 
       CSPImage.value = csp.value.imageURL;
+
+      checkIfOwner(response.data.email);
     })
     .catch((error) => {
       console.log(error);
@@ -87,6 +202,7 @@ onMounted(async () => {
 });
 
 const goToCSPSetting = (CSPid) => {
+  localStorage.setItem("CSPid", id);
   router.push({ name: "CSPSetting", params: { id: CSPid } });
 };
 </script>
@@ -95,7 +211,7 @@ const goToCSPSetting = (CSPid) => {
   <div v-if="loading" class="card">
     <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
   </div>
-  <div v-else>
+  <div v-else class="overflow-x-hidden">
     <Toolbar
       :style="{ backgroundColor: backgroundColor }"
       class="w-full md:w-10 lg:w-9"
@@ -103,6 +219,7 @@ const goToCSPSetting = (CSPid) => {
       <template #start> </template>
       <template #end>
         <Button
+          v-if="cspOwner"
           @click="goToCSPSetting(csp.id)"
           class="mr-2 roundBtn"
           icon="pi pi-pencil"
@@ -182,10 +299,22 @@ const goToCSPSetting = (CSPid) => {
           <p>
             {{ csp.desc }}
           </p>
+
+          <Button
+            v-if="csp.registration.active"
+            rounded
+            class="roundBtn"
+            @click="registerStudent()"
+            >Register</Button
+          >
         </div>
 
         <div v-for="url in csp.settings.urls">
-          <a v-if="url.url && url.active" :href="url.url">
+          <a
+            v-if="url.url && url.active"
+            :href="'http://' + url.url"
+            target="_blank"
+          >
             <Button
               :icon="'pi pi-' + url.icon"
               type="submit"

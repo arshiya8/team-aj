@@ -62,6 +62,11 @@ const routes = [
     component: () => import("@/views/csp/settings/CSPAppearance.vue"),
   },
   {
+    path: "/csp/zoom",
+    name: "Zoom",
+    component: () => import("@/views/csp/settings/CSPZoom.vue"),
+  },
+  {
     path: "/:catchAll(.*)",
     name: "NotFound",
     component: () => import("@/views/NotFound.vue"),
