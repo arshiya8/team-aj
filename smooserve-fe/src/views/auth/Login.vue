@@ -1,13 +1,16 @@
 <script setup>
 import { ref, computed, reactive } from "vue";
 import { useRouter } from "vue-router";
+import axios from "axios";
 import {
   getAuth,
   signInWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
-import { useToast } from 'primevue/usetoast';
+import { useToast } from "primevue/usetoast";
+import { db } from "@/firebase";
+import { collection, query, where, getDocs, addDoc, doc, limit } from "firebase/firestore";
 
 const toast = useToast();
 
@@ -28,8 +31,8 @@ const provider = new GoogleAuthProvider();
 const auth = getAuth();
 
 const showErrorToast = () => {
-    toast.add({severity: 'error', summary: 'Error', detail: errorMessage})
-}
+  toast.add({ severity: "error", summary: "Error", detail: errorMessage });
+};
 
 const submit = () => {
   signInWithEmailAndPassword(getAuth(), email.value, password.value)
@@ -39,39 +42,198 @@ const submit = () => {
     })
     .catch((error) => {
       errorMessage.value = error.message;
-      showErrorToast()
+      showErrorToast();
     });
 };
 
-const googleSignIn = () => {
-  signInWithPopup(auth, provider)
-    .then((result) => {
-        // The signed-in user info.
-        // const user = result.user;
-      console.log("Successfully registered");
+const studGoogleSignIn = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    console.log("Successfully registered");
+    
+    let id = await getDocumentIdByEmail(result.user.email, "students");
+
+    if (id) {
+      //existing user
+      router.replace({ name: "User" });
+    } else {
+      //first time login
+      //redirecting to User page in addStudent function
+      addStudent(result);
+      addToUserDB(result.user.displayName, result.user.email, "student")
+    }
+  } catch (error) {
+    // Handle Errors
+    console.error(error);
+    showErrorToast();
+  }
+};
+
+const cspGoogleSignIn = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    console.log("Successfully registered");
+    
+    let id = await getDocumentIdByEmail(result.user.email, "CSPs");
+
+    if (id) {
+      //existing user
+      router.replace({ name: "CSP", params: { id } });
+    } else {
+      //first time login
+      //redirecting to CSP page in addCSP function
+      await addCSP(result);
+      await addToUserDB(result.user.displayName, result.user.email, "csp")
+    }
+  } catch (error) {
+    // Handle Errors
+    console.error(error);
+    showErrorToast();
+  }
+};
+
+async function getDocumentIdByEmail(email, collectionName) {
+  const q = query(collection(db, collectionName), where("email", "==", email), limit(1));
+  const querySnapshot = await getDocs(q);
+
+  if (!querySnapshot.empty) {
+    // Get the first document (if there are multiple matching)
+    const doc = querySnapshot.docs[0];
+    // Access the document ID
+    return doc.id;
+  } else {
+    // No matching document found
+    return null;
+  }
+}
+
+async function addToUserDB(name, email, role){
+  // Add a new document with a generated id.
+const docRef = await addDoc(collection(db, "Users"), {
+  name: name,
+  country: email,
+  role: role
+});
+}
+
+//To add CSP into db
+async function addCSP(result) {
+  const data = {
+    email: result.user.email,
+    isLocal: true,
+    noOfHours: "",
+    desc: "",
+    signupFormURL: "",
+    skills: "",
+    igURL: "",
+    telehandle: "",
+    title: result.user.displayName,
+    settings: {
+      zoomRefreshToken: "",
+      zoomAccessToken: "",
+      urls: [],
+      zoomTokenIssueDT: 0,
+      buttons: {
+        "button-font-colour": "ffffff",
+        type: {
+          rounded: true,
+          outline: true,
+          raised: false,
+        },
+        "button-colour": "000000",
+      },
+      registerActive: true,
+      font: {
+        "font-family": "Arial",
+        "font-colour": "000000",
+      },
+      background: {
+        "bg-colour": "ffffff",
+      },
+    },
+    imageURL: "",
+    causes: "",
+    signupDeadline: "",
+  };
+  axios
+    .post("https://smooserve-be.vercel.app/api/csp/", data)
+    .then(async (response) => {
+      let id = await getDocumentIdByEmail(result.user.email, "CSPs");
+      console.log("add csp: ");
+      console.log(id);
+
+      //redirect to CSP page
+      router.replace({ name: "CSP", params: { id } });
+      return id
+    })
+    .catch((e) => {
+      console.log(e);
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: e,
+        life: 3000,
+      });
+      return null
+    });
+}
+
+// to add student into db
+async function addStudent(result) {
+  const data = {
+    email: result.user.email,
+    displayName: result.user.displayName,
+    favoriteCsps: [
+      {
+        imageURL: "",
+        skills: "",
+        desc: "",
+        title: "",
+        id: "",
+      },
+    ],
+    quizPreference: {
+      commitment: "",
+      self_awareness: "",
+      skills: [],
+      self_description: "",
+      volunteering_experience: [],
+      passionate_about: [
+      ],
+      volunteering_location: [],
+    },
+  };
+  axios
+    .post("https://smooserve-be.vercel.app/api/student/", data)
+    .then(async (response) => {
+
+      // redirect to User page
       router.replace({ name: "User" });
     })
-    .catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
-
-      showErrorToast()
+    .catch((e) => {
+      console.log(e);
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: e,
+        life: 3000,
+      });
     });
-};
+}
 </script>
 
 <template>
-    <Toast></Toast>
+  <Toast></Toast>
   <div
     class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden"
   >
     <div class="flex flex-column align-items-center justify-content-center">
-      <router-link :to="{ name: 'Home' }"><img :src="logoUrl" alt="SmooServe logo" class="mb-5 w-10rem flex-shrink-0" /></router-link>
+      <router-link :to="{ name: 'Home' }"
+        ><img
+          :src="logoUrl"
+          alt="SmooServe logo"
+          class="mb-5 w-10rem flex-shrink-0"
+      /></router-link>
       <div
         style="
           border-radius: 56px;
@@ -90,10 +252,19 @@ const googleSignIn = () => {
           <div>
             <form @submit.prevent="submit">
               <Button
-                @click="googleSignIn"
+                @click="studGoogleSignIn"
                 type="button"
-                label="Sign in with Google"
-                class="w-full p-3 text-xl p-button-text mr-2 mb-2"
+                label="Sign in with Google (Student)"
+                class="w-full p-3 text-xl p-button-text mb-2"
+                rounded
+                outlined
+                icon="pi pi-google"
+              ></Button>
+              <Button
+                @click="cspGoogleSignIn"
+                type="button"
+                label="Sign in with Google (CSP)"
+                class="w-full p-3 text-xl p-button-text mb-2"
                 rounded
                 outlined
                 icon="pi pi-google"
@@ -111,8 +282,9 @@ const googleSignIn = () => {
                 id="email1"
                 type="text"
                 placeholder="Email address"
-                class="w-full md:w-30rem mb-5"
-                style="padding: 1rem"
+                class="w-full mb-3"
+                inputClass="w-full"
+                :inputStyle="{ padding: '1rem' }"
               />
 
               <label
