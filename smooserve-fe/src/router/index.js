@@ -49,7 +49,17 @@ const routes = [
   {
     path: "/csp/settings/:id",
     name: "CSPSetting",
-    component: () => import("@/views/csp/CSPSetting.vue"),
+    component: () => import("@/views/csp/settings/CSPSetting.vue"),
+  },
+  {
+    path: "/csp/links/:id",
+    name: "CSPLinks",
+    component: () => import("@/views/csp/settings/CSPLinks.vue"),
+  },
+  {
+    path: "/csp/appearance/:id",
+    name: "CSPApperance",
+    component: () => import("@/views/csp/settings/CSPAppearance.vue"),
   },
   {
     path: "/:catchAll(.*)",
@@ -79,9 +89,9 @@ const routes = [
     name: "Profile",
     component: () => import("@/views/profile/Profile.vue"),
     meta: {
-      requiresAuth: true
-    }
-  }
+      requiresAuth: true,
+    },
+  },
 ];
 
 const router = createRouter({
