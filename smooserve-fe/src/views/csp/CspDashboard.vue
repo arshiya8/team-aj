@@ -1,5 +1,9 @@
 <template>
-  <header>
+    <Toast></Toast>
+  <div v-if="loading" class="card">
+    <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
+  </div>
+  <div v-else>
     <h1>Volunteer Organizations</h1>
     <nav>
       <div class="card" style="background-color: #76c6b4">
@@ -26,6 +30,28 @@
           <TabPanel header="Signups">
             <section id="signups">
               <h2>Sign Ups</h2>
+              <div class="card">
+        <DataTable :value="registeredStudents" tableStyle="min-width: 50rem">
+            <template #header>
+                <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                    <span class="text-xl text-900 font-bold">Students</span>
+                    <Button icon="pi pi-refresh" rounded raised />
+                </div>
+            </template>
+            <Column field="email" header="Email"></Column>
+            <Column field="status" header="Status"></Column>
+            <Column header="Action">
+              <template #body="slotProps">
+                <!-- if registered -->
+                <Button v-if="slotProps.data.status=='registered'" rounded label="Schedule Interview" />
+                <!-- if scheduled -->
+                <Button v-if="slotProps.data.status=='scheduled'" rounded severity="success" label="Accept" />
+                    <Button v-if="slotProps.data.status=='scheduled'" rounded severity="danger" label="Reject" />
+                </template>
+            </Column>
+            <template #footer> In total there are {{ registeredStudents ? registeredStudents.length : 0 }} students. </template>
+        </DataTable>
+    </div>
               <table id="studentTable">
                 <tr>
                   <th>Student Name</th>
@@ -81,16 +107,20 @@
         </TabView>
       </div>
     </nav>
-  </header>
+  </div>
 </template>
 <script>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import Button from 'primevue/button';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import CalendarComponent from './CSPCalender.vue';
 import StudentProfile from './StudentProfile.vue'; // Adjust the path if needed
-
+import axios from "axios";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { collection, query, where, getDocs, addDoc, doc, limit } from "firebase/firestore";
+import { useToast } from "primevue/usetoast";
+import { db } from "@/firebase";
 
 export default {
   components: {
@@ -123,9 +153,58 @@ export default {
       },
       events: [],
       showProfile: null, // Added showProfile data
+      loading: false,
+      registeredStudents: null
     };
   },
+  mounted() {
+    const auth = getAuth();
+    const toast = useToast();
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // User is signed in
+        this.loading = true;
+        console.log(await this.getDocumentIdByEmail(user.email, "CSPs"));
+
+    axios
+    .get("https://smooserve-be.vercel.app/api/csp/" + await this.getDocumentIdByEmail(user.email, "CSPs"))
+    .then((response) => {
+      console.log(response.data.registration.registeredStudents);
+      this.registeredStudents = response.data.registration.registeredStudents
+    })
+    .catch((error) => {
+      console.log(error);
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: error,
+        life: 3000,
+      });
+    })
+    .finally(() => (this.loading = false));
+    } else {
+          // User is signed out
+          this.loggedIn = false;
+        }
+      });
+  },
   methods: {
+    
+    async getDocumentIdByEmail(email, collectionName) {
+      const q = query(collection(db, collectionName), where("email", "==", email), limit(1));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        // Get the first document (if there are multiple matching)
+        const doc = querySnapshot.docs[0];
+        // Access the document ID
+        return doc.id;
+      } else {
+        // No matching document found
+        return null;
+      }
+    },
     
     // Function to increment the view count
     incrementPageViewCount() {
@@ -232,12 +311,12 @@ export default {
 }
 
 /* Style the cards */
-.card {
+/* .card {
   border: 1px solid #ccc;
   border-radius: 5px;
   margin: 10px;
   padding: 10px;
-}
+} */
 
 /* styles.css */
 
