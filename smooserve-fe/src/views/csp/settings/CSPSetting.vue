@@ -414,7 +414,6 @@ function formatDateTimeToISOString(dateTime) {
                   {{ slotProps.option + " min" }}
                 </template>
               </SelectButton>
-              <span>{{ formatDateTimeToISOString(datetime12h) }}</span>
             </div>
             <Button
               text
