@@ -16,7 +16,7 @@
             <template #subtitle>{{ email }}</template>
             <template #content>
               <p v-if="contact"><strong>Contact Number:</strong> {{ contact }}</p>
-              <p v-if="description"><strong>Description:</strong> {{ description }}</p>
+              <!-- <p v-if="description"><strong>Description:</strong> {{ quizPreference.self_description}}</p> -->
               <!-- <p v-if="commitments && commitments.length > 0"><strong>Commitments:</strong> {{ commitments.join(", ") }}</p> -->
               <!-- <p v-else><strong>Commitments:</strong> {{ commitments }}</p> -->
             </template>
@@ -184,7 +184,6 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/firebase";
 import axios from 'axios';
-//import NavBar from 'NavBar.vue'; 
 
 export default {
   components: {
@@ -222,8 +221,6 @@ export default {
     const first_name = ref('');
     const quizPreference = ref(['']);
     const favCSPs = ref([]);
-    // const selectedCommitment = ref('');
-    // const commitments = ref(['']);
     let studentId = null;
     const auth = getAuth();
     const profilePicture = ref('');
