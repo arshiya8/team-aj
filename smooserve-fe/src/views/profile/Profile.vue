@@ -11,9 +11,10 @@
                     <template #title>{{ first_name }}</template>
                     <template #subtitle>{{ email }}</template>
                     <template #content>
-                        <p><strong>Contact Number:</strong> {{ contact }}</p>
-                        <p><strong>Description:</strong> {{ description }}</p>
-                        <p><strong>Commitments:</strong> {{ commitments.join(", ") }}</p>
+                        <p v-if="contact"><strong>Contact Number:</strong> {{ contact }}</p>
+                        <p v-if="description"><strong>Description:</strong> {{ description }}</p>
+                        <!-- <p v-if="commitments && commitments.length > 0"><strong>Commitments:</strong> {{ commitments.join(", ") }}</p> -->
+                        <!-- <p v-else><strong>Commitments:</strong> {{ commitments }}</p> -->
                     </template>
                     <template #footer>
                         <Button icon="pi pi-pencil" label="Edit" @click="editProfile" />
@@ -43,7 +44,7 @@
                     <label for="Description1" class="form-label">Describe yourself:</label>
                     <textarea v-model="description" class="form-control" id="Description1" rows="5"></textarea>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
+                <!-- <div class="col-lg-6 col-md-6 col-sm-12">
                     <label for="commitment">Commitment:</label>
                     <select v-model="selectedCommitment" id="commitment" name="commitment">
                         <option value="Monday">Monday</option>
@@ -53,7 +54,7 @@
                         <option value="Friday">Friday</option>
                     </select>
                     <button type="button" @click="addCommitment">Add</button>
-                </div>
+                </div> -->
                 <div class="pt-3 col-lg-6 col-md-6 col-sm-12 order-last">
                     <button type="button" @click="updateProfile">Update Profile</button>
                 </div>
@@ -80,13 +81,16 @@
                     <div v-if="quizPreference">
                         <!-- Display quiz data fetched from the Quiz Vue component -->
                         <p><strong>Commitment:</strong> {{ quizPreference.commitment }}</p>
-                        <p><strong>Passionate About:</strong> {{ quizPreference.passionate_about.join(', ') }}</p>
+                        <p v-if="quizPreference.passionate_about.length > 0"><strong>Passionate About:</strong> {{ quizPreference.passionate_about.join(', ') }}</p>
+                        <p v-else><strong>Passionate About:</strong> {{ quizPreference.passionate_about }}</p>
                         <p><strong>Self Awareness:</strong> {{ quizPreference.self_awareness }}</p>
                         <p><strong>Self Description:</strong> {{ quizPreference.self_description }}</p>
-                        <p><strong>Skills:</strong> {{ quizPreference.skills.join(', ') }}</p>
-                        <p><strong>Volunteering Experience:</strong> {{ quizPreference.volunteering_experience.join(', ') }}
+                        <p v-if="quizPreference.skills.length > 0"><strong>Skills:</strong> {{ quizPreference.skills.join(', ') }}</p>
+                        <p v-else><strong>Skills:</strong> {{ quizPreference.skills }}</p>
+                        <p v-if="quizPreference.volunteering_experience.length > 0"><strong>Volunteering Experience:</strong> {{ quizPreference.volunteering_experience.join(', ') }}
                         </p>
-                        <p><strong>Volunteering Location:</strong> {{ quizPreference.volunteering_location.join(', ') }}</p>
+                        <p v-else><strong>Volunteering experience: </strong> {{ quizPreference.volunteering_experience }}</p>
+                        <p v-if="quizPreference.volunteering_location.length > 0"><strong>Volunteering Location:</strong> {{ quizPreference.volunteering_location.join(', ') }}</p>
                     </div>
                     <div v-else>
                         <p>Loading quiz data...</p>
@@ -180,14 +184,14 @@ export default {
     setup() {
         const first_name = ref('');
         const email = ref('');
-        const quizPreference = ref([]);
+        const quizPreference = ref(['']);
         const favCSPs = ref([]);
         const profilePicture = ref('');
         const name = ref('');
         const contact = ref('');
         const description = ref('');
-        const selectedCommitment = ref('');
-        const commitments = ref(['']);
+        // const selectedCommitment = ref('');
+        // const commitments = ref(['']);
         const editMode = ref(false);
         let studentId = null;
         const auth = getAuth();
@@ -202,16 +206,16 @@ export default {
             },
         ]);
 
-        const addCommitment = () => {
-            if (selectedCommitment) {
-                commitments.value.push(selectedCommitment.value);
-                selectedCommitment.value = '';
-            }
-        };
+        // const addCommitment = () => {
+        //     if (selectedCommitment) {
+        //         commitments.value.push(selectedCommitment.value);
+        //         selectedCommitment.value = '';
+        //     }
+        // };
 
-        const removeCommitment = (index) => {
-            commitments.value.splice(index, 1);
-        };
+        // const removeCommitment = (index) => {
+        //     commitments.value.splice(index, 1);
+        // };
 
 
 
@@ -249,7 +253,7 @@ export default {
                         first_name.value = response.data.first_name;
                         email.value = response.data.email;
                         contact.value = response.data.contact;
-                        commitments.value = response.data.commitments;
+                        // commitments.value = response.data.commitments;
                         description.value = response.data.description;
                         quizPreference.value = response.data.quizPreference;
                         favCSPs.value = response.data.favoriteCsps;
@@ -273,7 +277,7 @@ export default {
                     first_name: first_name.value,
                     email: email.value,
                     contact: contact.value,
-                    commitments: commitments.value,
+                    // commitments: commitments.value,
                     description: description.value
                 });
                 console.log(response.data); // Handle the response from the server if needed
@@ -281,7 +285,7 @@ export default {
                     first_name: first_name.value,
                     email: email.value,
                     contact: contact.value,
-                    commitments: commitments.value,
+                    // commitments: commitments.value,
                     description: description.value
                 }));
                 editMode.value = false;
@@ -298,7 +302,7 @@ export default {
                 first_name.value = parsedProfile.first_name;
                 email.value = parsedProfile.email;
                 contact.value = parsedProfile.contact;
-                commitments.value = parsedProfile.commitments;
+                // commitments.value = parsedProfile.commitments;
                 description.value = parsedProfile.description;
             }
         });
@@ -323,10 +327,10 @@ export default {
             favCSPs,
             contact,
             description,
-            selectedCommitment,
-            commitments,
-            addCommitment,
-            removeCommitment,
+            // selectedCommitment,
+            // commitments,
+            // addCommitment,
+            // removeCommitment,
             updateProfile,
             editProfile,
             handleProfilePictureChange,
