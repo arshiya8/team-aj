@@ -194,15 +194,15 @@ export default {
       }
       if (csps.value.length === csps.original.length) {
         const filteredCsps = csps.value.filter(csp => {
-        const causeMatch = selectedValue1.value === '' || selectedValue1.value === csp.cause;
-        const skillsMatch = selectedValue2.value === '' || selectedValue2.value === csp.skills;
-        return causeMatch || skillsMatch;
-      });
-      csps.value = filteredCsps;
+          const causeMatch = selectedValue1.value === '' || selectedValue1.value === csp.cause;
+          const skillsMatch = selectedValue2.value === '' || selectedValue2.value === csp.skills;
+          return causeMatch || skillsMatch;
+        });
+        csps.value = filteredCsps;
       } else {
         // Restore the original csps array if it's already filtered
         csps.value = csps.original.slice();
-      }      
+      }
     };
 
 
@@ -250,12 +250,12 @@ export default {
   <div class="container-fluid" style="background-color: lightblue;">
     <div class="row pb-3">
       <h2
-        style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">
+          style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">
         COMMUNITY SERVICE
         PROJECTS</h2>
       <br>
       <h2
-        style="color:rgb(252,84,84); font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; font-size: 4rem;">
+          style="color:rgb(252,84,84); font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; font-size: 4rem;">
         THIS MONTH</h2>
     </div>
   </div>
@@ -280,7 +280,7 @@ export default {
     <div class="row">
       <div class="col">
         <h1
-          style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; color:white;">
+            style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; color:white;">
           What's happening in Smooserve</h1>
       </div>
     </div>
@@ -310,7 +310,7 @@ export default {
 
         <div class="toggle-button" style="display: inline-block; text-align: center; padding-left: 10px;">
           <label
-            style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">Auto-filter:</label>
+              style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">Auto-filter:</label>
           <button @click="toggleAutoFilter">{{ selectedValue3 === '' ? 'Off' : 'On' }}</button>
         </div>
       </div>
@@ -343,7 +343,7 @@ export default {
               <div class="flip-card-back align-items-end">
                 <div class="heart-container">
                   <i class="fas fa-heart clickable" :class="{ 'heart-red': isCSPFavorite(csp) }"
-                    @click="toggleHeartColor(csp)"></i>
+                     @click="toggleHeartColor(csp)"></i>
                 </div>
                 <div class="text-center">
                   <h1>{{ csp.title }}</h1>
@@ -366,7 +366,7 @@ export default {
     <button @click="prevPage" :disabled="currentPage === 1" class="pagination-button">Prev</button>
     <span v-for="page in totalPages" :key="page">
       <button @click="goToPage(page)" :class="{ active: page === currentPage }" class="pagination-button">{{ page
-      }}</button>
+        }}</button>
     </span>
     <button @click="nextPage" :disabled="currentPage === totalPages" class="pagination-button">Next</button>
   </div>
