@@ -1,432 +1,358 @@
 <script>
-import NavBar from "../components/NavBar.vue"
+import { onMounted, ref, computed } from "vue";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/firebase";
+import NavBar from "../components/NavBar.vue";
 import CaroPics from "../components/CaroPics.vue";
+// import Footer from "../components/Footer.vue";
+import axios from 'axios';
+import { useRouter } from "vue-router";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
 export default {
+  setup() {
+    const csps = ref([]);
+    csps.original = null;
+    const favoriteCSPs = ref([]);
+    const selectedValue1 = ref('');
+    const selectedValue2 = ref('');
+    const selectedValue3 = ref('');
+    const auth = getAuth();
+    const router = useRouter();
+    let studentId = null;
+
+    onAuthStateChanged(auth, async (student) => {
+      if (student) {
+        try {
+          const querySnapshot = await getDocs(collection(db, "students"));
+          querySnapshot.forEach((doc) => {
+            const studentEmail = doc.data().email;
+            if (studentEmail === student.email) {
+              studentId = doc.id;
+              favoriteCSPs.value = doc.data().favoriteCsps || [];
+            }
+          });
+
+          // If studentId is still null, no matching email was found in the collection
+          if (studentId === null) {
+            console.log("No matching id found in the database.");
+          } else {
+            console.log("Student ID found:", studentId);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        studentId = null;
+        favoriteCSPs.value = []; // Clear favorites for non-authenticated users
+      }
+    });
+
+    const toggleHeartColor = (csp) => {
+      if (auth.currentUser) {
+        const index = favoriteCSPs.value.findIndex((favCSP) => favCSP.id === csp.id);
+        if (index === -1) {
+          // CSP is not in favorites, add it
+          favoriteCSPs.value.push(csp);
+        } else {
+          // CSP is already in favorites, remove it
+          favoriteCSPs.value.splice(index, 1);
+        }
+        // Update the student's favorite CSPs in the database
+        updateStudent(favoriteCSPs.value);
+        // Update localStorage with the updated favorite CSPs list
+        localStorage.setItem('favoriteCSPs', JSON.stringify(favoriteCSPs.value));
+      } else {
+        console.error('User is not authenticated.');
+        alert("Sign in first!");
+      }
+    };
+    // const toggleHeartColor = (csp) => {
+    //   const index = favoriteCSPs.value.findIndex((favCSP) => favCSP.id === csp.id);
+    //   if (index === -1) {
+    //     // CSP is not in favorites, add it
+    //     favoriteCSPs.value.push(csp);
+    //     // // // Update the student's favorite CSPs in the database
+    //     // updateStudent(favoriteCSPs.value);
+    //   } else {
+    //     // CSP is already in favorites, remove it
+    //     favoriteCSPs.value.splice(index, 1);
+    //     // // // Update the student's favorite CSPs in the database
+    //     // updateStudent(favoriteCSPs.value);
+    //   }
+    //   // Update localStorage with the updated favorite CSPs list
+    //   localStorage.setItem('favoriteCSPs', JSON.stringify(favoriteCSPs.value));
+
+    //   // Also, update the student's favorite CSPs in the database
+    //   updateStudent(favoriteCSPs.value);
+    // };
+
+    const updateStudent = async (updatedFavorites) => {
+      try {
+        // Ensure userId is not null before making the API request
+        if (studentId != null) {
+          const response = await axios.put(`http://localhost:8080/api/student/${studentId}`, {
+            favoriteCsps: updatedFavorites,
+          });
+          console.log(response.data);
+        } else {
+          console.error('User is not authenticated.');
+        }
+      } catch (error) {
+        console.error('Error updating favorite CSPs:', error);
+      }
+    };
+
+    const isCSPFavorite = (csp) => {
+      return favoriteCSPs.value.some((favCSP) => favCSP.id === csp.id);
+    };
+
+
+    const toggleAutoFilter = async () => {
+      const response = await axios.get(`http://localhost:8080/api/student/${studentId}`, {
+      });
+      // console.log(response.data.quizPreference)
+      const causes = response.data.quizPreference.passionate_about
+      const skills = response.data.quizPreference.skills
+
+      if (!csps.original) {
+        // Store the original csps array if it's not already stored
+        csps.original = csps.value.slice();
+      }
+      if (csps.value.length === csps.original.length) {
+        const auto_filter = csps.value.filter(csp => {
+          return causes.includes(csp.cause) || skills.includes(csp.skills);
+        });
+        csps.value = auto_filter;
+      } else {
+        // Restore the original csps array if it's already filtered
+        csps.value = csps.original.slice();
+      }
+
+      // console.log(auto_filter);
+
+
+      selectedValue3.value = selectedValue3.value === '' ? 'choiceX' : '';
+    };
+
+    const itemsPerPage = 6;
+    const currentPage = ref(1);
+
+    // pagination tools //
+    const totalPages = computed(() => Math.ceil(csps.value.length / itemsPerPage));
+
+    const getVisibleCsps = computed(() => {
+      const start = (currentPage.value - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      return csps.value.slice(start, end);
+    });
+
+    const prevPage = () => {
+      if (currentPage.value > 1) {
+        currentPage.value--;
+      }
+    };
+
+    const nextPage = () => {
+      if (currentPage.value < totalPages.value) {
+        currentPage.value++;
+      }
+    };
+
+    const goToPage = (page) => {
+      currentPage.value = page;
+    };
+
+    onMounted(async () => {
+      const fbCSP = [];
+      const querySnapshot = await getDocs(collection(db, "CSPs"));
+
+      querySnapshot.forEach((doc) => {
+        const CSP = {
+          id: doc.id,
+          title: doc.data().title,
+          desc: doc.data().desc,
+          imageURL: doc.data().imageURL,
+          cause: doc.data().cause,
+          skills: doc.data().skills,
+        };
+        fbCSP.push(CSP);
+      });
+      csps.value = fbCSP;
+
+      const storedFavoriteCSPs = localStorage.getItem('favoriteCSPs');
+      if (storedFavoriteCSPs) {
+        favoriteCSPs.value = JSON.parse(storedFavoriteCSPs);
+      }
+
+    });
+
+    const filterCsp = () => {
+      if (!csps.original) {
+        // Store the original csps array if it's not already stored
+        csps.original = csps.value.slice();
+      }
+      if (csps.value.length === csps.original.length) {
+        const filteredCsps = csps.value.filter(csp => {
+        const causeMatch = selectedValue1.value === '' || selectedValue1.value === csp.cause;
+        const skillsMatch = selectedValue2.value === '' || selectedValue2.value === csp.skills;
+        return causeMatch || skillsMatch;
+      });
+      csps.value = filteredCsps;
+      } else {
+        // Restore the original csps array if it's already filtered
+        csps.value = csps.original.slice();
+      }      
+    };
+
+
+
+    return {
+      csps,
+      favoriteCSPs,
+      selectedValue1,
+      selectedValue2,
+      selectedValue3,
+      toggleHeartColor,
+      toggleAutoFilter,
+      filterCsp,
+      isCSPFavorite,
+      studentId,
+      favoriteCSPs,
+      updateStudent,
+
+
+      // pagination tools //
+      itemsPerPage,
+      currentPage,
+      totalPages,
+      getVisibleCsps,
+      prevPage,
+      nextPage,
+      goToPage,
+    };
+  },
   components: {
     NavBar,
     CaroPics,
-  },
-
-  data() {
-    return {
-      selectedValue1: '', // Initialize with default values if needed
-      selectedValue2: '',
-      selectedValue3: '',
-      isHeartRed: false, // Initially, the heart is not red
-    };
-  },
-  methods: {
-    toggleHeartColor() {
-      // Toggle the heart color between red and gray
-      this.isHeartRed = !this.isHeartRed;
-    },
+    // Footer,
   },
 };
-
 </script>
+
 
 <template>
   <!-- navbar component -->
   <NavBar />
   <CaroPics />
 
-
   <!-- headers -->
   <div class="container-fluid" style="background-color: lightblue;">
     <div class="row pb-3">
-      <h2 style="color:black; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">COMMUNITY SERVICE PROJECTS</h2><br>
-      <h2 style="color:red; font-weight: bold; text-align: center; font-size: 5rem;">THIS MONTH</h2>
+      <h2
+        style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">
+        COMMUNITY SERVICE
+        PROJECTS</h2>
+      <br>
+      <h2
+        style="color:rgb(252,84,84); font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; font-size: 4rem;">
+        THIS MONTH</h2>
     </div>
   </div>
-
 
   <!-- tilted cards -->
   <div class="ct">
     <div class="card-container">
       <div class="card rd">
-        <img style="border-radius: 15px;" src="/layout/images/card1.jpg" >
+        <img style="border-radius: 15px;" src="/layout/images/card1.jpg">
       </div>
       <div class="card rd">
-        <img style="border-radius: 15px;" src="/layout/images/card2.jpg" >
-
+        <img style="border-radius: 15px;" src="/layout/images/card2.jpg">
       </div>
       <div class="card rd">
-        <img style="border-radius: 15px;" src="/layout/images/card3.jpg" >
+        <img style="border-radius: 15px;" src="/layout/images/card3.jpg">
       </div>
     </div>
   </div>
-
 
   <!-- body -->
   <div class="container-fluid" style="background-color: navy">
     <div class="row">
       <div class="col">
-        <h1 style="font-weight: bold; text-align: center; color:white;">What's happening in Smooserve</h1>
-        <div>
-        </div>
-        <div class="row" style="text-align: center;">
-          <!-- First Dropdown List -->
-          <div class="dropdown">
-            <label for="dropdown1">Causes:</label>
-            <select id="dropdown1" v-model="selectedValue1">
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
-            </select>
+        <h1
+          style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; color:white;">
+          What's happening in Smooserve</h1>
+      </div>
+    </div>
+    <div class="row" style="padding-left: 10px; padding-bottom:20px; text-align: center;display: flex; align-items: center; font-family: 'Helvetica Neue Medium', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: normal;">
 
 
-            <!-- Second Dropdown List -->
+      <!-- First Dropdown List -->
+      <div class="dropdown" style="display: inline-block; margin-right: 10px;">
+        <label for="dropdown1"></label>
+        <select id="dropdown1" v-model="selectedValue1" @change="filterCsp">
+          <option value="" selected>Causes</option>
+          <option value="Environmental Conservation">Environment</option>
+          <option value="Education">Education</option>
+          <option value="Youth Development">Youth Development</option>
+        </select>
 
-            <label for="dropdown2">Skills:</label>
-            <select id="dropdown2" v-model="selectedValue2">
-              <option value="optionA">Option A</option>
-              <option value="optionB">Option B</option>
-              <option value="optionC">Option C</option>
-            </select>
+        <!-- Second Dropdown List -->
+        <label for="dropdown2"></label>
+        <select id="dropdown2" v-model="selectedValue2" @change="filterCsp">
+          <option value="" selected>Skills</option>
+          <option value="Teaching">Teaching</option>
+          <option value="Event Planning">Event Planning</option>
+          <option value="Wrting and Communication">Communication</option>
+        </select>
 
 
-            <!-- Third Dropdown List -->
-
-            <label for="dropdown3">Date:</label>
-            <select id="dropdown3" v-model="selectedValue3">
-              <option value="choiceX">Choice X</option>
-              <option value="choiceY">Choice Y</option>
-              <option value="choiceZ">Choice Z</option>
-            </select>
-          </div>
-
-
-          <!-- Display selected values -->
-          <div class="row justify-content-center" style="color:white; font-weight: bold; font-size: 20px;">
-            Selected Value 1: {{ selectedValue1 }}
-            Selected Value 2: {{ selectedValue2 }}
-            Selected Value 3: {{ selectedValue3 }}
-          </div>
+        <div class="toggle-button" style="display: inline-block; text-align: center; padding-left: 10px;">
+          <label
+            style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">Auto-filter:</label>
+          <button @click="toggleAutoFilter">{{ selectedValue3 === '' ? 'Off' : 'On' }}</button>
         </div>
       </div>
+
+      <!-- Display selected values -->
+      <!-- <div class="row justify-content-center" style="color:white; font-weight: bold; font-size: 20px;">
+        Selected Value 1: {{ selectedValue1 }}
+        Selected Value 2: {{ selectedValue2 }}
+        Selected Value 3: {{ selectedValue3 }}
+      </div> -->
     </div>
   </div>
 
 
   <!-- font awesome library icons  -->
   <div>
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
   </div>
 
-
-  <!--cards taken from w3schools-->
+  <!-- CSP flip cards -->
   <div class="container-fluid" style="background-color: lightblue;">
     <div class="row">
-      <div class="col-md-3">  <!-- Align-items-end requires col -->
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card1.jpg" alt="CSP1">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
+      <div class="card-container">
+        <div class="col-md-6 col-sm-12 col-lg-4" v-for="(csp, index) in getVisibleCsps" :key="csp.id">
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <img :src="csp.imageURL" :alt="`CSP ${csp.id}`">
               </div>
-              <div class="text-center">
-                <h1>OTR LISTENS</h1>
-                <p>Keen to provide a listening ear for fellow peers?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+              <div class="flip-card-back align-items-end">
+                <div class="heart-container">
+                  <i class="fas fa-heart clickable" :class="{ 'heart-red': isCSPFavorite(csp) }"
+                    @click="toggleHeartColor(csp)"></i>
+                </div>
+                <div class="text-center">
+                  <h1>{{ csp.title }}</h1>
+                  <p class="card-description">{{ csp.desc }}</p>
 
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card2.jpg" alt="CSP2">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>PROJECT BRIGHT 5</h1>
-                <p>Feel strongly about equal education for all?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card3.jpg" alt="CSP3">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>CAHAYA COMMUNITY</h1>
-                <p>Passionate about serving the underdeserved?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card1.jpg" alt="CSP4">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>OTR LISTENS</h1>
-                <p>Keen to provide a listening ear for fellow peers?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card2.jpg" alt="CSP5">
-            </div>
-
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>PROJECT BRIGHT 5</h1>
-                <p>Feel strongly about equal education for all?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card3.jpg" alt="CSP6">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>CAHAYA COMMUNITY</h1>
-                <p>Passionate about serving the underdeserved?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card1.jpg" alt="CSP7">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>OTR LISTENS</h1>
-                <p>Keen to provide a listening ear for fellow peers?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card2.jpg" alt="CSP8">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>PROJECT BRIGHT 5</h1>
-                <p>Feel strongly about equal education for all?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card3.jpg" alt="CSP9">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>CAHAYA COMMUNITY</h1>
-                <p>Passionate about serving the underdeserved?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card1.jpg" alt="CSP10">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>OTR LISTENS</h1>
-                <p>Keen to provide a listening ear for fellow peers?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-
-              <img src="/layout/images/card2.jpg" alt="CSP11">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>PROJECT BRIGHT 5</h1>
-                <p>Feel strongly about equal education for all?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <img src="/layout/images/card3.jpg" alt="CSP12">
-            </div>
-            <div class="flip-card-back align-items-end">  <!-- Align-items-end sets item to the bottom of the card. -->
-              <div class="heart-container">
-                <!-- Heart icon with click event -->
-                <i
-                    class="fas fa-heart"
-                    :class="{ 'heart-red': isHeartRed }"
-                    @click="toggleHeartColor"
-                ></i>
-              </div>
-              <div class="text-center">
-                <h1>CAHAYA COMMUNITY</h1>
-                <p>Passionate about serving the underdeserved?</p>
-                <a class="btn btn-primary m-3" href="csp.page" role="button">See more!</a>  <!-- m-3 adds margin to the bottom-->
+                  <!-- see more button link to linktree -->
+                  <router-link :to="{ name: 'CSP', params: { id: csp.id } }" class="btn btn-primary">See
+                    more</router-link>
+                </div>
               </div>
             </div>
           </div>
@@ -435,30 +361,102 @@ export default {
     </div>
   </div>
 
+  <!-- Pagination Controls with Styling -->
+  <div class="pagination">
+    <button @click="prevPage" :disabled="currentPage === 1" class="pagination-button">Prev</button>
+    <span v-for="page in totalPages" :key="page">
+      <button @click="goToPage(page)" :class="{ active: page === currentPage }" class="pagination-button">{{ page
+      }}</button>
+    </span>
+    <button @click="nextPage" :disabled="currentPage === totalPages" class="pagination-button">Next</button>
+  </div>
+
+  <!-- <Footer /> -->
 </template>
+
 
 <style>
 @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css');
 
+/* pagination tool */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  align-items: center;
+}
+
+.pagination-button {
+  /* Your button styles here */
+  background-color: #007ad9;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  margin: 0 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination-button:hover {
+  background-color: #0053a6;
+}
+
+.pagination-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.active {
+  background-color: #0053a6;
+  font-weight: bold;
+}
+
+.dropdown select {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: normal;
+}
+
+.toggle-button button {
+  display: inline-block;
+  background-color: #007ad9;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 5px 20px;
+  cursor: pointer;
+  text-align: center;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: normal;
+}
+
+.toggle-button button:hover {
+  background-color: #0053a6;
+}
+
+.toggle-button button.on {
+  background-color: #007ad9;
+}
+
+.toggle-button button.off {
+  background-color: #ccc;
+}
+
 .heart-container {
   position: absolute;
-  top: 10px; /* Adjust the top position as needed */
-  right: 10px; /* Adjust the right position as needed */
-  z-index: 1; /* Ensure the heart is above other content */
+  top: 10px;
+  right: 10px;
+  z-index: 1;
 }
 
-/* Define styles for the red heart */
 .heart-red {
   color: red;
-  /* You can customize the red color as needed */
 }
 
-
-/* to have spacing between each card */
-.col-md-3{
-  margin: 20px 0;
+.clickable {
+  cursor: pointer;
 }
-
 
 .dropdown {
   display: inline;
@@ -485,7 +483,7 @@ export default {
   text-align: justify;
 }
 
-.ct{
+.ct {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -493,57 +491,62 @@ export default {
   margin: 0;
   background-color: lightblue;
 }
+
 .card-container {
   display: flex;
-  justify-content: space-around;
+  flex-wrap: wrap;
+  /* Allow cards to wrap to the next line */
+  justify-content: space-between;
+  /* Distribute cards evenly within each row */
   width: 80%;
+  margin: 0 auto;
 }
 
-.rd{
+.rd {
   border-radius: 15px;
   width: 30%;
 }
 
 .card:first-child {
   transform: rotate(-20deg);
-  border:none;
+  border: none;
   margin-right: 60px;
 }
 
 .card:last-child {
   transform: rotate(20deg);
-  border:none;
+  border: none;
   margin-left: 60px;
   background-color: lightblue;
 }
+
 .card:nth-child(2) {
   margin-top: -140px;
-  border:none;
+  border: none;
   background-color: lightblue;
 }
-*{
+
+* {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  color: rgba(6,66,115);
+  color: rgba(6, 66, 115);
 }
 
 
 /* navbar */
-.navbar{
-  width:100%;
-  margin:auto;
+.navbar {
+  width: 100%;
+  margin: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-
 /* logo */
-.logo{
-  width:250px;
+.logo {
+  width: 250px;
   cursor: pointer;
-
 }
 
 /* the search and login */
@@ -556,63 +559,61 @@ export default {
 
 .navbar ul li a {
   text-decoration: none;
-
-
 }
 
 /* search button */
 .search-button {
-  background-color: rgba(6,66,115);
-  color:white;
+  background-color: rgba(6, 66, 115);
+  color: white;
   border: none;
   border-radius: 25px;
   padding: 5px 5px;
   font-size: 16pm;
 }
 
-.search{
+.search {
   border-radius: 10px;
   padding: 5px 5px;
-  border: 2px solid rgba(6,66,115);;
+  border: 2px solid rgba(6, 66, 115);
 }
 
-.navbar-toggler{
-  background-color: rgba(6,66,115);
-
+.navbar-toggler {
+  background-color: rgba(6, 66, 115);
 }
-
-
-/* body */
 
 .navbar-list {
   display: flex;
-  padding-left: 190px; /* Align items to the left by default */
+  padding-left: 190px;
+  /* Align items to the left by default */
 }
 
 @media (max-width: 991.98px) {
   .navbar-list {
-    padding-left: 0px; /* Align items to the right when the page is collapsed */
+    padding-left: 0px;
+    /* Align items to the right when the page is collapsed */
   }
 }
+
 .list-inline-item a {
   text-decoration: none;
   text-transform: uppercase;
-  color:  rgba(6,66,115);
+  color: rgba(6, 66, 115);
   font-weight: bold;
   font-size: larger;
   padding: 5px;
 }
 
-.list-inline-item::after{
+.list-inline-item::after {
   content: '';
   height: 3px;
   width: 0;
-  background: rgba(6,66,115);
+  background: rgba(6, 66, 115);
   position: absolute;
   left: 0;
   bottom: 8;
   transition: 0.5s;
 }
+
 @media (min-width: 992px) {
   .list-inline-item:hover::after {
     width: 100%;
@@ -631,7 +632,8 @@ export default {
   width: 280px;
   height: 390px;
   border: none;
-  perspective: 1000px; /* Remove this if you don't want the 3D effect */
+  perspective: 1000px;
+  /* Remove this if you don't want the 3D effect */
   border-radius: 15px;
 }
 
@@ -651,7 +653,8 @@ export default {
 }
 
 /* Position the front and back side */
-.flip-card-front, .flip-card-back {
+.flip-card-front,
+.flip-card-back {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -663,7 +666,6 @@ export default {
 /* Style the front side (fallback if image is missing) */
 .flip-card-front {
   color: black;
-
 }
 
 /* Style the back side */
@@ -673,17 +675,21 @@ export default {
   transform: rotateY(180deg);
   display: flex;
   justify-content: center;
+  font-size: 14px;
+  /* Adjust the font size as needed */
+  padding: 10px;
+  /* Add some padding for readability */
 }
 
 .flip-card img {
-  max-width: 100%; /* Ensure the image doesn't exceed its container */
+  max-width: 100%;
+  /* Ensure the image doesn't exceed its container */
   max-height: 100%;
   border-radius: 15px;
 }
 
-.centralise{
-  margin:150px;
+.centralise {
+  margin: 150px;
 }
-
 </style>
 
