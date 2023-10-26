@@ -128,7 +128,7 @@ export default {
     StudentProfile,
   },
   created() {
-    this.incrementViewCount();
+    this.incrementPageViewCount();
   },
   data() {
     return {
@@ -216,12 +216,14 @@ export default {
     },
 
     rejectStudent(student) {
+      student.status = 'Rejected';
       const index = this.students.findIndex((s) => s.id === student.id);
       if (index !== -1) {
         this.students.splice(index, 1);
       }
       console.log(`${student.name} has been rejected.`);
     },
+   
     addEvent() {
       if (this.isClash(this.newEvent.date, this.newEvent.startTime, this.newEvent.endTime)) {
         alert('Event time clashes with an existing event.');
@@ -279,16 +281,6 @@ export default {
     clearStudentProfile() {
       this.showProfile = null;
     }
-  },
-  rejectStudent(student) {
-    student.status = 'Rejected';
-
-    // Remove the student from the list
-    const index = this.students.findIndex((s) => s.id === student.id);
-    if (index !== -1) {
-      this.students.splice(index, 1);
-    }
-    console.log(`${student.name} has been rejected.`);
   },
 };
 </script>
