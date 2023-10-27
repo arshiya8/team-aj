@@ -1,5 +1,55 @@
 <template>
     <Toast></Toast>
+    <Dialog
+    v-model:visible="visible"
+    modal
+    :header="'Schedule Interview for ' + selectedStudent"
+    :style="{ width: '50vw' }"
+    :breakpoints="{ '960px': '75vw', '641px': '100vw' }"
+  >
+
+      <Card class="p-3 mt-5 mb-4 card">
+          <template #title>Zoom Schedule</template>
+          <template #content>
+            <div
+              class="grid align-items-center justify-content-center mb-3"
+            ></div>
+
+            <div class="flex flex-column gap-3 mb-3">
+              <label for="topic">Meeting Topic</label>
+              <InputText id="topic" v-model="topic" />
+
+              <label for="calendar-12h" class="font-bold block">
+                12h Format
+              </label>
+              <Calendar
+                id="calendar-12h"
+                v-model="datetime12h"
+                showTime
+                hourFormat="12"
+              />
+
+              <SelectButton
+                v-model="zoomTimeSelected"
+                :options="zoomTimeOptions"
+                aria-labelledby="basic"
+              >
+                <template #option="slotProps">
+                  {{ slotProps.option + " min" }}
+                </template>
+              </SelectButton>
+            </div>
+            <Button
+              text
+              rounded
+              label="Save"
+              @click="scheduleZoomMeeting()"
+              class="w-full align-items-center justify-content-center"
+              ><i class="pi pi-save px-2"></i>Schedule</Button
+            >
+          </template>
+        </Card>
+  </Dialog>
   <div v-if="loading" class="card">
     <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
   </div>
@@ -43,7 +93,7 @@
             <Column header="Action">
               <template #body="slotProps">
                 <!-- if registered -->
-                <Button v-if="slotProps.data.status=='registered'" rounded label="Schedule Interview" />
+                <Button v-if="slotProps.data.status=='registered'" rounded label="Schedule Interview" @click="(visible = true), (selectedStudent = slotProps.data.email)" />
                 <!-- if scheduled -->
                 <Button v-if="slotProps.data.status=='scheduled'" rounded severity="success" label="Accept" />
                     <Button v-if="slotProps.data.status=='scheduled'" rounded severity="danger" label="Reject" />
@@ -74,6 +124,49 @@
             </section>
           </TabPanel>
           <TabPanel header="Schedule">
+            <div class="col-12 md:col-12 lg:col-6">
+            <Card class="p-3 mt-5 mb-4 card">
+          <template #title>Zoom Schedule</template>
+          <template #content>
+            <div
+              class="grid align-items-center justify-content-center mb-3"
+            ></div>
+
+            <div class="flex flex-column gap-3 mb-3">
+              <label for="topic">Meeting Topic</label>
+              <InputText id="topic" v-model="topic" />
+
+              <label for="calendar-12h" class="font-bold block">
+                12h Format
+              </label>
+              <Calendar
+                id="calendar-12h"
+                v-model="datetime12h"
+                showTime
+                hourFormat="12"
+              />
+
+              <SelectButton
+                v-model="zoomTimeSelected"
+                :options="zoomTimeOptions"
+                aria-labelledby="basic"
+              >
+                <template #option="slotProps">
+                  {{ slotProps.option + " min" }}
+                </template>
+              </SelectButton>
+            </div>
+            <Button
+              text
+              rounded
+              label="Save"
+              
+              class="w-full align-items-center justify-content-center"
+              ><i class="pi pi-save px-2"></i>Schedule</Button
+            >
+          </template>
+        </Card>
+      </div>
             <section id="schedule">
               <h2>Schedule</h2>
               <div id="calendar" style="background-color: #def3f6;">
@@ -111,9 +204,6 @@
 </template>
 <script>
 import { ref, onMounted } from 'vue';
-import Button from 'primevue/button';
-import TabView from 'primevue/tabview';
-import TabPanel from 'primevue/tabpanel';
 import CalendarComponent from './CSPCalender.vue';
 import StudentProfile from './StudentProfile.vue'; // Adjust the path if needed
 import axios from "axios";
@@ -132,6 +222,8 @@ export default {
   },
   data() {
     return {
+      visible: false,
+      selectedStudent: '',
       pageViewCount: 0,
       students: [
         { id: 1, name: 'John Doe', status: 'Enrolled' },
@@ -190,7 +282,32 @@ export default {
       });
   },
   methods: {
-    
+    scheduleZoomMeeting() {
+      axios
+        .post("http://localhost:8080/api/createMeeting", {
+          accessToken: dbAccessToken.value,
+          topic: topic.value,
+          duration: zoomTimeSelected.value,
+          start_time: formatDateTimeToISOString(datetime12h.value),
+        })
+        .then((response) => {
+          toast.add({
+            severity: "success",
+            summary: "Done",
+            detail: response.statusText,
+            life: 3000,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: error,
+            life: 3000,
+          });
+        });
+    },
     async getDocumentIdByEmail(email, collectionName) {
       const q = query(collection(db, collectionName), where("email", "==", email), limit(1));
       const querySnapshot = await getDocs(q);
@@ -350,7 +467,4 @@ tr,
 td {
   border: 1px solid black;
 }
-
-.card:hover {
-  background-color: #f0f0f0;
-}</style>
+</style>

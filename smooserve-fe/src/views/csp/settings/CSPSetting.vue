@@ -40,7 +40,6 @@ const dbAccessToken = ref("");
 const dbRefreshToken = ref("");
 const meetingsList = ref();
 
-
 function add() {
   const input = document.createElement("input");
   input.type = "file";
@@ -193,7 +192,7 @@ const getZoomMeetings = async () => {
       life: 3000,
     });
   }
-}
+};
 
 const getTokens = async () => {
   const cspTokens = await axios
@@ -436,13 +435,16 @@ function formatDateTimeToISOString(dateTime) {
             >
 
             <div class="card">
-        <DataTable :value="meetingsList.meetings" tableStyle="min-width: 50rem">
-            <Column field="id" header="ID"></Column>
-            <Column field="topic" header="Topic"></Column>
-            <Column field="start_time" header="Time"></Column>
-            <Column field="join_url" header="Link"></Column>
-        </DataTable>
-    </div>
+              <DataTable
+                :value="meetingsList.meetings"
+                tableStyle="min-width: 50rem"
+              >
+                <Column field="id" header="ID"></Column>
+                <Column field="topic" header="Topic"></Column>
+                <Column field="start_time" header="Time"></Column>
+                <Column field="join_url" header="Link"></Column>
+              </DataTable>
+            </div>
           </template>
         </Card>
       </div>
