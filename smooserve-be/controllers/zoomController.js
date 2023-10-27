@@ -4,13 +4,21 @@ const firebase = require("../db");
 const Csp = require("../models/csp");
 const axios = require("axios");
 const firestore = firebase.firestore();
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const {
+  CLIENT_ID,
+  CLIENT_SECRET 
+} = process.env;
 
 //zoom auth, rmb to configure domain url when in prod
 const getZoomAuth = async (req, res) => {
   try {
     return res.redirect(
       encodeURI(
-        `https://zoom.us/oauth/authorize?response_type=code&client_id=DgWlPZgGSrGcJOBMXERH2w&redirect_uri=${encodeURI(
+        `https://zoom.us/oauth/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURI(
           "http://localhost:8080/api/zoomRedirect"
         )}`
       )
@@ -36,7 +44,7 @@ const getZoomRedirect = async (req, res) => {
         Authorization:
           "Basic " +
           Buffer.from(
-            "DgWlPZgGSrGcJOBMXERH2w:UjVGte9FWBtP3AhzdAjiYXnsyRRHDK2Z"
+            `${CLIENT_ID}:${CLIENT_SECRET}`
           ).toString("base64"),
       },
       data: data,
@@ -57,7 +65,7 @@ const getZoomRedirect = async (req, res) => {
   } else {
     res.redirect(
       encodeURI(
-        `https://zoom.us/oauth/authorize?response_type=code&client_id=DgWlPZgGSrGcJOBMXERH2w&redirect_uri=${encodeURI(
+        `https://zoom.us/oauth/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURI(
           "http://localhost:8080/api/zoomRedirect"
         )}`
       )
@@ -78,7 +86,7 @@ const getNewAccessToken = async (req, res) => {
         Authorization:
           "Basic " +
           Buffer.from(
-            "DgWlPZgGSrGcJOBMXERH2w:UjVGte9FWBtP3AhzdAjiYXnsyRRHDK2Z"
+            `${CLIENT_ID}:${CLIENT_SECRET}`
           ).toString("base64"),
       },
       data: data,
