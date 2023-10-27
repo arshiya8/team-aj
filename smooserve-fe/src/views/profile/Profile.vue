@@ -1,367 +1,440 @@
-<!-- <script setup>
-// Sample data for past and registered activities (replace with data from your database)
-const pastActivitiesData = [
-  { name: "Activity 1", date: "2023-09-01", cspHours: 2 },
-  { name: "Activity 2", date: "2023-08-15", cspHours: 2 },
-];
+<template>
+  
+  <div>
+    <!-- Include NavBar component here -->
+    <NavBar />
+  </div>
+  <main class="crypto_bg">
+      <!-- Display User Profile -->
+      <div class="center-container">
+      <div class="user-profile" v-show="!editMode">
+          <div class="card">
+            <img :src="profilePicture" class="circular-crop" alt="Profile Picture" />
+            <Card style="width: 75em;">
+              <template #title>{{ name }}</template>
+              <template #subtitle>{{ email }}</template>
+              <template #content>
+                <p><strong>Contact Number:</strong> {{ contact }}</p>
+                <p><strong>Description:</strong> {{ description }}</p>
+                <p><strong>Commitments:</strong> {{ commitments.join(", ") }}</p>
+              </template>
+              <template #footer>
+                <Button icon="pi pi-pencil" label="Edit" @click="editProfile" />
+              </template>
+            </Card>
+          </div>
+        </div>
+      </div>
+      
 
-const registeredActivitiesData = [
-  { name: "Activity 3", date: "2023-09-10", status: "Pending" },
-  { name: "Activity 4", date: "2023-09-20", status: "Accepted" },
-  { name: "Activity 5", date: "2023-09-25", status: "Rejected" },
-];
+      <!-- User Profile Form -->
+      <div id="userProfile" v-show="editMode">
+        <form class="row g-3" id="userDetailsForm">
+          <div class="col-lg-6">
+            <label for="profilePicture" class="form-label">Profile Picture:</label>
+            <input type="file" style="display: none" id="profilePicture" accept="image/*" @change="handleProfilePictureChange" />
+        <!-- Create a custom PrimeVue-styled button -->
+        <Button @click="selectFile" severity="success">
+          <i class="pi pi-upload"></i> Choose File
+        </Button>
+            <img :src="profilePicture" class="circular-crop" alt="Profile Picture" />
+          </div>
+          <div class="col-lg-6">
+            <label for="name" class="form-label">Name:</label>
+            <InputText size= "small" v-model="name" type="text" class="form-control" id="name1" placeholder="Name" required />
+          </div>
+          <div class="col-lg-6">
+            <label for="email" class="form-label">Email:</label>
+            <InputText size= "small" v-model="email" type="email" class="form-control" id="email1" placeholder="Email" required />
+          </div>
+          <div class="col-lg-6">
+            <label for="contact" class="form-label">Contact Number:</label>
+            <InputText size="small" v-model="contact" type="tel" class="form-control" id="contact" placeholder="Contact" required />
+          </div>
+          <div class="col-lg-6">
+            <label for="Description1" class="form-label">Describe yourself:</label>
+            <InputText size="small" v-model="description" class="form-control" id="Description1" rows="5" placeholder="Describe yourself"/>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12">
+            <label for="commitment">Commitment:</label>
+            <select v-model="selectedCommitment" id="commitment" name="commitment">
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+            </select>
+            <Button type="button" @click="addCommitment">Add</button>
+          </div>
+          <div class="pt-3 col-lg-6 col-md-6 col-sm-12 order-last">
+            <Button type="button" @click="updateProfile">Update Profile</button>
+          </div>
+        </form>
 
-// Function to calculate cspHours by summing values from pastActivitiesData
-function calculateCSPHours() {
-  return pastActivitiesData.reduce((total, activity) => {
-    return total + (activity.cspHours || 0);
-  }, 0);
-}
+        <!-- Commitment List -->
+        <div class="commitment-list">
+          <ul>
+            <li v-for="(commitment, index) in commitments" :key="index">
+              {{ commitment }}
+              <Button @click="removeCommitment(index)" severity="danger">Remove</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </main>
+  
+    <TabView>
+        <!-- Quiz Tab -->
+        <TabPanel header="Quiz Data">
+          <div class="quiz" style="background-color: antiquewhite;">
+                <h2>Quiz Data</h2>
+          </div>
+                <div v-if="quizDataLoaded">
+                  <!-- Display quiz data fetched from the Quiz Vue component -->
+                  <div v-for="(question, index) in quizData.questions" :key="index">
+                    <h4>Question {{ index + 1 }}</h4>
+                    <p>{{ question.text }}</p>
+                    <!-- Display answer options -->
+                    <ul>
+                      <li v-for="(answer, aIndex) in question.answers" :key="aIndex">
+                        <input type="radio" :id="`q${index}_a${aIndex}`" :name="`q${index}`" />
+                        <label :for="`q${index}_a${aIndex}`">{{ answer.text }}</label>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div v-else>
+                  <p>Loading quiz data...</p>
+                </div>
+                <Button label="Take Quiz Again" @click="takeQuizAgain" />
+              
+        </TabPanel>
 
-// Function to update the CSP Hours display in the HTML
-function updateCSPHoursDisplay() {
-  const cspHoursValue = document.getElementById("cspHoursValue");
-  const cspHours = calculateCSPHours();
-  cspHoursValue.textContent = cspHours;
-}
+        <!-- Registered CSPs Tab -->
+        <TabPanel header="Registered CSPs">
+          <div style="background-color: antiquewhite;">
+      <h2>Registered CSPs</h2>
+    </div>
+    <table class="registered-CSP-table">
+      <thead>
+        <tr>
+          <th>Registered CSP</th>
+          <th>CSP Contact</th>
+          <th>Status</th>
+          <th>Schedule Interview</th>
+        </tr>
+      </thead>
+      <template v-if="registeredCSPs.length > 0">
+        <tbody>
+          <!-- Example CSP entry -->
+          <tr v-for="(csp, index) in registeredCSPs" :key="index">
+            <td>{{ csp.cspName }}</td>
+            <td>{{ csp.cspContact }}</td>
+            <td>{{ csp.status }}</td>
+            <td>
+              <Dropdown v-model="csp.selectedTimeSlot" :options="csp.availableTimeSlots" optionLabel="time"
+                placeholder="Select Time Slot" class="p-dropdown">
+                <template #selected>
+                  {{ csp.selectedTimeSlot || 'Select Time Slot' }}
+                </template>
+              </Dropdown>
+            </td>
+          </tr>
+          <!-- More CSP entries... -->
+        </tbody>
+      </template>
+      <template v-else>
+        <div>
+          <!-- Show this message when there are no registered CSPs -->
+          There are no registered CSPs.
+        </div>
+      </template>
+    </table>
+    <tbody>
+      <!-- Add upcoming interview data here -->
+    </tbody>
+        </TabPanel>
 
-// Function to populate past activities list
-function populatePastActivities() {
-  const pastActivitiesList = document.getElementById("pastActivities");
+        <!-- Favorites Tab -->
+        <TabPanel header="Favorites">
+          <div style="background-color: antiquewhite;">
+            <h2>Favorites</h2>
+          </div>
+          <div class="card">
+            <TabView>
+              <TabPanel v-for="tab in tabs" :key="tab.title" :header="tab.title">
+                <ShopCarousel v-if="tab.title === 'Smooserve Shops'" :shops="shops" />
+                <CSPCarousel v-if="tab.title === 'CSPs'" :csps="csps" />
+                <p class="m-0" v-else>{{ tab.content }}</p>
+              </TabPanel>
+            </TabView>
+          </div>
+          <div id="noFavoritesMessage" style="display: none;">You have no favorites currently.</div>
+        </TabPanel>
+      </TabView>
+    
+    <!-- ... rest of your code ... -->
+</template>
 
-  pastActivitiesData.forEach((activity) => {
-    const listItem = document.createElement("li");
-    listItem.textContent = `${activity.name} - ${activity.date}`;
+<script>
+import { ref } from 'vue';
+import Card from 'primevue/card';
+import TabMenu from 'primevue/tabmenu';
+import TabPanel from 'primevue/tabpanel';
+import Tag from 'primevue/tag';
+import Button from 'primevue/button';
+import ShopCarousel from './ShopCarousel.vue';
+import CSPCarousel from './CSPCarousel.vue';
+import NavBar from "/src/components/NavBar.vue";
+import InputText from 'primevue/inputtext';
 
-    pastActivitiesList.appendChild(listItem);
-  });
-}
 
-// Populate registered activities list
-function populateRegisteredActivities() {
-  const registeredActivitiesList = document.getElementById(
-    "registeredActivities"
-  );
+export default {
+  components: {
+    ShopCarousel,
+    CSPCarousel,
+    NavBar,
+  },
+  methods: {
+    selectFile() {
+      // Trigger the file input when the button is clicked
+      document.getElementById('profilePicture').click();
+    },
+    // ... Your existing methods ...
+  },
 
-  registeredActivitiesData.forEach((activity) => {
-    const listItem = document.createElement("li");
-    listItem.textContent = `${activity.name} - ${activity.date} (${activity.status})`;
+  setup() {
+    const registeredCSPs = ref([
+      {
+        cspName: 'CSP Name 1',
+        cspContact: 'CSP Contact Information 1',
+        status: 'Pending',
+        availableTimeSlots: [
+          { time: 'Monday 12:30pm' },
+          { time: 'Tuesday 8:30am' },],
+        selectedTimeSlot: '',
+      },
+      {
+        cspName: 'CSP Name 2',
+        cspContact: 'CSP Contact Information 2',
+        status: 'Accepted',
+      },
+      {
+        cspName: 'CSP Name 3',
+        cspContact: 'CSP Contact Information 3',
+        status: 'Pending',
+        availableTimeSlots: [
+          { time: 'Wednesday 4:30pm' },
+          { time: 'Thursday 10:30am' },],
+        selectedTimeSlot: '',
+      },
+      // Add more fake data objects as needed
+    ]);
+    const profilePicture = ref('');
+    const name = ref('');
+    const email = ref('');
+    const contact = ref('');
+    const description = ref('');
+    const selectedCommitment = ref(null);
+    const commitments = ref(['']);
+    const editMode = ref(false);
+    const tabs = ref([
+      {
+        title: 'Smooserve Shops',
+        content: '',
+      },
+      {
+        title: 'CSPs',
+        content: '',
+      },
+    ]);
 
-    registeredActivitiesList.appendChild(listItem);
-  });
-}
-
-function createDeleteButton(listItem) {
-  const deleteButton = document.createElement("button");
-  deleteButton.textContent = "Delete";
-
-  deleteButton.addEventListener("click", () => {
-    // Remove the corresponding list item when the "delete" button is clicked
-    listItem.remove();
-  });
-
-  listItem.appendChild(deleteButton);
-}
-
-// Event listener for the interests dropdown menu
-document.getElementById("interests").addEventListener("change", function () {
-  const selectedInterest = this.value; // Get the selected interest from the dropdown
-
-  // Add the selected interest to the "Interest List"
-  const interestList = document.getElementById("interestList");
-  const listItem = document.createElement("li");
-  listItem.textContent = selectedInterest;
-
-  // Add a "delete" button next to the interest item
-  const deleteButton = createDeleteButton(listItem);
-
-  interestList.appendChild(listItem);
-});
-
-// Populate the initial lists of activities
-populatePastActivities();
-populateRegisteredActivities();
-
-// Function to handle image upload
-function handleImageUpload(event) {
-  const fileInput = event.target;
-  const imagePreview = document.getElementById("profileImagePreview");
-  const previewImage = document.getElementById("previewProfileImage");
-
-  const file = fileInput.files[0];
-
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      previewImage.src = e.target.result;
-      imagePreview.style.display = "block";
+    const addCommitment = () => {
+      if (selectedCommitment) {
+        commitments.value.push(selectedCommitment.value);
+        selectedCommitment.value = '';
+      }
     };
-    reader.readAsDataURL(file);
-  }
-}
 
-// Event listener for the image upload button
-document
-  .getElementById("profileUploadButton")
-  .addEventListener("click", function () {
-    const imageUpload = document.getElementById("profileImageUpload");
-    imageUpload.click();
+    const removeCommitment = (index) => {
+      commitments.value.splice(index, 1);
+    };
+
+    const updateProfile = () => {
+      editMode.value = false;
+    };
+
+    const editProfile = () => {
+      editMode.value = true;
+    };
+
+    const handleProfilePictureChange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        profilePicture.value = URL.createObjectURL(file);
+      }
+    };
+
+    // Dummy data for shops and csps
+    const shops = ref([
+      { name: 'Shop 1', price: 100, inventoryStatus: 'INSTOCK', image: 'image1.jpg' },
+      { name: 'Shop 2', price: 120, inventoryStatus: 'LOWSTOCK', image: 'image2.jpg' },
+      // Add more shop data as needed
+    ]);
+
+    const csps = ref([
+      { name: 'CSP 1', price: 50, inventoryStatus: 'INSTOCK', image: 'csp1.jpg' },
+      { name: 'CSP 2', price: 70, inventoryStatus: 'LOWSTOCK', image: 'csp2.jpg' },
+      // Add more CSP data as needed
+    ]);
+
+    return {
+      registeredCSPs, // Replace with your CSP data
+      profilePicture,
+      name,
+      email,
+      contact,
+      description,
+      selectedCommitment,
+      commitments,
+      addCommitment,
+      removeCommitment,
+      updateProfile,
+      editProfile,
+      handleProfilePictureChange,
+      editMode,
+      tabs,
+      shops,
+      csps,
+    };
+  },
+};
+// Hide the "Registered CSP" table initially
+const registeredCspTable = document.querySelector('.registered-CSP');
+const noRegisteredCspMessage = document.getElementById('noRegisteredCspMessage'); // Get the message element
+
+// Example data fetching logic (replace with your actual data fetching)
+fetch('get_registered_csp_data.php') // Replace with your actual data source URL
+  .then(response => response.json())
+  .then(data => {
+    // Check if there is data
+    if (data.length > 0) {
+      // There are registered CSPs, hide the message and display the table
+      noRegisteredCspMessage.style.display = 'none';
+      registeredCspTable.style.display = 'table'; // Display the table
+
+      // Get the table body
+      const tableBody = registeredCspTable.querySelector('tbody');
+
+      // Clear previous content
+      tableBody.innerHTML = '';
+
+      // Iterate through the data and create rows
+      data.forEach(item => {
+        const row = tableBody.insertRow();
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+        const cell3 = row.insertCell(2);
+        const cell4 = row.insertCell(3);
+
+        cell1.textContent = item.cspName; // Replace with your actual data property
+        cell2.textContent = item.registeredDate; // Replace with your actual data property
+        cell3.textContent = item.cspContact; // Replace with your actual data property
+        cell4.textContent = item.status; // Replace with your actual data property
+      });
+    } else {
+      // There are no registered CSPs, display the message and hide the table
+      noRegisteredCspMessage.style.display = 'block';
+      registeredCspTable.style.display = 'none';
+    }
+  })
+  .catch(error => {
+    console.error('Error fetching registered CSP data:', error);
+    // Handle the error here
+    noRegisteredCspMessage.style.display = 'block';
+    registeredCspTable.style.display = 'none';
   });
 
-// Event listener for the image upload input
-document
-  .getElementById("profileImageUpload")
-  .addEventListener("change", handleImageUpload);
+function showScheduleDropdown(button) {
+  // Get the parent row containing the button and dropdown
+  const row = button.parentElement.parentElement;
 
-// Badge system
-const socialImpactorBadge = document.getElementById("socialImpactorBadge");
-const serviceEnthusiastBadge = document.getElementById(
-  "serviceEnthusiastBadge"
-);
+  // Find the dropdown within the row
+  const dropdown = row.querySelector(".schedule-dropdown");
 
-// Update CSP Hours display initially
-updateCSPHoursDisplay();
-
-// Calculate cspHours and update badges and progress bar when needed
-function updateBadgesAndProgressBar() {
-  const cspHours = calculateCSPHours();
-
-  if (cspHours >= 80) {
-    serviceEnthusiastBadge.classList.add("earned-badge");
+  // Toggle the visibility of the dropdown
+  if (dropdown.style.display === "block") {
+    dropdown.style.display = "none";
   } else {
-    serviceEnthusiastBadge.classList.remove("earned-badge");
+    dropdown.style.display = "block";
   }
+}
 
-  if (cspHours > 0) {
-    socialImpactorBadge.classList.add("earned-badge");
-  } else {
-    socialImpactorBadge.classList.remove("earned-badge");
+
+function scheduleInterview(button) {
+  const dropdown = button.parentNode; // Get the parent div containing the dropdown
+  const selectedTimeSlot = dropdown.querySelector("#interviewTime").value;
+  const cspName = button.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.textContent; // Get CSP name
+
+  // Send scheduling information to the CSP organization (You can use AJAX or other methods)
+
+  // Example: Display a confirmation message
+  alert(`Scheduled an interview with ${cspName} on ${selectedTimeSlot}`);
+}
+const statusCells = document.querySelectorAll("td:nth-child(4)"); // Select all "Status" cells
+
+statusCells.forEach(statusCell => {
+  if (statusCell.textContent === "Accepted") {
+    const buttonCell = statusCell.nextElementSibling; // Get the cell with the button
+    buttonCell.innerHTML = ""; // Remove the button
   }
+});
+</script>
 
-  const progressBar = document.getElementById("progressBar");
-  const progressBarWidth = (cspHours / 80) * 100;
-  progressBar.style.width = `${progressBarWidth}%`;
-}
+<style scoped>
 
-// Call updateBadgesAndProgressBar whenever there's a change in pastActivitiesData
-// For example, after adding or updating activities in pastActivitiesData
-updateBadgesAndProgressBar();
-</script> -->
-<style>
-/* styles.css */
-
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #064273;
-}
-
-.container {
-  max-width: 800px;
-  margin: 20px auto;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-.profile-section {
+.center-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Adjust the height as needed */
 }
 
-.interests-section {
-  flex: 1;
-  padding: 20px;
+
+.crypto_bg {
+  background: linear-gradient(#064273, white)
 }
 
-.select-box {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #def3f6;
-  border-radius: 5px;
-}
 
-.action-button {
-  background-color: #76b6c4;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.image-section {
-  flex: 1;
-  text-align: center;
-}
-
-.profile-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 50%; /* Circular shape */
-  margin-top: 20px;
-}
-
-.activities-section {
-  margin-top: 20px;
-}
-
-.info-list {
-  list-style: none;
-  padding: 0;
-}
-
-.info-list li {
-  margin-bottom: 10px;
-  padding: 5px;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.info-list li button {
-  background-color: #7fcdff;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-left: 10px;
-}
-
-.circular-image-preview {
-  width: 200px; /* Adjust the size as needed */
+.circular-crop {
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
-  overflow: hidden;
+  object-fit: cover;
+  margin: 0 auto;
+  display: block;
 }
 
-.circular-image-preview img {
-  width: 200px;
+/* CSS for the "Schedule Interview" button */
+.schedule-button {
+  position: relative;
 }
 
-/* Existing CSS styles above this line */
-
-/* Badge styles */
-.earned-badge {
-  background-color: #27ae60 !important; /* Change color for earned badges */
-}
-
-/* Progress bar styles */
-.progress-bar-container {
-  background-color: #ecf0f1;
-  height: 20px;
+/* Style for tables */
+table {
   width: 100%;
-  border-radius: 5px;
-  margin-top: 10px;
+  border-collapse: collapse;
 }
 
-.progress-bar {
-  height: 100%;
-  background-color: #3498db;
-  border-radius: 5px;
-  transition: width 0.5s;
+th,
+td {
+  border: 1px solid black;
+  padding: 8px;
 }
 
-/* Favorites tab styles */
-.favorites {
-  margin-top: 20px;
+th {
+  background-color: #f2f1f1;
 }
-
-.favorites h2 {
-  margin-top: 20px;
-}
-
-/* Existing CSS styles below this line */
 </style>
 
-<template>
-  <div class="container">
-    <img src="/layout/images/logo-white.png" width="25%" height="25%" />
-    <h1>Student Profile</h1>
-    <div class="profile-section">
-      <div class="interests-section">
-        <label for="interests">Select Interests:</label>
-        <select id="interests" class="select-box">
-          <option value="Elderly">Elderly</option>
-          <option value="Youth">Youth</option>
-          <option value="Children">Children</option>
-          <option value="Others">Others</option>
-        </select>
-        <ul id="interestList" class="info-list"></ul>
-      </div>
-
-      <div class="image-section">
-        <input
-          type="file"
-          id="profileImageUpload"
-          accept="image/*"
-          style="display: none"
-        />
-        <button id="profileUploadButton" class="action-button">
-          Upload Profile Picture
-        </button>
-        <div
-          id="profileImagePreview"
-          class="circular-image-preview"
-          style="display: none"
-        >
-          <img
-            id="previewProfileImage"
-            src="http://placehold.it/32x32"
-            alt="Profile Picture"
-            class="profile-image"
-          />
-        </div>
-      </div>
-    </div>
-
-    <div class="activities-section">
-      <h2>Past Volunteered Activities</h2>
-      <ul id="pastActivities" class="info-list">
-        <!-- Activities will be dynamically added here using JavaScript -->
-      </ul>
-
-      <h2>Registered Activities</h2>
-      <ul id="registeredActivities" class="info-list">
-        <!-- Activities will be dynamically added here using JavaScript -->
-      </ul>
-
-      <!--Badge section -->
-      <div class="badges">
-        <h2>Badges</h2>
-        <div class="badge" id="socialImpactorBadge">Social Impactor Badge</div>
-        <div class="badge" id="serviceEnthusiastBadge">
-          Service Enthusiast Badge
-        </div>
-      </div>
-
-      <!-- Progress section -->
-      <div class="progress">
-        <h2>Progress</h2>
-        <div class="progress-bar-container">
-          <div class="progress-bar" id="progressBar"></div>
-        </div>
-        <!-- Display CSP Hours -->
-        <p id="cspHoursDisplay">
-          Total CSP Hours: <span id="cspHoursValue">0</span>
-        </p>
-      </div>
-    </div>
-
-    <div class="image-section">
-      <!-- Your existing image section remains unchanged -->
-
-      <!-- Add a favorites section -->
-      <div class="favorites">
-        <h2>Favorites</h2>
-        <ul id="favoritesList">
-          <!-- Favorite CSPs will be dynamically added here -->
-        </ul>
-      </div>
-    </div>
-  </div>
-</template>
+<!-- End of Basic Profile -->
