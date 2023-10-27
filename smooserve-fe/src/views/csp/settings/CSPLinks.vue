@@ -1,16 +1,21 @@
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 import axios from "axios";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import draggable from "vuedraggable";
 import CSPNavBar from "../CSPNavBar.vue";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { collection, query, where, getDocs, limit } from "firebase/firestore";
+import { db } from "@/firebase";
+
+const auth = getAuth();
 
 const toast = useToast();
 
-const route = useRoute();
+const router = useRouter();
 
-const CSPid = route.params.id;
+const CSPid = ref();
 
 const urlList = ref([]);
 
@@ -19,7 +24,6 @@ const csp = ref([]);
 const loading = ref(true);
 
 const drag = ref(true);
-const active = ref(true);
 
 const buttonColor = ref("");
 
@@ -71,9 +75,8 @@ function changeIcon(name, index) {
 function save() {
   loading.value = true;
   csp.value.settings.urls = urlList.value;
-  console.log(csp.value);
   axios
-    .put("https://smooserve-be.vercel.app/api/csp/" + CSPid, csp.value)
+    .put("https://smooserve-be.vercel.app/api/csp/" + CSPid.value, csp.value)
     .then((response) => {
       toast.add({
         severity: "success",
@@ -104,8 +107,15 @@ const dragOptions = computed(() => {
 });
 
 onMounted(async () => {
-  axios
-    .get("https://smooserve-be.vercel.app/api/csp/" + CSPid)
+  onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // User is signed in
+        loading.value = true;
+        console.log(CSPid);
+        CSPid.value = await getDocumentIdByEmail(user.email, "CSPs");
+
+        axios
+    .get("https://smooserve-be.vercel.app/api/csp/" + CSPid.value)
     .then((response) => {
       csp.value = response.data;
       response.data.settings.urls != null
@@ -122,6 +132,11 @@ onMounted(async () => {
       });
     })
     .finally(() => (loading.value = false));
+    } else {
+          // User is signed out
+          router.push({ name: 'Login' })
+        }
+      });
 });
 
 watch(
@@ -134,6 +149,21 @@ watch(
     });
   }
 );
+
+async function getDocumentIdByEmail(email, collectionName) {
+      const q = query(collection(db, collectionName), where("email", "==", email), limit(1));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        // Get the first document (if there are multiple matching)
+        const doc = querySnapshot.docs[0];
+        // Access the document ID
+        return doc.id;
+      } else {
+        // No matching document found
+        return null;
+      }
+    }
 </script>
 <template>
   <Toast></Toast>

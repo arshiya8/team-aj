@@ -4,7 +4,9 @@ import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import CSPNavbar from "../CSPNavBar.vue";
-// import { db, storage } from "@/firebase";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { collection, query, where, getDocs, limit } from "firebase/firestore";
+import { db } from "@/firebase";
 import {
   getStorage,
   uploadBytes,
@@ -12,13 +14,14 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 
+const auth = getAuth();
 const storage = getStorage();
 
 const toast = useToast();
 
-const route = useRoute();
+const router = useRouter();
 
-const CSPid = route.params.id;
+const CSPid = ref();
 
 const list = ref([]);
 
@@ -81,7 +84,7 @@ function save() {
   csp.value.registration.active = registerChecked.value;
   console.log(csp.value);
   axios
-    .put("https://smooserve-be.vercel.app/api/csp/" + CSPid, csp.value)
+    .put("https://smooserve-be.vercel.app/api/csp/" + CSPid.value, csp.value)
     .then((response) => {
       toast.add({
         severity: "success",
@@ -103,8 +106,14 @@ function save() {
 }
 
 onMounted(async () => {
-  axios
-    .get("https://smooserve-be.vercel.app/api/csp/" + CSPid)
+  onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // User is signed in
+        loading.value = true;
+        CSPid.value = await getDocumentIdByEmail(user.email, "CSPs");
+
+        axios
+    .get("https://smooserve-be.vercel.app/api/csp/" + CSPid.value)
     .then((response) => {
       csp.value = response.data;
       response.data.settings.urls
@@ -125,7 +134,27 @@ onMounted(async () => {
       });
     })
     .finally(() => (loading.value = false));
+    } else {
+          // User is signed out
+          router.push({ name: 'Login' })
+        }
+      });
 });
+
+async function getDocumentIdByEmail(email, collectionName) {
+      const q = query(collection(db, collectionName), where("email", "==", email), limit(1));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        // Get the first document (if there are multiple matching)
+        const doc = querySnapshot.docs[0];
+        // Access the document ID
+        return doc.id;
+      } else {
+        // No matching document found
+        return null;
+      }
+    }
 
 watch(
   () => buttonColor,

@@ -37,17 +37,22 @@ const routes = [
     component: () => import("@/views/csp/CSP.vue"),
   },
   {
-    path: "/csp/settings/:id",
+    path: "/csp/settings/",
     name: "CSPSetting",
     component: () => import("@/views/csp/settings/CSPSetting.vue"),
   },
   {
-    path: "/csp/links/:id",
+    path: "/csp/signups/",
+    name: "CSPSignup",
+    component: () => import("@/views/csp/settings/CSPSignup.vue"),
+  },
+  {
+    path: "/csp/links/",
     name: "CSPLinks",
     component: () => import("@/views/csp/settings/CSPLinks.vue"),
   },
   {
-    path: "/csp/appearance/:id",
+    path: "/csp/appearance/",
     name: "CSPApperance",
     component: () => import("@/views/csp/settings/CSPAppearance.vue"),
   },
