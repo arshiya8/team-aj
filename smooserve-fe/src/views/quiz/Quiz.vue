@@ -61,7 +61,7 @@ export default {
               "Environmental Conservation",
               "Education and Youth Development",
               "Healthcare and Medical Services",
-              "Construction"
+              "Arts and Culture"
             ],
           },
         },
@@ -75,7 +75,7 @@ export default {
               "Teaching or Tutoring",
               "Writing and Communication",
               "Event Planning and Coordination",
-              "Building"
+              "Artistic Skills Eg. Drawing"
             ],
           },
         },
