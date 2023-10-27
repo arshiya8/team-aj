@@ -1,23 +1,26 @@
 <template>
   <div class="card">
-    <Carousel :value="favoriteCSPs" :numVisible="3" :numScroll="3" :responsiveOptions="responsiveOptions">
-      <template #item="slotProps">
-        <div v-for="(csp, index) in favoriteCSPs" :key="index"
-          class="border-1 surface-border border-round m-2 text-center py-5 px-3">
+    <Carousel v-if="favoriteCSPs.length > 0" :value="favoriteCSPs" :numVisible="3" :numScroll="3" :responsiveOptions="responsiveOptions">
+      <template #item="csp">
+        <div class="border-1 surface-border border-round m-2 text-center py-5 px-3">
           <div class="mb-3">
-            <img src="" :alt="csp.title" class="w-6 shadow-2" />
+            <img src="" :alt="csp.data.title" class="w-6 shadow-2" />
           </div>
           <div>
-            <!-- need to add a router link -->
-            <h4 class="mb-1">{{ csp.title }}</h4>
-            <p class="mt-0 mb-3">{{ csp.desc }}</p>
+             <!-- need to add a router link  -->
+            <h4 class="mb-1">{{ csp.data.title }}</h4>
+            <p class="mt-0 mb-3">{{ csp.data.desc }}</p>
             <div class="mt-5">
-              <Button icon="pi pi-times" rounded severity="danger" class="mr-2" raised @click="removeFavoriteCSP(csp)" />
+              <Button icon="pi pi-times" rounded severity="danger" class="mr-2" raised @click="removeFavoriteCSP(csp.data)" />
             </div>
           </div>
         </div>
       </template>
     </Carousel>
+    <div v-else style="display: flex; flex-direction: column; align-items: center; justify-content: center;" >
+      <h3 >No Favorites..</h3>
+      <router-link :to="{name: 'Home'}"><Button label="Add Favourites Now!"></Button></router-link>
+    </div>
   </div>
 </template>
 
@@ -27,6 +30,7 @@ import Carousel from 'primevue/carousel';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/firebase";
+import axios from 'axios';
 
 const favoriteCSPs = ref([]);
 let studentId = null;
@@ -58,7 +62,7 @@ onAuthStateChanged(auth, async (student) => {
   }
 });
 
-// removal does not work 
+
 const removeFavoriteCSP = (cspToRemove) => {
   // Find the index of the CSP in the favoriteCSPs array
   const index = favoriteCSPs.value.findIndex(csp => csp.id === cspToRemove.id);
@@ -66,6 +70,7 @@ const removeFavoriteCSP = (cspToRemove) => {
   // If the CSP is found, remove it from the favoriteCSPs array
   if (index !== -1) {
     favoriteCSPs.value.splice(index, 1);
+    console.log(favoriteCSPs.value)
     updateStudent(favoriteCSPs.value);
     localStorage.setItem('favoriteCSPs', JSON.stringify(favoriteCSPs.value));
   }
@@ -87,13 +92,13 @@ const updateStudent = async (updatedFavorites) => {
   }
 };
 
-// onMounted(async () => {
-//   const storedFavoriteCSPs = localStorage.getItem('favoriteCSPs');
-//   if (storedFavoriteCSPs) {
-//     favoriteCSPs.value = JSON.parse(storedFavoriteCSPs);
-//   }
+onMounted(async () => {
+  const storedFavoriteCSPs = localStorage.getItem('favoriteCSPs');
+  if (storedFavoriteCSPs) {
+    favoriteCSPs.value = JSON.parse(storedFavoriteCSPs);
+  }
 
-// });
+});
 
 
 const responsiveOptions = ref([
