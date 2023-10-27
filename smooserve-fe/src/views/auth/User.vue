@@ -1,7 +1,8 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { defineComponent, ref, computed, onMounted } from 'vue';
 import { getAuth,onAuthStateChanged, signOut } from 'firebase/auth';
 import { useRouter } from 'vue-router';
+import TypeEffect from '../../components/TypeEffect.vue';
 
 
 const router = useRouter()
@@ -34,6 +35,12 @@ const handleSignOut = () => {
 const logoUrl = computed(() => {
     return `/layout/images/logo-white.png`;
 });
+
+const TypeEffectComponent = defineComponent({
+  components: {
+    TypeEffect
+  }
+});
 </script>
 
 <template>
@@ -41,14 +48,14 @@ const logoUrl = computed(() => {
         <div class="flex flex-column align-items-center justify-content-center">
             <router-link :to="{ name: 'Home' }"><img :src="logoUrl" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0" /></router-link>
             <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
-                <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius: 53px">
+                <div class="w-full surface-card  px-8 sm:px-8" style="border-radius: 53px">
                     <div class="text-center mb-5">
-                        <div class="text-900 text-3xl font-medium mb-3">Welcome{{ ', ' + user?.displayName }}!</div>
-                        <span class="text-600 font-medium">Email: {{user?.email}}</span>
+                        <div class="text-900 text-3xl font-medium mb-3"> <TypeEffect/></div>
+                        <!-- <span class="text-600 font-medium">Email: {{user?.email}}</span> -->
                         <!-- <Button @click="handleSignOut" v-if="isLoggedIn" label="Sign Out" class="w-full p-3 text-xl"></Button> -->
 
-                        <router-link :to="{ name: 'Quiz'}">
-                        <Button v-if="isLoggedIn" label="Set Up Your Account" class="w-full p-3 text-xl"></Button></router-link>
+                        <!-- <router-link :to="{ name: 'Quiz'}">
+                        <Button v-if="isLoggedIn" label="Set Up Your Account" class="w-full p-3 text-xl"></Button></router-link> -->
                     </div>
                 </div>
             </div>
