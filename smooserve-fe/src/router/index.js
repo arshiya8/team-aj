@@ -68,6 +68,17 @@ const routes = [
     name: "Quiz",
     component: () => import("@/views/quiz/Quiz.vue"),
   },
+
+  {
+    path: "/NearYou",
+    name: "Map",
+    component: () => import("@/views/maps/map.vue"),
+  },
+  {
+    path: "/shop",
+    name: "Shop",
+    component: () => import("@/views/shops/shop.vue"),
+  },
   //rayne
   {
     path: "/profile",
@@ -77,6 +88,7 @@ const routes = [
       requiresAuth: true
     }
   }
+
 ];
 
 const router = createRouter({

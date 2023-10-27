@@ -107,6 +107,9 @@ import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css'
 
+// bootstrap things
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 import { initializeApp } from 'firebase/app';
 
 const app = createApp(App)
