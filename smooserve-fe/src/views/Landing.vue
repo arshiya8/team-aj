@@ -262,7 +262,7 @@ export default {
 
   <!-- tilted cards -->
   <div class="ct">
-    <div class="card-container">
+    <div class="card-container" style="flex-wrap: nowrap;">
       <div class="card rd">
         <img style="border-radius: 15px;" src="/layout/images/card1.jpg">
       </div>
@@ -483,6 +483,8 @@ export default {
   text-align: justify;
 }
 
+/* tilted cards */
+
 .ct {
   display: flex;
   justify-content: center;
@@ -532,7 +534,6 @@ export default {
   font-family: sans-serif;
   color: rgba(6, 66, 115);
 }
-
 
 /* navbar */
 .navbar {

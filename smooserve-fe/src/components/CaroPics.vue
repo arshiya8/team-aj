@@ -29,7 +29,7 @@
 
 <template>
   <div class="container-fluid">
-    <Carousel :value="images" :responsiveOptions="responsiveOptions" circular>
+    <Carousel :value="images" circular>
       <template #item="image">
         <div class="imItem">
           <img :src="image.data" :alt="image.data" class="d-block w-100" style="height: 450px; width:100%;" />
@@ -55,23 +55,6 @@ export default {
         "/layout/images/landing-img1.jpg",
         "/layout/images/landing-img2.jpg",
         "/layout/images/landing-img3.jpg",
-      ],
-      responsiveOptions: [
-        {
-          breakpoint: "1024px",
-          numVisible: 3,
-          numScroll: 1,
-        },
-        {
-          breakpoint: "768px",
-          numVisible: 2,
-          numScroll: 1,
-        },
-        {
-          breakpoint: "560px",
-          numVisible: 1,
-          numScroll: 1,
-        },
       ],
     };
   },
