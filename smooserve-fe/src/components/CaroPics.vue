@@ -1,53 +1,77 @@
 <style>
+@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css');
+
 .carousel-fluid {
   position: relative;
-  width: 100%;
-  margin: 0;
-  padding: 0;
+  max-width: 800px; /* Maximum width */
+  margin: 0 auto; /* Center it */
 }
 
-.imItem {
-  position: relative;
-}
-
-.imItem img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
-.text-overlay {
+.carousel-inner .content {
   position: absolute;
-  top: 0;
-  left: 0;
-  padding: 20px;
-  
-  font-weight: bold;
-  text-align: left;
+  top: 8px;
+  left: 16px;
 }
+
 </style>
 
 <template>
   <div class="container-fluid">
-    <Carousel :value="images" circular>
-      <template #item="image">
-        <div class="imItem">
-          <img :src="image.data" :alt="image.data" class="d-block w-100" style="height: 450px; width:100%;" />
-          <div class="text-overlay">
+
+    <div id="carouselExampleIndicators" class="carousel slide">
+      <ol class="carousel-indicators">
+        <li
+            v-for="(image, index) in images"
+            :key="index"
+            :class="{ active: index === currentImage }"
+            @click="goToImage(index)"
+        >
+        </li>
+      </ol>
+      <!-- Carousel Items -->
+      <div class="carousel-inner">
+        <div
+            v-for="(image, index) in images"
+            :key="index"
+            class="carousel-item"
+            :class="{ active: index === currentImage }"
+        >
+          <img :src="image" class="d-block w-100" style="height: 600px; width:100%;">
+          <div class="content">
             <h1 style="color:rgb(254, 254, 254); font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold;">EMPOWER THE <br> PEOPLE AROUND YOU</h1>
           </div>
         </div>
-      </template>
-    </Carousel>
+      </div>
+
+      <!-- Previous Button -->
+      <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExampleIndicators"
+          data-bs-slide="prev"
+          @click="prevImage"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+
+      <!-- Next Button -->
+      <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExampleIndicators"
+          data-bs-slide="next"
+          @click="nextImage"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
   </div>
 </template>
 <script>
-import Carousel from 'primevue/carousel';
 
 export default {
-  components: {
-    Carousel,
-  },
   data() {
     return {
       currentImage: 0,
@@ -55,9 +79,24 @@ export default {
         "/layout/images/landing-img1.jpg",
         "/layout/images/landing-img2.jpg",
         "/layout/images/landing-img3.jpg",
-      ],
+      ]
     };
   },
+  methods: {
+    prevImage() {
+      if (this.currentImage > 0) {
+        this.currentImage--;
+      }
+    },
+    nextImage() {
+      if (this.currentImage < this.images.length - 1) {
+        this.currentImage++;
+      }
+    },
+    goToImage(imageIndex) {
+      this.currentImage = imageIndex;
+    },
+  }
 };
 </script>
 

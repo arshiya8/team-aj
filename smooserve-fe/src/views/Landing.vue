@@ -334,7 +334,7 @@ export default {
   <div class="container-fluid" style="background-color: lightblue;">
     <div class="row">
       <div class="card-container">
-        <div class="col-md-6 col-sm-12 col-lg-4" v-for="(csp, index) in getVisibleCsps" :key="csp.id">
+        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4" v-for="(csp, index) in getVisibleCsps" :key="csp.id">
           <div class="flip-card">
             <div class="flip-card-inner">
               <div class="flip-card-front">
