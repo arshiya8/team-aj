@@ -121,8 +121,7 @@ const createMeeting = async (req, res) => {
     const response = await axios.post(apiUrl, meetingData, { headers });
 
     if (response.status === 201) {
-      const meetingInfo = response.data;
-      res.send(meetingInfo);
+      return res.json(response.data)
     } else {
         // Handle any errors or validation issues
         throw new Error("Failed to create the Zoom meeting");

@@ -5,6 +5,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import VueQrcode from "@chenfengyuan/vue-qrcode";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getDocumentIdByEmail } from "@/helper/helperFunctions.js";
 
 const toast = useToast();
 const visibleShare = ref(false);
@@ -188,6 +189,8 @@ onMounted(async () => {
       CSPImage.value = csp.value.imageURL;
 
       checkIfOwner(response.data.email);
+      const documentId = getDocumentIdByEmail(response.data.email, "CSPs", "view");
+      console.log(documentId);
     })
     .catch((error) => {
       console.log(error);
