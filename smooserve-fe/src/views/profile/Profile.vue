@@ -1,184 +1,206 @@
 <template>
-  
   <div>
     <!-- Include NavBar component here -->
     <NavBar />
   </div>
   <main class="crypto_bg">
-      <!-- Display User Profile -->
-      <div class="center-container">
+    <!-- Display User Profile -->
+    <div class="center-container">
       <div class="user-profile" v-show="!editMode">
-          <div class="card">
-            <img :src="profilePicture" class="circular-crop" alt="Profile Picture" />
-            <Card style="width: 75em;">
-              <template #title>{{ name }}</template>
-              <template #subtitle>{{ email }}</template>
-              <template #content>
-                <p><strong>Contact Number:</strong> {{ contact }}</p>
-                <p><strong>Description:</strong> {{ description }}</p>
-                <p><strong>Commitments:</strong> {{ commitments.join(", ") }}</p>
-              </template>
-              <template #footer>
-                <Button icon="pi pi-pencil" label="Edit" @click="editProfile" />
-              </template>
-            </Card>
+        <div class="card">
+          <img :src="profilePicture" class="circular-crop" alt="Profile Picture" />
+          <Card style="width: 75em;">
+            <template #title>{{ name }}</template>
+            <template #subtitle>{{ email }}</template>
+            <template #content>
+              <p><strong>Contact Number:</strong> {{ contact }}</p>
+              <p><strong>Description:</strong> {{ description }}</p>
+              <p><strong>Commitments:</strong> {{ commitments.join(", ") }}</p>
+            </template>
+            <template #footer>
+              <Button icon="pi pi-pencil" label="Edit" @click="editProfile" />
+            </template>
+          </Card>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- User Profile Form -->
+    <div id="userProfile" v-show="editMode">
+      <form class="row g-3" id="userDetailsForm"> 
+        <div class="col-lg-6">
+          <label for="profilePicture" class="form-label">Profile Picture:</label>
+          <input type="file" style="display: none" id="profilePicture" accept="image/*"
+            @change="handleProfilePictureChange" />
+          <!-- Create a custom PrimeVue-styled button -->
+          <Button @click="selectFile" severity="success">
+            <i class="pi pi-upload"></i> Choose File
+          </Button>
+          <img :src="profilePicture" class="circular-crop" alt="Profile Picture" />
+        </div>
+        <div class="grid p-fluid center-container">
+          <div class="col-12 md:col-5">
+            <div class="p-inputgroup">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-user"></i>
+              </span>
+              <InputText placeholder="Name" v-model="name" type="text" class="form-control" id="name1" required />
+            </div>
+          </div>
+
+          <div class="col-12 md:col-5">
+            <div class="p-inputgroup">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-phone"></i>
+              </span>
+              <InputText placeholder="Contact Number" v-model="contact" type="tel" class="form-control" id="contact"
+                required />
+              <span class="p-inputgroup-addon"></span>
+            </div>
+          </div>
+
+          <div class="col-12 md:col-5">
+            <div class="p-inputgroup">
+              <span class="p-inputgroup-addon"><i class="pi pi-envelope"></i></span>
+              <InputText placeholder="Email" v-model="email" type="email" class="form-control" id="email1" required />
+            </div>
+          </div>
+        
+        <div class="col-12 md:col-5">
+          <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-pencil"></i>
+            </span>
+            <InputText placeholder="Description" v-model="description" class="form-control" id="Description1" rows="5" />
           </div>
         </div>
       </div>
-      
+    <div class="col-12 md:col-5 center-container">
+      <label for="commitment">Commitment:</label>
+      <select v-model="selectedCommitment" id="commitment" name="commitment">
+        <option value="Monday">Monday</option>
+        <option value="Tuesday">Tuesday</option>
+        <option value="Wednesday">Wednesday</option>
+        <option value="Thursday">Thursday</option>
+        <option value="Friday">Friday</option>
+      </select>
+      <Button type="button" @click="addCommitment">Add</button>
+    </div>
+    <div class="col-12 md:col-5 right-align-div">
+      <Button type="button" @click="updateProfile">Update Profile</button>
+    </div>
+  </form>
+  
+    <!-- Commitment List -->
+    <div class="commitment-list">
+      <ol style="padding-left:100px">
+        <li v-for="(commitment, index) in commitments" :key="index">
+          {{ commitment }}
+          <Button @click="removeCommitment(index)" severity="danger">Remove</button>
+        </li>
+      </ol>
+    </div>
+  </div>
+  </main>
 
-      <!-- User Profile Form -->
-      <div id="userProfile" v-show="editMode">
-        <form class="row g-3" id="userDetailsForm">
-          <div class="col-lg-6">
-            <label for="profilePicture" class="form-label">Profile Picture:</label>
-            <input type="file" style="display: none" id="profilePicture" accept="image/*" @change="handleProfilePictureChange" />
-        <!-- Create a custom PrimeVue-styled button -->
-        <Button @click="selectFile" severity="success">
-          <i class="pi pi-upload"></i> Choose File
-        </Button>
-            <img :src="profilePicture" class="circular-crop" alt="Profile Picture" />
-          </div>
-          <div class="col-lg-6">
-            <label for="name" class="form-label">Name:</label>
-            <InputText size= "small" v-model="name" type="text" class="form-control" id="name1" placeholder="Name" required />
-          </div>
-          <div class="col-lg-6">
-            <label for="email" class="form-label">Email:</label>
-            <InputText size= "small" v-model="email" type="email" class="form-control" id="email1" placeholder="Email" required />
-          </div>
-          <div class="col-lg-6">
-            <label for="contact" class="form-label">Contact Number:</label>
-            <InputText size="small" v-model="contact" type="tel" class="form-control" id="contact" placeholder="Contact" required />
-          </div>
-          <div class="col-lg-6">
-            <label for="Description1" class="form-label">Describe yourself:</label>
-            <InputText size="small" v-model="description" class="form-control" id="Description1" rows="5" placeholder="Describe yourself"/>
-          </div>
-          <div class="col-lg-6 col-md-6 col-sm-12">
-            <label for="commitment">Commitment:</label>
-            <select v-model="selectedCommitment" id="commitment" name="commitment">
-              <option value="Monday">Monday</option>
-              <option value="Tuesday">Tuesday</option>
-              <option value="Wednesday">Wednesday</option>
-              <option value="Thursday">Thursday</option>
-              <option value="Friday">Friday</option>
-            </select>
-            <Button type="button" @click="addCommitment">Add</button>
-          </div>
-          <div class="pt-3 col-lg-6 col-md-6 col-sm-12 order-last">
-            <Button type="button" @click="updateProfile">Update Profile</button>
-          </div>
-        </form>
-
-        <!-- Commitment List -->
-        <div class="commitment-list">
+  <TabView>
+    <!-- Quiz Tab -->
+    <TabPanel header="Quiz Data">
+      <div class="quiz" style="background-color: antiquewhite;">
+        <h2>Quiz Data</h2>
+      </div>
+      <div v-if="quizDataLoaded">
+        <!-- Display quiz data fetched from the Quiz Vue component -->
+        <div v-for="(question, index) in quizData.questions" :key="index">
+          <h4>Question {{ index + 1 }}</h4>
+          <p>{{ question.text }}</p>
+          <!-- Display answer options -->
           <ul>
-            <li v-for="(commitment, index) in commitments" :key="index">
-              {{ commitment }}
-              <Button @click="removeCommitment(index)" severity="danger">Remove</button>
+            <li v-for="(answer, aIndex) in question.answers" :key="aIndex">
+              <input type="radio" :id="`q${index}_a${aIndex}`" :name="`q${index}`" />
+              <label :for="`q${index}_a${aIndex}`">{{ answer.text }}</label>
             </li>
           </ul>
         </div>
       </div>
-    </main>
-  
-    <TabView>
-        <!-- Quiz Tab -->
-        <TabPanel header="Quiz Data">
-          <div class="quiz" style="background-color: antiquewhite;">
-                <h2>Quiz Data</h2>
-          </div>
-                <div v-if="quizDataLoaded">
-                  <!-- Display quiz data fetched from the Quiz Vue component -->
-                  <div v-for="(question, index) in quizData.questions" :key="index">
-                    <h4>Question {{ index + 1 }}</h4>
-                    <p>{{ question.text }}</p>
-                    <!-- Display answer options -->
-                    <ul>
-                      <li v-for="(answer, aIndex) in question.answers" :key="aIndex">
-                        <input type="radio" :id="`q${index}_a${aIndex}`" :name="`q${index}`" />
-                        <label :for="`q${index}_a${aIndex}`">{{ answer.text }}</label>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div v-else>
-                  <p>Loading quiz data...</p>
-                </div>
-                <Button label="Take Quiz Again" @click="takeQuizAgain" />
-              
-        </TabPanel>
+      <div v-else>
+        <p>Loading quiz data...</p>
+      </div>
+      <Button label="Take Quiz Again" @click="takeQuizAgain" />
 
-        <!-- Registered CSPs Tab -->
-        <TabPanel header="Registered CSPs">
-          <div style="background-color: antiquewhite;">
-      <h2>Registered CSPs</h2>
-    </div>
-    <table class="registered-CSP-table">
-      <thead>
-        <tr>
-          <th>Registered CSP</th>
-          <th>CSP Contact</th>
-          <th>Status</th>
-          <th>Schedule Interview</th>
-        </tr>
-      </thead>
-      <template v-if="registeredCSPs.length > 0">
-        <tbody>
-          <!-- Example CSP entry -->
-          <tr v-for="(csp, index) in registeredCSPs" :key="index">
-            <td>{{ csp.cspName }}</td>
-            <td>{{ csp.cspContact }}</td>
-            <td>{{ csp.status }}</td>
-            <td>
-              <Dropdown v-model="csp.selectedTimeSlot" :options="csp.availableTimeSlots" optionLabel="time"
-                placeholder="Select Time Slot" class="p-dropdown">
-                <template #selected>
-                  {{ csp.selectedTimeSlot || 'Select Time Slot' }}
-                </template>
-              </Dropdown>
-            </td>
+    </TabPanel>
+
+    <!-- Registered CSPs Tab -->
+    <TabPanel header="Registered CSPs">
+      <div style="background-color: antiquewhite;">
+        <h2>Registered CSPs</h2>
+      </div>
+      <table class="registered-CSP-table">
+        <thead>
+          <tr>
+            <th>Registered CSP</th>
+            <th>CSP Contact</th>
+            <th>Status</th>
+            <th>Schedule Interview</th>
           </tr>
-          <!-- More CSP entries... -->
-        </tbody>
-      </template>
-      <template v-else>
-        <div>
-          <!-- Show this message when there are no registered CSPs -->
-          There are no registered CSPs.
-        </div>
-      </template>
-    </table>
-    <tbody>
-      <!-- Add upcoming interview data here -->
-    </tbody>
-        </TabPanel>
+        </thead>
+        <template v-if="registeredCSPs.length > 0">
+          <tbody>
+            <!-- Example CSP entry -->
+            <tr v-for="(csp, index) in registeredCSPs" :key="index">
+              <td>{{ csp.cspName }}</td>
+              <td>{{ csp.cspContact }}</td>
+              <td>{{ csp.status }}</td>
+              <td>
+                <Dropdown v-model="csp.selectedTimeSlot" :options="csp.availableTimeSlots" optionLabel="time"
+                  placeholder="Select Time Slot" class="p-dropdown">
+                  <template #selected>
+                    {{ csp.selectedTimeSlot || 'Select Time Slot' }}
+                  </template>
+                </Dropdown>
+              </td>
+            </tr>
+            <!-- More CSP entries... -->
+          </tbody>
+        </template>
+        <template v-else>
+          <div>
+            <!-- Show this message when there are no registered CSPs -->
+            There are no registered CSPs.
+          </div>
+        </template>
+      </table>
+      <tbody>
+        <!-- Add upcoming interview data here -->
+      </tbody>
+    </TabPanel>
 
-        <!-- Favorites Tab -->
-        <TabPanel header="Favorites">
-          <div style="background-color: antiquewhite;">
-            <h2>Favorites</h2>
-          </div>
-          <div class="card">
-            <TabView>
-              <TabPanel v-for="tab in tabs" :key="tab.title" :header="tab.title">
-                <ShopCarousel v-if="tab.title === 'Smooserve Shops'" :shops="shops" />
-                <CSPCarousel v-if="tab.title === 'CSPs'" :csps="csps" />
-                <p class="m-0" v-else>{{ tab.content }}</p>
-              </TabPanel>
-            </TabView>
-          </div>
-          <div id="noFavoritesMessage" style="display: none;">You have no favorites currently.</div>
-        </TabPanel>
-      </TabView>
-    
-    <!-- ... rest of your code ... -->
+    <!-- Favorites Tab -->
+    <TabPanel header="Favorites">
+      <div style="background-color: antiquewhite;">
+        <h2>Favorites</h2>
+      </div>
+      <div class="card">
+        <TabView>
+          <TabPanel v-for="tab in tabs" :key="tab.title" :header="tab.title">
+            <ShopCarousel v-if="tab.title === 'Smooserve Shops'" :shops="shops" />
+            <CSPCarousel v-if="tab.title === 'CSPs'" :csps="csps" />
+            <p class="m-0" v-else>{{ tab.content }}</p>
+          </TabPanel>
+        </TabView>
+      </div>
+      <div id="noFavoritesMessage" style="display: none;">You have no favorites currently.</div>
+    </TabPanel>
+  </TabView>
+
+  <!-- ... rest of your code ... -->
 </template>
 
 <script>
 import { ref } from 'vue';
 import Card from 'primevue/card';
+import Textarea from 'primevue/textarea';
 import TabMenu from 'primevue/tabmenu';
 import TabPanel from 'primevue/tabpanel';
 import Tag from 'primevue/tag';
@@ -393,11 +415,17 @@ statusCells.forEach(statusCell => {
 
 <style scoped>
 
+.right-align-div {
+  float: right;
+  padding-right: 100px;
+}
 .center-container {
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  height: 100vh; /* Adjust the height as needed */
+  justify-content: center;
+  /* Center horizontally */
+  align-items: center;
+  /* Center vertically */
+  /* Adjust the height as needed */
 }
 
 
