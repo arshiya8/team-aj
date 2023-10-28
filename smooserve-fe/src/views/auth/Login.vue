@@ -35,7 +35,7 @@ const submit = () => {
   signInWithEmailAndPassword(getAuth(), email.value, password.value)
     .then((data) => {
       console.log("Successfully registered");
-      router.replace({ name: "User" });
+      router.replace({ name: "Home" });
     })
     .catch((error) => {
       errorMessage.value = error.message;
@@ -49,7 +49,7 @@ const googleSignIn = () => {
         // The signed-in user info.
         // const user = result.user;
       console.log("Successfully registered");
-      router.replace({ name: "User" });
+      router.replace({ name: "Home" });
     })
     .catch((error) => {
       // Handle Errors here.

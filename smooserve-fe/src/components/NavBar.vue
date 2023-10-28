@@ -1,11 +1,29 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
-
+import { ref, computed, onMounted, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { collection, query, where, getDocs, limit } from "firebase/firestore";
+import { db } from "@/firebase";
 //login and logout things
 const isLoggedIn = ref(false)
 
-const auth = getAuth()
+const auth = getAuth();
+const router = useRouter();
+
+const route = useRoute();
+const CSPid = ref();
+
+onMounted(() => {
+  // onAuthStateChanged(auth, async (user) => {
+  //   if (user) {
+  //     isLoggedIn.value = true;
+  //     CSPid.value = await getDocumentIdByEmail(user.email, "CSPs");
+  //     console.log(CSPid.value);
+  //   } else {
+  //     isLoggedIn.value = false;
+  //   }
+  // });
+});
 
 onMounted(() => {
   onAuthStateChanged(auth, (user) => {
@@ -19,145 +37,112 @@ onMounted(() => {
 
 const handleSignOut = () => {
   signOut(auth).then(() => {
-    router.replace({ name: "Login" })
+    router.replace({ name: "Home" })
   })
 }
-
-//primevue things
-const smoothScroll = (id) => {
-  document.querySelector(id).scrollIntoView({
-    behavior: 'smooth'
-  });
-};
 
 const logoUrl = computed(() => {
   return `layout/images/logo-white.png`;
 });
+
+
+
+//menu
+const items = ref([
+  {
+    label: "HOME",
+    icon: "pi pi-home",
+    routeName: "Home",
+  },
+  {
+    label: "ABOUT US",
+    icon: "pi pi-info-circle",
+    routeName: "About",
+  },
+  {
+    label: "NEAR YOU",
+    icon: "pi pi-map-marker",
+    routeName: "Map",
+  },
+  {
+    label: "SMOOSERVE SHOP",
+    icon: "pi pi-shopping-cart",
+    routeName: "Shop",
+  },
+  
+]);
 </script>
 
 <template>
-  <nav id="home" class="surface-0 navbar navbar-expand-xl navbar-light bg-light px-5">
-    <!-- This is the hamburger menu that appears on mobile -->
-    <div class="container-fluid">
-      <!-- This is the logo -->
-      <a class="navbar-brand" href="#">
-        <img :src="logoUrl" alt="Smooserve Logo" height="80" class="mr-0 lg:mr-2" />
-      </a>
-
-      <!-- This is the collapsed menu -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div id="navbarSupportedContent" class="collapse navbar-collapse align-items-start mt-3">
-        <ul class="navbar-nav list-none select-none align-items-start d-flex align-items-start w-100">
-          <li class="d-flex nav-item flex-grow-1"></li>
-          <li class="nav-item">
-            <a @click="smoothScroll('#hero')">
-              <i class="navbar-icon pi pi-home"></i>
-              <router-link :to="{ name: 'Home' }"><span>HOME</span></router-link>
+  <div class="grid align-items-center justify-content-center">
+    <div class="col-12 md:col-12 lg:col-10">
+      <Menubar
+        :model="items"
+        :pt="{
+          action: ({ props, state, context }) => ({
+            class: context.active
+              ? 'bg-primary-50 border-round-sm'
+              : context.focused
+              ? 'bg-primary-100 border-round-sm'
+              : undefined,
+          }),
+        }"
+        class="mb-3 shadow-none surface-ground border-none"
+      >
+        <template #start>
+          <img alt="logo" :src="logoUrl" height="60" class="mr-2" />
+        </template>
+        <template
+          #item="{ label, item, props, root, hasSubmenu }"
+          class="p-menuitem-active"
+        >
+          <router-link
+            v-if="item.routeName"
+            v-slot="routerProps"
+            :to="{ name: item.routeName }"
+            custom
+            :exact="true"
+          >
+            <a :href="routerProps.href" v-bind="props.action">
+              <span v-bind="props.icon" />
+              <span v-bind="props.label">{{ label }}</span>
             </a>
-          </li>
-          <li class="nav-item">
-            <a @click="smoothScroll('#about')">
-              <i class="navbar-icon pi pi-info-circle"></i>
-              <router-link :to="{ name: 'About' }"><span>ABOUT US</span></router-link>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a @click="smoothScroll('#highlights')">
-              <i class="navbar-icon pi pi-map-marker"></i>
-              <router-link :to="{ name: 'Map' }"><span>NEAR YOU</span></router-link>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a @click="smoothScroll('#highlights')">
-              <i class="navbar-icon pi pi-shopping-cart"></i>
-              <router-link :to="{ name: 'Shop' }"><span>SMOOSERVE SHOP</span></router-link>
-            </a>
-          </li>
-          <li class="d-flex nav-item flex-grow-1"></li>
-          <!-- If the user is logged in, show the search and user icons -->
-          <li v-if="isLoggedIn" class="nav-item">
-            <div>
-              <!-- Search button currently does nothing -->
-              <Button
-                class="p-button-text navbar-icon pi pi-search p-button-rounded border-none font-light line-height-2 pr-3">
-              </Button>
-              <a @click="handleSignOut">
-                <i class="pi pi-sign-out icon-spacing px-2"></i>
-                <router-link :to="{ name: 'Shop' }"><span>LOG OUT</span></router-link>
+          </router-link>
+          <a
+            v-else
+            :href="item.url"
+            :target="item.target"
+            v-bind="props.action"
+          >
+            <span v-bind="props.icon" />
+            <span v-bind="props.label">{{ label }}</span>
+            <span
+              :class="[
+                hasSubmenu &&
+                  (root ? 'pi pi-fw pi-angle-down' : 'pi pi-fw pi-angle-right'),
+              ]"
+              v-bind="props.submenuicon"
+            />
+          </a>
+        </template>
+        <template #end>
+              <a class='line-remove' v-if="isLoggedIn" @click="handleSignOut">
+                <router-link :to="{ name: 'Home' }"><i class="pi pi-sign-out icon-spacing pr-2"></i>
+                <span style="text-decoration: none;">LOG OUT</span></router-link>
+                <router-link :to="{ name: 'Profile' }"><i class="pi pi-user px-4" style="font-size: 1.2rem"></i></router-link>
               </a>
-              <!-- <Button  class="p-button-text p-button-rounded border-none font-light line-height-2 pr-3">
-                <span class="icon-label-container" >
-                  <i class="pi pi-sign-out icon-spacing">LOG OUT</i>
-                </span>
-              </Button> -->
-              <router-link :to="{ name: 'Profile' }"><i class="pi pi-user px-4" style="font-size: 1.2rem"></i></router-link>
-            </div>
-          </li>
-          <li v-else class="nav-item">
-            <div> <!-- If the user is not logged in, show the login and register buttons -->
-              <i class="navbar-icon pi pi-sign-in"></i><router-link :to="{ name: 'Login' }"><span class="pr-4">LOG IN</span></router-link>
-              <i class="navbar-icon pi pi-user-plus"></i><router-link :to="{ name: 'Register' }"><span>SIGN IN</span></router-link>
-            </div>
-          </li>
-        </ul>
-      </div>
+          <a class='line-remove' v-else>
+              <i class="navbar-icon pi pi-sign-in px-2"></i><router-link :to="{ name: 'Login' }"><span class="pr-4">LOG IN</span></router-link>
+              <i class="navbar-icon pi pi-user-plus px-2"></i><router-link :to="{ name: 'Register' }"><span >SIGN IN</span></router-link>
+          </a>
+        </template>
+      </Menubar>
     </div>
-  </nav>
+  </div>
 </template>
-
 <style>
-.navbar-icon {
-  margin-right: 8px;
-  /* Spacing between the icon and the text */
-  font-size: 1.2em;
-  /* Adjust icon size if needed */
+a{
+  text-decoration: none !important;
+  color: black !important;
 }
-
-#hero {
-  background: linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), radial-gradient(77.36% 256.97% at 77.36% 57.52%, #eeefaf 0%, #c3e3fa 100%);
-  height: 700px;
-  overflow: hidden;
-}
-
-@media screen and (min-width: 768px) {
-  #hero {
-    -webkit-clip-path: ellipse(150% 87% at 93% 13%);
-    clip-path: ellipse(150% 87% at 93% 13%);
-    height: 530px;
-  }
-}
-
-@media screen and (min-width: 1300px) {
-  #hero>img {
-    position: absolute;
-  }
-
-  #hero>div>p {
-    max-width: 450px;
-  }
-}
-
-@media screen and (max-width: 1300px) {
-  #hero {
-    height: 600px;
-  }
-
-  #hero>img {
-    position: static;
-    transform: scale(1);
-    margin-left: auto;
-  }
-
-  #hero>div {
-    width: 100%;
-  }
-
-  #hero>div>p {
-    width: 100%;
-    max-width: 100%;
-  }
-}</style>
+</style>
