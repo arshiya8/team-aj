@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <Carousel v-if="favoriteCSPs.length > 0" :value="favoriteCSPs" :numVisible="3" :numScroll="3" :responsiveOptions="responsiveOptions">
+    <Carousel v-if="favoriteCSPs.length > 0" :value="favoriteCSPs" :numVisible="2" :numScroll="2" :responsiveOptions="responsiveOptions">
       <template #item="csp">
         <div class="border-1 surface-border border-round m-2 text-center py-5 px-3">
           <div class="mb-3">

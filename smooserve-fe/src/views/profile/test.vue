@@ -102,14 +102,16 @@
                                                     </li>
                                                     <li v-for="exp in quizPreference.passionate_about" :key="exp.id"
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                                        <div class="text-500 w-6 md:w-2 font-medium">Past Volunteering Experiences</div>
+                                                        <div class="text-500 w-6 md:w-2 font-medium">Past Volunteering
+                                                            Experiences</div>
                                                         <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
                                                             <Chip :label="exp" class="mr-2"></Chip>
                                                         </div>
                                                     </li>
                                                     <li v-for="loc in quizPreference.volunteering_location" :key="loc.id"
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                                        <div class="text-500 w-6 md:w-2 font-medium">Location Preference</div>
+                                                        <div class="text-500 w-6 md:w-2 font-medium">Location Preference
+                                                        </div>
                                                         <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
                                                             <Chip :label="loc" class="mr-2"></Chip>
                                                         </div>
@@ -119,12 +121,34 @@
                                         </div>
                                     </TabPanel>
                                     <TabPanel header="Registered CSPs">
-                                        <h3>No registered CSPs..</h3>
-                                        <router-link :to="{ name: 'Home' }"><Button
-                                                label="Register Now!"></Button></router-link>
+                                        <DataTable :value="registeredCSPs" tableStyle="min-width: 50rem">
+                                            <Column field="cspName" header="Registered CSP"></Column>
+                                            <Column field="cspStatus" header="Status"></Column>
+                                            <Column field="link" header="More"></Column>
+                                        </DataTable>
+                                        <div v-if="registeredCSPs.length === 0">
+
+                                            <h3>No registered CSPs..</h3>
+                                            <router-link :to="{ name: 'Home' }"><Button
+                                                    label="Register Now!"></Button></router-link>
+                                        </div>
                                     </TabPanel>
+
                                     <TabPanel header="Favourites">
-                                        ....
+                                        <TabPanel header="Favourites" class="centered-tab-panel">
+                                            <div class="card">
+                                                <TabView>
+                                                    <TabPanel v-for="tab in tabs" :key="tab.title" :header="tab.title">
+                                                        <ShopCarousel v-if="tab.title === 'Smooserve Shops'"
+                                                            :shops="shops" />
+                                                        <CSPCarousel v-if="tab.title === 'CSPs'" :csps="csps" />
+                                                        <p class="m-0" v-else>{{ tab.content }}</p>
+                                                    </TabPanel>
+                                                </TabView>
+                                            </div>
+                                            <div id="noFavoritesMessage" style="display: none;">You have no favorites
+                                                currently.</div>
+                                        </TabPanel>
                                     </TabPanel>
                                 </TabView>
                             </div>
@@ -184,11 +208,52 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase";
 import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "firebase/storage";
-import ShopCarousel from '../../components/ShopCarousel.vue';
-import CSPCarousel from '../../components/CSPCarousel.vue';
+import ShopCarousel from '@/components/ShopCarousel.vue';
+import CSPCarousel from '@/components/CSPCarousel.vue';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import ColumnGroup from 'primevue/columngroup';   // optional
+import Row from 'primevue/row';                   // optional
 
 // import { db, storage } from "@/firebase";
-
+const tabs = ref([
+      {
+        title: 'Smooserve Shops',
+        content: '',
+      },
+      {
+        title: 'CSPs',
+        content: '',
+      },
+    ]);
+onMounted(async () => {
+  // You can fetch your CSP data here, for example:
+  try {
+    getRegisteredCSPs();
+    registeredCSPs.cspName = cspName;
+    registeredCSPs.cspStatus = cspName; // Update this line based on your API response structure
+  } catch (error) {
+    console.error('Error fetching registered CSP data:', error);
+  }
+});
+const registeredCSPs = ref([
+  {
+    cspName: 'CSP Name 1',
+    cspStatus: 'Pending',
+    link: 'Waiting for confirmation...'
+  },
+  {
+    cspName: 'CSP Name 2',
+    cspStatus: 'Schedule',
+    link: 'Link to CSP...'
+  },
+  {
+    cspName: 'CSP Name 3',
+    cspStatus: 'Accepted',
+    link: 'Congratulations!'
+  },
+  // Add more dummy data objects as needed
+]);
 const backgroundImage = ref("/layout/images/landing-img1.jpg"); // Set this to the URL of your background image
 
 const backgroundImageStyle = computed(() => {
@@ -393,5 +458,6 @@ watch(
     /* For Safari compatibility */
     background-color: rgba(255, 255, 255, 0.7);
     /* Semi-transparent white */
-}</style>
+}
+</style>
   

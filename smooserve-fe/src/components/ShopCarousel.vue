@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <Carousel :value="products" :numVisible="3" :numScroll="3" :responsiveOptions="responsiveOptions">
+    <Carousel :value="products" :numVisible="2" :numScroll="2" :responsiveOptions="responsiveOptions">
       <template #item="slotProps">
         <div class="border-1 surface-border border-round m-2 text-center py-5 px-3">
           <div class="mb-3">
