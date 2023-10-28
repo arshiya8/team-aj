@@ -135,7 +135,7 @@ async function scheduleZoomMeeting() {
         detail: response.statusText,
         life: 3000,
       });
-      visible.value = false;
+      visibleInterview.value = false;
     })
     .catch((error) => {
       console.log(error);
