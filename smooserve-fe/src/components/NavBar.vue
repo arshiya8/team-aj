@@ -2,9 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
-//login and logout things
 const isLoggedIn = ref(false)
-
 const auth = getAuth()
 
 onMounted(() => {
@@ -23,7 +21,6 @@ const handleSignOut = () => {
   })
 }
 
-//primevue things
 const smoothScroll = (id) => {
   document.querySelector(id).scrollIntoView({
     behavior: 'smooth'
@@ -31,23 +28,24 @@ const smoothScroll = (id) => {
 };
 
 const logoUrl = computed(() => {
-  return layout / images / logo - white.png;
+  return "layout/images/logo-white.png";
 });
 </script>
 
 <template>
   <nav id="home" class="surface-0 navbar navbar-expand-lg navbar-light bg-light px-5">
-    <!-- This is the logo -->
-    <a class="flex align-items-start" href="#">
+    <!-- Logo -->
+    <div class="flex items-center" style="margin-top: 0; margin-bottom: 0;">
+    <a class="align-items-start logo" href="#">
       <img :src="logoUrl" alt="Smooserve Logo" height="80" class="mr-0 lg:mr-2" />
     </a>
 
-    <!-- This is the hamburger menu that appears on mobile -->
-    <div class="align-items-center" style="top: 130px">
-      <ul class="list-none select-none justify-content-center">
+    <!-- Navigation items and user actions -->
+    <div class="navbar-content flex items-center">
+      <!-- Navigation items -->
+      <ul class="list-none select-none flex">
         <li>
-          <a @click="smoothScroll('#hero')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple"
-            v-ripple>
+          <a @click="smoothScroll('#hero')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple">
             <i class="navbar-icon pi pi-home"></i> <span>HOME</span>
           </a>
         </li>
@@ -70,28 +68,23 @@ const logoUrl = computed(() => {
           </a>
         </li>
       </ul>
-    </div>
 
-    <div v-if="isLoggedIn" class="align-items-end"> <!-- If the user is logged in, show the search and user icons -->
-      <!-- Search button currently does nothing -->
-      <div v-if="isLoggedIn" class="align-items-center flex">
-        <Button
-          class="p-button-text navbar-icon pi pi-search p-button-rounded border-none font-light line-height-2 pr-3"></Button>
+      <!-- User actions -->
+      <div class="align-items-center flex" v-if="isLoggedIn">
+        <!-- Search button -->
+        <Button class="p-button-text navbar-icon pi pi-search p-button-rounded border-none font-light line-height-2 pr-3"></Button>
+        <!-- Log out button -->
         <Button @click="handleSignOut" class="p-button-text p-button-rounded border-none font-light line-height-2 pr-3">
           <span class="icon-label-container">
             <i class="pi pi-sign-out icon-spacing"></i>
             LOG OUT
           </span>
         </Button>
+        <!-- User profile link -->
         <router-link :to="{ name: 'Profile' }"><i class="pi pi-user" style="font-size: 1.2rem"></i></router-link>
       </div>
-      <div v-else class="align-items-end"> <!-- If the user is not logged in, show the login and register buttons -->
-        <i class="navbar-icon pi pi-sign-in"></i><router-link :to="{ name: 'Login' }"><Button label="LOG IN"
-            class="p-button-text p-button-rounded border-none font-light line-height-2 pr-3"></Button></router-link>
-        <i class="navbar-icon pi pi-user-plus"></i><router-link :to="{ name: 'Register' }"><Button label="SIGN UP"
-            class="p-button-text p-button-rounded border-none font-light line-height-2"></Button></router-link>
-      </div>
     </div>
+  </div>
   </nav>
 </template>
 
@@ -101,6 +94,10 @@ const logoUrl = computed(() => {
   /* Spacing between the icon and the text */
   font-size: 1.2em;
   /* Adjust icon size if needed */
+}
+
+.logo {
+  margin-right: 20px; /* Add margin to the logo to align it with the tabs */
 }
 
 #hero {
