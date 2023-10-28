@@ -15,7 +15,7 @@
             <template #content>
               <p><strong>Contact Number:</strong> {{ contact }}</p>
               <p><strong>Description:</strong> {{ description }}</p>
-              <p><strong>Commitments:</strong> {{ commitments.join(", ") }}</p>
+              <p><strong>Commitments:</strong> {{ commitment}}</p>
             </template>
             <template #footer>
               <Button icon="pi pi-pencil" label="Edit" @click="editProfile" />
@@ -30,11 +30,11 @@
     <div id="userProfile" v-show="editMode">
       <form class="row g-3" id="userDetailsForm"> 
         <div class="col-lg-6">
-          <label for="profilePicture" class="form-label">Profile Picture:</label>
+          <label for="profilePicture" class="form-label"></label>
           <input type="file" style="display: none" id="profilePicture" accept="image/*"
             @change="handleProfilePictureChange" />
           <!-- Create a custom PrimeVue-styled button -->
-          <Button @click="selectFile" severity="success">
+          <Button style="margin-left:560px" @click="selectFile" severity="success">
             <i class="pi pi-upload"></i> Choose File
           </Button>
           <img :src="profilePicture" class="circular-crop" alt="Profile Picture" />
@@ -76,31 +76,19 @@
           </div>
         </div>
       </div>
-    <div class="col-12 md:col-5 center-container">
-      <label for="commitment">Commitment:</label>
-      <select v-model="selectedCommitment" id="commitment" name="commitment">
-        <option value="Monday">Monday</option>
-        <option value="Tuesday">Tuesday</option>
-        <option value="Wednesday">Wednesday</option>
-        <option value="Thursday">Thursday</option>
-        <option value="Friday">Friday</option>
-      </select>
-      <Button type="button" @click="addCommitment">Add</button>
-    </div>
-    <div class="col-12 md:col-5 right-align-div">
+      <div class="col-12 md:col-5" style="margin-left:100px">
+          <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-calendar"></i>
+            </span>
+            <InputText placeholder="What days are you free?" v-model="commitment" class="form-control" id="commitment" rows="5" />
+          </div>
+      </div>
+      
+    <div class="col-12 md:col-2" style="margin-left:100px">
       <Button type="button" @click="updateProfile">Update Profile</button>
     </div>
   </form>
-  
-    <!-- Commitment List -->
-    <div class="commitment-list">
-      <ol style="padding-left:100px">
-        <li v-for="(commitment, index) in commitments" :key="index">
-          {{ commitment }}
-          <Button @click="removeCommitment(index)" severity="danger">Remove</button>
-        </li>
-      </ol>
-    </div>
   </div>
   </main>
 
@@ -177,9 +165,9 @@
     </TabPanel>
 
     <!-- Favorites Tab -->
-    <TabPanel header="Favorites">
+    <TabPanel header="Favourites">
       <div style="background-color: antiquewhite;">
-        <h2>Favorites</h2>
+        <h2>Favourites</h2>
       </div>
       <div class="card">
         <TabView>
@@ -257,8 +245,6 @@ export default {
     const email = ref('');
     const contact = ref('');
     const description = ref('');
-    const selectedCommitment = ref(null);
-    const commitments = ref(['']);
     const editMode = ref(false);
     const tabs = ref([
       {
@@ -270,17 +256,6 @@ export default {
         content: '',
       },
     ]);
-
-    const addCommitment = () => {
-      if (selectedCommitment) {
-        commitments.value.push(selectedCommitment.value);
-        selectedCommitment.value = '';
-      }
-    };
-
-    const removeCommitment = (index) => {
-      commitments.value.splice(index, 1);
-    };
 
     const updateProfile = () => {
       editMode.value = false;
@@ -317,10 +292,6 @@ export default {
       email,
       contact,
       description,
-      selectedCommitment,
-      commitments,
-      addCommitment,
-      removeCommitment,
       updateProfile,
       editProfile,
       handleProfilePictureChange,
