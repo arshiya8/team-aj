@@ -390,19 +390,15 @@ export default {
 <style scoped>
 .wishlist-button {
 
-    top: 20px;
+    
     /* Adjust the top margin as needed */
-    right: 20px;
+
     /* Adjust the right margin as needed */
+    position: absolute;
+    right: 5px;
 }
 
-.wishlist-icon {
-    outline: none;
-    /* Remove the outline */
-    border: none;
-    /* Remove the border */
-    /* Other styles for the heart icon can be retained or modified as needed */
-}
+
 
 .title-container {
     position: absolute;
@@ -458,6 +454,7 @@ export default {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .product-details {
