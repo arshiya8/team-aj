@@ -356,9 +356,14 @@ export default {
             <div class="col-md-3 mb-4" v-for="product in products" :key="product.id">
                 <div class="p-card">
                     <div class="wishlist-button">
-                        <button @click="toggleWishlist(product)" :class="{ 'clicked': isClicked }">
-                            <i class="pi pi-heart-fill"></i>
+                        <button @click="toggleWishlist(product)" style="border:0px; size:70px; ">
+                            <i :class="{ 'pi pi-heart-fill': isClicked, 'pi pi-heart': !isClicked }"
+                                :style="isClicked ? 'color: red;' : 'color: rgb(66, 66, 66);'"></i>
                         </button>
+                                <!-- <div class="heart-container">
+                  <i class="fas fa-heart clickable" :class="{ 'heart-red': isCSPFavorite(csp) }"
+                     @click="toggleHeartColor(csp)"></i>
+ -->
                     </div>
 
                     <div class="overflow-hidden rounded-lg bg-gray-200 product-image">
@@ -390,7 +395,7 @@ export default {
 <style scoped>
 .wishlist-button {
 
-    
+
     /* Adjust the top margin as needed */
 
     /* Adjust the right margin as needed */
@@ -532,7 +537,8 @@ cart-preview {
 .cart-items p {
     margin: 5px 0;
 }
+
 .clicked {
-  color: red;
+    color: red;
 }
 </style>
