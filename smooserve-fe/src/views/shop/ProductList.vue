@@ -267,13 +267,18 @@ export default {
     </div>
 
     <div class="container">
-        <!-- Badge and Cart Dialog -->
-        <i v-badge.danger="totalCartItems" icon="p-overlay-badge" style="font-size: 2.5rem">
-            <Button icon="pi pi-shopping-cart" style="font-size:3rem" @click="toggleCart" />
-        </i>
-        <!-- wishlist button -->
-        <Button label="&nbsp Wishlist &nbsp" icon="pi pi-heart" iconPos="right" @click="toggleWishlistModal" />
-
+        <div class="icon-container">
+            <!-- Badge and Cart Dialog -->
+            <i style="position: relative; font-size: 2rem; margin-right: 5px;">
+                <i class="pi pi-shopping-cart" style="font-size: 1.5rem;" @click="toggleCart"></i>
+                <span class="p-badge p-component p-badge-danger p-badge-no-gutter"
+                    style="position: absolute; top: -5px; right: -15px;">
+                    {{ totalCartItems }}
+                </span>
+            </i>
+            <!-- wishlist button -->
+            <Button label="&nbsp Wishlist &nbsp" icon="pi pi-heart" iconPos="right" @click="toggleWishlistModal" />
+        </div>
 
         <Dialog v-model:visible="showWishlist" modal header="&nbsp Wishlist" :style="{ width: '50vw' }"
             :breakpoints="{ '960px': '75vw', '641px': '100vw' }">
@@ -328,7 +333,8 @@ export default {
                             <!-- Quantity adjustment buttons -->
                             <div class="d-flex align-items-center quantity-box">
                                 <!-- Minus quantity -->
-                                <Button icon="pi pi-minus quantity-box" @click="decrementQuantity(product, index)" />
+                                
+                                <Button icon="pi pi-minus" @click="decrementQuantity(product, index)" />
                                 <!-- Quantity display -->
                                 <div class="quantity-display">
                                     <p>{{ product.quantity }}</p>
@@ -352,18 +358,17 @@ export default {
         </Dialog>
 
         <!-- Product Cards -->
+        <div class="cart-container">
         <div class="row justify-content-center">
             <div class="col-md-3 mb-4" v-for="product in products" :key="product.id">
                 <div class="p-card">
                     <div class="wishlist-button">
                         <button @click="toggleWishlist(product)" style="border:0px; size:70px; ">
-                            <i :class="{ 'pi pi-heart-fill': isClicked, 'pi pi-heart': !isClicked }"
-                                :style="isClicked ? 'color: red;' : 'color: rgb(66, 66, 66);'"></i>
+                            <i class="pi pi-heart" severity="help" text rounded aria-label="Favorite"
+                                :class="{ 'clicked': isClicked }"></i>
                         </button>
-                                <!-- <div class="heart-container">
-                  <i class="fas fa-heart clickable" :class="{ 'heart-red': isCSPFavorite(csp) }"
-                     @click="toggleHeartColor(csp)"></i>
- -->
+
+
                     </div>
 
                     <div class="overflow-hidden rounded-lg bg-gray-200 product-image">
@@ -383,8 +388,9 @@ export default {
                 </div>
             </div>
         </div>
-
     </div>
+    </div>
+
 
 
 
@@ -397,12 +403,20 @@ export default {
 
 
     /* Adjust the top margin as needed */
-
     /* Adjust the right margin as needed */
     position: absolute;
     right: 5px;
+    border: 0px;
 }
 
+.icon-container {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: 20px;
+    /* Adjust the margin as needed */
+}
 
 
 .title-container {
@@ -422,6 +436,7 @@ export default {
 }
 
 .quantity-display {
+    flex-direction: column;
     margin-top: 10px;
     /* Adjust the value as needed */
 }
@@ -434,6 +449,13 @@ export default {
     border-radius: 4px;
     /* Rounded corners */
 }
+
+.cart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 
 .bg-img {
     position: relative;
