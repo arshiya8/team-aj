@@ -2,9 +2,9 @@
 import { onMounted, ref, computed } from "vue";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/firebase";
-import NavBar from "../components/NavBar.vue";
-import CaroPics from "../components/CaroPics.vue";
-import Footer from "../components/Footer.vue";
+import NavBar from "@/components/NavBar.vue";
+import CaroPics from "@/components/CaroPics.vue";
+import Footer from "@/components/Footer.vue";
 import axios from 'axios';
 import { useRouter } from "vue-router";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -243,48 +243,73 @@ export default {
 <template>
   <!-- navbar component -->
   <NavBar />
-  <CaroPics />
-
+  
   <!-- headers -->
-  <div class="container-fluid" style="background-color: lightblue;">
+  <div class="container-fluid">
+    <CaroPics /> 
     <div class="row pb-3">
       <h2
-          style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; text-align: center; margin-top: 30px; font-size: 2rem">
+          style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; 
+          text-align: center; margin-top: 30px; font-size: 2rem">
         COMMUNITY SERVICE
         PROJECTS</h2>
-      <br>
-      <h2
-          style="color:rgb(252,84,84); font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; font-size: 4rem;">
-        THIS MONTH</h2>
+    </div>
+
+  <!-- Instructions card -->
+  <div class="surface-section px-4 py-8 md:px-6 lg:px-8 text-center">
+      <div class="grid">
+          <div class="col-12 md:col-4 mb-4 px-5">
+              <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+                  <i class="pi pi-search text-4xl text-blue-700"></i>
+              </span>
+              <div class="text-900 text-xl mb-3 font-medium">Step 1</div>
+              <span class="text-700 line-height-3">
+                Ready to start your CSP search? Take a look at the displayed CSP's below that were filtered according to 
+                your quiz results!
+              </span>
+          </div>
+          <div class="col-12 md:col-4 mb-4 px-5">
+              <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+                  <i class="pi pi-sliders-v text-4xl text-blue-700"></i>
+              </span>
+              <div class="text-900 text-xl mb-3 font-medium">Step 2</div>
+              <span class="text-700 line-height-3">
+                Not too satisfied with what you are seeing? Fret not as you can choose to manually filter the CSPs using our 
+                filter functions, or use our convenient auto-filter feature, but not both at once.
+              </span>
+          </div>
+          <div class="col-12 md:col-4 mb-4 px-5">
+              <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+                  <i class="pi pi-heart text-4xl text-blue-700"></i>
+              </span>
+              <div class="text-900 text-xl mb-3 font-medium">Step 3</div>
+              <span class="text-700 line-height-3">
+                Found the CSP of your dreams? Go ahead and favourite the CSP using the heart icons on the back of the CSP cards! You
+                can also click the 'See More' button to find out more about the individual CSP's!
+              </span>
+          </div>
+      </div>
     </div>
   </div>
 
-  <!-- tilted cards -->
-  <div class="ct">
-    <div class="card-container" style="flex-wrap: nowrap;">
-      <div class="card rd">
-        <img style="border-radius: 15px;" src="/layout/images/card1.jpg">
-      </div>
-      <div class="card rd">
-        <img style="border-radius: 15px;" src="/layout/images/card2.jpg">
-      </div>
-      <div class="card rd">
-        <img style="border-radius: 15px;" src="/layout/images/card3.jpg">
-      </div>
-    </div>
+  <!-- favourites clickable heart -->
+  <div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
   </div>
+
 
   <!-- body -->
   <div class="container-fluid" style="background-color: navy">
     <div class="row">
       <div class="col">
         <h1
-            style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; text-align: center; color:white;">
-          What's happening in Smooserve</h1>
+            style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; 
+            text-align: center; color:white;">
+            What's happening in Smooserve</h1>
       </div>
     </div>
-    <div class="row" style="padding-left: 10px; padding-bottom:20px; text-align: center;display: flex; align-items: center; font-family: 'Helvetica Neue Medium', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-weight: normal;">
+    <div class="row justify-content-center align-items-center" style="padding-bottom: 20px; text-align: center; 
+    font-family: 'Helvetica Neue Medium', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">
 
 
       <!-- First Dropdown List -->
@@ -321,27 +346,15 @@ export default {
           <button @click="toggleAutoFilter">{{ selectedValue3 === '' ? 'Off' : 'On' }}</button>
         </div>
       </div>
-
-      <!-- Display selected values -->
-      <!-- <div class="row justify-content-center" style="color:white; font-weight: bold; font-size: 20px;">
-        Selected Value 1: {{ selectedValue1 }}
-        Selected Value 2: {{ selectedValue2 }}
-        Selected Value 3: {{ selectedValue3 }}
-      </div> -->
     </div>
   </div>
 
 
-  <!-- font awesome library icons  -->
-  <div>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
-  </div>
-
   <!-- CSP flip cards -->
-  <div class="container-fluid" style="background-color: lightblue;">
-    <div class="row">
+  <div class="container-fluid flex justify-content-center flex-wrap pt-5" style="background-color: lightblue;">
+    <div class="grid ">
       <div class="card-container">
-        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4" v-for="(csp, index) in getVisibleCsps" :key="csp.id">
+        <div class="flex align-items-center justify-content-center sm:col-12 md:col-6 lg:col-4" v-for="(csp, index) in getVisibleCsps" :key="csp.id">
           <div class="flip-card">
             <div class="flip-card-inner">
               <div class="flip-card-front">
@@ -356,9 +369,8 @@ export default {
                   <h1>{{ csp.title }}</h1>
                   <p class="card-description">{{ csp.desc }}</p>
 
-                  <!-- see more button link to linktree -->
-                  <router-link :to="{ name: 'CSP', params: { id: csp.id } }" class="btn btn-primary">See
-                    more</router-link>
+                   <!-- see more button link to linktree  -->
+                  <router-link :to="{ name: 'CSP', params: { id: csp.id } }"><Button label="See More"></Button></router-link>
                 </div>
               </div>
             </div>
@@ -383,7 +395,6 @@ export default {
 
 
 <style>
-@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css');
 
 /* pagination tool */
 .pagination {
@@ -490,57 +501,6 @@ export default {
   text-align: justify;
 }
 
-/* tilted cards */
-
-.ct {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-  background-color: lightblue;
-}
-
-.card-container {
-  display: flex;
-  flex-wrap: wrap;
-  /* Allow cards to wrap to the next line */
-  justify-content: space-between;
-  /* Distribute cards evenly within each row */
-  width: 80%;
-  margin: 0 auto;
-}
-
-.rd {
-  border-radius: 15px;
-  width: 30%;
-}
-
-.card:first-child {
-  transform: rotate(-20deg);
-  border: none;
-  margin-right: 60px;
-}
-
-.card:last-child {
-  transform: rotate(20deg);
-  border: none;
-  margin-left: 60px;
-  background-color: lightblue;
-}
-
-.card:nth-child(2) {
-  margin-top: -140px;
-  border: none;
-  background-color: lightblue;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  color: rgba(6, 66, 115);
-}
 
 /* navbar */
 .navbar {
@@ -635,6 +595,18 @@ export default {
   }
 }
 
+/* flip cards  */
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  /* Allow cards to wrap to the next line */
+  justify-content: space-between;
+  /* Distribute cards evenly within each row */
+  width: 80%;
+  margin: 0 auto;
+}
+
 .flip-card {
   background-color: transparent;
   width: 280px;
@@ -699,5 +671,6 @@ export default {
 .centralise {
   margin: 150px;
 }
+
 </style>
 

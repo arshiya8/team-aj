@@ -45,7 +45,8 @@ const logoUrl = computed(() => {
       </a>
 
       <!-- This is the collapsed menu -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -61,7 +62,7 @@ const logoUrl = computed(() => {
           <li class="nav-item">
             <a @click="smoothScroll('#about')">
               <i class="navbar-icon pi pi-info-circle"></i>
-              <router-link :to="{ name: 'About' }"><span>ABOUT US</span></router-link> 
+              <router-link :to="{ name: 'About' }"><span>ABOUT US</span></router-link>
             </a>
           </li>
           <li class="nav-item">
@@ -71,7 +72,7 @@ const logoUrl = computed(() => {
             </a>
           </li>
           <li class="nav-item">
-            <a @click="smoothScroll('#highlights')" >
+            <a @click="smoothScroll('#highlights')">
               <i class="navbar-icon pi pi-shopping-cart"></i>
               <router-link :to="{ name: 'Shop' }"><span>SMOOSERVE SHOP</span></router-link>
             </a>
@@ -84,18 +85,22 @@ const logoUrl = computed(() => {
               <Button
                 class="p-button-text navbar-icon pi pi-search p-button-rounded border-none font-light line-height-2 pr-3">
               </Button>
-              <Button @click="handleSignOut" class="p-button-text p-button-rounded border-none font-light line-height-2 pr-3">
+              <a @click="handleSignOut">
+                <i class="pi pi-sign-out icon-spacing px-2"></i>
+                <router-link :to="{ name: 'Shop' }"><span>LOG OUT</span></router-link>
+              </a>
+              <!-- <Button  class="p-button-text p-button-rounded border-none font-light line-height-2 pr-3">
                 <span class="icon-label-container" >
                   <i class="pi pi-sign-out icon-spacing">LOG OUT</i>
                 </span>
-              </Button>
-              <router-link :to="{ name: 'Profile' }"><i class="pi pi-user" style="font-size: 1.2rem"></i></router-link>
+              </Button> -->
+              <router-link :to="{ name: 'Profile' }"><i class="pi pi-user px-4" style="font-size: 1.2rem"></i></router-link>
             </div>
           </li>
           <li v-else class="nav-item">
             <div> <!-- If the user is not logged in, show the login and register buttons -->
-              <i class="navbar-icon pi pi-sign-in"></i><router-link :to="{ name: 'Login' }"><Button label="LOG IN" class="p-button-text p-button-rounded border-none font-light line-height-2 pr-3"></Button></router-link>
-              <i class="navbar-icon pi pi-user-plus"></i><router-link :to="{ name: 'Register' }"><Button label="SIGN UP" class="p-button-text p-button-rounded border-none font-light line-height-2"></Button></router-link>
+              <i class="navbar-icon pi pi-sign-in"></i><router-link :to="{ name: 'Login' }"><span class="pr-4">LOG IN</span></router-link>
+              <i class="navbar-icon pi pi-user-plus"></i><router-link :to="{ name: 'Register' }"><span>SIGN IN</span></router-link>
             </div>
           </li>
         </ul>
@@ -155,5 +160,4 @@ const logoUrl = computed(() => {
     width: 100%;
     max-width: 100%;
   }
-}
-</style>
+}</style>
