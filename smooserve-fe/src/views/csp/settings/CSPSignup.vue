@@ -72,7 +72,7 @@ onMounted(async () => {
 
 function acceptRejectStudent(status) {
   registeredStudents.value[selectedStudent.value].status = status;
-  csp.value.registeredStudents = registeredStudents.value;
+  csp.value.registration.registeredStudents = registeredStudents.value;
   axios
     .put("https://smooserve-be.vercel.app/api/csp/" + CSPid.value, csp.value)
     .then((response) => {
@@ -113,7 +113,7 @@ async function scheduleZoomMeeting() {
       registeredStudents.value[selectedStudent.value].status = "scheduled";
       registeredStudents.value[selectedStudent.value].link =
         response.data.join_url;
-      csp.value.registeredStudents = registeredStudents.value;
+      csp.value.registration.registeredStudents = registeredStudents.value;
       axios
         .put(
           "https://smooserve-be.vercel.app/api/csp/" + CSPid.value,

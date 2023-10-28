@@ -10,7 +10,16 @@ import {
 } from "firebase/auth";
 import { useToast } from "primevue/usetoast";
 import { db } from "@/firebase";
-import { collection, query, where, getDocs, addDoc, doc, limit } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  doc,
+  limit,
+} from "firebase/firestore";
+import { getDocumentIdByEmail } from "@/helper/helperFunctions.js";
 
 const toast = useToast();
 
@@ -50,17 +59,22 @@ const studGoogleSignIn = async () => {
   try {
     const result = await signInWithPopup(auth, provider);
     console.log("Successfully registered");
-    
-    let id = await getDocumentIdByEmail(result.user.email, "students");
 
-    if (id) {
+    let data = await getDocumentIdByEmail(result.user.email, "Users");
+
+    console.log(data);
+    if (data) {
       //existing user
-      router.replace({ name: "User" });
+      if (data.role == "student") {
+        router.replace({ name: "User" });
+      } else {
+        router.replace({ name: "CSPSetting" });
+      }
     } else {
       //first time login
       //redirecting to User page in addStudent function
       addStudent(result);
-      addToUserDB(result.user.displayName, result.user.email, "student")
+      addToUserDB(result.user.displayName, result.user.email, "student");
     }
   } catch (error) {
     // Handle Errors
@@ -73,17 +87,22 @@ const cspGoogleSignIn = async () => {
   try {
     const result = await signInWithPopup(auth, provider);
     console.log("Successfully registered");
-    
-    let id = await getDocumentIdByEmail(result.user.email, "CSPs");
 
-    if (id) {
+    let data = await getDocumentIdByEmail(result.user.email, "Users");
+
+    console.log(data);
+    if (data) {
       //existing user
-      router.replace({ name: "CSP", params: { id } });
+      if (data.role == "student") {
+        router.replace({ name: "User" });
+      } else {
+        router.replace({ name: "CSPSetting" });
+      }
     } else {
       //first time login
       //redirecting to CSP page in addCSP function
       await addCSP(result);
-      await addToUserDB(result.user.displayName, result.user.email, "csp")
+      await addToUserDB(result.user.displayName, result.user.email, "csp");
     }
   } catch (error) {
     // Handle Errors
@@ -92,34 +111,21 @@ const cspGoogleSignIn = async () => {
   }
 };
 
-async function getDocumentIdByEmail(email, collectionName) {
-  const q = query(collection(db, collectionName), where("email", "==", email), limit(1));
-  const querySnapshot = await getDocs(q);
-
-  if (!querySnapshot.empty) {
-    // Get the first document (if there are multiple matching)
-    const doc = querySnapshot.docs[0];
-    // Access the document ID
-    return doc.id;
-  } else {
-    // No matching document found
-    return null;
-  }
-}
-
-async function addToUserDB(name, email, role){
+async function addToUserDB(name, email, role) {
   // Add a new document with a generated id.
-const docRef = await addDoc(collection(db, "Users"), {
-  name: name,
-  country: email,
-  role: role
-});
+  const docRef = await addDoc(collection(db, "Users"), {
+    name: name,
+    email: email,
+    role: role,
+  });
 }
 
 //To add CSP into db
 async function addCSP(result) {
   const data = {
     email: result.user.email,
+    title: result.user.displayName,
+    views: 0,
     isLocal: true,
     noOfHours: "",
     desc: "",
@@ -127,7 +133,10 @@ async function addCSP(result) {
     skills: "",
     igURL: "",
     telehandle: "",
-    title: result.user.displayName,
+    registration: {
+      active: true,
+      registeredStudents: [],
+    },
     settings: {
       zoomRefreshToken: "",
       zoomAccessToken: "",
@@ -164,7 +173,7 @@ async function addCSP(result) {
 
       //redirect to CSP page
       router.replace({ name: "CSP", params: { id } });
-      return id
+      return id;
     })
     .catch((e) => {
       console.log(e);
@@ -174,7 +183,7 @@ async function addCSP(result) {
         detail: e,
         life: 3000,
       });
-      return null
+      return null;
     });
 }
 
@@ -198,17 +207,15 @@ async function addStudent(result) {
       skills: [],
       self_description: "",
       volunteering_experience: [],
-      passionate_about: [
-      ],
+      passionate_about: [],
       volunteering_location: [],
     },
   };
   axios
     .post("https://smooserve-be.vercel.app/api/student/", data)
     .then(async (response) => {
-
       // redirect to User page
-      router.replace({ name: "User" });
+      router.replace({ name: "Profile" });
     })
     .catch((e) => {
       console.log(e);

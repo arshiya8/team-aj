@@ -40,21 +40,33 @@ const routes = [
     path: "/csp/settings/",
     name: "CSPSetting",
     component: () => import("@/views/csp/settings/CSPSetting.vue"),
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/csp/signups/",
     name: "CSPSignup",
     component: () => import("@/views/csp/settings/CSPSignup.vue"),
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/csp/links/",
     name: "CSPLinks",
     component: () => import("@/views/csp/settings/CSPLinks.vue"),
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/csp/appearance/",
     name: "CSPApperance",
     component: () => import("@/views/csp/settings/CSPAppearance.vue"),
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/csp/zoom",
@@ -82,6 +94,9 @@ const routes = [
     path: "/quiz",
     name: "Quiz",
     component: () => import("@/views/quiz/Quiz.vue"),
+    meta: {
+      requiresAuth: true,
+    },
   },
   //rayne
   {
@@ -121,7 +136,7 @@ router.beforeEach(async (to, from, next) => {
     (to.name == "Login" || to.name == "Register") &&
     (await getCurrentUser())
   ) {
-    next({ name: "User" });
+    next({ name: "Profile" });
   } else {
     next();
   }
