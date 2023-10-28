@@ -90,14 +90,14 @@ const logoUrl = computed(() => {
 
 <style>
 .navbar-icon {
-  margin-right: 8px;
+  margin-right: 10px;
   /* Spacing between the icon and the text */
   font-size: 1.2em;
   /* Adjust icon size if needed */
 }
 
 .logo {
-  margin-right: 20px; /* Add margin to the logo to align it with the tabs */
+  margin-right: 100px; /* Add margin to the logo to align it with the tabs */
 }
 
 #hero {
