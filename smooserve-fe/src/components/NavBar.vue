@@ -53,24 +53,27 @@ const logoUrl = computed(() => {
         <ul class="navbar-nav list-none select-none align-items-start d-flex align-items-start w-100">
           <li class="d-flex nav-item flex-grow-1"></li>
           <li class="nav-item">
-            <a @click="smoothScroll('#hero')"
-              v-ripple>
-              <i class="navbar-icon pi pi-home"></i> <span>HOME</span>
+            <a @click="smoothScroll('#hero')">
+              <i class="navbar-icon pi pi-home"></i>
+              <router-link :to="{ name: 'Home' }"><span>HOME</span></router-link>
             </a>
           </li>
           <li class="nav-item">
-            <a @click="smoothScroll('#about')" v-ripple>
-              <i class="navbar-icon pi pi-info-circle"></i> <span>ABOUT US</span>
+            <a @click="smoothScroll('#about')">
+              <i class="navbar-icon pi pi-info-circle"></i>
+              <router-link :to="{ name: 'About' }"><span>ABOUT US</span></router-link> 
             </a>
           </li>
           <li class="nav-item">
-            <a @click="smoothScroll('#highlights')" v-ripple href="maps.vue">
-              <i class="navbar-icon pi pi-map-marker"></i><span>NEAR YOU</span>
+            <a @click="smoothScroll('#highlights')">
+              <i class="navbar-icon pi pi-map-marker"></i>
+              <router-link :to="{ name: 'Map' }"><span>NEAR YOU</span></router-link>
             </a>
           </li>
           <li class="nav-item">
-            <a @click="smoothScroll('#highlights')" v-ripple href="shop.vue">
-              <i class="navbar-icon pi pi-shopping-cart"></i><span>SMOOSERVE SHOP</span>
+            <a @click="smoothScroll('#highlights')" >
+              <i class="navbar-icon pi pi-shopping-cart"></i>
+              <router-link :to="{ name: 'Shop' }"><span>SMOOSERVE SHOP</span></router-link>
             </a>
           </li>
           <li class="d-flex nav-item flex-grow-1"></li>
