@@ -12,6 +12,7 @@ export default {
             wishlist: [],
             showWishlist: false,
             success: false,
+            isClicked: false,
             //products- dummy data
             products: [
                 {
@@ -165,6 +166,13 @@ export default {
                 product.quantity--;
             }
         },
+        toggleWishlist(product) {
+            // Add product to wishlist logic here
+            this.addToWishlist(product);
+
+            // Toggle the isClicked property
+            this.isClicked = !this.isClicked;
+        },
         addToWishlist(product) {
             // Check if the product is already in the wishlist
             const existingProduct = this.wishlist.find(item => item.id === product.id);
@@ -296,8 +304,9 @@ export default {
                 </div>
                 <div class="d-flex justify-content-between">
                     <p>&nbsp Total items in wishlist: {{ wishlist.length }}</p>
-                    <p >
-                        <Button label="Add All to Cart &nbsp" icon="pi pi-cart-plus " iconPos="right" style="margin-right: 10px;" @click="addAllToCart" />
+                    <p>
+                        <Button label="Add All to Cart &nbsp" icon="pi pi-cart-plus " iconPos="right"
+                            style="margin-right: 10px;" @click="addAllToCart" />
                     </p>
                 </div>
             </div>
@@ -347,7 +356,7 @@ export default {
             <div class="col-md-3 mb-4" v-for="product in products" :key="product.id">
                 <div class="p-card">
                     <div class="wishlist-button">
-                        <button @click="addToWishlist(product)">
+                        <button @click="toggleWishlist(product)" :class="{ 'clicked': isClicked }">
                             <i class="pi pi-heart-fill"></i>
                         </button>
                     </div>
@@ -525,5 +534,8 @@ cart-preview {
 
 .cart-items p {
     margin: 5px 0;
+}
+.clicked {
+  color: red;
 }
 </style>
