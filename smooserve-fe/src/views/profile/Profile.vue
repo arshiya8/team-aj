@@ -1,501 +1,359 @@
-<!--Start of Basic Form-->
 <template>
-  <div>
-    <!-- Include NavBar component here -->
+  <Toast></Toast>
+  <div v-if="loading" class="card">
+      <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
   </div>
-  <main class="crypto_bg">
-    <div class='flex-container'>
-      <!-- Display User Profile -->
-      <div class="flex-child user-profile" v-show="!editMode">
-        <div class="card align-items-center justify-content-center">
-          <Card style="width: 25em">
-            <template #header>
-              <img :src="profilePicture" class="circular-crop" alt="Profile Picture" />
-            </template>
-            <template #title>{{ first_name }}</template>
-            <template #subtitle>{{ email }}</template>
-            <template #content>
-              <p v-if="contact"><strong>Contact Number:</strong> {{ contact }}</p>
-              <!-- <p v-if="description"><strong>Description:</strong> {{ quizPreference.self_description}}</p> -->
-              <!-- <p v-if="commitments && commitments.length > 0"><strong>Commitments:</strong> {{ commitments.join(", ") }}</p> -->
-              <!-- <p v-else><strong>Commitments:</strong> {{ commitments }}</p> -->
-            </template>
-            <template #footer>
-              <Button icon="pi pi-pencil" label="Edit" @click="editProfile" />
-            </template>
-          </Card>
-        </div>
+  <div v-else class="surface-ground flex flex-column w-full h-screen">
+      <div class="grid align-items-center justify-content-center">
+          <div class="col-12 md:col-12 lg:col-6">
+              <Card class="p-3 mt-4 mb-4 card">
+                  <template #title style="text-align: center;">Profile</template>
+                  <template #content>
+                      <div class="grid align-items-center justify-content-center mb-3">
+                          <div class="col-12 md:col-4 lg:col-3 mb-3">
+                              <Avatar v-if="profilePicture != ''" shape="circle" size="xlarge" :image="profilePicture"
+                                  :style="{ backgroundColor: '#fafafa', width: '6rem', height: '6rem' }" />
+                              <Avatar v-else shape="circle" size="xlarge"
+                                  :style="{ backgroundColor: '#3F51B5', color: '#ffffff', width: '6rem', height: '6rem' }" />
+                          </div>
+                          <div class="p-col-12 text-center">
+                              <strong>{{ first_name }}</strong>
+                              <p v-if="email"> {{ email }}</p>
+                              <Button label="Edit profile" @click="editProfile"></Button>
+                          </div>
+                      </div>
+                      <div class="centered-container">
+                          <TabView style="width: 100%;">
+                              <TabPanel header="Quiz Data" class="centered-tab-panel">
+                                  <div v-if="quizPreference">
+                                      <!-- Display quiz data fetched from the Quiz Vue component -->
+                                      <p><strong>Commitment:</strong> {{ quizPreference.commitment }}</p>
+                                      <p><strong>Passionate About:</strong> {{ quizPreference.passionate_about }}
+                                      </p>
+                                      <p><strong>Self Awareness:</strong> {{ quizPreference.self_awareness }}</p>
+                                      <p><strong>Self Description:</strong> {{ quizPreference.self_description }}</p>
+                                      <p><strong>Skills:</strong> {{ quizPreference.skills }}</p>
+                                      <p><strong>Volunteering Experience:</strong> {{
+                                          quizPreference.volunteering_experience }} </p>
+                                      <p><strong>Volunteering Location:</strong> {{
+                                          quizPreference.volunteering_location }}</p>
+                                  </div>
+                                  <div v-else>
+                                      <p>Loading quiz data...</p>
+                                  </div>
+                              </TabPanel>
+                              <TabPanel header="Registered CSPs" class="centered-tab-panel">
+                                  <div class="centered-content">
+                                      <h3>No registered CSPs..</h3>
+                                  <router-link :to="{ name: 'Home' }"><Button label="Register Now!"></Button></router-link>
+                                  </div>
+                              </TabPanel>
+                              <TabPanel header="Favourites" class="centered-tab-panel">
+                                  ....
+                              </TabPanel>
+                          </TabView>
+                          </div>
+                  </template>
+              </Card>
+          </div>
       </div>
+      <!-- <div class="flex flex-column gap-3 mb-3 justify-center items-center">
+          <TabView style="width: 100%;"> -->
+      <!-- <TabPanel header="Quiz Data">
+                  <div v-if="quizPreference">
+                      Display quiz data fetched from the Quiz Vue component 
+                      <p><strong>Commitment:</strong> {{ quizPreference.commitment }}</p>
+                      <p><strong>Passionate About:</strong> {{ quizPreference.passionate_about }}
+                      </p>
+                      <p><strong>Self Awareness:</strong> {{ quizPreference.self_awareness }}</p>
+                      <p><strong>Self Description:</strong> {{ quizPreference.self_description }}</p>
+                      <p><strong>Skills:</strong> {{ quizPreference.skills }}</p>
+                      <p><strong>Volunteering Experience:</strong> {{
+                          quizPreference.volunteering_experience }} </p>
+                      <p><strong>Volunteering Location:</strong> {{
+                          quizPreference.volunteering_location }}</p>
+                  </div>
+                  <div v-else>
+                      <p>Loading quiz data...</p>
+                  </div>
+              </TabPanel> -->
+      <!-- <TabPanel header="Registered CSPs">
+                  <h3>No registered CSPs..</h3>
+                  <router-link :to="{ name: 'Home' }"><Button label="Register Now!"></Button></router-link>
+              </TabPanel>
+              <TabPanel header="Favourites">
+                  ....
+              </TabPanel>
+          </TabView>
+      </div> 
+       profile -->
+      <Dialog v-model:visible="visible" :style="{ width: '80vw' }">
+          <div class="grid align-items-center justify-content-center">
+              <div class="col-12 md:col-12 lg:col-6">
+                  <Card class="p-3 mt-4 mb-4 card">
+                      <template #title>Edit Profile</template>
+                      <template #content>
+                          <div class="grid align-items-center justify-content-center mb-3">
+                              <div class="col-12 md:col-4 lg:col-3 mb-3">
+                                  <Avatar v-if="profilePicture != ''" shape="circle" size="xlarge" :image="profilePicture"
+                                      :style="{ backgroundColor: '#fafafa', width: '6rem', height: '6rem' }" />
+                                  <Avatar v-else shape="circle" size="xlarge"
+                                      :style="{ backgroundColor: '#3F51B5', color: '#ffffff', width: '6rem', height: '6rem' }" />
+                              </div>
+                              <div class="col-12 md:col-8 lg:col-9 mb-3">
+                                  <div class="grid">
+                                      <Button rounded @click="add()"
+                                          class="w-full align-items-center justify-content-center mb-3"><i
+                                              class="pi pi-plus px-2"></i><span class="px-2">Pick an Image</span></Button>
+                                      <Button rounded outlined @click="remove()"
+                                          class="w-full align-items-center justify-content-center"><i
+                                              class="pi pi-trash px-2"></i><span class="px-2">Remove</span></Button>
+                                  </div>
+                              </div>
+                          </div>
 
-      <!-- User Profile Form -->
-      <div id="userProfile" v-show="editMode">
-        <form class="row g-3" id="userDetailsForm">
-          <div class="col-lg-6">
-            <label for="profilePicture" class="form-label">Profile Picture:</label>
-            <input type="file" class="form-control" id="profilePicture" accept="image/*"
-              @change="handleProfilePictureChange" />
-            <img :src="profilePicture" class="circular-crop" alt="Profile Picture" />
-          </div>
-          <div class="col-lg-6">
-            <label for="name" class="form-label">Name:</label>
-            <input v-model="first_name" type="text" class="form-control" id="name1" required />
-          </div>
-          <div class="col-lg-6">
-            <label for="contact" class="form-label">Contact Number:</label>
-            <input v-model="contact" type="tel" class="form-control" id="contact" required />
-          </div>
-          <!-- <div class="col-lg-6">
-            <label for="Description1" class="form-label">Describe yourself:</label>
-            <textarea v-model="description" class="form-control" id="Description1" rows="5"></textarea>
-          </div> -->
-          <!-- <div class="col-lg-6 col-md-6 col-sm-12">
-            <label for="commitment">Commitment:</label>
-            <select v-model="selectedCommitment" id="commitment" name="commitment">
-              <option value="Monday">Monday</option>
-              <option value="Tuesday">Tuesday</option>
-              <option value="Wednesday">Wednesday</option>
-              <option value="Thursday">Thursday</option>
-              <option value="Friday">Friday</option>
-            </select>
-            <button type="button" @click="addCommitment">Add</button>
-          </div> -->
-          <div class="pt-3 col-lg-6 col-md-6 col-sm-12 order-last">
-            <button type="button" @click="updateProfile">Update Profile</button>
-          </div>
-        </form>
+                          <div class="flex flex-column gap-3 mb-3">
+                              <label for="title">Username</label>
+                              <InputText id="title" :value="first_name" v-model="first_name" />
 
-        <!-- Commitment List -->
-        <!-- <div class="commitment-list">
-          <ul>
-            <li v-for="(commitment, index) in commitments" :key="index">
-              {{ commitment }}
-              <button @click="removeCommitment(index)">Remove</button>
-            </li>
-          </ul>
-        </div> -->
-      </div>
+                              <label for="desc">Description</label>
+                              <Textarea id="desc" :value="desc" v-model="desc" rows="5" cols="30" />
+                          </div>
+                          <Button text rounded label="Save" @click="save()"
+                              class="w-full align-items-center justify-content-center"><i
+                                  class="pi pi-save px-2"></i>Save</Button>
+                      </template>
+                  </Card>
+              </div>
+          </div>
+      </Dialog>
 
-      <!-- Quiz Card -->
-      <div class="flex-child quiz">
-        <Card style="width: 25em">
-          <template #header>
-            <h2>Quiz Data</h2>
-          </template>
-          <template #content>
-            <div v-if="quizPreference">
-              <!-- Display quiz data fetched from the Quiz Vue component -->
-              <p><strong>Commitment:</strong> {{ quizPreference.commitment }}</p>
-              <p v-if="quizPreference.passionate_about.length > 0"><strong>Passionate About:</strong> {{
-                quizPreference.passionate_about.join(', ') }}</p>
-              <p v-else><strong>Passionate About:</strong> {{ quizPreference.passionate_about }}</p>
-              <p><strong>Self Awareness:</strong> {{ quizPreference.self_awareness }}</p>
-              <p><strong>Self Description:</strong> {{ quizPreference.self_description }}</p>
-              <p v-if="quizPreference.skills.length > 0"><strong>Skills:</strong> {{ quizPreference.skills.join(', ') }}
-              </p>
-              <p v-else><strong>Skills:</strong> {{ quizPreference.skills }}</p>
-              <p v-if="quizPreference.volunteering_experience.length > 0"><strong>Volunteering Experience:</strong> {{
-                quizPreference.volunteering_experience.join(', ') }}</p>
-              <p v-else><strong>Volunteering Experience:</strong> {{ quizPreference.volunteering_experience }} </p>
-              <p v-if="quizPreference.volunteering_location.length > 0"><strong>Volunteering Location:</strong> {{ quizPreference.volunteering_location.join(', ') }}</p>
-              <p v-else><strong>Volunteering Location:</strong> {{ quizPreference.volunteering_location }}</p>
-            </div>
-            <div v-else>
-              <p>Loading quiz data...</p>
-            </div>
-          </template>
-          <template #footer>
-            <router-link :to="{ name: 'Quiz' }"><Button label="Take Quiz Again" @click="takeQuizAgain" /></router-link>
-          </template>
-        </Card>
-      </div>
-    </div>
-  </main>
-  <!--Registered CSPs-->
-  <section class="registeredCSP">
-    <div style="background-color: antiquewhite;">
-      <h2>Registered CSPs</h2>
-    </div>
-    <table class="registered-CSP-table">
-      <thead>
-        <tr>
-          <th>Registered CSP</th>
-          <th>CSP Contact</th>
-          <th>Status</th>
-          <th>Schedule Interview</th>
-        </tr>
-      </thead>
-      <template v-if="registeredCSPs.length > 0">
-        <tbody>
-          <!-- Example CSP entry -->
-          <tr v-for="(csp, index) in registeredCSPs" :key="index">
-            <td>{{ csp.cspName }}</td>
-            <td>{{ csp.cspContact }}</td>
-            <td>{{ csp.status }}</td>
-            <td>
-              <Dropdown v-model="csp.selectedTimeSlot" :options="csp.availableTimeSlots" optionLabel="time"
-                placeholder="Select Time Slot" class="p-dropdown">
-                <template #selected>
-                  {{ csp.selectedTimeSlot || 'Select Time Slot' }}
-                </template>
-              </Dropdown>
-            </td>
-          </tr>
-          <!-- More CSP entries... -->
-        </tbody>
-      </template>
-      <template v-else>
-        <div>
-          <!-- Show this message when there are no registered CSPs -->
-          There are no registered CSPs.
-        </div>
-      </template>
-    </table>
-    <tbody>
-      <!-- Add upcoming interview data here -->
-    </tbody>
-  </section>
-  <!-- Favourites Tab -->
-  <div style="background-color: antiquewhite;">
-    <h2>Favourites</h2>
   </div>
-
-  <div class="card">
-    <TabView>
-      <TabPanel v-for="tab in tabs" :key="tab.title" :header="tab.title">
-        <ShopCarousel v-if="tab.title === 'Smooserve Shops'" :shops="shops" />
-        <CSPCarousel v-if="tab.title === 'CSPs'" :csps="csps" />
-        <p class="m-0" v-else>{{ tab.content }}</p>
-      </TabPanel>
-    </TabView>
-  </div>
-  <div id="noFavoritesMessage" style="display: none;">You have no favorites currently.</div>
 </template>
-  
-<script>
-import { ref, onMounted } from 'vue';
-import Card from 'primevue/card';
-import TabMenu from 'primevue/tabmenu';
-import Tag from 'primevue/tag';
-import TabPanel from 'primevue/tabpanel';
-import Button from 'primevue/button';
+<script setup>
+import { ref, computed, onMounted, watch } from "vue";
+import axios from "axios";
+import { useRoute, useRouter } from "vue-router";
+import { useToast } from "primevue/usetoast";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
+import { db } from "@/firebase";
+import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import ShopCarousel from '../../components/ShopCarousel.vue';
 import CSPCarousel from '../../components/CSPCarousel.vue';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/firebase";
-import axios from 'axios';
 
-export default {
-  components: {
-    ShopCarousel,
-    CSPCarousel,
-  },
+// import { db, storage } from "@/firebase";
 
-  setup() {
-    const registeredCSPs = ref([
-      {
-        cspName: 'CSP Name 1',
-        cspContact: 'CSP Contact Information 1',
-        status: 'Pending',
-        availableTimeSlots: [
-          { time: 'Monday 12:30pm' },
-          { time: 'Tuesday 8:30am' },],
-        selectedTimeSlot: '',
-      },
-      {
-        cspName: 'CSP Name 2',
-        cspContact: 'CSP Contact Information 2',
-        status: 'Accepted',
-      },
-      {
-        cspName: 'CSP Name 3',
-        cspContact: 'CSP Contact Information 3',
-        status: 'Pending',
-        availableTimeSlots: [
-          { time: 'Wednesday 4:30pm' },
-          { time: 'Thursday 10:30am' },],
-        selectedTimeSlot: '',
-      },
-      // Add more fake data objects as needed
-    ]);
-    const first_name = ref('');
-    const quizPreference = ref(['']);
-    const favCSPs = ref([]);
-    let studentId = null;
-    const auth = getAuth();
-    const profilePicture = ref('');
-    const name = ref('');
-    const email = ref('');
-    const contact = ref('');
-    // const description = ref('');
-    // const selectedCommitment = ref('');
-    // const commitments = ref(['']);
-    const editMode = ref(false);
-    const tabs = ref([
-      {
-        title: 'Smooserve Shops',
-        content: '',
-      },
-      {
-        title: 'CSPs',
-        content: '',
-      },
-    ]);
+const backgroundImage = ref("/layout/images/landing-img1.jpg"); // Set this to the URL of your background image
 
-    onAuthStateChanged(auth, async (student) => {
-      if (student) {
-        try {
+const backgroundImageStyle = computed(() => {
+    return {
+        backgroundImage: `url(${backgroundImage.value})`,
+        backgroundSize: "cover", // Adjust the background size as needed
+        backgroundPosition: "center", // Adjust the background position as needed
+    };
+});
+const storage = getStorage();
+
+const toast = useToast();
+
+const route = useRoute();
+const auth = getAuth();
+let studentId = null;
+
+const visible = ref(false);
+const user = ref([]);
+
+const loading = ref(true);
+
+const buttonColor = ref("");
+const student = ref([]);
+const profilePicture = ref("");
+const backgroundPicture = ref("");
+const first_name = ref('');
+const quizPreference = ref(['']);
+const favCSPs = ref([]);
+const name = ref('');
+const email = ref('');
+const contact = ref('');
+
+const options = ref(['Quiz Data', 'Registered CSPs', 'Favourites']);
+
+function add() {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+
+  input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+          uploadImage(file);
+      }
+  };
+
+  input.click();
+}
+
+function remove() {
+  profilePicture.value = "";
+  user.value.profilePicture = "";
+}
+
+const editProfile = () => {
+  visible.value = true;
+};
+
+
+const uploadImage = async (file) => {
+  try {
+      const storageRef = sRef(storage, `studentPics/${studentId}/${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+
+      // Get the download URL
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      // Update the profile picture URL in Firestore
+      await updateDoc(doc(db, "students", studentId), {
+          profilePicture: downloadURL,
+      });
+
+      // Update the profile picture in the local state
+      profilePicture.value = downloadURL;
+
+      // Show success toast message
+      toast.add({
+          severity: "success",
+          summary: "Image Uploaded",
+          detail: "Image has been uploaded successfully!",
+          life: 3000,
+      });
+  } catch (error) {
+      console.error("Error uploading image:", error);
+      // Show error toast message
+      toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: "Error uploading image. Please try again later.",
+          life: 3000,
+      });
+  }
+};
+
+
+
+onAuthStateChanged(auth, async (student) => {
+  if (student) {
+      try {
+          loading.value = false;
           const querySnapshot = await getDocs(collection(db, "students"));
           querySnapshot.forEach((doc) => {
-            const studentEmail = doc.data().email;
-            if (studentEmail === student.email) {
-              studentId = doc.id;
-            }
+              const studentEmail = doc.data().email;
+              if (studentEmail === student.email) {
+                  studentId = doc.id;
+              }
           });
 
           // If studentId is still null, no matching email was found in the collection
           if (studentId === null) {
-            console.log("No matching id found in the database.");
+              console.log("No matching id found in the database.");
           } else {
-            console.log("Student ID found:", studentId);
-            const response = await axios.get(`http://localhost:8080/api/student/${studentId}`, {
-            });
-            first_name.value = response.data.first_name;
-            email.value = response.data.email;
-            contact.value = response.data.contact;
-            quizPreference.value = response.data.quizPreference;
-            favCSPs.value = response.data.favoriteCsps;
-            console.log(response.data)
+              console.log("Student ID found:", studentId);
+              const response = await axios.get(`http://localhost:8080/api/student/${studentId}`, {
+              });
+              first_name.value = response.data.first_name;
+              email.value = response.data.email;
+              contact.value = response.data.contact;
+              quizPreference.value = response.data.quizPreference;
+              favCSPs.value = response.data.favoriteCsps;
+              console.log(response.data)
 
           }
-        } catch (error) {
+      } catch (error) {
           console.error(error);
 
-        }
-      } else {
-        localStorage.remove('userProfile');
-        studentId = null;
-
       }
-    });
-
-    const updateProfile = async () => {
-      try {
-        const response = await axios.put(`http://localhost:8080/api/student/${studentId}`, {
-          first_name: first_name.value,
-          email: email.value,
-          contact: contact.value,
-        });
-        console.log(response.data); // Handle the response from the server if needed
-        localStorage.setItem('userProfile', JSON.stringify({
-          first_name: first_name.value,
-          email: email.value,
-          contact: contact.value,
-        }));
-        editMode.value = false;
-      } catch (error) {
-        console.error(error);
-        // Handle errors if the update fails
-      }
-    };
-    // onMounted(() => {
-    //   const storedProfile = localStorage.getItem('userProfile');
-    //   console.log(storedProfile)
-    //   if (storedProfile) {
-    //     const parsedProfile = JSON.parse(storedProfile);
-    //     first_name.value = parsedProfile.first_name;
-    //     email.value = parsedProfile.email;
-    //     contact.value = parsedProfile.contact;
-    //   }
-    // });
-
-    // const addCommitment = () => {
-    //   if (selectedCommitment) {
-    //     commitments.value.push(selectedCommitment.value);
-    //     selectedCommitment.value = '';
-    //   }
-    // };
-
-    // const removeCommitment = (index) => {
-    //   commitments.value.splice(index, 1);
-    // };
-
-    const editProfile = () => {
-      editMode.value = true;
-    };
-
-    const handleProfilePictureChange = (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        profilePicture.value = URL.createObjectURL(file);
-      }
-    };
-
-    // Dummy data for shops and csps
-    const shops = ref([
-      { name: 'Shop 1', price: 100, inventoryStatus: 'INSTOCK', image: 'image1.jpg' },
-      { name: 'Shop 2', price: 120, inventoryStatus: 'LOWSTOCK', image: 'image2.jpg' },
-      // Add more shop data as needed
-    ]);
-
-    const csps = ref([
-      { name: 'CSP 1', price: 50, inventoryStatus: 'INSTOCK', image: 'csp1.jpg' },
-      { name: 'CSP 2', price: 70, inventoryStatus: 'LOWSTOCK', image: 'csp2.jpg' },
-      // Add more CSP data as needed
-    ]);
-
-    return {
-      registeredCSPs, // Replace with your CSP data
-      profilePicture,
-      first_name,
-      email,
-      quizPreference,
-      favCSPs,
-      contact,
-      // description,
-      // selectedCommitment,
-      // commitments,
-      // addCommitment,
-      // removeCommitment,
-      updateProfile,
-      editProfile,
-      handleProfilePictureChange,
-      editMode,
-      tabs,
-      shops,
-      csps,
-    };
-  },
-};
-// Hide the "Registered CSP" table initially
-const registeredCspTable = document.querySelector('.registered-CSP');
-const noRegisteredCspMessage = document.getElementById('noRegisteredCspMessage'); // Get the message element
-
-// Example data fetching logic (replace with your actual data fetching)
-fetch('get_registered_csp_data.php') // Replace with your actual data source URL
-  .then(response => response.json())
-  .then(data => {
-    // Check if there is data
-    if (data.length > 0) {
-      // There are registered CSPs, hide the message and display the table
-      noRegisteredCspMessage.style.display = 'none';
-      registeredCspTable.style.display = 'table'; // Display the table
-
-      // Get the table body
-      const tableBody = registeredCspTable.querySelector('tbody');
-
-      // Clear previous content
-      tableBody.innerHTML = '';
-
-      // Iterate through the data and create rows
-      data.forEach(item => {
-        const row = tableBody.insertRow();
-        const cell1 = row.insertCell(0);
-        const cell2 = row.insertCell(1);
-        const cell3 = row.insertCell(2);
-        const cell4 = row.insertCell(3);
-
-        cell1.textContent = item.cspName; // Replace with your actual data property
-        cell2.textContent = item.registeredDate; // Replace with your actual data property
-        cell3.textContent = item.cspContact; // Replace with your actual data property
-        cell4.textContent = item.status; // Replace with your actual data property
-      });
-    } else {
-      // There are no registered CSPs, display the message and hide the table
-      noRegisteredCspMessage.style.display = 'block';
-      registeredCspTable.style.display = 'none';
-    }
-  })
-  .catch(error => {
-    console.error('Error fetching registered CSP data:', error);
-    // Handle the error here
-    noRegisteredCspMessage.style.display = 'block';
-    registeredCspTable.style.display = 'none';
-  });
-
-function showScheduleDropdown(button) {
-  // Get the parent row containing the button and dropdown
-  const row = button.parentElement.parentElement;
-
-  // Find the dropdown within the row
-  const dropdown = row.querySelector(".schedule-dropdown");
-
-  // Toggle the visibility of the dropdown
-  if (dropdown.style.display === "block") {
-    dropdown.style.display = "none";
   } else {
-    dropdown.style.display = "block";
-  }
-}
+      // localStorage.remove('userProfile');
+      studentId = null;
 
-
-function scheduleInterview(button) {
-  const dropdown = button.parentNode; // Get the parent div containing the dropdown
-  const selectedTimeSlot = dropdown.querySelector("#interviewTime").value;
-  const cspName = button.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.textContent; // Get CSP name
-
-  // Send scheduling information to the CSP organization (You can use AJAX or other methods)
-
-  // Example: Display a confirmation message
-  alert(`Scheduled an interview with ${cspName} on ${selectedTimeSlot}`);
-}
-const statusCells = document.querySelectorAll("td:nth-child(4)"); // Select all "Status" cells
-
-statusCells.forEach(statusCell => {
-  if (statusCell.textContent === "Accepted") {
-    const buttonCell = statusCell.nextElementSibling; // Get the cell with the button
-    buttonCell.innerHTML = ""; // Remove the button
   }
 });
+
+function save() {
+  loading.value = true;
+  const data = {
+      profilePicture: profilePicture.value,
+      first_name: first_name.value,
+  };
+  axios
+      .put(`https://localhost:8080/api/student/${studentId}`, data)
+      .then((response) => {
+          toast.add({
+              severity: "success",
+              summary: "Done",
+              detail: response.statusText,
+              life: 3000,
+          });
+      })
+      .catch((error) => {
+          console.log(error);
+          toast.add({
+              severity: "error",
+              summary: "Error",
+              detail: error,
+              life: 3000,
+          });
+      })
+      .finally(() => (loading.value = false));
+}
+
+onMounted(async () => {
+  axios
+      .get(`https://localhost:8080/api/student/${studentId}`)
+      .then((response) => {
+          student.value = response.data;
+          profilePicture.value = student.profilePicture;
+          first_name.value = student.first_name;
+      })
+      .catch((error) => {
+          console.log(error);
+          toast.add({
+              severity: "error",
+              summary: "Error",
+              detail: error,
+              life: 3000,
+          });
+      })
+      .finally(() => (loading.value = false));
+});
+watch(
+  () => buttonColor,
+  (newColor) => {
+      // Watch for changes in the buttonColor value and update the button background color
+      const buttons = document.querySelectorAll(".selectBtns");
+      buttons.forEach((button) => {
+          button.style.backgroundColor = newColor;
+      });
+  }
+);
 </script>
-  
 <style scoped>
-.crypto_bg {
-  background: linear-gradient(#064273, white)
+.card {
+  border-radius: 12px;
 }
 
-.flex-container {
-  display: flex;
-  padding-top: 3%;
-  padding-bottom: 3%;
+.centered-content {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+height: 100%;
 }
 
-.flex-child {
-  flex: 1;
-  margin-left: 5%;
-  margin-right: 5%;
-
-}
-
-.circular-crop {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin: 0 auto;
-  display: block;
-}
-
-/* CSS for the "Schedule Interview" button */
-.schedule-button {
-  position: relative;
-}
-
-/* Style for tables */
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th,
-td {
-  border: 1px solid black;
-  padding: 8px;
-}
-
-th {
-  background-color: #f2f1f1;
+.centered-container {
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100%;
 }
 </style>
-  
-  <!-- End of Basic Profile -->
