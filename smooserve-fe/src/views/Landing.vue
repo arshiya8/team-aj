@@ -206,7 +206,6 @@ export default {
     };
 
 
-
     return {
       csps,
       favoriteCSPs,
@@ -305,6 +304,14 @@ export default {
           <option value="Teaching">Teaching</option>
           <option value="Event Planning">Event Planning</option>
           <option value="Wrting and Communication">Communication</option>
+        </select>
+
+        <!-- Third Dropdown List -->
+        <label for="dropdown3"></label>
+        <select id="dropdown3" v-model="selectedValue3" @change="filterCsp">
+          <option value="" selected>Location</option>
+          <option value="Teaching">Local</option>
+          <option value="Teaching">Overseas</option>
         </select>
 
 
