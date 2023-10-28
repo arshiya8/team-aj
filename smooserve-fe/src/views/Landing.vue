@@ -524,12 +524,6 @@ export default {
   border:none;
   background-color: lightblue;
 }
-*{
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  color: rgba(6,66,115);
-}
 
 
 /* navbar */
