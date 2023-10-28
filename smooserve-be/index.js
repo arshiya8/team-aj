@@ -23,7 +23,7 @@ app.use("/api", zoomRoutes.routes);
 //   return res.redirect(
 //     encodeURI(
 //       `https://zoom.us/oauth/authorize?response_type=code&client_id=DgWlPZgGSrGcJOBMXERH2w&redirect_uri=${encodeURI(
-//         "http://localhost:8080/redirect"
+//         "https://smooserve-be.vercel.app/redirect"
 //       )}`
 //     )
 //   );
@@ -35,7 +35,7 @@ app.use("/api", zoomRoutes.routes);
 //     var data = {
 //       code: req.query.code,
 //       grant_type: "authorization_code",
-//       redirect_uri: "http://localhost:8080/redirect",
+//       redirect_uri: "https://smooserve-be.vercel.app/redirect",
 //     };
 
 //     var config = {
@@ -64,7 +64,7 @@ app.use("/api", zoomRoutes.routes);
 
 //     return res.json(result);
 //   }else{
-//       res.redirect("http://localhost:8080/zoomauth");
+//       res.redirect("https://smooserve-be.vercel.app/zoomauth");
 //   }
 // });
 
@@ -74,7 +74,7 @@ app.use("/api", zoomRoutes.routes);
 //     refresh_token:
 //       "eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6ImU1MjM3NTVlLTcwY2MtNGIxNC1hNTc1LThlZTUzNGQwNjU2ZiJ9.eyJ2ZXIiOjksImF1aWQiOiJlNWI2NDg5MDRlN2RiZjhkZTJiNDljMTY0MTljYTE5MSIsImNvZGUiOiJyU3duYW1rZ1JYd19HR0Y4M2lLVF82QWdiVlZqWC1uVGciLCJpc3MiOiJ6bTpjaWQ6dE04MnFOWlRUTG1COFM1dlVVeFYyZyIsImdubyI6MCwidHlwZSI6MSwidGlkIjowLCJhdWQiOiJodHRwczovL29hdXRoLnpvb20udXMiLCJ1aWQiOiIya1RVT2RCMlFaaUlpWEhJX1hNc2l3IiwibmJmIjoxNjk3NjgxNzM4LCJleHAiOjE3MDU0NTc3MzgsImlhdCI6MTY5NzY4MTczOCwiYWlkIjoieVRXQ2VNdDFSeG1lZFpaZ0l5RHBrZyJ9.9cxEKsjHHL7qGlUXHTGwqA0irfJPKkPbEUx3DLlgRVQFQFVzFJoB4ugG0alqYHudazhSpz3-hxXcG6yElY9ltg",
 //     grant_type: "refresh_token",
-//     //   redirect_uri: "http://localhost:8080/redirect",
+//     //   redirect_uri: "https://smooserve-be.vercel.app/redirect",
 //   };
 
 //   var config = {

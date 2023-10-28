@@ -102,7 +102,7 @@ async function getProfile(email){
 
 async function scheduleZoomMeeting() {
   axios
-    .post("http://localhost:8080/api/createMeeting", {
+    .post("https://smooserve-be.vercel.app/api/createMeeting", {
       accessToken: dbAccessToken.value,
       topic: topic.value,
       duration: zoomTimeSelected.value,
@@ -186,7 +186,7 @@ const updateTokens = async () => {
 
   console.log("fetching new tokens...");
   axios
-    .get("http://localhost:8080/api/getNewAccessToken/" + dbRefreshToken.value)
+    .get("https://smooserve-be.vercel.app/api/getNewAccessToken/" + dbRefreshToken.value)
     .then((response) => {
       toast.add({
         severity: "success",

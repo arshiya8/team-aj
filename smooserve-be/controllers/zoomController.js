@@ -19,7 +19,7 @@ const getZoomAuth = async (req, res) => {
     return res.redirect(
       encodeURI(
         `https://zoom.us/oauth/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURI(
-          "http://localhost:8080/api/zoomRedirect"
+          "https://smooserve-be.vercel.app/api/zoomRedirect"
         )}`
       )
     );
@@ -33,7 +33,7 @@ const getZoomRedirect = async (req, res) => {
     var data = {
       code: req.query.code,
       grant_type: "authorization_code",
-      redirect_uri: "http://localhost:8080/api/zoomRedirect",
+      redirect_uri: "https://smooserve-be.vercel.app/api/zoomRedirect",
     };
 
     var config = {
@@ -66,7 +66,7 @@ const getZoomRedirect = async (req, res) => {
     res.redirect(
       encodeURI(
         `https://zoom.us/oauth/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURI(
-          "http://localhost:8080/api/zoomRedirect"
+          "https://smooserve-be.vercel.app/api/zoomRedirect"
         )}`
       )
     );

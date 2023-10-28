@@ -27,12 +27,12 @@ onMounted(async () => {
 
   if (dbAccessToken && dbRefreshToken && !accessToken && !refreshToken) {
     window.location.href =
-      "http://localhost:8080/api/getNewAccessToken/" + dbRefreshToken;
+      "https://smooserve-be.vercel.app/api/getNewAccessToken/" + dbRefreshToken;
   } else if (dbAccessToken && dbRefreshToken && accessToken && refreshToken) {
     updateTokens(accessToken, refreshToken);
     window.location.href = "http://localhost:5173/#/csp/settings/" + localStorage.getItem("CSPid");  
   } else {
-    window.location.href = "http://localhost:8080/api/zoomAuth";
+    window.location.href = "https://smooserve-be.vercel.app/api/zoomAuth";
   }
 });
 
@@ -114,13 +114,13 @@ function scheduleZoomMeeting() {
   const refreshToken = urlParams.get("refresh_token");
 
   if (!accessToken && !refreshToken) {
-    window.location.href = "http://localhost:8080/api/zoomAuth";
+    window.location.href = "https://smooserve-be.vercel.app/api/zoomAuth";
   } else {
     // Now, you have the access_token and refresh_token for further use
     console.log("Access Token:", accessToken);
     console.log("Refresh Token:", refreshToken);
     axios
-      .post("http://localhost:8080/api/createMeeting", {
+      .post("https://smooserve-be.vercel.app/api/createMeeting", {
         accessToken: accessToken,
       })
       .then((response) => {

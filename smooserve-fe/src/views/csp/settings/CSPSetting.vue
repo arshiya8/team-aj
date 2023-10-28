@@ -176,7 +176,7 @@ async function getDocumentIdByEmail(email, collectionName) {
 
 function scheduleZoomMeeting() {
   axios
-    .post("http://localhost:8080/api/createMeeting", {
+    .post("https://smooserve-be.vercel.app/api/createMeeting", {
       accessToken: dbAccessToken.value,
       topic: topic.value,
       duration: zoomTimeSelected.value,
@@ -207,7 +207,7 @@ const getZoomMeetings = async () => {
   console.log(accessToken);
 
   try {
-    const response = await axios.post("http://localhost:8080/api/getMeetings", {
+    const response = await axios.post("https://smooserve-be.vercel.app/api/getMeetings", {
       accessToken: accessToken,
     });
 
@@ -249,7 +249,7 @@ const updateTokens = async () => {
 
   console.log("fetching new tokens...");
   axios
-    .get("http://localhost:8080/api/getNewAccessToken/" + dbRefreshToken.value)
+    .get("https://smooserve-be.vercel.app/api/getNewAccessToken/" + dbRefreshToken.value)
     .then((response) => {
       toast.add({
         severity: "success",
