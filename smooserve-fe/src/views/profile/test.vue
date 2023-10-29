@@ -57,62 +57,65 @@
                                         <div v-else>
                                             <p>Loading quiz data...</p>
                                         </div> -->
-                                        <div class="p-3 mt-2 mb-2 card">
+                                        <div v-transition class="p-3 mt-2 mb-2 card">
                                             <div class="surface-section">
-                                                <div class="font-medium text-3xl text-900 mb-3">Volunteering Preference
+                                                <div v-scroll class="font-medium text-3xl text-900 mb-3">Volunteering Preference
                                                 </div>
-                                                <div class="text-500 mb-5">
+                                                <div  v-scroll class="text-500 mb-5">
                                                     dsgdhdhds
                                                 </div>
                                                 <ul v-if="quizPreference" class="list-none p-0 m-0">
-                                                    <li
+                                                    <li v-transition
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                                        <div class="text-500 w-6 md:w-2 font-medium">Commitment </div>
-                                                        <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                        <div  v-scroll class="text-500 w-6 md:w-2 font-medium">Commitment </div>
+                                                        <div  v-scroll class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
                                                             {{ quizPreference.commitment }}
                                                         </div>
                                                     </li>
-                                                    <li v-for="cause in quizPreference.passionate_about" :key="cause.id"
+                                                    <li  v-transition v-for="cause in quizPreference.passionate_about"
+                                                        :key="cause.id"
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                                        <div class="text-500 w-6 md:w-2 font-medium">Passionate About</div>
-                                                        <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                        <div  v-scroll class="text-500 w-6 md:w-2 font-medium">Passionate About</div>
+                                                        <div  v-scroll class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
                                                             <Chip :label="cause" class="mr-2"></Chip>
                                                         </div>
                                                     </li>
-                                                    <li
+                                                    <li  v-transition
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                                        <div class="text-500 w-6 md:w-2 font-medium">Self Awareness</div>
-                                                        <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                        <div  v-scroll class="text-500 w-6 md:w-2 font-medium">Self Awareness</div>
+                                                        <div  v-scroll class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
                                                             {{ quizPreference.self_awareness }}
                                                         </div>
                                                     </li>
-                                                    <li
+                                                    <li  v-transition
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                                        <div class="text-500 w-6 md:w-2 font-medium">Self Description</div>
-                                                        <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                        <div  v-scroll class="text-500 w-6 md:w-2 font-medium">Self Description</div>
+                                                        <div  v-scroll class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
                                                             {{ quizPreference.self_awareness }}
                                                         </div>
                                                     </li>
-                                                    <li v-for="skill in quizPreference.skills" :key="skill.id"
+                                                    <li  v-transition v-for="skill in quizPreference.skills" :key="skill.id"
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                                        <div class="text-500 w-6 md:w-2 font-medium">Skills</div>
+                                                        <div  v-scroll class="text-500 w-6 md:w-2 font-medium">Skills</div>
                                                         <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-                                                            <Chip :label="skill" class="mr-2"></Chip>
+                                                            <Chip  v-scroll :label="skill" class="mr-2"></Chip>
                                                         </div>
                                                     </li>
-                                                    <li v-for="exp in quizPreference.passionate_about" :key="exp.id"
+                                                    <li  v-transition v-for="exp in quizPreference.passionate_about"
+                                                        :key="exp.id"
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                                        <div class="text-500 w-6 md:w-2 font-medium">Past Volunteering
+                                                        <div  v-scroll class="text-500 w-6 md:w-2 font-medium">Past Volunteering
                                                             Experiences</div>
-                                                        <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                        <div  v-scroll class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
                                                             <Chip :label="exp" class="mr-2"></Chip>
                                                         </div>
                                                     </li>
-                                                    <li v-for="loc in quizPreference.volunteering_location" :key="loc.id"
+                                                    <li  v-transition v-for="loc in quizPreference.volunteering_location"
+                                                        :key="loc.id"
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                                        <div class="text-500 w-6 md:w-2 font-medium">Location Preference
+                                                        <div  v-scroll class="text-500 w-6 md:w-2 font-medium">Location Preference
                                                         </div>
-                                                        <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                        <div  v-scroll class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
                                                             <Chip :label="loc" class="mr-2"></Chip>
                                                         </div>
                                                     </li>
@@ -121,15 +124,15 @@
                                         </div>
                                     </TabPanel>
                                     <TabPanel header="Registered CSPs">
-                                        <DataTable :value="registeredCSPs" tableStyle="min-width: 50rem">
-                                            <Column field="cspName" header="Registered CSP"></Column>
-                                            <Column field="cspStatus" header="Status"></Column>
-                                            <Column field="link" header="More"></Column>
+                                        <DataTable v-transition :value="registeredCSPs" tableStyle="min-width: 50rem">
+                                            <Column v-scroll field="cspName" header="Registered CSP"></Column>
+                                            <Column v-scrollfield="cspStatus" header="Status"></Column>
+                                            <Column v-scroll field="link" header="More"></Column>
                                         </DataTable>
-                                        <div v-if="registeredCSPs.length === 0">
+                                        <div v-transition v-if="registeredCSPs.length === 0">
 
-                                            <h3>No registered CSPs..</h3>
-                                            <router-link :to="{ name: 'Home' }"><Button
+                                            <h3 v-scroll>No registered CSPs..</h3>
+                                            <router-link :to="{ name: 'Home' }"><Button v-scroll
                                                     label="Register Now!"></Button></router-link>
                                         </div>
                                     </TabPanel>
@@ -217,42 +220,42 @@ import Row from 'primevue/row';                   // optional
 
 // import { db, storage } from "@/firebase";
 const tabs = ref([
-      {
+    {
         title: 'Smooserve Shops',
         content: '',
-      },
-      {
+    },
+    {
         title: 'CSPs',
         content: '',
-      },
-    ]);
+    },
+]);
 onMounted(async () => {
-  // You can fetch your CSP data here, for example:
-  try {
-    getRegisteredCSPs();
-    registeredCSPs.cspName = cspName;
-    registeredCSPs.cspStatus = cspName; // Update this line based on your API response structure
-  } catch (error) {
-    console.error('Error fetching registered CSP data:', error);
-  }
+    // You can fetch your CSP data here, for example:
+    try {
+        getRegisteredCSPs();
+        registeredCSPs.cspName = cspName;
+        registeredCSPs.cspStatus = cspName; // Update this line based on your API response structure
+    } catch (error) {
+        console.error('Error fetching registered CSP data:', error);
+    }
 });
 const registeredCSPs = ref([
-  {
-    cspName: 'CSP Name 1',
-    cspStatus: 'Pending',
-    link: 'Waiting for confirmation...'
-  },
-  {
-    cspName: 'CSP Name 2',
-    cspStatus: 'Schedule',
-    link: 'Link to CSP...'
-  },
-  {
-    cspName: 'CSP Name 3',
-    cspStatus: 'Accepted',
-    link: 'Congratulations!'
-  },
-  // Add more dummy data objects as needed
+    {
+        cspName: 'CSP Name 1',
+        cspStatus: 'Pending',
+        link: 'Waiting for confirmation...'
+    },
+    {
+        cspName: 'CSP Name 2',
+        cspStatus: 'Schedule',
+        link: 'Link to CSP...'
+    },
+    {
+        cspName: 'CSP Name 3',
+        cspStatus: 'Accepted',
+        link: 'Congratulations!'
+    },
+    // Add more dummy data objects as needed
 ]);
 const backgroundImage = ref("/layout/images/landing-img1.jpg"); // Set this to the URL of your background image
 
@@ -459,5 +462,19 @@ watch(
     background-color: rgba(255, 255, 255, 0.7);
     /* Semi-transparent white */
 }
+
+.before-enter {
+    opacity: 0;
+    transform: translateY(100px);
+    transition: all 2s ease-out;
+  }
+
+  /* 
+    If the element intersects with the viewport, the before-enter class is added.
+  */
+  .enter {
+    opacity: 1;
+    transform: translateY(0px);
+  }
 </style>
   
