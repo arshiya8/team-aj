@@ -2,6 +2,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
 
+// animation things
+import ScrollAnimation from './directives/ScrollAnimation'; 
 
 import PrimeVue from 'primevue/config';
 import AutoComplete from 'primevue/autocomplete';
@@ -126,6 +128,10 @@ const firebaseConfig = {
 };
 
 initializeApp(firebaseConfig);
+
+// animation 
+app.directive('scrollanimation', ScrollAnimation);
+
 
 app.use(router);
 

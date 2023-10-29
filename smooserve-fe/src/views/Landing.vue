@@ -9,6 +9,7 @@ import axios from 'axios';
 import { useRouter } from "vue-router";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
+
 export default {
   setup() {
     const csps = ref([]);
@@ -258,7 +259,7 @@ export default {
   <!-- Instructions card -->
   <div class="surface-section px-4 py-8 md:px-6 lg:px-8 text-center">
       <div class="grid">
-          <div class="col-12 md:col-4 mb-4 px-5">
+          <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
               <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
                   <i class="pi pi-search text-4xl text-blue-700"></i>
               </span>
@@ -268,7 +269,7 @@ export default {
                 your quiz results!
               </span>
           </div>
-          <div class="col-12 md:col-4 mb-4 px-5">
+          <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
               <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
                   <i class="pi pi-sliders-v text-4xl text-blue-700"></i>
               </span>
@@ -278,7 +279,7 @@ export default {
                 filter functions, or use our convenient auto-filter feature, but not both at once.
               </span>
           </div>
-          <div class="col-12 md:col-4 mb-4 px-5">
+          <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
               <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
                   <i class="pi pi-heart text-4xl text-blue-700"></i>
               </span>
@@ -369,7 +370,7 @@ export default {
                   <h1>{{ csp.title }}</h1>
                   <p class="card-description">{{ csp.desc }}</p>
 
-                   <!-- see more button link to linktree  -->
+                  <!-- see more button link to linktree  -->
                   <router-link :to="{ name: 'CSP', params: { id: csp.id } }"><Button label="See More"></Button></router-link>
                 </div>
               </div>
@@ -379,6 +380,7 @@ export default {
       </div>
     </div>
   </div>
+
 
   <!-- Pagination Controls with Styling -->
   <div class="pagination">
@@ -395,6 +397,19 @@ export default {
 
 
 <style>
+
+/* animation */
+.before-enter {
+  opacity: 0;
+  transform: translateY(100px);
+  transition: all 2s ease-out;
+}
+
+.enter {
+  opacity: 1;
+  transform: translateY(0px);
+}
+
 
 /* pagination tool */
 .pagination {
