@@ -115,6 +115,7 @@ export default {
       // console.log(response.data.quizPreference)
       const causes = response.data.quizPreference.passionate_about
       const skills = response.data.quizPreference.skills
+      const location = response.data.quizPreference.isLocal 
 
       if (!csps.original) {
         // Store the original csps array if it's not already stored
@@ -122,7 +123,7 @@ export default {
       }
       if (csps.value.length === csps.original.length) {
         const auto_filter = csps.value.filter(csp => {
-          return causes.includes(csp.cause) || skills.includes(csp.skills);
+          return causes.includes(csp.cause) || skills.includes(csp.skills) || location.includes(csp.isLocal);
         });
         csps.value = auto_filter;
       } else {
@@ -133,7 +134,7 @@ export default {
       // console.log(auto_filter);
 
 
-      selectedValue3.value = selectedValue3.value === '' ? 'choiceX' : '';
+      // selectedValue3.value = selectedValue3.value === '' ? 'choiceX' : '';
     };
 
     const itemsPerPage = 6;
@@ -197,7 +198,8 @@ export default {
         const filteredCsps = csps.value.filter(csp => {
           const causeMatch = selectedValue1.value === '' || selectedValue1.value === csp.cause;
           const skillsMatch = selectedValue2.value === '' || selectedValue2.value === csp.skills;
-          return causeMatch || skillsMatch;
+          const locationMatch = selectedValue3.value === '' || selectedValue3 === csp.isLocal;
+          return causeMatch || skillsMatch || locationMatch;
         });
         csps.value = filteredCsps;
       } else {
@@ -261,30 +263,30 @@ export default {
       <div class="grid">
           <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
               <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
-                  <i class="pi pi-search text-4xl text-blue-700"></i>
+                  <i v-scroll class="pi pi-search text-4xl text-blue-700"></i>
               </span>
-              <div class="text-900 text-xl mb-3 font-medium">Step 1</div>
-              <span class="text-700 line-height-3">
+              <div v-scroll class="text-900 text-xl mb-3 font-medium">Step 1</div>
+              <span v-scroll class="text-700 line-height-3">
                 Ready to start your CSP search? Take a look at the displayed CSP's below that were filtered according to 
                 your quiz results!
               </span>
           </div>
           <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
               <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
-                  <i class="pi pi-sliders-v text-4xl text-blue-700"></i>
+                  <i v-scroll class="pi pi-sliders-v text-4xl text-blue-700"></i>
               </span>
-              <div class="text-900 text-xl mb-3 font-medium">Step 2</div>
-              <span class="text-700 line-height-3">
+              <div v-scroll class="text-900 text-xl mb-3 font-medium">Step 2</div>
+              <span v-scroll class="text-700 line-height-3">
                 Not too satisfied with what you are seeing? Fret not as you can choose to manually filter the CSPs using our 
                 filter functions, or use our convenient auto-filter feature, but not both at once.
               </span>
           </div>
           <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
               <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
-                  <i class="pi pi-heart text-4xl text-blue-700"></i>
+                  <i v-scroll class="pi pi-heart text-4xl text-blue-700"></i>
               </span>
-              <div class="text-900 text-xl mb-3 font-medium">Step 3</div>
-              <span class="text-700 line-height-3">
+              <div v-scroll class="text-900 text-xl mb-3 font-medium">Step 3</div>
+              <span v-scroll class="text-700 line-height-3">
                 Found the CSP of your dreams? Go ahead and favourite the CSP using the heart icons on the back of the CSP cards! You
                 can also click the 'See More' button to find out more about the individual CSP's!
               </span>
@@ -336,8 +338,8 @@ export default {
         <label for="dropdown3"></label>
         <select id="dropdown3" v-model="selectedValue3" @change="filterCsp">
           <option value="" selected>Location</option>
-          <option value="Teaching">Local</option>
-          <option value="Teaching">Overseas</option>
+          <option value="true">Local</option>
+          <option value="false">Overseas</option>
         </select>
 
 
@@ -356,7 +358,7 @@ export default {
     <div class="grid ">
       <div class="card-container">
         <div class="flex align-items-center justify-content-center sm:col-12 md:col-6 lg:col-4" v-for="(csp, index) in getVisibleCsps" :key="csp.id">
-          <div class="flip-card">
+          <div  v-scrollanimation class="flip-card">
             <div class="flip-card-inner">
               <div class="flip-card-front">
                 <img :src="csp.imageURL" :alt="`CSP ${csp.id}`">
@@ -399,17 +401,21 @@ export default {
 <style>
 
 /* animation */
-.before-enter {
-  opacity: 0;
-  transform: translateY(100px);
-  transition: all 2s ease-out;
-}
 
-.enter {
-  opacity: 1;
-  transform: translateY(0px);
-}
 
+.before-enter-flip{
+    opacity: 0;
+    transform: scale(.5) rotateZ(-25deg);
+    transition: all 1s ease-out;
+  }
+
+  /* 
+    If the element intersects with the viewport, the before-enter class is added.
+  */
+  .enter-flip {
+    opacity: 1;
+    transform: scale(1) rotateZ(0deg);
+  }
 
 /* pagination tool */
 .pagination {
