@@ -123,7 +123,7 @@ export default {
       }
       if (csps.value.length === csps.original.length) {
         const auto_filter = csps.value.filter(csp => {
-          return causes.includes(csp.cause) || skills.includes(csp.skills) || location.includes(csp.isLocal);
+          return causes.includes(csp.cause) || skills.includes(csp.skills) || location===(csp.isLocal);
         });
         csps.value = auto_filter;
       } else {
