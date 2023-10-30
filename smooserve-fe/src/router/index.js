@@ -42,6 +42,11 @@ const routes = [
     component: () => import("@/views/csp/settings/CSPSetting.vue"),
   },
   {
+    path: "/csp/settings/Scheduler",
+    name: "CScheduler",
+    component: () => import("@/views/csp/settings/Scheduler.vue"),
+  },
+  {
     path: "/csp/signups/",
     name: "CSPSignup",
     component: () => import("@/views/csp/settings/CSPSignup.vue"),
