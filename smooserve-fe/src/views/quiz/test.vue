@@ -223,7 +223,7 @@ export default {
 <template>
     <div id="bg" :style="backgroundImage">
         <router-link :to="{ name: 'Home' }" style="display: flex; justify-content: center; align-items: center;">
-            <img src="layout/images/logo-white.png" height="80" class="mr-0 lg:mr-2" />
+            <img src="/layout/images/logo-white.png" height="80" class="mr-0 lg:mr-2" />
         </router-link>
         <h1 style="color:#064273; text-align: center;">CSP PREFERENCE QUIZ</h1>
 
