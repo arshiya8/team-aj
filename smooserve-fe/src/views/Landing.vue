@@ -115,7 +115,7 @@ export default {
       // console.log(response.data.quizPreference)
       const causes = response.data.quizPreference.passionate_about
       const skills = response.data.quizPreference.skills
-      const location = response.data.quizPreference.isLocal 
+      const location = response.data.quizPreference.isLocal
 
       if (!csps.original) {
         // Store the original csps array if it's not already stored
@@ -246,51 +246,51 @@ export default {
 <template>
   <!-- navbar component -->
   <NavBar />
-  
+
   <!-- headers -->
   <div class="container-fluid">
-    <CaroPics /> 
+    <CaroPics />
     <div class="row pb-3">
       <h2
-          style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; 
+          style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold;
           text-align: center; margin-top: 30px; font-size: 2rem">
         COMMUNITY SERVICE
         PROJECTS</h2>
     </div>
 
-  <!-- Instructions card -->
-  <div class="surface-section px-4 py-8 md:px-6 lg:px-8 text-center">
+    <!-- Instructions card -->
+    <div class="surface-section px-4 py-8 md:px-6 lg:px-8 text-center">
       <div class="grid">
-          <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
+        <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
               <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
                   <i v-scroll class="pi pi-search text-4xl text-blue-700"></i>
               </span>
-              <div v-scroll class="text-900 text-xl mb-3 font-medium">Step 1</div>
-              <span v-scroll class="text-700 line-height-3">
-                Ready to start your CSP search? Take a look at the displayed CSP's below that were filtered according to 
+          <div v-scroll class="text-900 text-xl mb-3 font-medium">Step 1</div>
+          <span v-scroll class="text-700 line-height-3">
+                Ready to start your CSP search? Take a look at the displayed CSP's below that were filtered according to
                 your quiz results!
               </span>
-          </div>
-          <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
+        </div>
+        <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
               <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
                   <i v-scroll class="pi pi-sliders-v text-4xl text-blue-700"></i>
               </span>
-              <div v-scroll class="text-900 text-xl mb-3 font-medium">Step 2</div>
-              <span v-scroll class="text-700 line-height-3">
-                Not too satisfied with what you are seeing? Fret not as you can choose to manually filter the CSPs using our 
+          <div v-scroll class="text-900 text-xl mb-3 font-medium">Step 2</div>
+          <span v-scroll class="text-700 line-height-3">
+                Not too satisfied with what you are seeing? Fret not as you can choose to manually filter the CSPs using our
                 filter functions, or use our convenient auto-filter feature, but not both at once.
               </span>
-          </div>
-          <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
+        </div>
+        <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
               <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
                   <i v-scroll class="pi pi-heart text-4xl text-blue-700"></i>
               </span>
-              <div v-scroll class="text-900 text-xl mb-3 font-medium">Step 3</div>
-              <span v-scroll class="text-700 line-height-3">
+          <div v-scroll class="text-900 text-xl mb-3 font-medium">Step 3</div>
+          <span v-scroll class="text-700 line-height-3">
                 Found the CSP of your dreams? Go ahead and favourite the CSP using the heart icons on the back of the CSP cards! You
                 can also click the 'See More' button to find out more about the individual CSP's!
               </span>
-          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -306,12 +306,12 @@ export default {
     <div class="row">
       <div class="col">
         <h1
-            style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600; 
+            style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600;
             text-align: center; color:white;">
-            What's happening in Smooserve</h1>
+          What's happening in Smooserve</h1>
       </div>
     </div>
-    <div class="row justify-content-center align-items-center" style="padding-bottom: 20px; text-align: center; 
+    <div class="row justify-content-center align-items-center" style="padding-bottom: 20px; text-align: center;
     font-family: 'Helvetica Neue Medium', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">
 
 
@@ -358,7 +358,7 @@ export default {
     <div class="grid ">
       <div class="card-container">
         <div class="flex align-items-center justify-content-center sm:col-12 md:col-6 lg:col-4" v-for="(csp, index) in getVisibleCsps" :key="csp.id">
-          <div  v-scrollanimation class="flip-card">
+          <div v-scrollanimation class="flip-card">
             <div class="flip-card-inner">
               <div class="flip-card-front">
                 <img :src="csp.imageURL" :alt="`CSP ${csp.id}`">
@@ -401,21 +401,20 @@ export default {
 <style>
 
 /* animation */
-
-
 .before-enter-flip{
-    opacity: 0;
-    transform: scale(.5) rotateZ(-25deg);
-    transition: all 1s ease-out;
-  }
+  opacity: 0;
+  transform: scale(.5) rotateZ(-25deg);
+  transition: all 1s ease-out;
+}
 
-  /* 
-    If the element intersects with the viewport, the before-enter class is added.
-  */
-  .enter-flip {
-    opacity: 1;
-    transform: scale(1) rotateZ(0deg);
-  }
+/*
+  If the element intersects with the viewport, the before-enter class is added.
+*/
+.enter-flip {
+  opacity: 1;
+  transform: scale(1) rotateZ(0deg);
+}
+
 
 /* pagination tool */
 .pagination {
