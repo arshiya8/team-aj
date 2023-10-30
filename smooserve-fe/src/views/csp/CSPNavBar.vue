@@ -149,7 +149,7 @@ const items = ref([
           ></Button>
 
           <div v-if="isLoggedIn">
-            <Button @click="goToCSP()" icon="pi pi-user" severity="primary" rounded outlined aria-label="User" />
+            <Button @click="goToCSP()" v-tooltip.bottom="'Your CSP Page'" icon="pi pi-external-link" severity="primary" rounded outlined aria-label="User" />
             <Button
               label="Sign out"
               class="p-button-rounded border-none ml-5 font-light text-white line-height-2"

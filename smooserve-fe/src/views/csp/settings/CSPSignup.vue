@@ -21,7 +21,7 @@ const loading = ref(true);
 
 const visibleInterview = ref(false);
 const visibleProfile = ref(false);
-const selectedProfile = ref()
+const selectedProfile = ref();
 
 const registeredStudents = ref([]);
 const selectedStudent = ref();
@@ -40,7 +40,7 @@ onMounted(async () => {
     if (user) {
       // User is signed in
       loading.value = true;
-      CSPid.value = await getDocumentIdByEmail(user.email, "CSPs", 'id');
+      CSPid.value = await getDocumentIdByEmail(user.email, "CSPs", "id");
 
       //check if is student
       let data = await getDocumentIdByEmail(user.email, "Users");
@@ -100,10 +100,14 @@ function acceptRejectStudent(status) {
     });
 }
 
-async function getProfile(email){
-    selectedProfile.value = await getDocumentIdByEmail(email, "students", 'profile');
-    console.log(selectedProfile.value);
-    visibleProfile.value = true;
+async function getProfile(email) {
+  selectedProfile.value = await getDocumentIdByEmail(
+    email,
+    "students",
+    "profile"
+  );
+  console.log(selectedProfile.value);
+  visibleProfile.value = true;
 }
 
 async function scheduleZoomMeeting() {
@@ -192,7 +196,10 @@ const updateTokens = async () => {
 
   console.log("fetching new tokens...");
   axios
-    .get("https://smooserve-be.vercel.app/api/getNewAccessToken/" + dbRefreshToken.value)
+    .get(
+      "https://smooserve-be.vercel.app/api/getNewAccessToken/" +
+        dbRefreshToken.value
+    )
     .then((response) => {
       toast.add({
         severity: "success",
@@ -307,9 +314,11 @@ const updateTokens = async () => {
   >
     <div class="p-3 mt-2 mb-2 card">
       <div class="surface-section">
-        <div class="font-medium text-3xl text-900 mb-3">{{ selectedProfile.displayName }}</div>
+        <div class="font-medium text-3xl text-900 mb-3">
+          {{ selectedProfile.displayName }}
+        </div>
         <div class="text-500 mb-5">
-            {{ selectedProfile.email }}
+          {{ selectedProfile.email }}
         </div>
         <ul class="list-none p-0 m-0">
           <li
@@ -406,13 +415,24 @@ const updateTokens = async () => {
 
     <div class="grid align-items-center justify-content-center">
       <div class="col-12 md:col-12 lg:col-10">
+        <div class="mb-7 ml-3">
+          <h1>
+            <span class="text-primary-900 font-bold">Hello</span>
+            <span class="pl-2 text-primary-500 font-bold">
+              {{ csp.title }}</span
+            >
+          </h1>
+          <h2 class="text-600">CSP Dashboard</h2>
+        </div>
         <div class="grid">
           <div class="col-12 lg:col-6 xl:col-3">
             <div class="card mb-0 surface-0 p-5">
               <div class="flex justify-content-between mb-3">
                 <div>
                   <span class="block text-500 font-medium mb-3">Views</span>
-                  <div class="text-900 font-medium text-xl">{{ csp.views }}</div>
+                  <div class="text-900 font-medium text-xl">
+                    {{ csp.views }}
+                  </div>
                 </div>
                 <div
                   class="flex align-items-center justify-content-center bg-blue-100 border-round"
@@ -421,8 +441,8 @@ const updateTokens = async () => {
                   <i class="pi pi-eye text-blue-500 text-xl"></i>
                 </div>
               </div>
-              <span class="text-green-500 font-medium">24 new </span>
-              <span class="text-500">since last visit</span>
+              <!-- <span class="text-green-500 font-medium">24 new </span>
+              <span class="text-500">since last visit</span> -->
             </div>
           </div>
           <div class="col-12 lg:col-6 xl:col-3">
@@ -441,8 +461,8 @@ const updateTokens = async () => {
                   <i class="pi pi-users text-orange-500 text-xl"></i>
                 </div>
               </div>
-              <span class="text-green-500 font-medium">%52+ </span>
-              <span class="text-500">since last week</span>
+              <!-- <span class="text-green-500 font-medium">%52+ </span>
+              <span class="text-500">since last week</span> -->
             </div>
           </div>
           <div class="col-12 lg:col-6 xl:col-3">
@@ -465,8 +485,8 @@ const updateTokens = async () => {
                   <i class="pi pi-check-square text-cyan-500 text-xl"></i>
                 </div>
               </div>
-              <span class="text-green-500 font-medium">520 </span>
-              <span class="text-500">newly registered</span>
+              <!-- <span class="text-green-500 font-medium">520 </span>
+              <span class="text-500">newly registered</span> -->
             </div>
           </div>
           <div class="col-12 lg:col-6 xl:col-3">
@@ -485,8 +505,8 @@ const updateTokens = async () => {
                   <i class="pi pi-heart text-purple-500 text-xl"></i>
                 </div>
               </div>
-              <span class="text-green-500 font-medium">85 </span>
-              <span class="text-500">responded</span>
+              <!-- <span class="text-green-500 font-medium">85 </span>
+              <span class="text-500">responded</span> -->
             </div>
           </div>
         </div>
@@ -505,13 +525,15 @@ const updateTokens = async () => {
                   class="flex flex-wrap align-items-center justify-content-between gap-2"
                 >
                   <span class="text-xl text-900 font-bold">Students</span>
-                  <Button icon="pi pi-refresh" rounded raised />
                 </div>
               </template>
               <Column field="email" header="Email"></Column>
               <Column header="Profile">
                 <template #body="slotProps">
-                  <Button rounded label="View" @click="getProfile(slotProps.data.email)"
+                  <Button
+                    rounded
+                    label="View"
+                    @click="getProfile(slotProps.data.email)"
                     >View Profile</Button
                   >
                 </template>

@@ -30,6 +30,7 @@ const loading = ref(true);
 const registerChecked = ref(false);
 
 const CSPImage = ref("");
+const CSPPoster = ref("");
 
 const datetime12h = ref();
 
@@ -40,7 +41,7 @@ const dbAccessToken = ref("");
 const dbRefreshToken = ref("");
 const meetingsList = ref();
 
-function add() {
+function add(purpose) {
   const input = document.createElement("input");
   input.type = "file";
   input.accept = "image/*";
@@ -48,21 +49,30 @@ function add() {
   input.onchange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      uploadImage(file);
+      uploadImage(file, purpose);
     }
   };
 
   input.click();
 }
 
-function remove() {
-  CSPImage.value = "";
-  csp.value.imageURL = "";
+function remove(purpose) {
+  if(purpose == 'profile'){
+    CSPImage.value = "";
+    csp.value.imageURL = "";
+  }else if(purpose == 'poster'){
+    CSPPoster.value = "";
+    csp.value.posterURL = "";
+  }
 }
 
-const uploadImage = async (file) => {
+const uploadImage = async (file, purpose) => {
   try {
-    const storageRef = sRef(storage, `images/${CSPid}/${file.name}`);
+    if(purpose == 'profile'){
+      var storageRef = sRef(storage, `images/${CSPid.value}/${file.name}`);
+    }else{
+      var storageRef = sRef(storage, `poster/${CSPid.value}/${file.name}`);
+    }
 
     const snapshot = await uploadBytes(storageRef, file);
 
@@ -70,8 +80,13 @@ const uploadImage = async (file) => {
     const downloadURL = await getDownloadURL(snapshot.ref);
 
     // Update csp.imageURL with the new URL
+    if(purpose == 'profile'){
     csp.value.imageURL = downloadURL;
     CSPImage.value = downloadURL;
+    }else{
+      csp.value.posterURL = downloadURL;
+      CSPPoster.value = downloadURL;
+    }
   } catch (error) {
     console.error("Error uploading image:", error);
     toast.add({
@@ -88,7 +103,6 @@ function save() {
   csp.value.title = title.value;
   csp.value.desc = desc.value;
   csp.value.registration.active = registerChecked.value;
-  console.log(csp.value);
   axios
     .put("https://smooserve-be.vercel.app/api/csp/" + CSPid.value, csp.value)
     .then((response) => {
@@ -118,6 +132,7 @@ onMounted(async () => {
       // User is signed in
       loading.value = true;
       CSPid.value = await getDocumentIdByEmail(user.email, "CSPs", "id");
+      console.log(CSPid.value);
 
       // check if is student
       let data = await getDocumentIdByEmail(user.email, "Users");
@@ -133,6 +148,7 @@ onMounted(async () => {
             ? (list.value = response.data.settings.urls)
             : (list.value = []);
           CSPImage.value = csp.value.imageURL;
+          CSPPoster.value = csp.value.posterURL;
           response.data.registration.active
             ? (registerChecked.value = response.data.registration.active)
             : (registerChecked.value = false);
@@ -158,33 +174,6 @@ onMounted(async () => {
     }
   });
 });
-
-function scheduleZoomMeeting() {
-  axios
-    .post("https://smooserve-be.vercel.app/api/createMeeting", {
-      accessToken: dbAccessToken.value,
-      topic: topic.value,
-      duration: zoomTimeSelected.value,
-      start_time: formatDateTimeToISOString(datetime12h.value),
-    })
-    .then((response) => {
-      toast.add({
-        severity: "success",
-        summary: "Done",
-        detail: response.statusText,
-        life: 3000,
-      });
-    })
-    .catch((error) => {
-      console.log(error);
-      toast.add({
-        severity: "error",
-        summary: "Error",
-        detail: error,
-        life: 3000,
-      });
-    });
-}
 
 const getZoomMeetings = async () => {
   // Access the access token from your data source, e.g., Vuex or a ref
@@ -296,21 +285,6 @@ const updateTokens = async () => {
         });
     });
 };
-
-function formatDateTimeToISOString(dateTime) {
-  const date = new Date(dateTime);
-
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  const seconds = String(date.getSeconds()).padStart(2, "0");
-
-  const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-
-  return formattedDate;
-}
 </script>
 <template>
   <Toast></Toast>
@@ -357,7 +331,7 @@ function formatDateTimeToISOString(dateTime) {
                 <div class="grid">
                   <Button
                     rounded
-                    @click="add()"
+                    @click="add('profile')"
                     class="w-full align-items-center justify-content-center mb-3"
                     ><i class="pi pi-plus px-2"></i
                     ><span class="px-2">Pick an Image</span></Button
@@ -365,7 +339,7 @@ function formatDateTimeToISOString(dateTime) {
                   <Button
                     rounded
                     outlined
-                    @click="remove()"
+                    @click="remove('profile')"
                     class="w-full align-items-center justify-content-center"
                     ><i class="pi pi-trash px-2"></i
                     ><span class="px-2">Remove</span></Button
@@ -389,6 +363,32 @@ function formatDateTimeToISOString(dateTime) {
                 rows="5"
                 cols="30"
               />
+
+              <label for="Poster">Poster</label>
+              
+              <div class="col-12 md:col-8 lg:col-6 mb-3">
+                <Image v-if="CSPPoster" :src="CSPPoster" alt="Image" width="250" preview />
+                <Skeleton v-else width="250px" height="300px"></Skeleton>
+              </div>
+              <div class="col-12 md:col-4 lg:col-6 mb-3">
+                <div class="grid">
+                  <Button
+                    rounded
+                    @click="add('poster')"
+                    class="w-full align-items-center justify-content-center mb-3"
+                    ><i class="pi pi-plus px-2"></i
+                    ><span class="px-2">Pick an Image</span></Button
+                  >
+                  <Button
+                    rounded
+                    outlined
+                    @click="remove('poster')"
+                    class="w-full align-items-center justify-content-center"
+                    ><i class="pi pi-trash px-2"></i
+                    ><span class="px-2">Remove</span></Button
+                  >
+                </div>
+              </div>
             </div>
             <Button
               text
@@ -400,7 +400,7 @@ function formatDateTimeToISOString(dateTime) {
             >
           </template>
         </Card>
-        <Card class="p-3 mt-5 mb-4 card">
+        <!-- <Card class="p-3 mt-5 mb-4 card">
           <template #title>Zoom Schedule</template>
           <template #content>
             <div
@@ -452,7 +452,7 @@ function formatDateTimeToISOString(dateTime) {
               </DataTable>
             </div>
           </template>
-        </Card>
+        </Card> -->
       </div>
     </div>
   </div>

@@ -125,44 +125,44 @@ async function addCSP(result) {
   const data = {
     email: result.user.email,
     title: result.user.displayName,
-    views: 0,
-    isLocal: true,
-    noOfHours: "",
-    desc: "",
-    signupFormURL: "",
-    skills: "",
     igURL: "",
+    signupDeadline: "",
+    views: 0,
     telehandle: "",
     registration: {
-      active: true,
       registeredStudents: [],
+      active: true,
     },
     settings: {
       zoomRefreshToken: "",
-      zoomAccessToken: "",
-      urls: [],
       zoomTokenIssueDT: 0,
-      buttons: {
-        "button-font-colour": "ffffff",
-        type: {
-          rounded: true,
-          outline: true,
-          raised: false,
-        },
-        "button-colour": "000000",
-      },
-      registerActive: true,
+      zoomAccessToken: "",
       font: {
         "font-family": "Arial",
         "font-colour": "000000",
       },
+      urls: [],
       background: {
-        "bg-colour": "ffffff",
+        "bg-colour": "8f8f8f",
+      },
+      buttons: {
+        "button-font-colour": "000000",
+        type: {
+          rounded: false,
+          value: "outlined",
+          outlined: true,
+        },
+        "button-colour": "c2c2c2",
       },
     },
+    skills: "",
+    desc: "",
     imageURL: "",
+    noOfHours: "",
+    posterURL: "",
+    signupFormURL: "",
     causes: "",
-    signupDeadline: "",
+    isLocal: true,
   };
   axios
     .post("https://smooserve-be.vercel.app/api/csp/", data)

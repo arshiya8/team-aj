@@ -321,7 +321,7 @@ watch(
           rounded
           label="Save"
           @click="save()"
-          class="w-full align-items-center justify-content-center"
+          class="w-full align-items-center justify-content-center mt-5 mb-8"
           ><i class="pi pi-save px-2"></i>Save</Button
         >
       </div>
