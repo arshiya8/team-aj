@@ -31,7 +31,7 @@ const smoothScroll = (id) => {
 };
 
 const logoUrl = computed(() => {
-  return `layout/images/logo-white.png`;
+  return `/layout/images/logo-white.png`;
 });
 </script>
 
