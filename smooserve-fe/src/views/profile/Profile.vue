@@ -3,94 +3,164 @@
   <div v-if="loading" class="card">
       <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
   </div>
-  <div v-else class="surface-ground flex flex-column w-full h-screen">
-      <div class="grid align-items-center justify-content-center">
-          <div class="col-12 md:col-12 lg:col-6">
-              <Card class="p-3 mt-4 mb-4 card">
-                  <template #title style="text-align: center;">Profile</template>
-                  <template #content>
-                      <div class="grid align-items-center justify-content-center mb-3">
-                          <div class="col-12 md:col-4 lg:col-3 mb-3">
-                              <Avatar v-if="profilePicture != ''" shape="circle" size="xlarge" :image="profilePicture"
-                                  :style="{ backgroundColor: '#fafafa', width: '6rem', height: '6rem' }" />
-                              <Avatar v-else shape="circle" size="xlarge"
-                                  :style="{ backgroundColor: '#3F51B5', color: '#ffffff', width: '6rem', height: '6rem' }" />
+  <div v-else>
+      <!-- Background Image Container -->
+      <div class="background-container" :style="backgroundImageStyle">
+          <!-- blue-background style defined in styles -->
+          <div class="grid align-items-center justify-content-center blur-background">
+              <div class="col-12 md:col-12 lg:col-6">
+                  <Card class="p-3 mt-4 mb-4 card container-fluid" style="width: 50em;">
+                      <!-- Header for bg image, avatar, name, and email -->
+                      <template class="container-fluid" #header style="text-align: center; position: relative;">
+                          <!-- div for bg image -->
+                          <div class="row justify-content-center">
+                              <img alt="csp image"
+                                  src="https://images.photowall.com/interiors/61939/landscape/wallpaper/room106.jpg?w=2000&q=80"
+                                  class="col-12" />
                           </div>
-                          <div class="p-col-12 text-center">
+
+                          <!-- div for avatar -->
+                          <div class="row text-center" style="transform: translate(0, -60%);">
+                              <Avatar v-if="profilePicture !== ''" shape="circle" size="xlarge" :image="profilePicture"
+                                  :style="{ backgroundColor: '#fafafa', width: '6rem', height: '6rem' }"
+                                  class="col-12 md:col-4 lg:col-3 justify-content-center" />
+                              <Avatar v-else shape="circle" size="xlarge"
+                                  :style="{ backgroundColor: '#3F51B5', color: '#ffffff', width: '6rem', height: '6rem' }"
+                                  class="col-12 md:col-4 lg:col-3 justify-content-center" />
+                          </div>
+
+                          <!-- div for name and email -->
+                          <div class="row text-center" style="transform: translate(0, -60%); margin-top: 20px;">
                               <strong>{{ first_name }}</strong>
-                              <p v-if="email"> {{ email }}</p>
+                              <p> {{ email }}</p>
                               <Button label="Edit profile" @click="editProfile"></Button>
                           </div>
-                      </div>
-                      <div class="centered-container">
-                          <TabView style="width: 100%;">
-                              <TabPanel header="Quiz Data" class="centered-tab-panel">
-                                  <div v-if="quizPreference">
-                                      <!-- Display quiz data fetched from the Quiz Vue component -->
-                                      <p><strong>Commitment:</strong> {{ quizPreference.commitment }}</p>
-                                      <p><strong>Passionate About:</strong> {{ quizPreference.passionate_about }}
-                                      </p>
-                                      <p><strong>Self Awareness:</strong> {{ quizPreference.self_awareness }}</p>
-                                      <p><strong>Self Description:</strong> {{ quizPreference.self_description }}</p>
-                                      <p><strong>Skills:</strong> {{ quizPreference.skills }}</p>
-                                      <p><strong>Volunteering Experience:</strong> {{
-                                          quizPreference.volunteering_experience }} </p>
-                                      <p><strong>Volunteering Location:</strong> {{
-                                          quizPreference.volunteering_location }}</p>
-                                  </div>
-                                  <div v-else>
-                                      <p>Loading quiz data...</p>
-                                  </div>
-                              </TabPanel>
-                              <TabPanel header="Registered CSPs" class="centered-tab-panel">
-                                  <div class="centered-content">
-                                      <h3>No registered CSPs..</h3>
-                                  <router-link :to="{ name: 'Home' }"><Button label="Register Now!"></Button></router-link>
-                                  </div>
-                              </TabPanel>
-                              <TabPanel header="Favourites" class="centered-tab-panel">
-                                  ....
-                              </TabPanel>
-                          </TabView>
+                      </template>
+
+                      <template #content style="text-align: center;">
+                          <div class="flex flex-column gap-3 mb-3 justify-center items-center">
+                            <TabView :activeIndex="selectedTabIndex" @onTabChange="handleTabChange">
+                                  <TabPanel header="Quiz Data">
+                                      <!-- <div v-if="quizPreference">
+                                          Display quiz data fetched from the Quiz Vue component
+                                          <p><strong>Commitment:</strong> {{ quizPreference.commitment }}</p>
+                                          <p><strong>Passionate About:</strong> {{ quizPreference.passionate_about }}
+                                          </p>
+                                          <p><strong>Self Awareness:</strong> {{ quizPreference.self_awareness }}</p>
+                                          <p><strong>Self Description:</strong> {{ quizPreference.self_description }}</p>
+                                          <p><strong>Skills:</strong> {{ quizPreference.skills }}</p>
+                                          <p><strong>Volunteering Experience:</strong> {{
+                                              quizPreference.volunteering_experience }} </p>
+                                          <p><strong>Volunteering Location:</strong> {{
+                                              quizPreference.volunteering_location }}</p>
+                                      </div>
+                                      <div v-else>
+                                          <p>Loading quiz data...</p>
+                                      </div> -->
+                                      <div class="p-3 mt-2 mb-2 card">
+                                          <div class="surface-section">
+                                              <div class="font-medium text-3xl text-900 mb-3">Volunteering Preference
+                                              </div>
+                                              <div class="text-500 mb-5">
+                                                  dsgdhdhds
+                                              </div>
+                                              <ul v-if="quizPreference" class="list-none p-0 m-0">
+                                                  <li
+                                                      class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                                      <div class="text-500 w-6 md:w-2 font-medium">Commitment </div>
+                                                      <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                          {{ quizPreference.commitment }}
+                                                      </div>
+                                                  </li>
+                                                  <li v-for="cause in quizPreference.passionate_about" :key="cause.id"
+                                                      class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                                      <div class="text-500 w-6 md:w-2 font-medium">Passionate About</div>
+                                                      <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                          <Chip :label="cause" class="mr-2"></Chip>
+                                                      </div>
+                                                  </li>
+                                                  <li
+                                                      class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                                      <div class="text-500 w-6 md:w-2 font-medium">Self Awareness</div>
+                                                      <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                          {{ quizPreference.self_awareness }}
+                                                      </div>
+                                                  </li>
+                                                  <li
+                                                      class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                                      <div class="text-500 w-6 md:w-2 font-medium">Self Description</div>
+                                                      <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                          {{ quizPreference.self_awareness }}
+                                                      </div>
+                                                  </li>
+                                                  <li v-for="skill in quizPreference.skills" :key="skill.id"
+                                                      class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                                      <div class="text-500 w-6 md:w-2 font-medium">Skills</div>
+                                                      <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                          <Chip :label="skill" class="mr-2"></Chip>
+                                                      </div>
+                                                  </li>
+                                                  <li v-for="exp in quizPreference.passionate_about" :key="exp.id"
+                                                      class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                                      <div class="text-500 w-6 md:w-2 font-medium">Past Volunteering
+                                                          Experiences</div>
+                                                      <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                          <Chip :label="exp" class="mr-2"></Chip>
+                                                      </div>
+                                                  </li>
+                                                  <li v-for="loc in quizPreference.volunteering_location" :key="loc.id"
+                                                      class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                                      <div class="text-500 w-6 md:w-2 font-medium">Location Preference
+                                                      </div>
+                                                      <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                          <Chip :label="loc" class="mr-2"></Chip>
+                                                      </div>
+                                                  </li>
+                                              </ul>
+                                          </div>
+                                      </div>
+                                    </TabPanel>
+                                  <TabPanel header="Registered CSPs">
+                                      <DataTable :value="registeredCSPs" tableStyle="min-width: 50rem">
+                                          <Column field="cspName" header="Registered CSP"></Column>
+                                          <Column field="cspStatus" header="Status"></Column>
+                                          <Column field="link" header="More"></Column>
+                                      </DataTable>
+                                      <div v-if="registeredCSPs.length === 0">
+
+                                          <h3>No registered CSPs..</h3>
+                                          <router-link :to="{ name: 'Home' }"><Button
+                                                  label="Register Now!"></Button></router-link>
+                                      </div>
+                                  </TabPanel>
+
+                                  <TabPanel header="Favourites">
+                                      <TabPanel header="Favourites" class="centered-tab-panel">
+                                          <div class="card">
+                                              <TabView>
+                                                <TabPanel v-for="(tab, index) in tabs" :key="tab.title" :header="tab.title">
+                                                      <ShopCarousel v-if="tab.title === 'Smooserve Shops'"
+                                                          :shops="shops" />
+                                                      <CSPCarousel v-else-if ="tab.title === 'CSPs'" :csps="csps" />
+                                                      <p class="m-0" v-else>{{ tab.content }}</p>
+                                                  </TabPanel>
+                                                  </TabView>
+                                          </div>
+                                          <div id="noFavoritesMessage" style="display: none;">You have no favorites
+                                              currently.</div>
+                                      </TabPanel>
+                                  </TabPanel>
+                              </TabView>
                           </div>
-                  </template>
-              </Card>
+                      </template>
+                  </Card>
+              </div>
           </div>
       </div>
-      <!-- <div class="flex flex-column gap-3 mb-3 justify-center items-center">
-          <TabView style="width: 100%;"> -->
-      <!-- <TabPanel header="Quiz Data">
-                  <div v-if="quizPreference">
-                      Display quiz data fetched from the Quiz Vue component 
-                      <p><strong>Commitment:</strong> {{ quizPreference.commitment }}</p>
-                      <p><strong>Passionate About:</strong> {{ quizPreference.passionate_about }}
-                      </p>
-                      <p><strong>Self Awareness:</strong> {{ quizPreference.self_awareness }}</p>
-                      <p><strong>Self Description:</strong> {{ quizPreference.self_description }}</p>
-                      <p><strong>Skills:</strong> {{ quizPreference.skills }}</p>
-                      <p><strong>Volunteering Experience:</strong> {{
-                          quizPreference.volunteering_experience }} </p>
-                      <p><strong>Volunteering Location:</strong> {{
-                          quizPreference.volunteering_location }}</p>
-                  </div>
-                  <div v-else>
-                      <p>Loading quiz data...</p>
-                  </div>
-              </TabPanel> -->
-      <!-- <TabPanel header="Registered CSPs">
-                  <h3>No registered CSPs..</h3>
-                  <router-link :to="{ name: 'Home' }"><Button label="Register Now!"></Button></router-link>
-              </TabPanel>
-              <TabPanel header="Favourites">
-                  ....
-              </TabPanel>
-          </TabView>
-      </div> 
-       profile -->
-      <Dialog v-model:visible="visible" :style="{ width: '80vw' }">
+      <Dialog v-model:visible="visible" :style="{ width: '65vw' }">
           <div class="grid align-items-center justify-content-center">
               <div class="col-12 md:col-12 lg:col-6">
-                  <Card class="p-3 mt-4 mb-4 card">
+                  <Card class="p-3 mt-4 mb-4 card" style="width: 40vw;">
                       <template #title>Edit Profile</template>
                       <template #content>
                           <div class="grid align-items-center justify-content-center mb-3">
@@ -102,9 +172,10 @@
                               </div>
                               <div class="col-12 md:col-8 lg:col-9 mb-3">
                                   <div class="grid">
-                                      <Button rounded @click="add()"
+                                      <Button rounded @click="addPic()"
                                           class="w-full align-items-center justify-content-center mb-3"><i
-                                              class="pi pi-plus px-2"></i><span class="px-2">Pick an Image</span></Button>
+                                              class="pi pi-plus px-2"></i><span class="px-2">Pick a profile picture
+                                          </span></Button>
                                       <Button rounded outlined @click="remove()"
                                           class="w-full align-items-center justify-content-center"><i
                                               class="pi pi-trash px-2"></i><span class="px-2">Remove</span></Button>
@@ -115,9 +186,6 @@
                           <div class="flex flex-column gap-3 mb-3">
                               <label for="title">Username</label>
                               <InputText id="title" :value="first_name" v-model="first_name" />
-
-                              <label for="desc">Description</label>
-                              <Textarea id="desc" :value="desc" v-model="desc" rows="5" cols="30" />
                           </div>
                           <Button text rounded label="Save" @click="save()"
                               class="w-full align-items-center justify-content-center"><i
@@ -127,9 +195,10 @@
               </div>
           </div>
       </Dialog>
-
   </div>
 </template>
+
+
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 import axios from "axios";
@@ -139,19 +208,74 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase";
 import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "firebase/storage";
-import ShopCarousel from '../../components/ShopCarousel.vue';
-import CSPCarousel from '../../components/CSPCarousel.vue';
+import ShopCarousel from '@/components/ShopCarousel.vue';
+import CSPCarousel from '@/components/CSPCarousel.vue';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import ColumnGroup from 'primevue/columngroup';   // optional
+import Row from 'primevue/row';                   // optional
+
+const data = ref({
+  tabs: [
+    { title: 'Smooserve Shops', content: 'Content for Smooserve Shops tab' },
+    { title: 'CSPs', content: 'Content for CSPs tab' },
+    // Add more tabs as needed
+  ],
+  selectedTabIndex: 0, // Initialize with the index of the default tab
+});
+const selectedTabIndex = ref(0);
+
+const handleTabChange = (event) => {
+  selectedTabIndex.value = event.index;
+};
 
 // import { db, storage } from "@/firebase";
-
+const tabs = ref([
+    {
+      title: 'Smooserve Shops',
+      content: '',
+    },
+    {
+      title: 'CSPs',
+      content: '',
+    },
+  ]);
+onMounted(async () => {
+// You can fetch your CSP data here, for example:
+try {
+  getRegisteredCSPs();
+  registeredCSPs.cspName = cspName;
+  registeredCSPs.cspStatus = cspName; // Update this line based on your API response structure
+} catch (error) {
+  console.error('Error fetching registered CSP data:', error);
+}
+});
+const registeredCSPs = ref([
+{
+  cspName: 'CSP Name 1',
+  cspStatus: 'Pending',
+  link: 'Waiting for confirmation...'
+},
+{
+  cspName: 'CSP Name 2',
+  cspStatus: 'Schedule',
+  link: 'Link to CSP...'
+},
+{
+  cspName: 'CSP Name 3',
+  cspStatus: 'Accepted',
+  link: 'Congratulations!'
+},
+// Add more dummy data objects as needed
+]);
 const backgroundImage = ref("/layout/images/landing-img1.jpg"); // Set this to the URL of your background image
 
 const backgroundImageStyle = computed(() => {
-    return {
-        backgroundImage: `url(${backgroundImage.value})`,
-        backgroundSize: "cover", // Adjust the background size as needed
-        backgroundPosition: "center", // Adjust the background position as needed
-    };
+  return {
+      backgroundImage: `url(${backgroundImage.value})`,
+      backgroundSize: "cover", // Adjust the background size as needed
+      backgroundPosition: "center", // Adjust the background position as needed
+  };
 });
 const storage = getStorage();
 
@@ -179,7 +303,7 @@ const contact = ref('');
 
 const options = ref(['Quiz Data', 'Registered CSPs', 'Favourites']);
 
-function add() {
+function addPic() {
   const input = document.createElement("input");
   input.type = "file";
   input.accept = "image/*";
@@ -337,23 +461,16 @@ watch(
   }
 );
 </script>
-<style scoped>
+<style>
 .card {
   border-radius: 12px;
 }
 
-.centered-content {
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-height: 100%;
-}
-
-.centered-container {
-display: flex;
-justify-content: center;
-align-items: center;
-height: 100%;
+.blur-background {
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  /* For Safari compatibility */
+  background-color: rgba(255, 255, 255, 0.7);
+  /* Semi-transparent white */
 }
 </style>

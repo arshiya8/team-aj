@@ -8,8 +8,8 @@
           </div>
           <div>
              <!-- need to add a router link  -->
-            <h4 class="mb-1">{{ csp.data.title }}</h4>
-            <p class="mt-0 mb-3">{{ csp.data.desc }}</p>
+             <h4 class="mb-1">{{ csp.data.name }}</h4>
+            <h6 class="mt-0 mb-3">{{ csp.data.link }}</h6>
             <div class="mt-5">
               <Button icon="pi pi-times" rounded severity="danger" class="mr-2" raised @click="removeFavoriteCSP(csp.data)" />
             </div>
@@ -17,10 +17,7 @@
         </div>
       </template>
     </Carousel>
-    <div v-else style="display: flex; flex-direction: column; align-items: center; justify-content: center;" >
-      <h3 >No Favorites..</h3>
-      <router-link :to="{name: 'Home'}"><Button label="Add Favourites Now!"></Button></router-link>
-    </div>
+    
   </div>
 </template>
 
