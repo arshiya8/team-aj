@@ -7,6 +7,7 @@ import CSPNavbar from "../CSPNavBar.vue";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { collection, query, where, getDocs, limit } from "firebase/firestore";
 import { db } from "@/firebase";
+import { getDocumentIdByEmail } from "@/helper/helperFunctions.js";
 
 const auth = getAuth();
 const toast = useToast();
@@ -83,7 +84,13 @@ onMounted(async () => {
     if (user) {
       // User is signed in
       loading.value = true;
-      CSPid.value = await getDocumentIdByEmail(user.email, "CSPs");
+      CSPid.value = await getDocumentIdByEmail(user.email, "CSPs", "id");
+
+      //check if is student
+      let data = await getDocumentIdByEmail(user.email, "Users");
+      if (data.role == "student") {
+        router.replace({ name: "Home" });
+      }
 
       axios
         .get("https://smooserve-be.vercel.app/api/csp/" + CSPid.value)
@@ -116,21 +123,6 @@ onMounted(async () => {
     }
   });
 });
-
-async function getDocumentIdByEmail(email, collectionName) {
-      const q = query(collection(db, collectionName), where("email", "==", email), limit(1));
-      const querySnapshot = await getDocs(q);
-
-      if (!querySnapshot.empty) {
-        // Get the first document (if there are multiple matching)
-        const doc = querySnapshot.docs[0];
-        // Access the document ID
-        return doc.id;
-      } else {
-        // No matching document found
-        return null;
-      }
-    }
 
 watch(
   () => buttonColor,

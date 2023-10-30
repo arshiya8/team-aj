@@ -5,9 +5,8 @@ import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import draggable from "vuedraggable";
 import CSPNavBar from "../CSPNavBar.vue";
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { collection, query, where, getDocs, limit } from "firebase/firestore";
-import { db } from "@/firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getDocumentIdByEmail } from "@/helper/helperFunctions.js";
 
 const auth = getAuth();
 
@@ -108,35 +107,41 @@ const dragOptions = computed(() => {
 
 onMounted(async () => {
   onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        // User is signed in
-        loading.value = true;
-        console.log(CSPid);
-        CSPid.value = await getDocumentIdByEmail(user.email, "CSPs");
+    if (user) {
+      // User is signed in
+      loading.value = true;
+      console.log(CSPid);
+      CSPid.value = await getDocumentIdByEmail(user.email, "CSPs", "id");
 
-        axios
-    .get("https://smooserve-be.vercel.app/api/csp/" + CSPid.value)
-    .then((response) => {
-      csp.value = response.data;
-      response.data.settings.urls != null
-        ? (urlList.value = response.data.settings.urls)
-        : (urlList.value = []);
-    })
-    .catch((error) => {
-      console.log(error);
-      toast.add({
-        severity: "error",
-        summary: "Error",
-        detail: error,
-        life: 3000,
-      });
-    })
-    .finally(() => (loading.value = false));
+      //check if is student
+      let data = await getDocumentIdByEmail(user.email, "Users");
+      if (data.role == "student") {
+        router.replace({ name: "Home" });
+      }
+
+      axios
+        .get("https://smooserve-be.vercel.app/api/csp/" + CSPid.value)
+        .then((response) => {
+          csp.value = response.data;
+          response.data.settings.urls != null
+            ? (urlList.value = response.data.settings.urls)
+            : (urlList.value = []);
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: error,
+            life: 3000,
+          });
+        })
+        .finally(() => (loading.value = false));
     } else {
-          // User is signed out
-          router.push({ name: 'Login' })
-        }
-      });
+      // User is signed out
+      router.push({ name: "Login" });
+    }
+  });
 });
 
 watch(
@@ -149,21 +154,6 @@ watch(
     });
   }
 );
-
-async function getDocumentIdByEmail(email, collectionName) {
-      const q = query(collection(db, collectionName), where("email", "==", email), limit(1));
-      const querySnapshot = await getDocs(q);
-
-      if (!querySnapshot.empty) {
-        // Get the first document (if there are multiple matching)
-        const doc = querySnapshot.docs[0];
-        // Access the document ID
-        return doc.id;
-      } else {
-        // No matching document found
-        return null;
-      }
-    }
 </script>
 <template>
   <Toast></Toast>

@@ -42,6 +42,12 @@ onMounted(async () => {
       loading.value = true;
       CSPid.value = await getDocumentIdByEmail(user.email, "CSPs", 'id');
 
+      //check if is student
+      let data = await getDocumentIdByEmail(user.email, "Users");
+      if (data.role == "student") {
+        router.replace({ name: "Home" });
+      }
+
       axios
         .get("https://smooserve-be.vercel.app/api/csp/" + CSPid.value)
         .then((response) => {

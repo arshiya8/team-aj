@@ -5,14 +5,13 @@ import { useRoute, useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import CSPNavbar from "../CSPNavBar.vue";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { collection, query, where, getDocs, limit } from "firebase/firestore";
-import { db } from "@/firebase";
 import {
   getStorage,
   uploadBytes,
   ref as sRef,
   getDownloadURL,
 } from "firebase/storage";
+import { getDocumentIdByEmail } from "@/helper/helperFunctions.js";
 
 const auth = getAuth();
 const storage = getStorage();
@@ -118,9 +117,15 @@ onMounted(async () => {
     if (user) {
       // User is signed in
       loading.value = true;
-      CSPid.value = await getDocumentIdByEmail(user.email, "CSPs");
-      
-      axios
+      CSPid.value = await getDocumentIdByEmail(user.email, "CSPs", "id");
+
+      // check if is student
+      let data = await getDocumentIdByEmail(user.email, "Users");
+      if (data.role == "student") {
+        router.replace({ name: "Home" });
+      }
+
+      await axios
         .get("https://smooserve-be.vercel.app/api/csp/" + CSPid.value)
         .then(async (response) => {
           csp.value = response.data;
@@ -136,7 +141,6 @@ onMounted(async () => {
           dbRefreshToken.value = response.data.settings.zoomRefreshToken;
           checkIfAccessTokenValid(response.data.settings.zoomTokenIssueDT);
           await getZoomMeetings();
-          
         })
         .catch((error) => {
           console.log(error);
@@ -154,25 +158,6 @@ onMounted(async () => {
     }
   });
 });
-
-async function getDocumentIdByEmail(email, collectionName) {
-  const q = query(
-    collection(db, collectionName),
-    where("email", "==", email),
-    limit(1)
-  );
-  const querySnapshot = await getDocs(q);
-
-  if (!querySnapshot.empty) {
-    // Get the first document (if there are multiple matching)
-    const doc = querySnapshot.docs[0];
-    // Access the document ID
-    return doc.id;
-  } else {
-    // No matching document found
-    return null;
-  }
-}
 
 function scheduleZoomMeeting() {
   axios
@@ -207,9 +192,12 @@ const getZoomMeetings = async () => {
   console.log(accessToken);
 
   try {
-    const response = await axios.post("https://smooserve-be.vercel.app/api/getMeetings", {
-      accessToken: accessToken,
-    });
+    const response = await axios.post(
+      "https://smooserve-be.vercel.app/api/getMeetings",
+      {
+        accessToken: accessToken,
+      }
+    );
 
     // Handle a successful response
     console.log(response);
@@ -249,7 +237,10 @@ const updateTokens = async () => {
 
   console.log("fetching new tokens...");
   axios
-    .get("https://smooserve-be.vercel.app/api/getNewAccessToken/" + dbRefreshToken.value)
+    .get(
+      "https://smooserve-be.vercel.app/api/getNewAccessToken/" +
+        dbRefreshToken.value
+    )
     .then((response) => {
       toast.add({
         severity: "success",
@@ -269,7 +260,10 @@ const updateTokens = async () => {
           csp.value.settings.zoomTokenIssueDT = Date.now();
 
           axios
-            .put("https://smooserve-be.vercel.app/api/csp/" + CSPid.value, csp.value)
+            .put(
+              "https://smooserve-be.vercel.app/api/csp/" + CSPid.value,
+              csp.value
+            )
             .then((response) => {
               toast.add({
                 severity: "success",
