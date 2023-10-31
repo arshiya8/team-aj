@@ -354,7 +354,7 @@ export default {
 
 
   <!-- CSP flip cards -->
-  <div class="container-fluid flex justify-content-center flex-wrap pt-5" style="background-color: lightblue;">
+  <div class="container-fluid pt-5" style="background-color: lightblue;">
     <div class="grid ">
       <div class="card-container">
         <div class="flex align-items-center justify-content-center sm:col-12 md:col-6 lg:col-4" v-for="(csp, index) in getVisibleCsps" :key="csp.id">

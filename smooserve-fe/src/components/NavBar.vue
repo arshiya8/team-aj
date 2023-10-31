@@ -60,14 +60,9 @@ const items = ref([
     routeName: "About",
   },
   {
-    label: "NEAR YOU",
+    label: "NEAR ME",
     icon: "pi pi-map-marker",
     routeName: "Map",
-  },
-  {
-    label: "SMOOSERVE SHOP",
-    icon: "pi pi-shopping-cart",
-    routeName: "Shop",
   },
 
 ]);
