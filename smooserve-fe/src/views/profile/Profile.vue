@@ -1,4 +1,5 @@
 <template>
+    <NavBar/>
   <Toast></Toast>
   <div v-if="loading" class="card">
       <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
@@ -223,6 +224,7 @@ import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "firebase/s
 import CSPCarousel from '@/components/CSPCarousel.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import NavBar from '@/components/NavBar.vue';
 import ColumnGroup from 'primevue/columngroup';   // optional
 import Row from 'primevue/row';                   // optional
 

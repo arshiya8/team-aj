@@ -1,4 +1,5 @@
 <template>
+    
   <div class="card">
     <Carousel v-if="favoriteCSPs.length > 0" :value="favoriteCSPs" :numVisible="3" :numScroll="3" :responsiveOptions="responsiveOptions">
       <template #item="csp">
@@ -31,6 +32,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/firebase";
 import axios from 'axios';
+
 
 const favoriteCSPs = ref([]);
 let studentId = null;
