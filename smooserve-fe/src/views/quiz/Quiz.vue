@@ -230,7 +230,7 @@ export default {
 
     <!-- smooserve logo -->
     <a href="#" style="display: flex; justify-content: center; align-items: center;">
-      <img src="layout/images/logo-white.png" height="80" class="mr-0 lg:mr-2" />
+      <img src="/layout/images/logo-white.png" height="80" class="mr-0 lg:mr-2" />
     </a>
 
     <!-- Container for header -->
