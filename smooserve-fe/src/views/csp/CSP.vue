@@ -35,6 +35,8 @@ const auth = getAuth();
 const cspOwner = ref(false);
 const loggedIn = ref(false);
 
+const studentID = ref();
+const registeredCSPs = ref([]);
 
 async function checkIfOwner(email) {
   if (loggedIn.value) {
@@ -46,28 +48,66 @@ async function checkIfOwner(email) {
 }
 
 //check if logged in
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (user) {
-   // User is signed in
-   loggedIn.value = true
-   
-  } else {
-    // User is signed out  
-    loggedIn.value = false
+    // User is signed in
+    loggedIn.value = true;
 
+    //update student registration
+    studentID.value = await getDocumentIdByEmail(
+      auth.currentUser.email,
+      "students",
+      "id"
+    );
+
+    if (studentID.value != null) {
+      console.log(studentID.value);
+      axios
+        .get("https://smooserve-be.vercel.app/api/student/" + studentID.value)
+        .then((res) => {
+          registeredCSPs.value = res.data.registeredCSPs;
+          console.log(registeredCSPs.value);
+        });
+    }
+  } else {
+    // User is signed out
+    loggedIn.value = false;
   }
 });
 
 //Register student
 function registerStudent() {
   //if is not cspOwner and first time registered
-  if (
-    !cspOwner.value &&
-    !checkIfStudentRegistered() &&
-    loggedIn.value
-  ) {
+  if (!cspOwner.value && !checkIfStudentRegistered() && loggedIn.value) {
     var studentEmail = auth.currentUser.email;
     loading.value = true;
+
+    registeredCSPs.value.push({
+      cspid: id,
+      title: csp.value.title,
+      status: "registered",
+      dateTime: Date.now(),
+      link: "",
+    });
+
+    try {
+      // Ensure userId is not null before making the API request
+      if (studentID.value != null) {
+        const response = axios.put(
+          "https://smooserve-be.vercel.app/api/student/" + studentID.value,
+          {
+            registeredCSPs: registeredCSPs.value,
+          }
+        );
+        console.log(response.data);
+      } else {
+        console.error("User is not authenticated.");
+      }
+    } catch (error) {
+      console.error("Error updating quiz preference:", error);
+    }
+
+    // update registration for csp
     csp.value.registration.registeredStudents.push({
       email: studentEmail,
       status: "registered",
@@ -189,7 +229,11 @@ onMounted(async () => {
       CSPImage.value = csp.value.imageURL;
 
       checkIfOwner(response.data.email);
-      const documentId = getDocumentIdByEmail(response.data.email, "CSPs", "view");
+      const documentId = getDocumentIdByEmail(
+        response.data.email,
+        "CSPs",
+        "view"
+      );
       console.log(documentId);
     })
     .catch((error) => {

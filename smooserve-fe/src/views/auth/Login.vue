@@ -126,7 +126,6 @@ async function addCSP(result) {
     email: result.user.email,
     title: result.user.displayName,
     igURL: "",
-    signupDeadline: "",
     views: 0,
     telehandle: "",
     registration: {
@@ -163,6 +162,10 @@ async function addCSP(result) {
     signupFormURL: "",
     causes: "",
     isLocal: true,
+    location: {
+      lat: 0,
+      long: 0
+    }
   };
   axios
     .post("https://smooserve-be.vercel.app/api/csp/", data)
@@ -202,6 +205,8 @@ async function addStudent(result) {
       },
     ],
     quizPreference: {
+      teleHandle: "",
+      year_of_study: "",
       commitment: "",
       self_awareness: "",
       skills: [],
@@ -210,6 +215,7 @@ async function addStudent(result) {
       passionate_about: [],
       volunteering_location: [],
     },
+    registeredCSPs: [],
   };
   axios
     .post("https://smooserve-be.vercel.app/api/student/", data)
