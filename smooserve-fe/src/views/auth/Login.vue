@@ -170,7 +170,7 @@ async function addCSP(result) {
   axios
     .post("https://smooserve-be.vercel.app/api/csp/", data)
     .then(async (response) => {
-      let id = await getDocumentIdByEmail(result.user.email, "CSPs");
+      let id = await getDocumentIdByEmail(result.user.email, "CSPs", "id");
       console.log("add csp: ");
       console.log(id);
 
