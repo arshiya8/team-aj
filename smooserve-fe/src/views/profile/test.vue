@@ -59,63 +59,76 @@
                                         </div> -->
                                         <div v-transition class="p-3 mt-2 mb-2 card">
                                             <div class="surface-section">
-                                                <div v-scroll class="font-medium text-3xl text-900 mb-3">Volunteering Preference
+                                                <div v-scroll class="font-medium text-3xl text-900 mb-3">Volunteering
+                                                    Preference
                                                 </div>
-                                                <div  v-scroll class="text-500 mb-5">
+                                                <div v-scroll class="text-500 mb-5">
                                                     dsgdhdhds
                                                 </div>
                                                 <ul v-if="quizPreference" class="list-none p-0 m-0">
                                                     <li v-transition
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                                        <div  v-scroll class="text-500 w-6 md:w-2 font-medium">Commitment </div>
-                                                        <div  v-scroll class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                        <div v-scroll class="text-500 w-6 md:w-2 font-medium">Commitment
+                                                        </div>
+                                                        <div v-scroll
+                                                            class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
                                                             {{ quizPreference.commitment }}
                                                         </div>
                                                     </li>
-                                                    <li  v-transition v-for="cause in quizPreference.passionate_about"
+                                                    <li v-transition v-for="cause in quizPreference.passionate_about"
                                                         :key="cause.id"
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                                        <div  v-scroll class="text-500 w-6 md:w-2 font-medium">Passionate About</div>
-                                                        <div  v-scroll class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                        <div v-scroll class="text-500 w-6 md:w-2 font-medium">Passionate
+                                                            About</div>
+                                                        <div v-scroll
+                                                            class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
                                                             <Chip :label="cause" class="mr-2"></Chip>
                                                         </div>
                                                     </li>
-                                                    <li  v-transition
+                                                    <li v-transition
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                                        <div  v-scroll class="text-500 w-6 md:w-2 font-medium">Self Awareness</div>
-                                                        <div  v-scroll class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                        <div v-scroll class="text-500 w-6 md:w-2 font-medium">Self Awareness
+                                                        </div>
+                                                        <div v-scroll
+                                                            class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
                                                             {{ quizPreference.self_awareness }}
                                                         </div>
                                                     </li>
-                                                    <li  v-transition
+                                                    <li v-transition
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                                        <div  v-scroll class="text-500 w-6 md:w-2 font-medium">Self Description</div>
-                                                        <div  v-scroll class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                        <div v-scroll class="text-500 w-6 md:w-2 font-medium">Self
+                                                            Description</div>
+                                                        <div v-scroll
+                                                            class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
                                                             {{ quizPreference.self_awareness }}
                                                         </div>
                                                     </li>
-                                                    <li  v-transition v-for="skill in quizPreference.skills" :key="skill.id"
+                                                    <li v-transition v-for="skill in quizPreference.skills" :key="skill.id"
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                                        <div  v-scroll class="text-500 w-6 md:w-2 font-medium">Skills</div>
+                                                        <div v-scroll class="text-500 w-6 md:w-2 font-medium">Skills</div>
                                                         <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-                                                            <Chip  v-scroll :label="skill" class="mr-2"></Chip>
+                                                            <Chip v-scroll :label="skill" class="mr-2"></Chip>
                                                         </div>
                                                     </li>
-                                                    <li  v-transition v-for="exp in quizPreference.passionate_about"
+                                                    <li v-transition v-for="exp in quizPreference.passionate_about"
                                                         :key="exp.id"
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                                        <div  v-scroll class="text-500 w-6 md:w-2 font-medium">Past Volunteering
+                                                        <div v-scroll class="text-500 w-6 md:w-2 font-medium">Past
+                                                            Volunteering
                                                             Experiences</div>
-                                                        <div  v-scroll class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                        <div v-scroll
+                                                            class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
                                                             <Chip :label="exp" class="mr-2"></Chip>
                                                         </div>
                                                     </li>
-                                                    <li  v-transition v-for="loc in quizPreference.volunteering_location"
+                                                    <li v-transition v-for="loc in quizPreference.volunteering_location"
                                                         :key="loc.id"
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                                        <div  v-scroll class="text-500 w-6 md:w-2 font-medium">Location Preference
+                                                        <div v-scroll class="text-500 w-6 md:w-2 font-medium">Location
+                                                            Preference
                                                         </div>
-                                                        <div  v-scroll class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                        <div v-scroll
+                                                            class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
                                                             <Chip :label="loc" class="mr-2"></Chip>
                                                         </div>
                                                     </li>
@@ -140,14 +153,7 @@
                                     <TabPanel header="Favourites">
                                         <TabPanel header="Favourites" class="centered-tab-panel">
                                             <div class="card">
-                                                <TabView>
-                                                    <TabPanel v-for="tab in tabs" :key="tab.title" :header="tab.title">
-                                                        <ShopCarousel v-if="tab.title === 'Smooserve Shops'"
-                                                            :shops="shops" />
-                                                        <CSPCarousel v-if="tab.title === 'CSPs'" :csps="csps" />
-                                                        <p class="m-0" v-else>{{ tab.content }}</p>
-                                                    </TabPanel>
-                                                </TabView>
+                                                <CSPCarousel/>
                                             </div>
                                             <div id="noFavoritesMessage" style="display: none;">You have no favorites
                                                 currently.</div>
@@ -175,7 +181,10 @@
                                 </div>
                                 <div class="col-12 md:col-8 lg:col-9 mb-3">
                                     <div class="grid">
-                                        <Button rounded @click="addPic()"
+                                        <label for="profilePicture" class="form-label"></label>
+                                        <input type="file" style="display: none" id="profilePicture" accept="image/*"
+                                            @change="handleProfilePictureChange" />
+                                        <Button rounded @click="selectFile()"
                                             class="w-full align-items-center justify-content-center mb-3"><i
                                                 class="pi pi-plus px-2"></i><span class="px-2">Pick a profile picture
                                             </span></Button>
@@ -211,7 +220,6 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase";
 import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "firebase/storage";
-import ShopCarousel from '@/components/ShopCarousel.vue';
 import CSPCarousel from '@/components/CSPCarousel.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -291,6 +299,16 @@ const email = ref('');
 const contact = ref('');
 
 const options = ref(['Quiz Data', 'Registered CSPs', 'Favourites']);
+const handleProfilePictureChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        profilePicture.value = URL.createObjectURL(file);
+    }
+};
+function selectFile() {
+    // Trigger the file input when the button is clicked
+    document.getElementById('profilePicture').click();
+};
 
 function addPic() {
     const input = document.createElement("input");
@@ -467,14 +485,13 @@ watch(
     opacity: 0;
     transform: translateY(100px);
     transition: all 2s ease-out;
-  }
+}
 
-  /* 
+/* 
     If the element intersects with the viewport, the before-enter class is added.
   */
-  .enter {
+.enter {
     opacity: 1;
     transform: translateY(0px);
-  }
-</style>
+}</style>
   
