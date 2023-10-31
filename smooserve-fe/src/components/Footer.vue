@@ -6,27 +6,23 @@
     <div class="content">
       <div class="social-media">
         <h4>Connect With Us</h4>
-        <p><a href="#"><i class="fab fa-linkedin"></i> Linkedin</a></p>
-        <p><a href="#"><i class="fab fa-twitter"></i> Twitter</a></p>
-        <p><a href="#"><i class="fab fa-facebook"></i> Facebook</a></p>
         <p><a href="#"><i class="fab fa-instagram"></i> Instagram</a></p>
       </div>
       <div class="links">
         <h4>Explore</h4>
         <p><a href="#">Home</a></p>
         <p><a href="#">About</a></p>
-        <p><a href="#">Blogs</a></p>
         <p><a href="#">Contact</a></p>
       </div>
       <div class="contact-details">
         <h4>Contact</h4>
-        <p><i class="fas fa-phone"></i> +65 8123 4567</p>
+        <p><i class="fas fa-phone"></i> +65 9646 7008</p>
         <p><i class="fas fa-envelope"></i> <a href="mailto:smooserve@gmail.com">smooserve@gmail.com</a></p>
       </div>
     </div>
     <footer>
         <hr />
-        Copyright © 2023. SIngapore Management University. All rights reserved.<br>
+        Copyright © 2023. Singapore Management University. All rights reserved.<br>
         Report Vulnerability. Terms of Use. Privacy Statement. Supported Browsers.
       </footer>
   </div>
