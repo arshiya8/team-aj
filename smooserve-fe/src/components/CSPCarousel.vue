@@ -9,7 +9,7 @@
           <div>
              <!-- need to add a router link  -->
              <h4 class="mb-1">{{ csp.data.name }}</h4>
-            <h6 class="mt-0 mb-3">{{ csp.data.link }}</h6>
+            <h6 class="mt-0 mb-3">{{ csp.data.desc }}</h6>
             <div class="mt-5">
               <Button icon="pi pi-times" rounded severity="danger" class="mr-2" raised @click="removeFavoriteCSP(csp.data)" />
             </div>
