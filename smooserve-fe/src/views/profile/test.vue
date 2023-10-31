@@ -9,7 +9,7 @@
             <!-- blue-background style defined in styles -->
             <div class="grid align-items-center justify-content-center blur-background">
                 <div class="col-12 md:col-12 lg:col-6">
-                    <Card class="p-3 mt-4 mb-4 card container-fluid" style="width: 50em;">
+                    <Card class="p-3 mt-4 mb-4 card container-fluid">
                         <!-- Header for bg image, avatar, name, and email -->
                         <template class="container-fluid" #header style="text-align: center; position: relative;">
                             <!-- div for bg image -->
