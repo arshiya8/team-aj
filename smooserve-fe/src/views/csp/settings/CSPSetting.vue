@@ -41,6 +41,8 @@ const dbAccessToken = ref("");
 const dbRefreshToken = ref("");
 const meetingsList = ref();
 
+const zoomRegisterVisible = ref(false)
+
 function add(purpose) {
   const input = document.createElement("input");
   input.type = "file";
@@ -155,8 +157,12 @@ onMounted(async () => {
 
           dbAccessToken.value = response.data.settings.zoomAccessToken;
           dbRefreshToken.value = response.data.settings.zoomRefreshToken;
-          checkIfAccessTokenValid(response.data.settings.zoomTokenIssueDT);
-          await getZoomMeetings();
+          if(dbAccessToken.value && dbRefreshToken.value){
+            checkIfAccessTokenValid(response.data.settings.zoomTokenIssueDT);
+            await getZoomMeetings();
+          }else{
+            zoomRegisterVisible.value = true
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -174,6 +180,11 @@ onMounted(async () => {
     }
   });
 });
+
+function zoomAccess(){
+  localStorage.setItem("CSPid", CSPid.value);
+  router.push({ name: "Zoom" });
+}
 
 const getZoomMeetings = async () => {
   // Access the access token from your data source, e.g., Vuex or a ref
@@ -351,6 +362,9 @@ const updateTokens = async () => {
             <div class="flex flex-column gap-3 mb-3">
               <label for="title">Registration</label>
               <InputSwitch v-model="registerChecked" />
+
+              <label for="title">Zoom Scheduler</label>
+              <Button @click="zoomAccess()" label="Enable Zoom" :visible="zoomRegisterVisible" />
 
               <label for="title">Username</label>
               <InputText id="title" :value="csp.title" v-model="title" />

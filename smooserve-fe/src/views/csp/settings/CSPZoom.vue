@@ -4,7 +4,7 @@ import CSPNavbar from "../CSPNavBar.vue";
 import { useToast } from "primevue/usetoast";
 import { useRoute, useRouter } from "vue-router";
 import { ref, computed, onMounted } from "vue";
-const route = useRoute();
+const router = useRouter();
 const loading = ref(true);
 
 const toast = useToast();
@@ -28,9 +28,10 @@ onMounted(async () => {
   if (dbAccessToken && dbRefreshToken && !accessToken && !refreshToken) {
     window.location.href =
       "https://smooserve-be.vercel.app/api/getNewAccessToken/" + dbRefreshToken;
-  } else if (dbAccessToken && dbRefreshToken && accessToken && refreshToken) {
+  } else if (accessToken && refreshToken) {
     updateTokens(accessToken, refreshToken);
-    window.location.href = "http://localhost:5173/#/csp/settings/" + localStorage.getItem("CSPid");  
+    router.push({ name: "CSPSetting" });
+
   } else {
     window.location.href = "https://smooserve-be.vercel.app/api/zoomAuth";
   }
