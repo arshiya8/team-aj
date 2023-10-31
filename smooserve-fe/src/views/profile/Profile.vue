@@ -1,471 +1,498 @@
 <template>
-  <!-- 
-      <title>Student Profile</title>
-      <link rel="stylesheet" href="styles2.css"> -->
-  
-      <!-- Navigation Bar -->
-      <!-- Include your navigation bar component here -->
-      <NavBar/>
-      <!-- User Profile Form -->
-      <div class="user-profile">
-          <h1>Student Profile</h1>
-          <form id="userDetailsForm" action="submit.php" method="POST">
-              <label for="name">Name:</label>
-              <input type="text" id="name" name="name" required><br><br>
-  
-              <label for="email">Email:</label>
-              <input type="email" id="email" name="email" required><br><br>
-  
-              <label for="contact">Contact Number:</label>
-              <input type="tel" id="contact" name="contact" required><br><br>
-  
-              <label for="commitment">Commitment:</label>
-              <select id="commitment" name="commitment">
-                  <option value="Monday">Monday</option>
-                  <option value="Tuesday">Tuesday</option>
-                  <option value="Wednesday">Wednesday</option>
-                  <option value="Thursday">Thursday</option>
-                  <option value="Friday">Friday</option>
-              </select>
-              <button type="button" onclick="addCommitment()">Add</button><br><br>
-  
-              <!-- Commitment Table -->
-              <table id="commitmentTable" style="display: none; border: 1px solid black;">
-                  <thead>
-                      <tr style="border: 1 px solid black;">
-                          <th>Selected</th>
-                          <th>Action</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <!-- toadd to DB -->
-                  </tbody>
-              </table>
-              <input type="submit" value="Submit">
-          </form>
-      </div>
-  
-      
-          <!-- Favourites Tab with CSP Integration -->
-          <h2>Favourites</h2>
-  <div class="favourites-tab">
-      <div class="tab-buttons">
-          <button class="tab-button" onclick="showTab('shops')" data-tab="shops">SmooServe Shops</button>
-          <button class="tab-button" onclick="showTab('csps')" data-tab="csps">CSPs</button>
-      </div>
-  
-      <section class="favorite-cards">
-          <div id="shopContent" class="card-grid"></div>
-          <div id="cspContent" class="card-grid"></div>
-      </section>
-  
-      <!-- Add the "noFavoritesMessage" here, and initially set it to display: none -->
-      <div id="noFavoritesMessage" style="display: none;">You have no favorites currently.</div>
+    <NavBar/>
+  <Toast></Toast>
+  <div v-if="loading" class="card">
+      <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
   </div>
-  
-          
-  
-      <!-- to change with Card Carousel Component -->
-      
-  
-      
-          <h2>Registered-CSP</h2>
-          <div id="noRegisteredCspMessage" style="display: none;">There are no registered CSPs.</div>
-          <section class="registered-CSP">
-          <table class="registered-CSP-table">
-              <thead>
-                  <tr>
-                      <th>Registered CSP </th>
-                      <th>Registered Date</th>
-                      <th>CSP Contact</th>
-                      <th>Status</th>
-                      <th>Schedule Interview</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <!-- Example CSP entry -->
-                  <tr>
-                      <td>CSP Name</td>
-                      <td>Registration Date</td>
-                      <td>CSP Contact Information</td>
-                      <td>Pending</td>
-                      <td>
-                          <button onclick="showScheduleDropdown(this)">Schedule Interview</button>
-                          <div class="schedule-dropdown" style="display: none;">
-                              <label for="interviewTime">Select Time Slot:</label>
-                              <select id="interviewTime">
-                                  <option value="9:00 AM">9:00 AM</option>
-                                  <option value="10:00 AM">10:00 AM</option>
-                                  <!-- Add more time slots as needed -->
-                              </select>
-                              <button onclick="scheduleInterview(this)">Schedule</button>
+  <div v-else>
+      <!-- Background Image Container -->
+      <div class="background-container" :style="backgroundImageStyle">
+          <!-- blue-background style defined in styles -->
+          <div class="grid align-items-center justify-content-center blur-background">
+              <div class="col-12 md:col-12 lg:col-6">
+                  <Card class="p-3 mt-4 mb-4 card container-fluid">
+                      <!-- Header for bg image, avatar, name, and email -->
+                      <template class="container-fluid" #header style="text-align: center; position: relative;">
+                          <!-- div for bg image -->
+                          <div class="row justify-content-center">
+                              <img alt="csp image"
+                                  src="https://images.photowall.com/interiors/61939/landscape/wallpaper/room106.jpg?w=2000&q=80"
+                                  class="col-12" />
                           </div>
-                      </td>
-                  </tr>
-                  <!-- More CSP entries... -->
-              </tbody>
-          </table>
-                  
-           <table>
-              <tbody>
-                  <!-- Add upcoming interview data here -->
-              </tbody>
-          </table>
-      </section>
-  
-      <!-- "Take Quiz Again" button -->
-      <section class="quiz-data">
-          <h2>Quiz Results</h2>
-          <table class="quiz-table">
-              <tbody>
-                  <!-- tochange Add quiz data here from db -->
-              </tbody>
-          </table>
-      </section>
-      <router-link :to="{ name: 'Quiz' }"><a class="quiz-button">Take Quiz Again</a></router-link>
-  
-      <!-- <script src="script2.js"></script> -->
-  </template>
-  <script>
-  function addCommitment() {
-      // Get the selected commitment value
-      const commitmentSelect = document.getElementById("commitment");
-      const selectedValue = commitmentSelect.value;
-  
-      // Check if the commitment is already in the table
-      const table = document.getElementById("commitmentTable");
-      const existingCommitments = table.querySelectorAll("td:first-child");
-      for (const commitment of existingCommitments) {
-          if (commitment.textContent === selectedValue) {
-              alert("Commitment already added.");
-              return;
-          }
-      }
-  
-      // Create a new row and add the selected commitment
-      const newRow = table.insertRow(-1);
-      const cell1 = newRow.insertCell(0);
-      cell1.innerHTML = selectedValue;
-  
-      // Add a button to remove the commitment
-      const cell2 = newRow.insertCell(1);
-      const removeButton = document.createElement("button");
-      removeButton.innerHTML = "Remove";
-      removeButton.onclick = function () {
-          table.deleteRow(newRow.rowIndex);
-      };
-      cell2.appendChild(removeButton);
-  }
-  
-  function toggleCommitmentTable(commitmentSelect) {
-      var table = document.getElementById("commitmentTable");
-  
-      if (commitmentSelect.value === "none") {
-          table.style.display = "none";
-      } else {
-          table.style.display = "table";
-      }
-  }
-  
-  function showTab(tabName) {
-      const tabButtons = document.querySelectorAll('.tab-button');
-      const noFavoritesMessage = document.getElementById('noFavoritesMessage');
-  
-      // Remove the 'active' class from all tab buttons
-      tabButtons.forEach(button => {
-          button.classList.remove('active');
-      });
-  
-      // Add the 'active' class to the clicked tab button
-      tabButtons.forEach(button => {
-          if (button.getAttribute('data-tab') === tabName) {
-              button.classList.add('active');
-          }
-      });
-  
-      const shopContent = document.getElementById('shopContent');
-      const cspContent = document.getElementById('cspContent');
-  
-      // Hide the "no favorites" message by default
-      noFavoritesMessage.style.display = 'none';
-  
-      // tochange db 
-      fetch('get_data.php')
-          .then(response => response.json())
-          .then(data => {
-              if (tabName === 'shops') {
-                  shopContent.innerHTML = ''; // Clear previous content
-  
-                  if (data.length === 0) {
-                      noFavoritesMessage.style.display = 'block'; // Display message when no favorites
-                  } else {
-                      data.forEach(shop => {
-                          shopContent.innerHTML += `
-                              <!-- Create cards for SmooServe Shops based on data -->
-                              <div class="shop-card">
-                                  <h3>${shop.name}</h3>
-                                  <!-- Add other shop details here -->
+
+                          <!-- div for avatar -->
+                          <div class="row text-center" style="transform: translate(0, -60%);">
+                              <Avatar v-if="profilePicture !== ''" shape="circle" size="xlarge" :image="profilePicture"
+                                  :style="{ backgroundColor: '#fafafa', width: '6rem', height: '6rem' }"
+                                  class="col-12 md:col-4 lg:col-3 justify-content-center" />
+                              <Avatar v-else shape="circle" size="xlarge"
+                                  :style="{ backgroundColor: '#3F51B5', color: '#ffffff', width: '6rem', height: '6rem' }"
+                                  class="col-12 md:col-4 lg:col-3 justify-content-center" />
+                          </div>
+
+                          <!-- div for name and email -->
+                          <div class="row text-center" style="transform: translate(0, -60%); margin-top: 20px;">
+                              <strong>{{ first_name }}</strong>
+                              <p> {{ email }}</p>
+                              <Button label="Edit profile" @click="editProfile"></Button>
+                          </div>
+                      </template>
+
+                      <template #content style="text-align: center;">
+                          <div class="flex flex-column gap-3 mb-3 justify-center items-center">
+                              <TabView style="width: 100%;">
+                                  <TabPanel header="Quiz Data">
+                                      <!-- <div v-if="quizPreference">
+                                          Display quiz data fetched from the Quiz Vue component
+                                          <p><strong>Commitment:</strong> {{ quizPreference.commitment }}</p>
+                                          <p><strong>Passionate About:</strong> {{ quizPreference.passionate_about }}
+                                          </p>
+                                          <p><strong>Self Awareness:</strong> {{ quizPreference.self_awareness }}</p>
+                                          <p><strong>Self Description:</strong> {{ quizPreference.self_description }}</p>
+                                          <p><strong>Skills:</strong> {{ quizPreference.skills }}</p>
+                                          <p><strong>Volunteering Experience:</strong> {{
+                                              quizPreference.volunteering_experience }} </p>
+                                          <p><strong>Volunteering Location:</strong> {{
+                                              quizPreference.volunteering_location }}</p>
+                                      </div>
+                                      <div v-else>
+                                          <p>Loading quiz data...</p>
+                                      </div> -->
+                                      <div v-transition class="p-3 mt-2 mb-2 card">
+                                          <div class="surface-section">
+                                              <div v-scroll class="font-medium text-3xl text-900 mb-3">Volunteering
+                                                  Preference
+                                              </div>
+                                              <div v-scroll class="text-500 mb-5">
+                                                  dsgdhdhds
+                                              </div>
+                                              <ul v-if="quizPreference" class="list-none p-0 m-0">
+                                                  <li v-transition
+                                                      class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                                      <div v-scroll class="text-500 w-6 md:w-2 font-medium">Commitment
+                                                      </div>
+                                                      <div v-scroll
+                                                          class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                          {{ quizPreference.commitment }}
+                                                      </div>
+                                                  </li>
+                                                  <li v-transition v-for="cause in quizPreference.passionate_about"
+                                                      :key="cause.id"
+                                                      class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                                      <div v-scroll class="text-500 w-6 md:w-2 font-medium">Passionate
+                                                          About</div>
+                                                      <div v-scroll
+                                                          class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                          <Chip :label="cause" class="mr-2"></Chip>
+                                                      </div>
+                                                  </li>
+                                                  <li v-transition
+                                                      class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                                      <div v-scroll class="text-500 w-6 md:w-2 font-medium">Self Awareness
+                                                      </div>
+                                                      <div v-scroll
+                                                          class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                          {{ quizPreference.self_awareness }}
+                                                      </div>
+                                                  </li>
+                                                  <li v-transition
+                                                      class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                                      <div v-scroll class="text-500 w-6 md:w-2 font-medium">Self
+                                                          Description</div>
+                                                      <div v-scroll
+                                                          class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                          {{ quizPreference.self_awareness }}
+                                                      </div>
+                                                  </li>
+                                                  <li v-transition v-for="skill in quizPreference.skills" :key="skill.id"
+                                                      class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                                      <div v-scroll class="text-500 w-6 md:w-2 font-medium">Skills</div>
+                                                      <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                          <Chip v-scroll :label="skill" class="mr-2"></Chip>
+                                                      </div>
+                                                  </li>
+                                                  <li v-transition v-for="exp in quizPreference.passionate_about"
+                                                      :key="exp.id"
+                                                      class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                                      <div v-scroll class="text-500 w-6 md:w-2 font-medium">Past
+                                                          Volunteering
+                                                          Experiences</div>
+                                                      <div v-scroll
+                                                          class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                          <Chip :label="exp" class="mr-2"></Chip>
+                                                      </div>
+                                                  </li>
+                                                  <li v-transition v-for="loc in quizPreference.volunteering_location"
+                                                      :key="loc.id"
+                                                      class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                                      <div v-scroll class="text-500 w-6 md:w-2 font-medium">Location
+                                                          Preference
+                                                      </div>
+                                                      <div v-scroll
+                                                          class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                                          <Chip :label="loc" class="mr-2"></Chip>
+                                                      </div>
+                                                  </li>
+                                              </ul>
+                                          </div>
+                                      </div>
+                                  </TabPanel>
+                                  <TabPanel header="Registered CSPs">
+                                      <DataTable v-transition :value="registeredCSPs" tableStyle="min-width: 50rem">
+                                          <Column v-scroll field="cspName" header="Registered CSP"></Column>
+                                          <Column v-scrollfield="cspStatus" header="Status"></Column>
+                                          <Column v-scroll field="link" header="More"></Column>
+                                      </DataTable>
+                                      <div v-transition v-if="registeredCSPs.length === 0">
+
+                                          <h3 v-scroll>No registered CSPs..</h3>
+                                          <router-link :to="{ name: 'Home' }"><Button v-scroll
+                                                  label="Register Now!"></Button></router-link>
+                                      </div>
+                                  </TabPanel>
+
+                                  <TabPanel header="Favourites">
+                                      <TabPanel header="Favourites" class="centered-tab-panel">
+                                          <div class="card">
+                                              <CSPCarousel/>
+                                          </div>
+                                          <div id="noFavoritesMessage" style="display: none;">You have no favorites
+                                              currently.</div>
+                                      </TabPanel>
+                                  </TabPanel>
+                              </TabView>
+                          </div>
+                      </template>
+                  </Card>
+              </div>
+          </div>
+      </div>
+      <Dialog v-model:visible="visible" :style="{ width: '65vw' }">
+          <div class="grid align-items-center justify-content-center">
+              <div class="col-12 md:col-12 lg:col-6">
+                  <Card class="p-3 mt-4 mb-4 card" style="width: 40vw;">
+                      <template #title>Edit Profile</template>
+                      <template #content>
+                          <div class="grid align-items-center justify-content-center mb-3">
+                              <div class="col-12 md:col-4 lg:col-3 mb-3">
+                                  <Avatar v-if="profilePicture != ''" shape="circle" size="xlarge" :image="profilePicture"
+                                      :style="{ backgroundColor: '#fafafa', width: '6rem', height: '6rem' }" />
+                                  <Avatar v-else shape="circle" size="xlarge"
+                                      :style="{ backgroundColor: '#3F51B5', color: '#ffffff', width: '6rem', height: '6rem' }" />
                               </div>
-                          `;
-                      });
-                  }
-              } else if (tabName === 'csps') {
-                  cspContent.innerHTML = ''; // Clear previous content
-  
-                  if (data.length === 0) {
-                      noFavoritesMessage.style.display = 'block'; // Display message when no favorites
-                  } else {
-                      data.forEach(csp => {
-                          cspContent.innerHTML += `
-                              <!-- Create cards for CSPs based on data -->
-                              <div class="csp-card">
-                                  <h3>${csp.name}</h3>
-                                  <!-- Add other CSP details here -->
+                              <div class="col-12 md:col-8 lg:col-9 mb-3">
+                                  <div class="grid">
+                                      <label for="profilePicture" class="form-label"></label>
+                                      <input type="file" style="display: none" id="profilePicture" accept="image/*"
+                                          @change="handleProfilePictureChange" />
+                                      <Button rounded @click="selectFile()"
+                                          class="w-full align-items-center justify-content-center mb-3"><i
+                                              class="pi pi-plus px-2"></i><span class="px-2">Pick a profile picture
+                                          </span></Button>
+                                      <Button rounded outlined @click="remove()"
+                                          class="w-full align-items-center justify-content-center"><i
+                                              class="pi pi-trash px-2"></i><span class="px-2">Remove</span></Button>
+                                  </div>
                               </div>
-                          `;
-                      });
-                  }
+                          </div>
+
+                          <div class="flex flex-column gap-3 mb-3">
+                              <label for="title">Username</label>
+                              <InputText id="title" :value="first_name" v-model="first_name" />
+                          </div>
+                          <Button text rounded label="Save" @click="save()"
+                              class="w-full align-items-center justify-content-center"><i
+                                  class="pi pi-save px-2"></i>Save</Button>
+                      </template>
+                  </Card>
+              </div>
+          </div>
+      </Dialog>
+  </div>
+</template>
+
+
+<script setup>
+import { ref, computed, onMounted, watch } from "vue";
+import axios from "axios";
+import { useRoute, useRouter } from "vue-router";
+import { useToast } from "primevue/usetoast";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
+import { db } from "@/firebase";
+import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import CSPCarousel from '@/components/CSPCarousel.vue';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import NavBar from '@/components/NavBar.vue';
+import ColumnGroup from 'primevue/columngroup';   // optional
+import Row from 'primevue/row';                   // optional
+
+// import { db, storage } from "@/firebase";
+const tabs = ref([
+  {
+      title: 'Smooserve Shops',
+      content: '',
+  },
+  {
+      title: 'CSPs',
+      content: '',
+  },
+]);
+onMounted(async () => {
+  // You can fetch your CSP data here, for example:
+  try {
+      getRegisteredCSPs();
+      registeredCSPs.cspName = cspName;
+      registeredCSPs.cspStatus = cspName; // Update this line based on your API response structure
+  } catch (error) {
+      console.error('Error fetching registered CSP data:', error);
+  }
+});
+const registeredCSPs = ref([
+  {
+      cspName: 'CSP Name 1',
+      cspStatus: 'Pending',
+      link: 'Waiting for confirmation...'
+  },
+  {
+      cspName: 'CSP Name 2',
+      cspStatus: 'Schedule',
+      link: 'Link to CSP...'
+  },
+  {
+      cspName: 'CSP Name 3',
+      cspStatus: 'Accepted',
+      link: 'Congratulations!'
+  },
+  // Add more dummy data objects as needed
+]);
+const backgroundImage = ref("/layout/images/landing-img1.jpg"); // Set this to the URL of your background image
+
+const backgroundImageStyle = computed(() => {
+  return {
+      backgroundImage: `url(${backgroundImage.value})`,
+      backgroundSize: "cover", // Adjust the background size as needed
+      backgroundPosition: "center", // Adjust the background position as needed
+  };
+});
+const storage = getStorage();
+
+const toast = useToast();
+
+const route = useRoute();
+const auth = getAuth();
+let studentId = null;
+
+const visible = ref(false);
+const user = ref([]);
+
+const loading = ref(true);
+
+const buttonColor = ref("");
+const student = ref([]);
+const profilePicture = ref("");
+const backgroundPicture = ref("");
+const first_name = ref('');
+const quizPreference = ref(['']);
+const favCSPs = ref([]);
+const name = ref('');
+const email = ref('');
+const contact = ref('');
+
+const options = ref(['Quiz Data', 'Registered CSPs', 'Favourites']);
+const handleProfilePictureChange = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+      profilePicture.value = URL.createObjectURL(file);
+  }
+};
+function selectFile() {
+  // Trigger the file input when the button is clicked
+  document.getElementById('profilePicture').click();
+};
+
+function addPic() {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+
+  input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+          uploadImage(file);
+      }
+  };
+
+  input.click();
+}
+
+function remove() {
+  profilePicture.value = "";
+  user.value.profilePicture = "";
+}
+
+const editProfile = () => {
+  visible.value = true;
+};
+
+
+const uploadImage = async (file) => {
+  try {
+      const storageRef = sRef(storage, `studentPics/${studentId}/${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+
+      // Get the download URL
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      // Update the profile picture URL in Firestore
+      await updateDoc(doc(db, "students", studentId), {
+          profilePicture: downloadURL,
+      });
+
+      // Update the profile picture in the local state
+      profilePicture.value = downloadURL;
+
+      // Show success toast message
+      toast.add({
+          severity: "success",
+          summary: "Image Uploaded",
+          detail: "Image has been uploaded successfully!",
+          life: 3000,
+      });
+  } catch (error) {
+      console.error("Error uploading image:", error);
+      // Show error toast message
+      toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: "Error uploading image. Please try again later.",
+          life: 3000,
+      });
+  }
+};
+
+
+
+onAuthStateChanged(auth, async (student) => {
+  if (student) {
+      try {
+          loading.value = false;
+          const querySnapshot = await getDocs(collection(db, "students"));
+          querySnapshot.forEach((doc) => {
+              const studentEmail = doc.data().email;
+              if (studentEmail === student.email) {
+                  studentId = doc.id;
               }
-          })
-          .catch(error => console.error('Error fetching data:', error));
-  }
-  
-  // Hide the "Registered CSP" table initially
-  const registeredCspTable = document.querySelector('.registered-CSP');
-  const noRegisteredCspMessage = document.getElementById('noRegisteredCspMessage'); // Get the message element
-  
-  // Example data fetching logic (replace with your actual data fetching)
-  fetch('get_registered_csp_data.php') // Replace with your actual data source URL
-      .then(response => response.json())
-      .then(data => {
-          // Check if there is data
-          if (data.length > 0) {
-              // There are registered CSPs, hide the message and display the table
-              noRegisteredCspMessage.style.display = 'none';
-              registeredCspTable.style.display = 'table'; // Display the table
-  
-              // Get the table body
-              const tableBody = registeredCspTable.querySelector('tbody');
-  
-              // Clear previous content
-              tableBody.innerHTML = '';
-  
-              // Iterate through the data and create rows
-              data.forEach(item => {
-                  const row = tableBody.insertRow();
-                  const cell1 = row.insertCell(0);
-                  const cell2 = row.insertCell(1);
-                  const cell3 = row.insertCell(2);
-                  const cell4 = row.insertCell(3);
-  
-                  cell1.textContent = item.cspName; // Replace with your actual data property
-                  cell2.textContent = item.registeredDate; // Replace with your actual data property
-                  cell3.textContent = item.cspContact; // Replace with your actual data property
-                  cell4.textContent = item.status; // Replace with your actual data property
-              });
+          });
+
+          // If studentId is still null, no matching email was found in the collection
+          if (studentId === null) {
+              console.log("No matching id found in the database.");
           } else {
-              // There are no registered CSPs, display the message and hide the table
-              noRegisteredCspMessage.style.display = 'block';
-              registeredCspTable.style.display = 'none';
+              console.log("Student ID found:", studentId);
+              const response = await axios.get(`http://localhost:8080/api/student/${studentId}`, {
+              });
+              first_name.value = response.data.first_name;
+              email.value = response.data.email;
+              contact.value = response.data.contact;
+              quizPreference.value = response.data.quizPreference;
+              favCSPs.value = response.data.favoriteCsps;
+              console.log(response.data)
+
           }
+      } catch (error) {
+          console.error(error);
+
+      }
+  } else {
+      // localStorage.remove('userProfile');
+      studentId = null;
+
+  }
+});
+
+function save() {
+  loading.value = true;
+  const data = {
+      profilePicture: profilePicture.value,
+      first_name: first_name.value,
+  };
+  axios
+      .put(`https://localhost:8080/api/student/${studentId}`, data)
+      .then((response) => {
+          toast.add({
+              severity: "success",
+              summary: "Done",
+              detail: response.statusText,
+              life: 3000,
+          });
       })
-      .catch(error => {
-          console.error('Error fetching registered CSP data:', error);
-          // Handle the error here
-          noRegisteredCspMessage.style.display = 'block';
-          registeredCspTable.style.display = 'none';
+      .catch((error) => {
+          console.log(error);
+          toast.add({
+              severity: "error",
+              summary: "Error",
+              detail: error,
+              life: 3000,
+          });
+      })
+      .finally(() => (loading.value = false));
+}
+
+onMounted(async () => {
+  axios
+      .get(`https://localhost:8080/api/student/${studentId}`)
+      .then((response) => {
+          student.value = response.data;
+          profilePicture.value = student.profilePicture;
+          first_name.value = student.first_name;
+      })
+      .catch((error) => {
+          console.log(error);
+          toast.add({
+              severity: "error",
+              summary: "Error",
+              detail: error,
+              life: 3000,
+          });
+      })
+      .finally(() => (loading.value = false));
+});
+watch(
+  () => buttonColor,
+  (newColor) => {
+      // Watch for changes in the buttonColor value and update the button background color
+      const buttons = document.querySelectorAll(".selectBtns");
+      buttons.forEach((button) => {
+          button.style.backgroundColor = newColor;
       });
-  
-      function showScheduleDropdown(button) {
-          const dropdown = button.nextElementSibling; // Get the sibling div containing the dropdown
-          dropdown.style.display = "block";
-      }
-      
-      function scheduleInterview(button) {
-          const dropdown = button.parentNode; // Get the parent div containing the dropdown
-          const selectedTimeSlot = dropdown.querySelector("#interviewTime").value;
-          const cspName = button.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.textContent; // Get CSP name
-      
-          // Send scheduling information to the CSP organization (You can use AJAX or other methods)
-      
-          // Example: Display a confirmation message
-          alert(`Scheduled an interview with ${cspName} on ${selectedTimeSlot}`);
-      }
-      const statusCells = document.querySelectorAll("td:nth-child(4)"); // Select all "Status" cells
-  
-      statusCells.forEach(statusCell => {
-          if (statusCell.textContent === "Accepted") {
-              const buttonCell = statusCell.nextElementSibling; // Get the cell with the button
-              buttonCell.innerHTML = ""; // Remove the button
-          }
-      });
-  </script>
-  
-  <style>
-  /* styles.css */
-  
-  /* Style the tab buttons */
-  .tab-button {
-      cursor: pointer;
-      padding: 10px 20px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      margin: 5px;
   }
-  
-  .tab-button.active {
-      background-color: #3498db;
-      color: #fff;
-  }
-  
-  /* Style the cards */
-  .card {
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      margin: 10px;
-      padding: 10px;
-  }
-  /* styles.css */
-  
-  /* Add this CSS rule for the "Take Quiz Again" button */
-  .quiz-button {
-      display: inline-block;
-      padding: 10px 20px;
-      border-radius: 25px;
-      background-color: #064273;
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
-      margin: 10px;
-  }
-  
-  .quiz-button:hover {
-      background-color: #042c4c;
-  }
-  
-  /* styles.css */
-  
-  /* Add this CSS rule for the selected card */
-  .selected-card {
-      background-color: #76b6c4;
-      color: #fff;
-  }
-  
-  /* Style the cards */
-  .card {
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      margin: 10px;
-      padding: 10px;
-      cursor: pointer;
-  }
-  
-  .card:hover {
-      background-color: #f0f0f0;
-  }
-  
-  .flip-card {
-      background-color: transparent;
-      width: 280px;
-      height: 390px;
-      border: none;
-      perspective: 1000px; /* Remove this if you don't want the 3D effect */
-      border-radius: 15px;
-    }
-    
-    /* This container is needed to position the front and back side */
-    .flip-card-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      transition: transform 0.8s;
-      transform-style: preserve-3d;
-    }
-    
-    /* Do an horizontal flip when you move the mouse over the flip box container */
-    .flip-card:hover .flip-card-inner {
-      transform: rotateY(180deg);
-    }
-    
-    /* Position the front and back side */
-    .flip-card-front, .flip-card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      border-radius: 15px;
-    }
-    
-    /* Style the front side (fallback if image is missing) */
-    .flip-card-front {
-      color: black;
-    
-    }
-    
-    /* Style the back side */
-    .flip-card-back {
-      background-color: rgb(119, 166, 204);
-      color: white;
-      transform: rotateY(180deg);
-      display: flex;
-      justify-content: center;
-    }
-    
-    .flip-card img {
-      max-width: 100%; /* Ensure the image doesn't exceed its container */
-      max-height: 100%;
-      border-radius: 15px;
-    }
-    
-    .centralise{
-      margin:150px;
-    }
-    /* Additional CSS for grid layout */
-  .favorite-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); /* Adjust the width as needed */
-      gap: 20px; /* Adjust the gap between cards */
-  }
-  
-  .flip-card {
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 10px;
-      cursor: pointer;
-  }
-  /* Your existing CSS styles... */
-  
-  /* Style for the card grid layout */
-  .card-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr); /* Adjust the number of columns as needed */
-      gap: 20px; /* Adjust the gap between cards */
-  }
-  
-  /* Style the flip cards */
-  .flip-card {
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 10px;
-      cursor: pointer;
-  }
-  
-  /* Additional CSS for grid layout */
-  .favorite-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* Adjust the width as needed */
-      gap: 20px; /* Adjust the gap between cards */
-  }
-   /* CSS for the "Schedule Interview" button */
-   .schedule-button {
-    position: relative;
-  }
-  
-  th,tr,td{
-    border:1px solid black;
-  }
-  </style>
-  
-  
+);
+</script>
+<style>
+.card {
+  border-radius: 12px;
+}
+
+.blur-background {
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  /* For Safari compatibility */
+  background-color: rgba(255, 255, 255, 0.7);
+  /* Semi-transparent white */
+}
+
+.before-enter {
+  opacity: 0;
+  transform: translateY(100px);
+  transition: all 2s ease-out;
+}
+
+/* 
+  If the element intersects with the viewport, the before-enter class is added.
+*/
+.enter {
+  opacity: 1;
+  transform: translateY(0px);
+}</style>

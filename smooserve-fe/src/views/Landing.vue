@@ -303,7 +303,7 @@ export default {
 
   <!-- body -->
   <div class="container-fluid" style="background-color: navy">
-    <div class="row">
+    <div class="row " style="padding-top: 10px;">
       <div class="col">
         <h1
             style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600;
@@ -325,32 +325,36 @@ export default {
           <option value="Youth Development">Youth Development</option>
         </select>
 
-        <!-- Second Dropdown List -->
-        <label for="dropdown2"></label>
-        <select id="dropdown2" v-model="selectedValue2" @change="filterCsp">
-          <option value="" selected>Skills</option>
-          <option value="Teaching">Teaching</option>
-          <option value="Event Planning">Event Planning</option>
-          <option value="Wrting and Communication">Communication</option>
-        </select>
+            <!-- Second Dropdown List -->
 
-        <!-- Third Dropdown List -->
-        <label for="dropdown3"></label>
-        <select id="dropdown3" v-model="selectedValue3" @change="filterCsp">
-          <option value="" selected>Location</option>
-          <option value="true">Local</option>
-          <option value="false">Overseas</option>
-        </select>
+            <label for="dropdown2">Skills:</label>
+            <select id="dropdown2" v-model="selectedValue2">
+              <option value="optionA">Option A</option>
+              <option value="optionB">Option B</option>
+              <option value="optionC">Option C</option>
+            </select>
 
 
-        <div class="toggle-button" style="display: inline-block; text-align: center; padding-left: 10px;">
-          <label
-              style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">Auto-filter:</label>
-          <button @click="toggleAutoFilter">{{ selectedValue3 === '' ? 'Off' : 'On' }}</button>
+            <!-- Third Dropdown List -->
+
+            <label for="dropdown3">Date:</label>
+            <select id="dropdown3" v-model="selectedValue3">
+              <option value="choiceX">Choice X</option>
+              <option value="choiceY">Choice Y</option>
+              <option value="choiceZ">Choice Z</option>
+            </select>
+          </div>
+
+
+          <!-- Display selected values -->
+          <div class="row justify-content-center" style="color:white; font-weight: bold; font-size: 20px;">
+            Selected Value 1: {{ selectedValue1 }}
+            Selected Value 2: {{ selectedValue2 }}
+            Selected Value 3: {{ selectedValue3 }}
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+
 
 
   <!-- CSP flip cards -->

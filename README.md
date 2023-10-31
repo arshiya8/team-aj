@@ -1,36 +1,7 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
-<a name="readme-top"></a>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
+  <a href="https://github.com/jontohh/team-aj">
     <img src="smooserve-fe/public/layout/images/logo-white.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -39,15 +10,13 @@
   <p align="center">
     Our project aims to address the inefficiencies in managing volunteer applications, caused by the current email-based system. This manual process results in a backlog of messages, hindering timely volunteer selection and potentially missing opportunities. To resolve these issues, we're developing a dedicated volunteer matching website. This platform will streamline application processing, reduce administrative burdens, and improve overall volunteer management. Additionally, it will feature event filtering based on user preferences. 
     <br />
-    <a href="https://github.com/arshiya8/team-aj"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/jontohh/team-aj"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/arshiya8/team-aj">View Demo</a>
+    <a href="http://smooserve-fe.vercel.app/">View Demo</a>
     ·
-    <a href="https://github.com/arshiya8/team-aj/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/arshiya8/team-aj/issues">Request Feature</a>
-  </p>
+    <a href="https://github.com/jontohh/team-aj/issues">Report Bug</a>
+
 </div>
 
 
@@ -64,140 +33,91 @@
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
 
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
-
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
+## Technologies
 
 ### Built With
 
 * [![Vue][Vue.js]][Vue-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+* [![PrimeVue](https://img.shields.io/badge/PrimeVue-6DA55F?style=for-the-badge&logo=linode&logoColor=white)](http://primevue.org)
+* ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+
+### Cloud Hosting
+* [![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com)
+
+### APIs
+* ![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white)
+* ![Google](https://img.shields.io/badge/google-4285F4?style=for-the-badge&logo=google&logoColor=white) Maps
+* ![Zoom](https://img.shields.io/badge/Zoom-2D8CFF?style=for-the-badge&logo=zoom&logoColor=white)
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
 <!-- GETTING STARTED -->
-## Getting Started
+# Getting Started
+## Frontend (Vue.js)
 
 Make sure to be in the project folder
 ```
 cd smooserve-fe
 ```
 
-## Setup
+### Setup
 
 Make sure to install the dependencies:
 
 ```bash
 # npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
 ```
 
-## Development Server
+### Start Server
 
-Start the development server on `http://localhost:3000`:
+Start the front end  server on `http://localhost:5173`:
 
 ```bash
 # npm
 npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
 ```
 
-## Production
 
-Build the application for production:
+## Backend (Node.js)
+
+Make sure to be in the project folder
+```
+cd smooserve-be
+```
+
+### Setup
+
+Make sure to install the dependencies:
 
 ```bash
 # npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
+npm install
 ```
 
-Locally preview production build:
+### Start Server
 
+Start the development server on `http://localhost:8080`:
 ```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
+node index.js
 ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -213,20 +133,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+SmooServe - smooservecsp@gmail.com
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
+Project Link: [https://github.com/jontohh/team-aj](https://github.com/jontohh/team-aj)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
