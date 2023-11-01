@@ -6,17 +6,12 @@
     <div class="content">
       <div class="social-media">
         <h4>Connect With Us</h4>
-        <p><a href="#"><i class="fab fa-linkedin"></i> Linkedin</a></p>
-        <p><a href="#"><i class="fab fa-twitter"></i> Twitter</a></p>
-        <p><a href="#"><i class="fab fa-facebook"></i> Facebook</a></p>
-        <p><a href="#"><i class="fab fa-instagram"></i> Instagram</a></p>
+        <p><a href="https://www.instagram.com/smooserve/"><i class="fab fa-instagram"></i> Instagram</a></p>
       </div>
       <div class="links">
         <h4>Explore</h4>
         <p><a href="#">Home</a></p>
         <p><a href="#">About</a></p>
-        <p><a href="#">Blogs</a></p>
-        <p><a href="#">Contact</a></p>
       </div>
       <div class="contact-details">
         <h4>Contact</h4>
