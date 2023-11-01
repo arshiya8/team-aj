@@ -101,7 +101,7 @@ const routes = [
   {
     path: "/quiz1",
     name: "Quiz1",
-    component: () => import("@/views/quiz/test.vue"),
+    component: () => import("@/views/quiz/testtest.vue"),
   },
   //rayne
   {
