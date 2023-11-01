@@ -1,17 +1,104 @@
-<script>
+<template>
+  <div id="bg" :style="backgroundImage">
+    <a href="#" style="display: flex; justify-content: center; align-items: center;">
+      <img src="layout/images/logo-white.png" height="80" class="mr-0 lg:mr-2" />
+    </a>
+    <div class="header-container">
+      <h1>CSP PREFERENCE QUIZ</h1>
+    </div>
+    <div class="container c1 p-col-12 p-md-6 p-lg-4">
+      <form @submit.prevent="submitForm">
+        <div class="card container">
+          <div class="container" style="display: flex; flex-direction: column; align-items: center;">
+            <h2 style="text-align: center;" class="pl-3">{{ currentQuestionData.text }}</h2>
+          </div>
+          <div class="container">
+            <table v-if="currentQuestionData.type === 'multi-select'" class="w-100">
+              <tr class="wrapping custom-radio-label"
+                @click="updateResponse(currentQuestionData.name, option, currentQuestionData.type)"
+                :class="{ selected: currentQuestionData.name in selectedOptions && selectedOptions[currentQuestionData.name].indexOf(option) >= 0 }"
+                v-for="(option, optionIndex) in currentQuestionData.options.cols"
+                style="display: flex; flex-direction: row;">
+                <td :key="optionIndex" class="w-100 row-option text-align-start">{{ option }}</td>
+                <td class="row-checkbox text-align-end">
+                  {{ currentQuestionData.name in selectedOptions &&
+                    selectedOptions[currentQuestionData.name].indexOf(option) >= 0 ? '✓' : '' }}
+                </td>
+              </tr>
+            </table>
+            <table v-else-if="currentQuestionData.type === 'single-select'" class="w-100">
+              <tr class="wrapping custom-radio-label"
+                @click="updateResponse(currentQuestionData.name, option, currentQuestionData.type)"
+                :class="{ selected: selectedOptions[currentQuestionData.name] === option }"
+                v-for="(option, optionIndex) in currentQuestionData.options.cols"
+                style="display: flex; flex-direction: row;">
+                <td :key="optionIndex" class="w-100 row-option text-align-start">{{ option }}</td>
+                <td class="row-checkbox text-align-end">
+                  {{ selectedOptions[currentQuestionData.name] === option ? '✓' : '' }}
+                </td>
+              </tr>
+            </table>
+            <div v-else style="display: flex; flex-direction: row;">
+              <span class="p-float-label w-100 mt-3 mx-2">
+                <Textarea v-model="currentQuestionData.response" :rows="10"
+                  :maxlength="currentQuestionData.character_limit" class="w-100" style="resize: none;"
+                  @mouseout="updateResponse(currentQuestionData.name, index, currentQuestionData.type)" />
+                <label>Enter response here</label>
+              </span>
+            </div>
+          </div>
 
+          <div class="buttons-container text-center">
+            <!-- Back and Next Buttons for each question -->
+            <div class="d-flex justify-content-between my-3 mx-2">
+              <div class="mx-auto">
+              <Button v-if="currentQuestion > 0" type="button" class="btn btn-secondary" @click="prevQuestion">
+                Back
+              </Button>
+              <div v-else> <!-- Empty div to force the next Button to row end -->
+              </div>
+              <Button v-if="currentQuestion < questions.length - 1" type="button" class="btn btn-primary mx-auto"
+                @click="nextQuestion">
+                Next
+              </Button>
+            </div>
+              <!-- Display "Submit" Button only on the last question -->
+              <Button v-if="currentQuestion === questions.length - 1" type="submit" class="btn btn-primary">
+                Submit
+              </Button>
+            </div>
+
+
+            <!-- "Take Me to Homepage" Button -->
+            <router-link v-if="showHomepageButton" :to="{ name: 'Home' }">
+              <Button class="btn btn-primary">Take Me to Homepage</Button>
+            </router-link>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>
+
+
+
+<script>
+import { ref } from 'vue';
+import 'primeflex/primeflex.css'; 
+import Button from 'primevue/button';
 export default {
   data() {
     return {
       textInput: '',
       currentQuestion: 0,
       selectedOptions: {},
-      backgroundImage: {  // Set background of webpage
-        backgroundImage: `url(../../layout/images/quiz1.png)`
+      backgroundImage: {
+        backgroundImage: `url(../../layout/images/quiz1.png)`,
+        backgroundSize: 'auto', // Set to 'cover' to make the image cover the entire container
+        backgroundRepeat: 'repeat',
       },
-      submitted: false, // Add this property to track form submission
-      showHomepageButton: false, // Add this property to control button visibility
-
+      submitted: false,
+      showHomepageButton: false,
       questions: [
         {
           name: "first_name",
@@ -138,6 +225,12 @@ export default {
       ],
     };
   },
+  computed: {
+    currentQuestionData() {
+      return this.questions[this.currentQuestion];
+    },
+  },
+
   methods: {
     prevQuestion() {
       if (this.currentQuestion > 0) {
@@ -151,9 +244,10 @@ export default {
         this.updateBackground();
       }
     },
-    updateBackground() {  // Update background of webpage
-      this.backgroundImage.backgroundImage = 'url(' + this.questions[this.currentQuestion].background + ')';
+    updateBackground() {
+      this.backgroundImage.backgroundImage = 'url(' + this.currentQuestionData.background + ')';
     },
+
     goToQuestion(questionIndex) {
       this.currentQuestion = questionIndex;
     },
@@ -190,145 +284,61 @@ export default {
         console.log("The value: ", v);
       });
 
-      // Set submitted to true and show the button
+      // Set submitted to true and show the Button
       this.submitted = true;
       this.showHomepageButton = true;
     },
   },
+
+  components: {
+    Button,
+  },
 };
 </script>
 
-<template>
-  <!-- Background image -->
-  <div id="bg" :style="backgroundImage">
-
-    <!-- smooserve logo -->
-    <a href="#" style="display: flex; justify-content: center; align-items: center;">
-      <img src="layout/images/logo-white.png" height="80" class="mr-0 lg:mr-2" />
-    </a>
-
-    <!-- Container for header -->
-    <div class="header-container">
-      <h1>CSP PREFERENCE QUIZ</h1>
-    </div>
-
-    <!-- Container for carousel -->
-    <div class="container c1 col-xxl-4 col-xl-5 col-lg-6 col-md-7 col-sm-8 col-10">
-      <form @submit.prevent="submitForm">
-
-        <div id="carouselExampleIndicators" class="carousel slide">
-          <!-- Carousel indicators for questions -->
-          <ol class="carousel-indicators">
-            <li v-for="(question, index) in questions" :key="index" :class="{ active: index === currentQuestion }"
-                @click="goToQuestion(index)"></li>
-          </ol>
-
-          <!-- Carousel items -->
-          <div class="carousel-inner">
-            <div v-for="(question, index) in questions" :key="index" class="carousel-item"
-                 :class="{ active: index === currentQuestion }">
-
-              <div class="container justify-content-start" style="display: flex; flex-direction: row;">
-                <h2 style="text-align: left;" class="pl-3">{{ question.text }}</h2>
-              </div>
-
-              <div class="container">
-                <!-- Display this table if question is multi-select -->
-                <table v-if="question.type === 'multi-select'" class="w-100">
-                  <tr class="wrapping custom-radio-label" @click="updateResponse(question.name, option, question.type)"
-                      :class="{
-                      selected: question.name in selectedOptions
-                        && selectedOptions[question.name].indexOf(option) >= 0
-                    }" v-for="(option, optionIndex) in question.options.cols"
-                      style="display: flex; flex-direction: row;">
-                    <td :key="optionIndex" class="w-100 row-option text-align-start">{{ option }}</td>
-                    <td class="row-checkbox text-align-end">{{ question.name in selectedOptions &&
-                    selectedOptions[question.name].indexOf(option) >= 0 ? '✓' : '' }}</td>
-                  </tr>
-                </table>
-
-                <!-- Display this table if question is single-select -->
-                <table v-else-if="question.type === 'single-select'" class="w-100">
-                  <tr class="wrapping custom-radio-label" @click="updateResponse(question.name, option, question.type)"
-                      :class="{ selected: selectedOptions[question.name] === option }"
-                      v-for="(option, optionIndex) in question.options.cols" style="display: flex; flex-direction: row;">
-                    <td :key="optionIndex" class="w-100 row-option text-align-start">{{ option }}</td>
-                    <td class="row-checkbox text-align-end">{{ selectedOptions[question.name] === option ? '✓' : '' }}
-                    </td>
-                  </tr>
-                </table>
-
-                <!-- Display this table if question is open-ended -->
-                <div v-else style="display: flex; flex-direction: row;">
-                  <span class="p-float-label w-100 mt-3 mx-2">
-                    <Textarea v-model="question.response" :rows="10" :maxlength="question.character_limit" class="w-100"
-                              style="resize: none;" @mouseout="updateResponse(question.name, index, question.type)" />
-                    <label>Enter response here</label>
-                  </span>
-                </div>
-
-                <!-- Back and Next buttons for each question -->
-                <div class="d-flex justify-content-between my-3 mx-2">
-                  <button v-if="currentQuestion > 0" type="button" class="btn btn-secondary" @click="prevQuestion">
-                    Back
-                  </button>
-                  <div v-else> <!-- Empty div to force the next button to row end -->
-                  </div>
-                  <button v-if="currentQuestion < questions.length - 1" type="button" class="btn btn-primary" @click="nextQuestion">
-                    Next
-                  </button>
-                  <!-- Display "Submit" button only on the last question -->
-                  <button v-if="currentQuestion === questions.length - 1" type="submit" class="btn btn-primary">
-                    Submit
-                  </button>
-                </div>
-
-                <!-- "Take Me to Homepage" button -->
-                <router-link v-if="showHomepageButton" :to="{ name: 'Home' }">
-                  <button class="btn btn-primary">Take Me to Homepage</button>
-                </router-link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-</template>
 
 <style>
-@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css');
+.buttons-container {
+  align-self: flex-end; /* Align at the bottom of the card */
+  margin-top: auto; /* Push buttons to the bottom */
+  display: flex;
+  justify-content: center; 
+}
+
 
 #bg {
   background-size: auto 100%;
   background-position: center top;
   width: 100%;
-  height: 100vh;
-  position: relative; /* Ensure proper positioning of the header */
+  height: auto;
+  position: relative;
 }
 
 .header-container {
   text-align: center;
   color: black;
   font-size: 50px;
-  background-color: rgba(255, 255, 255, 0.7); /* Add a semi-transparent background color */
+  background-color: rgba(255, 255, 255, 0.7);
+  /* Add a semi-transparent background color */
 }
 
-/* Adjust the background color of the body */
 body {
   background-color: #f7f7f7;
-  /* Light gray background */
   font-family: Arial, sans-serif;
-  /* Change the font to a sans-serif font like Arial */
 }
 
-/* Customize the active indicator color in the carousel */
-.carousel-indicators .active {
+/* Customize the active indicator color in the Carousel */
+.Carousel-indicators .active {
   background-color: #4338ca;
   /* Dark purple */
 }
+.container{ display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
-/* Style the container c1 */
 .c1 {
   background-color: #ffffff;
   /* White background */
@@ -340,15 +350,20 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   /* Add a subtle box shadow */
   max-width: 600px;
+  margin: 0 auto;
+  /* Center the container horizontally */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-/* Add styles to the carousel */
-.carousel {
+.Carousel {
   padding: 20px 0;
   /* Reduce top padding */
 }
 
-/* Style the wrapping elements */
 .wrapping {
   background-color: #f2f2f2;
   /* Light gray background */
@@ -361,13 +376,11 @@ body {
   /* Add a subtle box shadow */
 }
 
-/* Style the carousel items */
-.carousel-item {
+.Carousel-item {
   text-align: center;
   justify-content: center;
 }
 
-/* Customize the submit button */
 .btn-primary {
   background-color: #4338ca;
   /* Dark purple background */
@@ -382,7 +395,6 @@ body {
   /* Add pointer cursor */
 }
 
-/* Style the custom radio labels */
 .custom-radio-label {
   cursor: pointer;
   padding: 10px 20px;
@@ -405,16 +417,13 @@ body {
   display: flex;
 }
 
-/* Highlight on hover */
 .custom-radio-label:hover {
   background-color: #f7f7f7;
   /* Light gray on hover */
 }
 
-/* Add styles for the selected option */
 .custom-radio-label.selected {
   background-color: rgb(107, 161, 237);
   /* Dark purple for selected option */
   color: #ffffff;
-}
-</style>
+}</style>

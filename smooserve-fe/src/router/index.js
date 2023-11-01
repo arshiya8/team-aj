@@ -98,11 +98,6 @@ const routes = [
       requiresAuth: true,
     },
   },
-  {
-    path: "/quiz1",
-    name: "Quiz1",
-    component: () => import("@/views/quiz/testtest.vue"),
-  },
   //rayne
   {
     path: "/profile",
