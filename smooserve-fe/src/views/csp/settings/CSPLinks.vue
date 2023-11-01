@@ -4,7 +4,7 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import draggable from "vuedraggable";
-import CSPNavBar from "../CSPNavBar.vue";
+import CSPNavBar from "@/views/csp/CSPNavBar.vue";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getDocumentIdByEmail } from "@/helper/helperFunctions.js";
 

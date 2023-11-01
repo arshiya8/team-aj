@@ -1,6 +1,5 @@
 <script setup>
 import axios from "axios";
-import CSPNavbar from "../CSPNavBar.vue";
 import { useToast } from "primevue/usetoast";
 import { useRoute, useRouter } from "vue-router";
 import { ref, computed, onMounted } from "vue";

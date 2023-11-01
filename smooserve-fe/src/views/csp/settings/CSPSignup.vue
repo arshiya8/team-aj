@@ -1,9 +1,9 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
-import CSPNavbar from "../CSPNavBar.vue";
+import CSPNavbar from "@/views/csp/CSPNavBar.vue";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getDocumentIdByEmail } from "@/helper/helperFunctions.js";
 
@@ -32,6 +32,31 @@ const zoomTimeSelected = ref(60);
 const zoomTimeOptions = ref([30, 60]);
 const dbAccessToken = ref("");
 const dbRefreshToken = ref("");
+
+const checkIfZoomEnabled = ref(false);
+
+const zoomToastVisible = ref(false);
+const conflictVisible = ref(false);
+const showZoomEnable = () => {
+  if (!zoomToastVisible.value) {
+    toast.add({
+      severity: "info",
+      summary: "To enable Zoom Scheduler",
+      group: "bc",
+    });
+    zoomToastVisible.value = true;
+  }
+};
+
+const onReply = () => {
+  toast.removeGroup("bc");
+  zoomToastVisible.value = false;
+  router.push({ name: "CSPSetting" });
+};
+
+const onClose = () => {
+  zoomToastVisible.value = false;
+};
 
 const topic = ref();
 
@@ -75,6 +100,45 @@ onMounted(async () => {
     }
   });
 });
+
+watch(datetime12h, (newStartTime) => {
+  if (checkZoomConflicts(newStartTime)) {
+    toast.add({
+      severity: "error",
+      summary: "Conflicting Meetings",
+      detail: "There is an existing meeting during this time",
+      life: 3000,
+    });
+    conflictVisible.value = true;
+} else {
+    conflictVisible.value = false;
+  }
+});
+
+function checkZoomConflicts(newStartTime) {
+  // Convert the new start_time to a Date object
+  const newStart = new Date(newStartTime);
+
+  // Iterate through the existing meetings
+  for (const meeting of registeredStudents.value) {
+    // Convert the existing meeting's start_time to a Date object
+    const existingStart = new Date(meeting.start_time);
+
+    // Calculate the end time of the existing meeting
+    const existingEnd = new Date(
+      existingStart.getTime() + meeting.duration * 60 * 1000
+    );
+
+    // Check for conflicts
+    if (newStart >= existingStart && newStart < existingEnd) {
+      // There's a conflict
+      return true;
+    }
+  }
+
+  // No conflicts found
+  return false;
+}
 
 function acceptRejectStudent(status) {
   registeredStudents.value[selectedStudent.value].status = status;
@@ -120,6 +184,10 @@ async function scheduleZoomMeeting() {
     })
     .then((response) => {
       console.log(response.data);
+      registeredStudents.value[selectedStudent.value].start_time =
+        datetime12h.value;
+      registeredStudents.value[selectedStudent.value].duration =
+        zoomTimeSelected.value;
       registeredStudents.value[selectedStudent.value].status = "scheduled";
       registeredStudents.value[selectedStudent.value].link =
         response.data.join_url;
@@ -185,9 +253,15 @@ function checkIfAccessTokenValid(issuedTimestamp) {
 
   if (currentTimestamp < expirationTimestamp) {
     console.log("Access token is still valid.");
+    checkIfZoomEnabled.value = true;
   } else {
     console.log("Access token has expired.");
-    updateTokens();
+    if (issuedTimestamp == 0) {
+      checkIfZoomEnabled.value = false;
+    } else {
+      checkIfZoomEnabled.value = true;
+      updateTokens();
+    }
   }
 }
 
@@ -250,6 +324,26 @@ const updateTokens = async () => {
 };
 </script>
 <template>
+  <Toast position="bottom-center" group="bc" @close="onClose">
+    <template #message="slotProps">
+      <div class="flex flex-column align-items-start" style="flex: 1">
+        <div class="flex align-items-center gap-2">
+          <Avatar image="/layout/images/logo-white.png" shape="circle" />
+          <span class="font-bold text-900">Enable Zoom Scheduler!</span>
+        </div>
+        <div class="font-medium text-lg my-3 text-900">
+          Go to <i class="pi pi-spin pi-cog"></i> Settings >
+          <i class="pi pi-user"></i> Profile
+        </div>
+        <Button
+          icon="pi pi-user"
+          class="p-button-sm"
+          label="Profile"
+          @click="onReply()"
+        ></Button>
+      </div>
+    </template>
+  </Toast>
   <Toast></Toast>
   <Dialog
     v-model:visible="visibleInterview"
@@ -277,13 +371,15 @@ const updateTokens = async () => {
           ></Button>
         </div>
         <InputText id="topic" v-model="topic" />
-
-        <label for="calendar-12h"> 12h Format </label>
+        <div>
+        <label for="calendar-12h"> 12h Format </label><span v-if="conflictVisible" class="text-red-500"> There is an existing meeting during this time</span>
+        </div>
         <Calendar
           id="calendar-12h"
           v-model="datetime12h"
           showTime
           hourFormat="12"
+          @input="checkZoomConflicts(datetime12h)"
         />
 
         <SelectButton
@@ -552,37 +648,47 @@ const updateTokens = async () => {
               <Column header="Action">
                 <template #body="slotProps">
                   <!-- if registered -->
-                  <Button
-                    v-if="slotProps.data.status == 'registered'"
-                    rounded
-                    label="Schedule Interview"
-                    @click="
-                      (visibleInterview = true),
-                        (selectedStudent = slotProps.index)
-                    "
-                  />
-                  <!-- if scheduled -->
-                  <Button
-                    v-if="slotProps.data.status == 'scheduled'"
-                    rounded
-                    severity="success"
-                    label="Accept"
-                    class="mr-3"
-                    @click="
-                      (selectedStudent = slotProps.index),
-                        acceptRejectStudent('accepted')
-                    "
-                  />
-                  <Button
-                    v-if="slotProps.data.status == 'scheduled'"
-                    rounded
-                    severity="danger"
-                    label="Reject"
-                    @click="
-                      (selectedStudent = slotProps.index),
-                        acceptRejectStudent('rejected')
-                    "
-                  />
+                  <div v-if="checkIfZoomEnabled">
+                    <Button
+                      v-if="slotProps.data.status == 'registered'"
+                      rounded
+                      label="Schedule Interview"
+                      @click="
+                        (visibleInterview = true),
+                          (selectedStudent = slotProps.index)
+                      "
+                    />
+                    <!-- if scheduled -->
+                    <Button
+                      v-if="slotProps.data.status == 'scheduled'"
+                      rounded
+                      severity="success"
+                      label="Accept"
+                      class="mr-3"
+                      @click="
+                        (selectedStudent = slotProps.index),
+                          acceptRejectStudent('accepted')
+                      "
+                    />
+                    <Button
+                      v-if="slotProps.data.status == 'scheduled'"
+                      rounded
+                      severity="danger"
+                      label="Reject"
+                      @click="
+                        (selectedStudent = slotProps.index),
+                          acceptRejectStudent('rejected')
+                      "
+                    />
+                  </div>
+                  <div v-else>
+                    <Button
+                      rounded
+                      severity="primary"
+                      label="Enable Zoom First"
+                      @click="showZoomEnable"
+                    />
+                  </div>
                 </template>
               </Column>
               <template #footer>

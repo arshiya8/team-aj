@@ -62,7 +62,7 @@ const goToCSP = () =>{
 const items = ref([
   {
     label: "Sign ups",
-    icon: "pi pi-fw pi-user",
+    icon: "pi pi-fw pi-users",
     routeName: "CSPSignup",
   },
   {
@@ -81,7 +81,7 @@ const items = ref([
       },
       {
         label: "Profile",
-        icon: "pi pi-fw pi-cog",
+        icon: "pi pi-fw pi-user",
         routeName: "CSPSetting",
       },
     ],
@@ -115,9 +115,8 @@ const items = ref([
           <router-link
             v-if="item.routeName"
             v-slot="routerProps"
-            :to="{ name: item.routeName, params: { id: CSPid } }"
+            :to="{ name: item.routeName }"
             custom
-            :exact="true"
           >
             <a :href="routerProps.href" v-bind="props.action">
               <span v-bind="props.icon" />
