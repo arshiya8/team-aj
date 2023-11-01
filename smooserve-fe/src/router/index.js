@@ -109,16 +109,17 @@ const routes = [
     component: () => import("@/views/quiz/test.vue"),
   },
 
-  // {
-  //   path: "/NearYou",
-  //   name: "Map",
-  //   component: () => import("@/views/maps/map.vue"),
-  // },
   {
-    path: "/shop",
-    name: "Shop",
-    component: () => import("@/views/shops/shop.vue"),
+    path: "/NearYou",
+    name: "Map",
+    component: () => import("@/views/maps/map.vue"),
   },
+  // {
+  //   path: "/shop",
+  //   name: "Shop",
+  //   component: () => import("@/views/shops/shop.vue"),
+  // },
+  
   //rayne
   {
     path: "/profile",

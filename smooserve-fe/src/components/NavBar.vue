@@ -42,7 +42,7 @@ const handleSignOut = () => {
 }
 
 const logoUrl = computed(() => {
-  return `/layout/images/logo-white.png`;
+  return `layout/images/logo-white.png`;
 });
 
 
@@ -60,9 +60,9 @@ const items = ref([
     routeName: "About",
   },
   {
-    label: "NEAR ME",
+    label: "NEAR YOU",
     icon: "pi pi-map-marker",
-    // routeName: "Map",
+    routeName: "Map",
   },
 
 ]);
@@ -103,8 +103,8 @@ const items = ref([
           <a class='line-remove' v-if="isLoggedIn" @click="handleSignOut">
             <router-link :to="{ name: 'Home' }"><i class="pi pi-sign-out icon-spacing pr-2"></i>
               <span style="text-decoration: none;">LOG OUT</span></router-link>
-            </a>
-              <router-link v-if="isLoggedIn" :to="{ name: 'Profile' }"><i class="pi pi-user px-4" style="font-size: 1.2rem"></i></router-link>
+          </a>
+          <router-link v-if="isLoggedIn" :to="{ name: 'Profile' }"><i class="pi pi-user px-4" style="font-size: 1.2rem"></i></router-link>
           <a class='line-remove' v-else>
             <i class="navbar-icon pi pi-sign-in px-2"></i><router-link :to="{ name: 'Login' }"><span class="pr-4">LOG
                 IN</span></router-link>
