@@ -1,5 +1,5 @@
 <script>
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, toDisplayString } from "vue";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/firebase";
 import NavBar from "@/components/NavBar.vue";
@@ -8,10 +8,12 @@ import Footer from "@/components/Footer.vue";
 import axios from 'axios';
 import { useRouter } from "vue-router";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useToast } from "primevue/usetoast";
 
 
 export default {
   setup() {
+    const toast = useToast();
     const csps = ref([]);
     csps.original = null;
     const favoriteCSPs = ref([]);
@@ -123,7 +125,7 @@ export default {
       }
       if (csps.value.length === csps.original.length) {
         const auto_filter = csps.value.filter(csp => {
-          return causes.includes(csp.cause) || skills.includes(csp.skills) || location===(csp.isLocal);
+          return causes.includes(csp.cause) || skills.includes(csp.skills) || location === (csp.isLocal);
         });
         csps.value = auto_filter;
       } else {
@@ -166,21 +168,37 @@ export default {
     };
 
     onMounted(async () => {
-      const fbCSP = [];
-      const querySnapshot = await getDocs(collection(db, "CSPs"));
+      axios
+        .get("http://smooserve-be.vercel.app/api/csps")
+        .then(response => {
+          csps.value = response.data;
+          console.log(csps.value)
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: error,
+            life: 3000,
+          });
+        })
+      // const fbCSP = [];
+      // const querySnapshot = await getDocs(collection(db, "CSPs"));
 
-      querySnapshot.forEach((doc) => {
-        const CSP = {
-          id: doc.id,
-          title: doc.data().title,
-          desc: doc.data().desc,
-          imageURL: doc.data().imageURL,
-          cause: doc.data().cause,
-          skills: doc.data().skills,
-        };
-        fbCSP.push(CSP);
-      });
-      csps.value = fbCSP;
+      // querySnapshot.forEach((doc) => {
+      //   const CSP = {
+      //     id: doc.id,
+      //     title: doc.data().title,
+      //     desc: doc.data().desc,
+      //     imageURL: doc.data().imageURL,
+      //     posterURL: doc.data().posterURL,
+      //     cause: doc.data().cause,
+      //     skills: doc.data().skills,
+      //   };
+      //   fbCSP.push(CSP);
+      // });
+      // csps.value = fbCSP;
 
       const storedFavoriteCSPs = localStorage.getItem('favoriteCSPs');
       if (storedFavoriteCSPs) {
@@ -251,8 +269,7 @@ export default {
   <div class="container-fluid">
     <CaroPics />
     <div class="row pb-3">
-      <h2
-          style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold;
+      <h2 style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold;
           text-align: center; margin-top: 30px; font-size: 2rem">
         COMMUNITY SERVICE
         PROJECTS</h2>
@@ -262,34 +279,35 @@ export default {
     <div class="surface-section px-4 py-8 md:px-6 lg:px-8 text-center">
       <div class="grid">
         <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
-              <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
-                  <i v-scroll class="pi pi-search text-4xl text-blue-700"></i>
-              </span>
+          <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+            <i v-scroll class="pi pi-search text-4xl text-blue-700"></i>
+          </span>
           <div v-scroll class="text-900 text-xl mb-3 font-medium">Step 1</div>
           <span v-scroll class="text-700 line-height-3">
-                Ready to start your CSP search? Take a look at the displayed CSP's below that were filtered according to
-                your quiz results!
-              </span>
+            Ready to start your CSP search? Take a look at the displayed CSP's below that were filtered according to
+            your quiz results!
+          </span>
         </div>
         <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
-              <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
-                  <i v-scroll class="pi pi-sliders-v text-4xl text-blue-700"></i>
-              </span>
+          <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+            <i v-scroll class="pi pi-sliders-v text-4xl text-blue-700"></i>
+          </span>
           <div v-scroll class="text-900 text-xl mb-3 font-medium">Step 2</div>
           <span v-scroll class="text-700 line-height-3">
-                Not too satisfied with what you are seeing? Fret not as you can choose to manually filter the CSPs using our
-                filter functions, or use our convenient auto-filter feature, but not both at once.
-              </span>
+            Not too satisfied with what you are seeing? Fret not as you can choose to manually filter the CSPs using our
+            filter functions, or use our convenient auto-filter feature, but not both at once.
+          </span>
         </div>
         <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
-              <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
-                  <i v-scroll class="pi pi-heart text-4xl text-blue-700"></i>
-              </span>
+          <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+            <i v-scroll class="pi pi-heart text-4xl text-blue-700"></i>
+          </span>
           <div v-scroll class="text-900 text-xl mb-3 font-medium">Step 3</div>
           <span v-scroll class="text-700 line-height-3">
-                Found the CSP of your dreams? Go ahead and favourite the CSP using the heart icons on the back of the CSP cards! You
-                can also click the 'See More' button to find out more about the individual CSP's!
-              </span>
+            Found the CSP of your dreams? Go ahead and favourite the CSP using the heart icons on the back of the CSP
+            cards! You
+            can also click the 'See More' button to find out more about the individual CSP's!
+          </span>
         </div>
       </div>
     </div>
@@ -305,8 +323,7 @@ export default {
   <div class="container-fluid" style="background-color: navy">
     <div class="row">
       <div class="col">
-        <h1
-            style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600;
+        <h1 style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600;
             text-align: center; color:white;">
           What's happening in Smooserve</h1>
       </div>
@@ -345,7 +362,7 @@ export default {
 
         <div class="toggle-button" style="display: inline-block; text-align: center; padding-left: 10px;">
           <label
-              style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">Auto-filter:</label>
+            style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">Auto-filter:</label>
           <button @click="toggleAutoFilter">{{ selectedValue3 === '' ? 'Off' : 'On' }}</button>
         </div>
       </div>
@@ -357,23 +374,26 @@ export default {
   <div class="container-fluid pt-5" style="background-color: lightblue;">
     <div class="grid ">
       <div class="card-container">
-        <div class="flex align-items-center justify-content-center sm:col-12 md:col-6 lg:col-4" v-for="(csp, index) in getVisibleCsps" :key="csp.id">
+        <div class="flex align-items-center justify-content-center sm:col-12 md:col-6 lg:col-4"
+          v-for="(csp, index) in getVisibleCsps" :key="csp.id">
           <div v-scrollanimation class="flip-card">
             <div class="flip-card-inner">
               <div class="flip-card-front">
-                <img :src="csp.imageURL" :alt="`CSP ${csp.id}`">
+                <img :src="csp.posterURL" :alt="`CSP ${csp.id}`">
               </div>
               <div class="flip-card-back align-items-end">
                 <div class="heart-container">
                   <i class="fas fa-heart clickable" :class="{ 'heart-red': isCSPFavorite(csp) }"
-                     @click="toggleHeartColor(csp)"></i>
+                    @click="toggleHeartColor(csp)"></i>
                 </div>
                 <div class="text-center">
+                  <img :src="csp.imageURL" style="border-radius: 50%; width:180px" :alt="`CSP ${csp.id}`">
                   <h1>{{ csp.title }}</h1>
                   <p class="card-description">{{ csp.desc }}</p>
 
                   <!-- see more button link to linktree  -->
-                  <router-link :to="{ name: 'CSP', params: { id: csp.id } }"><Button label="See More"></Button></router-link>
+                  <router-link :to="{ name: 'CSP', params: { id: csp.id } }"><Button
+                      label="See More"></Button></router-link>
                 </div>
               </div>
             </div>
@@ -389,7 +409,7 @@ export default {
     <button @click="prevPage" :disabled="currentPage === 1" class="pagination-button">Prev</button>
     <span v-for="page in totalPages" :key="page">
       <button @click="goToPage(page)" :class="{ active: page === currentPage }" class="pagination-button">{{ page
-        }}</button>
+      }}</button>
     </span>
     <button @click="nextPage" :disabled="currentPage === totalPages" class="pagination-button">Next</button>
   </div>
@@ -399,9 +419,8 @@ export default {
 
 
 <style>
-
 /* animation */
-.before-enter-flip{
+.before-enter-flip {
   opacity: 0;
   transform: scale(.5) rotateZ(-25deg);
   transition: all 1s ease-out;
@@ -691,6 +710,5 @@ export default {
 .centralise {
   margin: 150px;
 }
-
 </style>
 
