@@ -44,7 +44,7 @@ const meetingsList = ref();
 const zoomRegisterVisible = ref(false);
 
 const causes = ref([
-    'Enviornment',
+    'Environment',
     'Education',
     'Youth Development',
 ]);
