@@ -9,7 +9,7 @@
     <div class="container c1 p-col-12 p-md-6 p-lg-4">
       <form @submit.prevent="submitForm">
         <div class="card container">
-          <div class="container" style="display: flex; flex-direction: column; align-items: center;">
+          <div class="current-question-container" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
             <h2 style="text-align: center;" class="pl-3">{{ currentQuestionData.text }}</h2>
           </div>
           <div class="container">
@@ -298,6 +298,7 @@ export default {
 
 
 <style>
+
 .buttons-container {
   align-self: flex-end; /* Align at the bottom of the card */
   margin-top: auto; /* Push buttons to the bottom */
@@ -317,7 +318,7 @@ export default {
 .header-container {
   text-align: center;
   color: black;
-  font-size: 50px;
+  font-size: 20px;
   background-color: rgba(255, 255, 255, 0.7);
   /* Add a semi-transparent background color */
 }
@@ -349,7 +350,7 @@ body {
   text-align: center;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   /* Add a subtle box shadow */
-  max-width: 600px;
+  max-width: 400px;
   margin: 0 auto;
   /* Center the container horizontally */
   display: flex;
