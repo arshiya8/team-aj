@@ -236,6 +236,7 @@ export default {
                         <div class="question-container">
                             <h2 style="text-align: center;" class="pl-3">{{ question.item.text }}</h2>
                             <div class="options-container w-100">
+
                                 <!-- Display options if question type is multi-select  -->
                                 <table v-if="question.item.type === 'multi-select'" class="w-100">
                                     <tr class="wrapping custom-radio-label"
@@ -344,8 +345,6 @@ body {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     /* Add a subtle box shadow */
 }
-
-
 
 
 /* Style the custom radio labels */
