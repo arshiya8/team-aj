@@ -1,6 +1,6 @@
 class Csp {
     constructor(id, title, desc, imageURL, igURL,
-        telehandle, signupFormURL, signupDeadline, isLocal, noOfHours, causes, skills, settings ) {
+        telehandle, signupFormURL, signupDeadline, isLocal, noOfHours, causes, skills, settings, posterURL, postalCode ) {
             this.id = id;
             this.title = title;
             this.desc = desc;
@@ -14,6 +14,8 @@ class Csp {
             this.causes = causes;
             this.skills = skills;
             this.settings = settings;
+            this.posterURL = posterURL;
+            this.postalCode = postalCode;
     }
 }
 

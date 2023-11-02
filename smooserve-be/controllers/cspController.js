@@ -38,6 +38,8 @@ const getAllCsps = async (req, res, next) => {
                     doc.data().causes,
                     doc.data().skills,
                     doc.data().settings,
+                    doc.data().posterURL,
+                    doc.data().postalCode,
                 );
                 cspsArray.push(csp);
             });
