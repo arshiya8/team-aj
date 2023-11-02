@@ -37,9 +37,41 @@ const routes = [
     component: () => import("@/views/csp/CSP.vue"),
   },
   {
-    path: "/csp/settings/:id",
+    path: "/csp/settings/",
     name: "CSPSetting",
-    component: () => import("@/views/csp/CSPSetting.vue"),
+    component: () => import("@/views/csp/settings/CSPSetting.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/csp/signups/",
+    name: "CSPSignup",
+    component: () => import("@/views/csp/settings/CSPSignup.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/csp/links/",
+    name: "CSPLinks",
+    component: () => import("@/views/csp/settings/CSPLinks.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/csp/appearance/",
+    name: "CSPApperance",
+    component: () => import("@/views/csp/settings/CSPAppearance.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/csp/zoom",
+    name: "Zoom",
+    component: () => import("@/views/csp/settings/CSPZoom.vue"),
   },
   {
     path: "/:catchAll(.*)",
@@ -67,6 +99,25 @@ const routes = [
     path: "/quiz",
     name: "Quiz",
     component: () => import("@/views/quiz/Quiz.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/quiz1",
+    name: "Quiz1",
+    component: () => import("@/views/quiz/test.vue"),
+  },
+
+  {
+    path: "/NearYou",
+    name: "Map",
+    component: () => import("@/views/maps/map.vue"),
+  },
+  {
+    path: "/shop",
+    name: "Shop",
+    component: () => import("@/views/shops/shop.vue"),
   },
 
   {
@@ -118,7 +169,7 @@ router.beforeEach(async (to, from, next) => {
     (to.name == "Login" || to.name == "Register") &&
     (await getCurrentUser())
   ) {
-    next({ name: "User" });
+    next({ name: "Profile" });
   } else {
     next();
   }
