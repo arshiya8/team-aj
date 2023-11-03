@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
 
+
 //maps
 import Vue3Geolocation from 'vue3-geolocation';
 
@@ -134,6 +135,7 @@ initializeApp(firebaseConfig);
 
 // animation 
 app.directive('scrollanimation', ScrollAnimation);
+
 
 
 app.use(router);

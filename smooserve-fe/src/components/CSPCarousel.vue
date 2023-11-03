@@ -82,7 +82,7 @@ const updateStudent = async (updatedFavorites) => {
   try {
     // Ensure userId is not null before making the API request
     if (studentId != null) {
-      const response = await axios.put(`http://localhost:8080/api/student/${studentId}`, {
+      const response = await axios.put(`http://smooserve-be.vercel.app/api/student/${studentId}`, {
         favoriteCsps: updatedFavorites,
       });
       console.log(response.data);

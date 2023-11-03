@@ -110,7 +110,7 @@ watch(datetime12h, (newStartTime) => {
       life: 3000,
     });
     conflictVisible.value = true;
-} else {
+  } else {
     conflictVisible.value = false;
   }
 });
@@ -197,7 +197,7 @@ async function scheduleZoomMeeting() {
           "https://smooserve-be.vercel.app/api/csp/" + CSPid.value,
           csp.value
         )
-        .then((response) => {})
+        .then((response) => { })
         .catch((error) => {
           console.log(error);
           toast.add({
@@ -272,7 +272,7 @@ const updateTokens = async () => {
   axios
     .get(
       "https://smooserve-be.vercel.app/api/getNewAccessToken/" +
-        dbRefreshToken.value
+      dbRefreshToken.value
     )
     .then((response) => {
       toast.add({
@@ -297,7 +297,7 @@ const updateTokens = async () => {
               "https://smooserve-be.vercel.app/api/csp/" + CSPid.value,
               csp.value
             )
-            .then((response) => {})
+            .then((response) => { })
             .catch((error) => {
               console.log(error);
               toast.add({
@@ -335,79 +335,43 @@ const updateTokens = async () => {
           Go to <i class="pi pi-spin pi-cog"></i> Settings >
           <i class="pi pi-user"></i> Profile
         </div>
-        <Button
-          icon="pi pi-user"
-          class="p-button-sm"
-          label="Profile"
-          @click="onReply()"
-        ></Button>
+        <Button icon="pi pi-user" class="p-button-sm" label="Profile" @click="onReply()"></Button>
       </div>
     </template>
   </Toast>
   <Toast></Toast>
-  <Dialog
-    v-model:visible="visibleInterview"
-    modal
-    :header="'Schedule Interview'"
-    :style="{ width: '50vw' }"
-    :breakpoints="{ '960px': '75vw', '641px': '100vw' }"
-    class="card"
-  >
+  <Dialog v-model:visible="visibleInterview" modal :header="'Schedule Interview'" :style="{ width: '50vw' }"
+    :breakpoints="{ '960px': '75vw', '641px': '100vw' }" class="card">
     <div class="p-3 mt-2 mb-2 card">
       <div class="grid align-items-center justify-content-center mb-3"></div>
       <div class="flex flex-column gap-3 mb-6">
         <div>
-          <label for="topic">Meeting Topic</label
-          ><Button
-            class="ml-3"
-            size="small"
-            rounded
-            label="Suggested"
-            icon="pi pi-info"
-            @click="
+          <label for="topic">Meeting Topic</label><Button class="ml-3" size="small" rounded label="Suggested"
+            icon="pi pi-info" @click="
               topic =
-                'Interview for ' + registeredStudents[selectedStudent].email
-            "
-          ></Button>
+              'Interview for ' + registeredStudents[selectedStudent].email
+              "></Button>
         </div>
         <InputText id="topic" v-model="topic" />
         <div>
-        <label for="calendar-12h"> 12h Format </label><span v-if="conflictVisible" class="text-red-500"> There is an existing meeting during this time</span>
+          <label for="calendar-12h"> 12h Format </label><span v-if="conflictVisible" class="text-red-500"> There is an
+            existing meeting during this time</span>
         </div>
-        <Calendar
-          id="calendar-12h"
-          v-model="datetime12h"
-          showTime
-          hourFormat="12"
-          @input="checkZoomConflicts(datetime12h)"
-        />
+        <Calendar id="calendar-12h" v-model="datetime12h" showTime hourFormat="12"
+          @input="checkZoomConflicts(datetime12h)" />
 
-        <SelectButton
-          v-model="zoomTimeSelected"
-          :options="zoomTimeOptions"
-          aria-labelledby="basic"
-        >
+        <SelectButton v-model="zoomTimeSelected" :options="zoomTimeOptions" aria-labelledby="basic">
           <template #option="slotProps">
             {{ slotProps.option + " min" }}
           </template>
         </SelectButton>
       </div>
-      <Button
-        rounded
-        @click="scheduleZoomMeeting()"
-        class="w-full align-items-center justify-content-center"
-        ><i class="pi pi-save px-2"></i>Schedule</Button
-      >
+      <Button rounded @click="scheduleZoomMeeting()" class="w-full align-items-center justify-content-center"><i
+          class="pi pi-save px-2"></i>Schedule</Button>
     </div>
   </Dialog>
-  <Dialog
-    v-model:visible="visibleProfile"
-    modal
-    :header="'Student Profile'"
-    :style="{ width: '50vw' }"
-    :breakpoints="{ '960px': '75vw', '641px': '100vw' }"
-    class="card"
-  >
+  <Dialog v-model:visible="visibleProfile" modal :header="'Student Profile'" :style="{ width: '50vw' }"
+    :breakpoints="{ '960px': '75vw', '641px': '100vw' }" class="card">
     <div class="p-3 mt-2 mb-2 card">
       <div class="surface-section">
         <div class="font-medium text-3xl text-900 mb-3">
@@ -417,84 +381,53 @@ const updateTokens = async () => {
           {{ selectedProfile.email }}
         </div>
         <ul class="list-none p-0 m-0">
-          <li
-            class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap"
-          >
-            <div class="text-500 w-6 md:w-2 font-medium">Title</div>
-            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-              Heat
-            </div>
-            <div class="w-6 md:w-2 flex justify-content-end">
-              <Button
-                label="Edit"
-                icon="pi pi-pencil"
-                class="p-button-text"
-              ></Button>
+          <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+            <div class="text-500 w-6 md:w-2 font-medium">Commitment</div>
+            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 px-3">
+              {{ selectedProfile.quizPreference.commitment }}
             </div>
           </li>
-          <li
-            class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap"
-          >
-            <div class="text-500 w-6 md:w-2 font-medium">Genre</div>
+          <li v-for="cause in selectedProfile.quizPreference.passionate_about" :key="cause.id"
+            class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+            <div class="text-500 w-6 md:w-2 font-medium">Passionate About</div>
             <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-              <Chip label="Crime" class="mr-2"></Chip>
-              <Chip label="Drama" class="mr-2"></Chip>
-              <Chip label="Thriller"></Chip>
+              <Chip :label="cause" class="mr-2"></Chip>
             </div>
-            <div class="w-6 md:w-2 flex justify-content-end">
-              <Button
-                label="Edit"
-                icon="pi pi-pencil"
-                class="p-button-text"
-              ></Button>
+
+          </li>
+          <li v-for="skill in selectedProfile.quizPreference.skills" :key="skill.id"
+            class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+            <div class="text-500 w-6 md:w-2 font-medium">Skills</div>
+            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+              <Chip :label="skill" class="mr-2"></Chip>
             </div>
           </li>
-          <li
-            class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap"
-          >
-            <div class="text-500 w-6 md:w-2 font-medium">Director</div>
-            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-              Michael Mann
-            </div>
-            <div class="w-6 md:w-2 flex justify-content-end">
-              <Button
-                label="Edit"
-                icon="pi pi-pencil"
-                class="p-button-text"
-              ></Button>
+          <li v-for="exp in selectedProfile.quizPreference.volunteering_experience" :key="exp.id"
+            class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+            <div class="text-500 w-6 md:w-2 font-medium">Past volunteering experiences</div>
+            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 px-2">
+              <Chip :label="exp" class="mr-2"></Chip>
             </div>
           </li>
-          <li
-            class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap"
-          >
-            <div class="text-500 w-6 md:w-2 font-medium">Actors</div>
-            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-              Robert De Niro, Al Pacino
-            </div>
-            <div class="w-6 md:w-2 flex justify-content-end">
-              <Button
-                label="Edit"
-                icon="pi pi-pencil"
-                class="p-button-text"
-              ></Button>
+          <li v-for="loc in selectedProfile.quizPreference.volunteering_location" :key="loc.id"
+            class="flex align-items-center py-3 px-2 border-top-1 border-bottom-1 surface-border flex-wrap">
+            <div class="text-500 w-6 md:w-2 font-medium">Location Preference</div>
+            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 line-height-3">
+              <Chip :label="loc" class="mr-2"></Chip>
             </div>
           </li>
-          <li
-            class="flex align-items-center py-3 px-2 border-top-1 border-bottom-1 surface-border flex-wrap"
-          >
-            <div class="text-500 w-6 md:w-2 font-medium">Plot</div>
-            <div
-              class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 line-height-3"
-            >
-              A group of professional bank robbers start to feel the heat from
-              police when they unknowingly leave a clue at their latest heist.
+          <li 
+            class="flex align-items-center py-3 px-2 border-top-1 border-bottom-1 surface-border flex-wrap">
+            <div class="text-500 w-6 md:w-2 font-medium">Self Description</div>
+            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 line-height-3 px-2">
+              {{selectedProfile.quizPreference.self_description}}
             </div>
-            <div class="w-6 md:w-2 flex justify-content-end">
-              <Button
-                label="Edit"
-                icon="pi pi-pencil"
-                class="p-button-text"
-              ></Button>
+          </li>
+          <li 
+            class="flex align-items-center py-3 px-2 border-top-1 border-bottom-1 surface-border flex-wrap">
+            <div class="text-500 w-6 md:w-2 font-medium">Self Awareness</div>
+            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 line-height-3 px-2">
+              {{selectedProfile.quizPreference.self_awareness}}
             </div>
           </li>
         </ul>
@@ -515,8 +448,7 @@ const updateTokens = async () => {
           <h1>
             <span class="text-primary-900 font-bold">Hello</span>
             <span class="pl-2 text-primary-500 font-bold">
-              {{ csp.title }}</span
-            >
+              {{ csp.title }}</span>
           </h1>
           <h2 class="text-600">CSP Dashboard</h2>
         </div>
@@ -530,10 +462,8 @@ const updateTokens = async () => {
                     {{ csp.views }}
                   </div>
                 </div>
-                <div
-                  class="flex align-items-center justify-content-center bg-blue-100 border-round"
-                  style="width: 2.5rem; height: 2.5rem"
-                >
+                <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                  style="width: 2.5rem; height: 2.5rem">
                   <i class="pi pi-eye text-blue-500 text-xl"></i>
                 </div>
               </div>
@@ -550,10 +480,8 @@ const updateTokens = async () => {
                     {{ registeredStudents.length }}
                   </div>
                 </div>
-                <div
-                  class="flex align-items-center justify-content-center bg-orange-100 border-round"
-                  style="width: 2.5rem; height: 2.5rem"
-                >
+                <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
+                  style="width: 2.5rem; height: 2.5rem">
                   <i class="pi pi-users text-orange-500 text-xl"></i>
                 </div>
               </div>
@@ -574,10 +502,8 @@ const updateTokens = async () => {
                     }}
                   </div>
                 </div>
-                <div
-                  class="flex align-items-center justify-content-center bg-cyan-100 border-round"
-                  style="width: 2.5rem; height: 2.5rem"
-                >
+                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+                  style="width: 2.5rem; height: 2.5rem">
                   <i class="pi pi-check-square text-cyan-500 text-xl"></i>
                 </div>
               </div>
@@ -589,15 +515,11 @@ const updateTokens = async () => {
             <div class="card mb-0 surface-0 p-5">
               <div class="flex justify-content-between mb-3">
                 <div>
-                  <span class="block text-500 font-medium mb-3"
-                    >Favourites (WIP)</span
-                  >
+                  <span class="block text-500 font-medium mb-3">Favourites (WIP)</span>
                   <div class="text-900 font-medium text-xl">152</div>
                 </div>
-                <div
-                  class="flex align-items-center justify-content-center bg-purple-100 border-round"
-                  style="width: 2.5rem; height: 2.5rem"
-                >
+                <div class="flex align-items-center justify-content-center bg-purple-100 border-round"
+                  style="width: 2.5rem; height: 2.5rem">
                   <i class="pi pi-heart text-purple-500 text-xl"></i>
                 </div>
               </div>
@@ -612,82 +534,46 @@ const updateTokens = async () => {
         <Card class="p-3 mt-4 mb-4 card">
           <template #title>Student Sign ups</template>
           <template #content>
-            <DataTable
-              :value="registeredStudents"
-              tableStyle="min-width: 50rem"
-            >
+            <DataTable :value="registeredStudents" tableStyle="min-width: 50rem">
               <template #header>
-                <div
-                  class="flex flex-wrap align-items-center justify-content-between gap-2"
-                >
+                <div class="flex flex-wrap align-items-center justify-content-between gap-2">
                   <span class="text-xl text-900 font-bold">Students</span>
                 </div>
               </template>
               <Column field="email" header="Email"></Column>
               <Column header="Profile">
                 <template #body="slotProps">
-                  <Button
-                    rounded
-                    label="View"
-                    @click="getProfile(slotProps.data.email)"
-                    >View Profile</Button
-                  >
+                  <Button rounded label="View" @click="getProfile(slotProps.data.email)">View Profile</Button>
                 </template>
               </Column>
               <Column field="status" header="Status"></Column>
               <Column field="link" header="Interview Link">
                 <template #body="slotProps">
                   <a :href="slotProps.data.link" target="_blank">
-                    <Button
-                      v-if="slotProps.data.link"
-                      rounded
-                      label="Start Zoom"
-                  /></a>
+                    <Button v-if="slotProps.data.link" rounded label="Start Zoom" /></a>
                 </template>
               </Column>
               <Column header="Action">
                 <template #body="slotProps">
                   <!-- if registered -->
                   <div v-if="checkIfZoomEnabled">
-                    <Button
-                      v-if="slotProps.data.status == 'registered'"
-                      rounded
-                      label="Schedule Interview"
-                      @click="
-                        (visibleInterview = true),
-                          (selectedStudent = slotProps.index)
-                      "
-                    />
+                    <Button v-if="slotProps.data.status == 'registered'" rounded label="Schedule Interview" @click="
+                      (visibleInterview = true),
+                      (selectedStudent = slotProps.index)
+                      " />
                     <!-- if scheduled -->
-                    <Button
-                      v-if="slotProps.data.status == 'scheduled'"
-                      rounded
-                      severity="success"
-                      label="Accept"
-                      class="mr-3"
-                      @click="
+                    <Button v-if="slotProps.data.status == 'scheduled'" rounded severity="success" label="Accept"
+                      class="mr-3" @click="
                         (selectedStudent = slotProps.index),
-                          acceptRejectStudent('accepted')
-                      "
-                    />
-                    <Button
-                      v-if="slotProps.data.status == 'scheduled'"
-                      rounded
-                      severity="danger"
-                      label="Reject"
-                      @click="
-                        (selectedStudent = slotProps.index),
-                          acceptRejectStudent('rejected')
-                      "
-                    />
+                        acceptRejectStudent('accepted')
+                        " />
+                    <Button v-if="slotProps.data.status == 'scheduled'" rounded severity="danger" label="Reject" @click="
+                      (selectedStudent = slotProps.index),
+                      acceptRejectStudent('rejected')
+                      " />
                   </div>
                   <div v-else>
-                    <Button
-                      rounded
-                      severity="primary"
-                      label="Enable Zoom First"
-                      @click="showZoomEnable"
-                    />
+                    <Button rounded severity="primary" label="Enable Zoom First" @click="showZoomEnable" />
                   </div>
                 </template>
               </Column>
