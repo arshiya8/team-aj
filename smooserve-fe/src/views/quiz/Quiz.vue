@@ -60,10 +60,9 @@ export default {
           background: "../../layout/images/quiz5.png",
           options: {
             cols: [
-              "Environmental Conservation",
-              "Education and Youth Development",
-              "Healthcare and Medical Services",
-              "Arts and Culture"
+              "Environment",
+              "Education",
+              "Youth Development"
             ],
           },
         },
@@ -74,10 +73,9 @@ export default {
           background: "../../layout/images/quiz6.png",
           options: {
             cols: [
-              "Teaching or Tutoring",
-              "Writing and Communication",
-              "Event Planning and Coordination",
-              "Artistic Skills Eg. Drawing"
+              "Teaching",
+              "Event Planning",
+              "Communication",
             ],
           },
         },
