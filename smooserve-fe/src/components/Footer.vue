@@ -10,8 +10,7 @@
       </div>
       <div class="links">
         <h4>Explore</h4>
-        <p><a href="#">Home</a></p>
-        <p><a href="#">About</a></p>
+        <p><a href="https://www.smu.edu.sg/campus-life/student-experience/community-service">Find Out More</a></p>
       </div>
       <div class="contact-details">
         <h4>Contact</h4>
