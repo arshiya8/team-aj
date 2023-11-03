@@ -387,7 +387,7 @@ export default {
                     @click="toggleHeartColor(csp)"></i>
                 </div>
                 <div class="text-center">
-                  <img :src="csp.imageURL" style="border-radius: 50%; width:180px" :alt="`CSP ${csp.id}`">
+                  <img :src="csp.imageURL" style="border-radius: 50%; width:150px" :alt="`CSP ${csp.id}`">
                   <h1>{{ csp.title }}</h1>
                   <p class="card-description">{{ csp.desc }}</p>
 
@@ -568,22 +568,6 @@ export default {
   text-decoration: none;
 }
 
-/* search button */
-.search-button {
-  background-color: rgba(6, 66, 115);
-  color: white;
-  border: none;
-  border-radius: 25px;
-  padding: 5px 5px;
-  font-size: 16pm;
-}
-
-.search {
-  border-radius: 10px;
-  padding: 5px 5px;
-  border: 2px solid rgba(6, 66, 115);
-}
-
 .navbar-toggler {
   background-color: rgba(6, 66, 115);
 }
@@ -635,7 +619,6 @@ export default {
 }
 
 /* flip cards  */
-
 .card-container {
   display: flex;
   flex-wrap: wrap;
@@ -695,9 +678,7 @@ export default {
   display: flex;
   justify-content: center;
   font-size: 14px;
-  /* Adjust the font size as needed */
   padding: 10px;
-  /* Add some padding for readability */
 }
 
 .flip-card img {
@@ -710,5 +691,6 @@ export default {
 .centralise {
   margin: 150px;
 }
+
 </style>
 
