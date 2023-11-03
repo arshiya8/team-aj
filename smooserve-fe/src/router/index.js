@@ -109,11 +109,11 @@ const routes = [
     component: () => import("@/views/quiz/test.vue"),
   },
 
-  // {
-  //   path: "/NearYou",
-  //   name: "Map",
-  //   component: () => import("@/views/maps/map.vue"),
-  // },
+  {
+    path: "/NearMe",
+    name: "Map",
+    component: () => import("@/views/maps/Map.vue"),
+  },
   // {
   //   path: "/shop",
   //   name: "Shop",

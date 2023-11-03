@@ -50,6 +50,7 @@ const causes = ref([
 ]);
 
 const selectedCause = ref();
+const postalCode = ref();
 const selectedSkills = ref();
 
 const skills = ref([
@@ -123,8 +124,9 @@ function save() {
   csp.value.desc = desc.value;
   csp.value.registration.active = registerChecked.value;
   csp.value.isLocal = isLocal.value;
-  csp.value.causes = selectedCause.value.name;
-  csp.value.isLskillsocal = selectedSkills.value.name;
+  csp.value.causes = selectedCause.value;
+  csp.value.skills = selectedSkills.value;
+  csp.value.postalCode = postalCode.value;
 
   axios
     .put("https://smooserve-be.vercel.app/api/csp/" + CSPid.value, csp.value)
@@ -179,6 +181,7 @@ onMounted(async () => {
           isLocal.value = csp.value.isLocal;
           selectedCause.value = csp.value.causes;
           selectedSkills.value = csp.value.skills;
+          postalCode.value = csp.postalCode;
 
 
           dbAccessToken.value = response.data.settings.zoomAccessToken;
@@ -434,6 +437,8 @@ const updateTokens = async () => {
                 rows="5"
                 cols="30"
               />
+              <label for="postalCode">Postal Code</label>
+              <InputText id="postalCode"  v-model="postalCode" />
 
               <label for="Poster">Poster</label>
 
