@@ -414,7 +414,7 @@ export default {
 
   <!-- body -->
   <div class="container-fluid">
-    <div class="col-12 mb-8 p-2 md:p-8" style="
+    <div class="col-12 mb-5 p-2 md:p-8" style="
         border-radius: 20px;
         background: linear-gradient(
             0deg,
@@ -433,29 +433,31 @@ export default {
 
       <!-- First Dropdown List -->
 
-      <div class="grid px-5 align-items-center justify-content-center">
-        <div class="card-container sm:gap-3 lg:gap-0">
-          <div class="flex align-items-center justify-content-center col-12 lg:col-4">
+      <div class="grid align-items-center justify-content-center">
+        <div class="grid">
+        <div class="w-full card-container align-items-center justify-content-center sm:gap-3 lg:gap-0">
+          <div class="flex align-items-center justify-content-center col-12 lg:col-3">
             <Dropdown v-model="selectedValue1" editable :options="causes" optionLabel="name"
               placeholder="Select a Cause" />
             <!-- <Button rounded icon="pi pi-search" style="margin-left: 8px;" @click="searchByCause(selectedValue1)"></Button> -->
           </div>
 
-          <div class="flex align-items-center justify-content-center col-12 lg:col-4">
+          <div class="flex align-items-center justify-content-center col-12 lg:col-3">
             <Dropdown v-model="selectedValue2" editable :options="skills" optionLabel="name"
               placeholder="Select a Skill" />
             <!-- <Button rounded icon="pi pi-search" style="margin-left: 8px;" @click="searchBySkill(selectedValue2)"></Button> -->
           </div>
 
-          <div class="flex align-items-center justify-content-center col-12 lg:col-4">
+          <div class="flex align-items-center justify-content-center col-12 lg:col-3">
             <Dropdown v-model="selectedValue3" editable :options="locations" optionLabel="name"
               placeholder="Select a location" />
           </div>
-          <div class="flex align-items-center justify-content-center col-12 lg:col-4">
-            <Button rounded icon="pi pi-search" style="margin-left: 8px;"
-              @click="searchByFilters(selectedValue1, selectedValue2, selectedValue3)"></Button>
-            <Button rounded label="Reset" style="margin-left: 8px;" @click="reset"></Button>
+          <div class="flex align-items-center justify-content-center col-12 lg:col-2">
+            <Button rounded icon="pi pi-search" label="Search" style="margin-left: 8px;"
+            @click="searchByFilters(selectedValue1, selectedValue2, selectedValue3)"></Button>
+            <Button rounded label="Reset" icon="pi pi-sync" style="margin-left: 8px;" @click="reset"></Button>
           </div>
+        </div>
 
         </div>
         <div class=" flex align-items-center  justify-content-center ">
@@ -467,17 +469,13 @@ export default {
       </div>
 
     </div>
-    <div class="row">
-      <div class="col">
-      </div>
-    </div>
   </div>
 
   <!-- CSP flip cards -->
-  <div class="container-fluid pt-5">
+  <div class="container-fluid">
     <div class="grid">
-      <div class="card-container">
-        <div class="flex align-items-center justify-content-center sm:col-12 md:col-6 lg:col-4"
+      <div class="card-container mt-5">
+        <div class="flex align-items-center justify-content-center pb-5 sm:col-12 md:col-6 lg:col-4"
           v-for="(csp, index) in getVisibleCsps" :key="csp.id">
           <div v-scrollanimation class="flip-card">
             <div class="flip-card-inner">

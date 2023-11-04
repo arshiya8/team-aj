@@ -85,7 +85,7 @@ function registerStudent() {
     registeredCSPs.value.push({
       cspid: id,
       title: csp.value.title,
-      status: "registered",
+      status: "Registered",
       dateTime: Date.now(),
       link: "",
     });

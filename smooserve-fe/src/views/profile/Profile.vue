@@ -103,7 +103,7 @@
                                                         </div>
                                                         <div v-scroll
                                                             class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 px-4 text-right-sm">
-                                                            {{ quizPreference.self_awareness }}
+                                                            {{ quizPreference.past_experience }}
                                                         </div>
                                                     </li>
                                                     <li v-scrollanimation
