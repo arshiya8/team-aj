@@ -16,7 +16,7 @@
                             <!-- div for bg image -->
                             <div class="row justify-content-center">
                                 <img alt="csp image"
-                                    src="https://images.photowall.com/interiors/61939/landscape/wallpaper/room106.jpg?w=2000&q=80"
+                                    src="/layout/images/profile1.png"
                                     class="col-12" />
                             </div>
 
