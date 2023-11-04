@@ -116,8 +116,8 @@ const routes = [
 
   {
     path: "/NearMe",
-    name: "Map",
-    component: () => import("@/views/maps/Map.vue"),
+    name: "gMap",
+    component: () => import("@/views/maps/gMap.vue"),
   },
   {
     path: "/shop",

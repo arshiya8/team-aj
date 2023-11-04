@@ -2,8 +2,6 @@
 import { ref, computed, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { collection, query, where, getDocs, limit } from "firebase/firestore";
-import { db } from "@/firebase";
 import { getDocumentIdByEmail } from "@/helper/helperFunctions.js";
 
 //login and logout things
@@ -57,7 +55,7 @@ const items = ref([
   {
     label: "NEAR ME",
     icon: "pi pi-map-marker",
-    routeName: "Map",
+    routeName: "gMap",
   },
   {
     label: "SMOOSERVE SHOP",
