@@ -67,7 +67,7 @@ const routes = [
   },
   {
     path: "/csp/appearance/",
-    name: "CSPApperance",
+    name: "CSPAppearance",
     component: () => import("@/views/csp/settings/CSPAppearance.vue"),
     meta: {
       requiresAuth: true,
