@@ -205,6 +205,8 @@ async function addStudent(result) {
       },
     ],
     quizPreference: {
+      first_name: "",
+      last_name: "",
       teleHandle: "",
       year_of_study: "",
       commitment: "",

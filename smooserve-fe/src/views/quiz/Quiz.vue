@@ -1,4 +1,9 @@
 <script>
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { onMounted, ref, computed } from "vue";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/firebase";
+import axios from 'axios';
 
 export default {
   data() {
@@ -13,7 +18,8 @@ export default {
       showHomepageButton: false, // Add this property to control button visibility
       questionsAnswered: new Set(),
       allQuestionsAnswered: false,
-
+      auth: getAuth(),
+      studentId: null,
       questions: [
         {
           name: "first_name",
@@ -32,7 +38,7 @@ export default {
           response: ''
         },
         {
-          name: "telegram",
+          name: "teleHandle",
           text: "3. What is your telegram handle?",
           type: "open-ended",
           background: "../../layout/images/quiz3.png",
@@ -120,16 +126,16 @@ export default {
           },
         },
         {
-          name: "strengths",
-          text: "10. What are your strengths?",
+          name: "self_description",
+          text: "10. Describe yourself briefly?",
           type: "open-ended",
           background: "../../layout/images/quiz10.png",
           character_limit: 1000,
           response: ''
         },
         {
-          name: "weaknesses",
-          text: "11. What are your weaknesses?",
+          name: "self_awareness",
+          text: "11. What are your past volunteering experiences?",
           type: "open-ended",
           background: "../../layout/images/quiz11.png",
           character_limit: 1000,
@@ -138,7 +144,65 @@ export default {
       ],
     };
   },
+  // setup() {
+  //   const auth = getAuth();
+  //   // let studentId = null;
+  //   onAuthStateChanged(auth, async (student) => {
+  //     if (student) {
+  //       try {
+  //         const querySnapshot = await getDocs(collection(db, "students"));
+  //         querySnapshot.forEach((doc) => {
+  //           const studentEmail = doc.data().email;
+  //           if (studentEmail === student.email) {
+  //             this.studentId = doc.id;
+  //           }
+  //         });
+  //         // If studentId is still null, no matching email was found in the collection
+  //         if (this.studentId === null) {
+  //           console.log("No matching email found in the database.");
+  //         } else {
+  //           console.log("Student ID found:", studentId);
+  //         }
+  //       } catch (error) {
+  //         console.error(error);
+  //       }
+  //     } else {
+  //       this.studentId = null;
+  //     }
+  //   });
+
+  
+  // },
+  mounted(){
+    const auth = getAuth();
+    // let studentId = null;
+    onAuthStateChanged(auth, async (student) => {
+      if (student) {
+        try {
+          const querySnapshot = await getDocs(collection(db, "students"));
+          querySnapshot.forEach((doc) => {
+            const studentEmail = doc.data().email;
+            if (studentEmail === student.email) {
+              this.studentId = doc.id;
+            }
+          });
+          // If studentId is still null, no matching email was found in the collection
+          if (this.studentId === null) {
+            console.log("No matching email found in the database.");
+          } else {
+            console.log("Student ID found:", this.studentId);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        this.studentId = null;
+      }
+    });
+
+  },
   methods: {
+    
     prevQuestion() {
       if (this.currentQuestion > 0) {
         this.currentQuestion--;
@@ -214,8 +278,26 @@ export default {
 
         this.submitted = true;
         this.showHomepageButton = true;
+        console.log(this.selectedOptions);
+        this.updateStudent(this.selectedOptions);
       }
     },
+    async updateStudent(data) {
+      
+      try {
+        // Ensure userId is not null before making the API request
+        if (this.studentId != null) {
+          const response = await axios.put(`https://smooserve-be.vercel.app/api/student/${this.studentId}`, {
+            quizPreference: data,
+          });
+          console.log(response.data);
+        } else {
+          console.error('User is not authenticated.');
+        }
+      } catch (error) {
+        console.error('Error updating quiz preference:', error);
+      }
+    }
 
   },
 
@@ -239,7 +321,7 @@ export default {
       return false; // Enable the "Next" button by default
     },
   },
-
+  
 
 };
 </script>
@@ -270,12 +352,12 @@ export default {
           <div>
             <table v-if="questions[currentQuestion].type === 'multi-select'" class="w-full">
               <tr class="wrapping custom-radio-label" @click="updateMultiSelect(questions[currentQuestion].name, option)"
-                  :class="{
+                :class="{
                   selected:
                     questions[currentQuestion].name in selectedOptions &&
                     selectedOptions[questions[currentQuestion].name].indexOf(option) >= 0,
                 }" v-for="(option, optionIndex) in questions[currentQuestion].options.cols"
-                  style="display: flex; flex-direction: row;">
+                style="display: flex; flex-direction: row;">
                 <td :key="optionIndex" class="w-100 row-option text-align-start" :style="{
                   backgroundColor: questions[currentQuestion].name in selectedOptions &&
                     selectedOptions[questions[currentQuestion].name].indexOf(option) >= 0
@@ -287,8 +369,8 @@ export default {
                   {{
                     questions[currentQuestion].name in selectedOptions &&
                     selectedOptions[questions[currentQuestion].name].indexOf(option) >= 0
-                        ? '✓'
-                        : ''
+                    ? '✓'
+                    : ''
                   }}
                 </td>
               </tr>
@@ -296,10 +378,10 @@ export default {
 
             <table v-else-if="questions[currentQuestion].type === 'single-select'" class="w-full">
               <tr class="wrapping custom-radio-label"
-                  @click="updateResponse(questions[currentQuestion].name, option, questions[currentQuestion].type)" :class="{
+                @click="updateResponse(questions[currentQuestion].name, option, questions[currentQuestion].type)" :class="{
                   selected: selectedOptions[questions[currentQuestion].name] === option,
                 }" v-for="(option, optionIndex) in questions[currentQuestion].options.cols"
-                  style="display: flex; flex-direction: row; align-items: center; cursor: pointer;">
+                style="display: flex; flex-direction: row; align-items: center; cursor: pointer;">
                 <td :key="optionIndex" class="w-full row-option text-align-start" :style="{
                   backgroundColor: selectedOptions[questions[currentQuestion].name] === option
                     ? 'rgb(107, 161, 237)' // Highlight background color for selected option
@@ -314,9 +396,9 @@ export default {
             <div v-else style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
               <span class="p-float-label w-full mt-3 mx-2">
                 <Textarea v-model="questions[currentQuestion].response" :rows="10"
-                          :maxlength="questions[currentQuestion].character_limit" class="w-full"
-                          style="resize: none; width: auto;"
-                          @mouseout="updateResponse(questions[currentQuestion].name, currentQuestion, questions[currentQuestion].type)" />
+                  :maxlength="questions[currentQuestion].character_limit" class="w-full"
+                  style="resize: none; width: auto;"
+                  @mouseout="updateResponse(questions[currentQuestion].name, currentQuestion, questions[currentQuestion].type)" />
                 <label>Enter response here</label>
               </span>
             </div>
@@ -327,7 +409,7 @@ export default {
             <Button v-if="currentQuestion > 0" type="button" label="Back" @click="prevQuestion" class="mr-2"></Button>
             <div v-else></div> <!-- Render nothing in place of "Back" button on the first question -->
             <Button v-if="currentQuestion < questions.length - 1" type="button" label="Next" @click="nextQuestion"
-                    class="ml-2" :disabled="isNextButtonDisabled"></Button>
+              class="ml-2" :disabled="isNextButtonDisabled"></Button>
             <Button v-if="currentQuestion === questions.length - 1" type="submit" label="Submit"></Button>
             <!-- Render "Submit" button only on the last question -->
           </div>

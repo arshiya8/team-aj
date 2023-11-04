@@ -84,11 +84,11 @@ const routes = [
     name: "About",
     component: () => import("@/views/AboutUs.vue"),
   },
-  {
-    path: "/test",
-    name: "Test",
-    component: () => import("@/views/auth/Test.vue"),
-  },
+  // {
+  //   path: "/test",
+  //   name: "Test",
+  //   component: () => import("@/views/auth/Test.vue"),
+  // },
   {
     path: "/faq",
     name: "FAQ",
@@ -114,11 +114,22 @@ const routes = [
     name: "Map",
     component: () => import("@/views/maps/Map.vue"),
   },
-  // {
-  //   path: "/shop",
-  //   name: "Shop",
-  //   component: () => import("@/views/shops/shop.vue"),
-  // },
+  {
+    path: "/shop",
+    name: "Shop",
+    component: () => import("@/views/shop/products.vue"),
+  },
+  {
+    path: "/success",
+    name: "Success",
+    component: () => import("@/views/shop/success.vue"),
+  },
+  {
+    path: "/cancel",
+    name: "cancel",
+    component: () => import("@/views/shop/cancel.vue"),
+  },
+  
   
   //rayne
   {

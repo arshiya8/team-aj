@@ -380,6 +380,9 @@ const updateTokens = async () => {
         <div class="text-500 mb-5">
           {{ selectedProfile.email }}
         </div>
+        <div class="text-500 mb-5">
+         Telehandle:  @{{ selectedProfile.quizPreference.teleHandle }}
+        </div>
         <ul class="list-none p-0 m-0">
           <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
             <div class="text-500 w-6 md:w-2 font-medium">Commitment</div>
@@ -387,47 +390,49 @@ const updateTokens = async () => {
               {{ selectedProfile.quizPreference.commitment }}
             </div>
           </li>
-          <li v-for="cause in selectedProfile.quizPreference.passionate_about" :key="cause.id"
-            class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-            <div class="text-500 w-6 md:w-2 font-medium">Passionate About</div>
-            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-              <Chip :label="cause" class="mr-2"></Chip>
-            </div>
-
-          </li>
-          <li v-for="skill in selectedProfile.quizPreference.skills" :key="skill.id"
-            class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-            <div class="text-500 w-6 md:w-2 font-medium">Skills</div>
-            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-              <Chip :label="skill" class="mr-2"></Chip>
+          <li  class="flex align-items-center py-3 px-2 border-top-1 surface-border">
+            <div  class="text-500 w-6 md:w-2 font-medium">Passionate
+              About</div>
+            <div  class="flex flex-wrap px-4">
+              <div v-for="cause in selectedProfile.quizPreference.passionate_about" :key="cause.id" class="text-900 mr-1 mb-1">
+                <Chip :label="cause"></Chip>
+              </div>
             </div>
           </li>
-          <li v-for="exp in selectedProfile.quizPreference.volunteering_experience" :key="exp.id"
-            class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-            <div class="text-500 w-6 md:w-2 font-medium">Past volunteering experiences</div>
-            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 px-2">
-              <Chip :label="exp" class="mr-2"></Chip>
+          <li  class="flex align-items-center py-3 px-2 border-top-1 surface-border">
+            <div  class="text-500 w-6 md:w-2 font-medium">Skills</div>
+            <div  class="flex flex-wrap px-4">
+              <div v-for="skill in selectedProfile.quizPreference.skills" :key="skill.id" class="text-900 mr-1 mb-1">
+                <Chip :label="skill"></Chip>
+              </div>
             </div>
           </li>
-          <li v-for="loc in selectedProfile.quizPreference.volunteering_location" :key="loc.id"
-            class="flex align-items-center py-3 px-2 border-top-1 border-bottom-1 surface-border flex-wrap">
-            <div class="text-500 w-6 md:w-2 font-medium">Location Preference</div>
-            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 line-height-3">
-              <Chip :label="loc" class="mr-2"></Chip>
+          <li  class="flex align-items-center py-3 px-2 border-top-1 surface-border">
+            <div  class="text-500 w-6 md:w-2 font-medium">Past Volunteering experience</div>
+            <div  class="flex flex-wrap px-4">
+              <div v-for="exp in selectedProfile.quizPreference.volunteering_experience" :key="exp.id" class="text-900 mr-1 mb-1">
+                <Chip :label="exp"></Chip>
+              </div>
             </div>
           </li>
-          <li 
-            class="flex align-items-center py-3 px-2 border-top-1 border-bottom-1 surface-border flex-wrap">
+          <li  class="flex align-items-center py-3 px-2 border-top-1 surface-border">
+            <div  class="text-500 w-6 md:w-2 font-medium">Location Preference</div>
+            <div  class="flex flex-wrap px-4">
+              <div v-for="loc in selectedProfile.quizPreference.volunteering_location" :key="loc.id" class="text-900 mr-1 mb-1">
+                <Chip :label="loc"></Chip>
+              </div>
+            </div>
+          </li>
+          <li class="flex align-items-center py-3 px-2 border-top-1 border-bottom-1 surface-border flex-wrap">
             <div class="text-500 w-6 md:w-2 font-medium">Self Description</div>
             <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 line-height-3 px-2">
-              {{selectedProfile.quizPreference.self_description}}
+              {{ selectedProfile.quizPreference.self_description }}
             </div>
           </li>
-          <li 
-            class="flex align-items-center py-3 px-2 border-top-1 border-bottom-1 surface-border flex-wrap">
+          <li class="flex align-items-center py-3 px-2 border-top-1 border-bottom-1 surface-border flex-wrap">
             <div class="text-500 w-6 md:w-2 font-medium">Self Awareness</div>
             <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 line-height-3 px-2">
-              {{selectedProfile.quizPreference.self_awareness}}
+              {{ selectedProfile.quizPreference.self_awareness }}
             </div>
           </li>
         </ul>

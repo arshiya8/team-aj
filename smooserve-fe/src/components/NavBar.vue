@@ -64,6 +64,11 @@ const items = ref([
     icon: "pi pi-map-marker",
     routeName: "Map",
   },
+  {
+    label: "SMOOSERVE SHOP",
+    icon: "pi pi-shopping-cart",
+    routeName: "Shop",
+  },
 
 ]);
 </script>
