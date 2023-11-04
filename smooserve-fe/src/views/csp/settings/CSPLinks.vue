@@ -53,6 +53,25 @@ const icons = ref([
   { name: "arrow-right" },
   { name: "star-fill" },
 ]);
+function validateAndSave() {
+  const invalidLinks = urlList.value.filter((item) => {
+    const url = item.url.trim();
+    return url.startsWith("http://") || url.startsWith("https://");
+  });
+
+  if (invalidLinks.length > 0) {
+    // Display an alert for invalid links
+    toast.add({
+      severity: "error",
+      summary: "Invalid Link Format",
+      detail: "Please check that the link is in a valid format (without 'http://' or 'https://').",
+      life: 3000,
+    });
+  } else {
+    // All links are valid, proceed with saving
+    save();
+  }
+}
 
 function removeAt(idx) {
   urlList.value.splice(idx, 1);
@@ -72,6 +91,7 @@ function changeIcon(name, index) {
 }
 
 function save() {
+
   loading.value = true;
   csp.value.settings.urls = urlList.value;
   axios
@@ -157,22 +177,11 @@ watch(
 </script>
 <template>
   <Toast></Toast>
-  <Dialog
-    v-model:visible="visible"
-    modal
-    header="Add Icon"
-    :style="{ width: '50vw' }"
-    :breakpoints="{ '960px': '75vw', '641px': '100vw' }"
-  >
+  <Dialog v-model:visible="visible" modal header="Add Icon" :style="{ width: '50vw' }"
+    :breakpoints="{ '960px': '75vw', '641px': '100vw' }">
     <div class="card flex justify-content-center">
-      <Listbox
-        filter
-        v-model="selectedIcon"
-        :options="icons"
-        optionLabel="name"
-        :style="{ width: '100vw' }"
-        listStyle="max-height:250px"
-      >
+      <Listbox filter v-model="selectedIcon" :options="icons" optionLabel="name" :style="{ width: '100vw' }"
+        listStyle="max-height:250px">
         <template #option="slotProps">
           <div class="flex align-items-center">
             <i :class="'pi pi-' + slotProps.option.name + ' px-2'"></i>
@@ -183,12 +192,8 @@ watch(
     </div>
     <template #footer>
       <div class="card flex justify-content-center">
-        <Button
-          rounded
-          label="Add"
-          icon="pi pi-plus"
-          @click="(visible = false), changeIcon(selectedIcon, currentIndex)"
-        />
+        <Button rounded label="Add" icon="pi pi-plus"
+          @click="(visible = false), changeIcon(selectedIcon, currentIndex)" />
       </div>
     </template>
   </Dialog>
@@ -208,37 +213,20 @@ watch(
           <template #title> <span class="px-5">Links</span></template>
           <template #content>
             <div class="md:mx-5">
-              <Button
-                rounded
-                @click="add()"
-                class="w-full align-items-center justify-content-center mb-3"
-                ><i class="pi pi-plus px-2"></i
-                ><span class="px-2">Add Link</span></Button
-              >
-              <draggable
-                class="list-group"
-                tag="transition-group"
-                :component-data="{
-                  tag: 'ul',
-                  type: 'transition-group',
-                  name: !drag ? 'flip-list' : null,
-                }"
-                v-model="urlList"
-                v-bind="dragOptions"
-                @start="drag = true"
-                @end="drag = false"
-                item-key="order"
-                handle=".handle"
-              >
+              <Button rounded @click="add()" class="w-full align-items-center justify-content-center mb-3"><i
+                  class="pi pi-plus px-2"></i><span class="px-2">Add Link</span></Button>
+              <draggable class="list-group" tag="transition-group" :component-data="{
+                tag: 'ul',
+                type: 'transition-group',
+                name: !drag ? 'flip-list' : null,
+              }" v-model="urlList" v-bind="dragOptions" @start="drag = true" @end="drag = false" item-key="order"
+                handle=".handle">
                 <template #item="{ element, index }">
                   <li class="mb-3" style="list-style-type: none">
                     <div class="bg-white p-2 mt-4 mb-4 card cardLink">
                       <div class="grid gap-3 align-items-center">
                         <div class="col-1 text-center handle h-full">
-                          <i
-                            class="pi pi-sort-alt"
-                            v-tooltip.top="'Drag to re-arrange your links'"
-                          ></i>
+                          <i class="pi pi-sort-alt" v-tooltip.top="'Drag to re-arrange your links'"></i>
                         </div>
                         <!-- <div class="col-1 text-center">
                           <i
@@ -256,6 +244,8 @@ watch(
                                 <label class="font-bold">Title</label>
                                 <InputText id="title" v-model="element.title" />
                                 <label class="font-bold">URL</label>
+                                <p size="small" style="font-style: italic">Format: www.website.com instead of http://www.website.com
+                                </p>
                                 <InputText id="link" v-model="element.url" />
                               </div>
                             </div>
@@ -264,31 +254,20 @@ watch(
                         <div class="col-1 lg:col-1 text-center">
                           <div class="grid gap-1">
                             <div class="col-12">
-                              <i
-                                :class="
-                                  'hover:bg-primary-100 p-inputgroup-addon pi pi-' +
-                                  element.icon
-                                "
-                                @click="
-                                  (visible = true), passIcon(element, index)
-                                "
-                              ></i>
+                              <i :class="'hover:bg-primary-100 p-inputgroup-addon pi pi-' +
+                                element.icon
+                                " @click="
+    (visible = true), passIcon(element, index)
+    "></i>
                             </div>
                             <div class="col-12">
-                              <InputSwitch
-                                v-model="element.active"
-                                v-tooltip.top="
-                                  element.active
-                                    ? 'This link is active'
-                                    : 'This link is not active'
-                                "
-                              />
+                              <InputSwitch v-model="element.active" v-tooltip.top="element.active
+                                  ? 'This link is active'
+                                  : 'This link is not active'
+                                " />
                             </div>
                             <div class="col-12">
-                              <i
-                                class="pi pi-trash close"
-                                @click="removeAt(index)"
-                              ></i>
+                              <i class="pi pi-trash close" @click="removeAt(index)"></i>
                             </div>
                           </div>
                         </div>
@@ -318,14 +297,11 @@ watch(
                 </template>
               </draggable>
 
-              <Button
-                text
-                rounded
-                label="Save"
-                @click="save()"
-                class="w-full align-items-center justify-content-center"
-                ><i class="pi pi-save px-2"></i>Save</Button
-              >
+              <Button text rounded label="Save" @click="validateAndSave"
+                class="w-full align-items-center justify-content-center">
+                <i class="pi pi-save px-2"></i>Save
+              </Button>
+
             </div>
           </template>
         </Card>
