@@ -7,7 +7,7 @@ const config = require("./config");
 const studentRoutes = require("./routes/student-routes");
 const cspRoutes = require("./routes/csp-routes");
 const zoomRoutes = require("./routes/zoom-routes");
-const stripe = require("stripe")('sk_test_51O2xN2Alv9o8wDQ6TVmtjDWdmWlrmZwIXsXaOmxarWnjDH48KNuvwiCEGwtsNkEtuAMNyCJ71izX8uEjUvXM1gRu00cl9eyumN');
+// const stripe = require("stripe")('sk_test_51O2xN2Alv9o8wDQ6TVmtjDWdmWlrmZwIXsXaOmxarWnjDH48KNuvwiCEGwtsNkEtuAMNyCJ71izX8uEjUvXM1gRu00cl9eyumN');
 
 const app = express();
 
@@ -102,32 +102,32 @@ app.use("/api", zoomRoutes.routes);
 
 //   return res.json(result);
 // });
-app.get("/shopping-cart", (req,res) => {
-    res.send({cart: USER_SHOPPING_CART});
-});
+// app.get("/shopping-cart", (req,res) => {
+//     res.send({cart: USER_SHOPPING_CART});
+// });
 
-// create a checkout session 
-app.post("/create-checkout-session",async (req,res) => {
-    // make an array of just Stripe Price ID and quantities
-    const lineItems = USER_SHOPPING_CART.map((item) => {
-        return {
-            price: item.stripePriceId,
-            quantity: item.quantity,
-        };
-    });
+// // create a checkout session 
+// app.post("/create-checkout-session",async (req,res) => {
+//     // make an array of just Stripe Price ID and quantities
+//     const lineItems = USER_SHOPPING_CART.map((item) => {
+//         return {
+//             price: item.stripePriceId,
+//             quantity: item.quantity,
+//         };
+//     });
 
-    const session = await stripe.checkout.sessions.create({
-        mode: "payment",
-        line_items: lineItems,
-        success_url:`https://localhost:5173/success`,
-        cancel_url: 'http://localhost:5173/cancel',
-    });
-    return res.send({url:session.url});
-});
+//     const session = await stripe.checkout.sessions.create({
+//         mode: "payment",
+//         line_items: lineItems,
+//         success_url:`https://localhost:5173/success`,
+//         cancel_url: 'http://localhost:5173/cancel',
+//     });
+//     return res.send({url:session.url});
+// });
 
-app.listen(config.port, () =>
-  console.log("App is listening on url http://localhost:" + config.port)
-);
+// app.listen(config.port, () =>
+//   console.log("App is listening on url http://localhost:" + config.port)
+// );
 
 
 // const USER_SHOPPING_CART = [
