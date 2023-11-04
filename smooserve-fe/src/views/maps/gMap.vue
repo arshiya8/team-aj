@@ -1,11 +1,11 @@
 <script>
 import GoogleMaps from "@/components/GoogleMaps.vue";
 import Footer from "@/components/Footer.vue";
-import Navbar from "@/components/Navbar.vue";
+import NavBar from "@/components/NavBar.vue";
 
 export default {
   components: {
-    Navbar,
+    NavBar,
     GoogleMaps,
     Footer,
   },
@@ -13,7 +13,7 @@ export default {
 </script>
 
 <template>
-  <Navbar />
+  <NavBar />
   <GoogleMaps />
   <Footer />
 </template>
