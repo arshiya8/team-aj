@@ -1,10 +1,11 @@
 <template>
     <div>
-        <GoogleMap :api-key="apiKey" style="width: 60%; height: 700px" :center="{ lat: lat, lng: lng }" :zoom="15">
+        <GoogleMap :api-key="apiKey" style="width: 100%; height: 600px" :center="{ lat: lat, lng: lng }" :zoom="15">
             <Marker :options="{ position: { lat: lat, lng: lng } }" :clickable="true">
-            <InfoWindow :closeclick="true">
-                You are here!
-            </InfoWindow> </Marker>
+                <InfoWindow :closeclick="true">
+                    You are here!
+                </InfoWindow>
+            </Marker>
             <!-- <Marker :options="{ position: { lat: lat + 0.001, lng: lng } }" />  -->
 
             <Marker v-for="loc in locations" :options="{ position: { lat: loc[0], lng: loc[1] } }" @click="showCsp(loc)">
@@ -13,46 +14,58 @@
         </GoogleMap>
     </div>
 
-    <div v-if="selectedCSP" class="p-2 border-round-xl" style="background: var(--style-cards-fancy-bg); border: 1px solid rgba(255, 255, 255, 0.1); backgroundBlendMode: normal, color-dodge; width: 300px; background-image: url(https://i.pinimg.com/564x/75/b2/7d/75b27d44e72dd1fc44f4e886d577504a.jpg)">
-        <div class="content border-round-sm">
-            <div class="content-image bg-center" style="height: 244px; ">
-                <img :src="selectedCSP.imageURL" style="border-radius: 10px; width: 15rem; height: 15rem; margin-left: 20px;" />
-            </div>
-            <div class="content-info mt-2 border-round-sm bg-black-alpha-10 shadow-1 py-1" style="backdropFilter: blur(27px);">
-                <div class="flex align-items-center justify-content-between py-2 px-3">
-                    <span class="font-medium text-black">{{ selectedCSP.title }}</span>
-                    <i class="pi pi-verified text-black"></i>
+    <div v-if="selectedCSP" class="p-2 border-round-xl"
+        style="background: var(--style-cards-fancy-bg); border: 1px solid rgba(255, 255, 255, 0.1); backgroundBlendMode: normal, color-dodge; width: 300px; ">
+        <Dialog v-model:visible="visible" modal header="CSP Information" :style="{ width: '30vw' }"
+            :breakpoints="{ '960px': '75vw', '641px': '100vw' }" >
+            <div class="content border-round-sm">
+                <div class="content-image bg-center"
+                    style="height: 244px; display: flex; justify-content: center; align-items: center;">
+                    <img :src="selectedCSP.imageURL" style="border-radius: 50%; width: 15rem; height: 15rem;" />
                 </div>
-                <div class="flex align-items-center justify-content-between py-2 px-3">
-                    <span class="font-medium text-black">{{ selectedCSP.desc }}</span>
-                   
-                </div>
-                <div class="flex align-items-center justify-content-between py-2 px-3 gap-2">
-                    <div class="flex align-items-center gap-2">
-                        <i class="pi pi-star-fill text-black"></i>
-                        <span v-if="selectedCSP.isLocal" class="font-small text-black black-space-nowrap">Local CSP</span>
-                        <span v-else class="font-small text-black black-space-nowrap">Overseas CSP</span>
+                <div class="content-info mt-2 border-round-sm bg-black-alpha-10 shadow-1 py-1"
+                    style="backdropFilter: blur(27px);">
+                    <div class="flex align-items-center justify-content-between py-2 px-3">
+                        <span class="font-medium text-black">{{ selectedCSP.title }}</span>
+                        <i class="pi pi-verified text-black"></i>
+                    </div>
+                    <div class="flex align-items-center justify-content-between py-2 px-3">
+                        <span class="font-medium text-black">{{ selectedCSP.desc }}</span>
+
+                    </div>
+                    <div class="flex align-items-center justify-content-between py-2 px-3 gap-2">
+                        <div class="flex align-items-center gap-2">
+                            <i class="pi pi-star-fill text-black"></i>
+                            <span v-if="selectedCSP.isLocal" class="font-small text-black black-space-nowrap">Local
+                                CSP</span>
+                            <span v-else class="font-small text-black black-space-nowrap">Overseas CSP</span>
+                        </div>
+                    </div>
+                    <div class="flex align-items-center justify-content-between py-2 px-3 gap-2">
+                        <div
+                            class="flex align-items-center justify-content-center gap-1 border-right-1 surface-border pr-2">
+                            <!-- <i class="pi pi-bolt text-black"></i> -->
+                            <span class="font-small text-black black-space-nowrap">{{ selectedCSP.skills }}</span>
+                        </div>
+                        <div
+                            class="flex align-items-center gap-1 justify-content-center gap-1 border-right-1 surface-border px-2">
+                            <!-- <i class="pi pi-wifi text-black"></i> -->
+                            <span class="font-small text-black black-space-nowrap">{{ selectedCSP.causes }}</span>
+                        </div>
+
                     </div>
                 </div>
-                <div class="flex align-items-center justify-content-between py-2 px-3 gap-2">
-                    <div class="flex align-items-center justify-content-center gap-1 border-right-1 surface-border pr-2">
-                        <!-- <i class="pi pi-bolt text-black"></i> -->
-                        <span class="font-small text-black black-space-nowrap">{{ selectedCSP.skills }}</span>
-                    </div>
-                    <div class="flex align-items-center gap-1 justify-content-center gap-1 border-right-1 surface-border px-2">
-                        <!-- <i class="pi pi-wifi text-black"></i> -->
-                        <span class="font-small text-black black-space-nowrap">{{selectedCSP.causes}}</span>
-                    </div>
-                    
+                <div class="flex align-items-center justify-content-center pt-2 gap-2">
+                    <button @click="goToCSP(selectedCSP.id)"
+                        class="p-3 flex align-items-center justify-content-center w-7 gap-2 border-round-sm bg-black-alpha-10 shadow-1 border-none cursor-pointer hover:bg-black-alpha-20 transition-duration-200"
+                        style="backdropFilter: blur(27px);">
+                        <span class="font-medium text-black black-space-nowrap">See More!</span>
+                        <i class="pi pi-send text-black"></i>
+                    </button>
                 </div>
             </div>
-            <div class="flex align-items-center justify-content-center pt-2 gap-2">
-                <button class="p-3 flex align-items-center justify-content-center w-7 gap-2 border-round-sm bg-black-alpha-10 shadow-1 border-none cursor-pointer hover:bg-black-alpha-20 transition-duration-200" style="backdropFilter: blur(27px);">
-                    <span class="font-medium text-black black-space-nowrap">See More!</span>
-                    <i class="pi pi-send text-black"></i>
-                </button>
-            </div>
-        </div>
+        </Dialog>
+
     </div>
 </template>
 
@@ -61,6 +74,7 @@ import { GoogleMap, Marker, InfoWindow } from 'vue3-google-map';
 import { useToast } from "primevue/usetoast";
 import { onMounted, ref } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
 
 
@@ -113,7 +127,7 @@ export default {
     },
     methods: {
 
-        
+
         // var geocoder = new google.maps.Geocoder();
         // var address = postalCode;
         // geocoder.geocode({ 'address': 'zipcode ' + address }, function (results, status) {
@@ -133,6 +147,8 @@ export default {
         const csps = ref([]);
         const locations = ref([]);
         const selectedCSP = ref(null);
+        const visible = ref(false);
+        const router = useRouter();
 
         onMounted(async () => {
             axios
@@ -143,7 +159,7 @@ export default {
 
                     for (const csp of csps.value) {
                         if (csp.postalCode) {
-                            getCoordinatesMarkerOptions(csp,csp.postalCode);
+                            getCoordinatesMarkerOptions(csp, csp.postalCode);
                         }
                     }
                 })
@@ -158,14 +174,18 @@ export default {
                 })
         });
 
-        async function getCoordinatesMarkerOptions(csp,postalCode) {
+        const goToCSP = (CSPid) => {
+            router.push({ name: "CSP", params: { id: CSPid } })
+        }
+
+        async function getCoordinatesMarkerOptions(csp, postalCode) {
 
             const { latitude, longitude } = await getCoordinates(postalCode);
             // console.log(latitude, longitude)
-            locations.value.push([latitude, longitude,csp])
+            locations.value.push([latitude, longitude, csp])
 
         }
-        
+
         async function getCoordinates(postalCode) {
             const apiKey = "AIzaSyDiX0loPVlIkq1M5ujXrbaK3DdL3eBCFio";
             try {
@@ -188,22 +208,22 @@ export default {
         }
 
         function showCsp(loc) {
-           const info = loc[2];
-           selectedCSP.value = info
-           console.log(selectedCSP.value)
+            visible.value = true;
+            const info = loc[2];
+            selectedCSP.value = info
+            console.log(selectedCSP.value)
         }
         return {
             locations,
             showCsp,
             selectedCSP,
-           
+            visible,
+            goToCSP
+
         };
     }
 }
 </script>
 
 
-<style>
-
-
-</style>
+<style></style>
