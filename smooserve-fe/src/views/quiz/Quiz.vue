@@ -19,7 +19,10 @@ export default {
       questionsAnswered: new Set(),
       allQuestionsAnswered: false,
       auth: getAuth(),
-      studentId: null,
+      studentId: null,      
+      showAlertModal: false, // Add this property to control the alert modal
+      progress: 0, // Add this property to track completion progress
+
       questions: [
         {
           name: "first_name",
@@ -127,7 +130,7 @@ export default {
         },
         {
           name: "self_description",
-          text: "10. Describe yourself briefly?",
+          text: "10. Describe yourself briefly.",
           type: "open-ended",
           background: "../../layout/images/quiz10.png",
           character_limit: 1000,
@@ -212,8 +215,18 @@ export default {
 
     nextQuestion() {
       if (this.currentQuestion < this.questions.length - 1) {
+        const currentQuestionData = this.questions[this.currentQuestion];
+        const isNextButtonDisabled = this.isNextButtonDisabled;
+
+        if (isNextButtonDisabled) {
+          this.showAlertModal = true; // Show the alert modal
+          return; // Prevent moving to the next question
+        }
+
+        // ... Your existing nextQuestion logic ...
         this.currentQuestion++;
         this.updateBackground();
+        this.progress = this.completionPercentage; // Update the progress
       }
     },
 
@@ -320,6 +333,11 @@ export default {
 
       return false; // Enable the "Next" button by default
     },
+
+    completionPercentage() {
+      return (this.currentQuestion / (this.questions.length - 1)) * 100;
+    },
+
   },
   
 
@@ -343,7 +361,20 @@ export default {
 
     <!-- Container for quiz content -->
     <div class="container c1 col-xxl-4 col-xl-5 col-lg-6 col-md-7 col-sm-8 col-10">
+
+      <div v-if="showAlertModal" class="alert-modal">
+        <div class="alert-content">
+          <p>Please fill in the required fields.</p>
+          <button @click="showAlertModal = false">OK</button>
+        </div>
+      </div>
+
       <form @submit.prevent="submitForm" class="w-full">
+
+        <div class="progress-container">
+          <div class="progress-bar" :style="{ width: completionPercentage + '%' }"></div>
+        </div>
+
         <div>
           <!-- Display the current question -->
           <h2 style="text-align: left;" class="pl-3">{{ questions[currentQuestion].text }}</h2>
@@ -432,7 +463,6 @@ export default {
   width: 100%;
   height: 100vh;
   position: relative;
-  /* Ensure proper positioning of the header */
 }
 
 .header-container {
@@ -514,4 +544,50 @@ body {
   color: #ffffff;
 }
 
+/* alert */
+.alert-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.alert-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.alert-content button {
+  margin-top: 10px;
+}
+
+/* progress bar */
+.progress-container {
+  background-color: #eaeaea;
+  /* Light gray background for the progress bar container */
+  height: 20px;
+  /* Set your desired height */
+  border-radius: 10px;
+  /* Rounded corners */
+  margin-bottom: 10px;
+}
+
+.progress-bar {
+  background-color: #6ba1ed;
+  /* Color of the progress bar */
+  height: 100%;
+  /* Match the container's height */
+  border-radius: 10px;
+  /* Rounded corners */
+  transition: width 0.3s;
+  /* Add a smooth transition for the width changes */
+}
 </style>
