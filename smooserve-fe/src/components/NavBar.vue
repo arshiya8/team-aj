@@ -60,7 +60,7 @@ const items = ref([
     routeName: "About",
   },
   {
-    label: "NEAR YOU",
+    label: "NEAR ME",
     icon: "pi pi-map-marker",
     routeName: "Map",
   },
