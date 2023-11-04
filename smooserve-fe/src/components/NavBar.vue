@@ -106,7 +106,7 @@ const items = ref([
           </a>
           <router-link v-if="isLoggedIn && (role == 'student')" :to="{ name: 'Profile' }"><i class="pi pi-user px-4" style="font-size: 1.2rem"></i></router-link>
           <router-link v-if="isLoggedIn && (role == 'csp')" :to="{ name: 'CSPSignup' }"><i class="pi pi-user px-4" style="font-size: 1.2rem"></i></router-link>
-          <a class='line-remove' v-else>
+          <a class='line-remove' v-if="!isLoggedIn">
             <i class="navbar-icon pi pi-sign-in px-2"></i><router-link :to="{ name: 'Login' }"><span class="pr-4">LOG
                 IN</span></router-link>
           </a>

@@ -66,7 +66,7 @@ const studGoogleSignIn = async () => {
     if (data) {
       //existing user
       if (data.role == "student") {
-        router.replace({ name: "User" });
+        router.replace({ name: "Home" });
       } else {
         router.replace({ name: "CSPSetting" });
       }
@@ -223,7 +223,7 @@ async function addStudent(result) {
     .post("https://smooserve-be.vercel.app/api/student/", data)
     .then(async (response) => {
       // redirect to User page
-      router.replace({ name: "Profile" });
+      router.replace({ name: "User" });
     })
     .catch((e) => {
       console.log(e);

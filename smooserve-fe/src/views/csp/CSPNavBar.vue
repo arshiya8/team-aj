@@ -106,7 +106,7 @@ const items = ref([
         class="mb-3 shadow-none surface-ground border-none"
       >
         <template #start>
-          <img alt="logo" :src="logoUrl" height="60" class="mr-2" />
+          <router-link :to="{ name: 'CSPSignup' }"><img alt="logo" :src="logoUrl" height="60" class="mr-2" /></router-link>
         </template>
         <template
           #item="{ label, item, props, root, hasSubmenu }"

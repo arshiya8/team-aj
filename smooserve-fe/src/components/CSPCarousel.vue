@@ -3,7 +3,7 @@
   <div class="card">
     <Carousel v-if="favoriteCSPs.length > 0" :value="favoriteCSPs" :numVisible="3" :numScroll="3" :responsiveOptions="responsiveOptions">
       <template #item="csp">
-        <div class="border-1 surface-border border-round m-2 text-center py-5 px-3">
+        <div class="border-1 surface-border border-round m-2 text-center py-5 px-3 h-full" >
           <div class="mb-3">
             <img :src="csp.data.imageURL" style="border-radius: 50%;" :alt="csp.data.title" class="w-6 shadow-2" />
           </div>
@@ -82,7 +82,7 @@ const updateStudent = async (updatedFavorites) => {
   try {
     // Ensure userId is not null before making the API request
     if (studentId != null) {
-      const response = await axios.put(`http://smooserve-be.vercel.app/api/student/${studentId}`, {
+      const response = await axios.put(`https://smooserve-be.vercel.app/api/student/${studentId}`, {
         favoriteCsps: updatedFavorites,
       });
       console.log(response.data);

@@ -149,16 +149,20 @@
                                                         </div>
                                                     </li>
                                                 </ul>
+                                                <router-link :to="{ name: 'Quiz' }"><Button v-scrollanimation v-scroll
+                                                        label="Retake Quiz"></Button></router-link>
                                             </div>
                                         </div>
                                     </TabPanel>
                                     <TabPanel header="Registered CSPs">
 
-                                        <div v-scrollanimation v-if="registeredCSPs.length === 0">
+                                        <div v-scrollanimation v-if="registeredCSPs.length === 0"
+                                            style="display: flex; flex-direction: column;justify-content: center; align-items: center; margin: 0px auto;">
 
-                                            <h3 v-scroll>No registered CSPs..</h3>
+                                            <h3 v-scroll>No registered CSPs.. </h3>
                                             <router-link :to="{ name: 'Home' }"><Button v-scroll
                                                     label="Register Now!"></Button></router-link>
+
                                         </div>
 
                                         <DataTable v-else v-scrollanimation :value="registeredCSPs"
@@ -239,7 +243,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 import axios from "axios";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
@@ -250,8 +254,7 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import NavBar from '@/components/NavBar.vue';
 import Footer from '@/components/Footer.vue'
-import ColumnGroup from 'primevue/columngroup';   // optional
-import Row from 'primevue/row';                   // optional
+
 
 // import { db, storage } from "@/firebase";
 // const tabs = ref([
@@ -315,7 +318,7 @@ const visible = ref(false);
 const loading = ref(true);
 
 const buttonColor = ref("");
-const student = ref([]);
+const student = ref({});
 const profilePicture = ref("");
 const backgroundPicture = ref("");
 const displayName = ref('');
@@ -345,7 +348,7 @@ onAuthStateChanged(auth, async (student) => {
                 console.log("No matching id found in the database.");
             } else {
                 console.log("Student ID found:", studentId);
-                const response = await axios.get(`http://smooserve-be.vercel.app/api/student/${studentId}`, {
+                const response = await axios.get(`https://smooserve-be.vercel.app/api/student/${studentId}`, {
                 });
                 displayName.value = response.data.displayName;
                 email.value = response.data.email;
@@ -353,6 +356,7 @@ onAuthStateChanged(auth, async (student) => {
                 quizPreference.value = response.data.quizPreference;
                 registeredCSPs.value = response.data.registeredCSPs;
                 favCSPs.value = response.data.favoriteCsps;
+                profilePicture.value = response.data.profilePicture
                 console.log(registeredCSPs.value)
 
             }
@@ -452,9 +456,10 @@ function save() {
     loading.value = true;
     student.value.profilePicture = profilePicture.value
     student.value.displayName = displayName.value
+    console.log(student.value)
 
     axios
-        .put(`http://smooserve-be.vercel.app/api/student/${studentId}`, student.value)
+        .put(`https://smooserve-be.vercel.app/api/student/${studentId}`, student.value)
         .then((response) => {
             toast.add({
                 severity: "success",
@@ -476,23 +481,6 @@ function save() {
 }
 
 onMounted(async () => {
-    axios
-        .get(`http://smooserve-be.vercel.app/api/student/${studentId}`)
-        .then((response) => {
-            student.value = response.data;
-            profilePicture.value = student.profilePicture;
-            displayName.value = student.displayName;
-        })
-        .catch((error) => {
-            console.log(error);
-            toast.add({
-                severity: "error",
-                summary: "Error",
-                detail: error,
-                life: 3000,
-            });
-        })
-        .finally(() => (loading.value = false));
 });
 watch(
     () => buttonColor,
