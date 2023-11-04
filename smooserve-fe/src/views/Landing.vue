@@ -169,7 +169,7 @@ export default {
 
     onMounted(async () => {
       axios
-        .get("http://smooserve-be.vercel.app/api/csps")
+        .get("https://smooserve-be.vercel.app/api/csps")
         .then(response => {
           csps.value = response.data;
           console.log(csps.value)
