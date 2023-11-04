@@ -14,6 +14,11 @@ const routes = [
     component: () => import("@/views/auth/Login.vue"),
   },
   {
+    path: "/LoginCSP",
+    name: "LoginCSP",
+    component: () => import("@/views/auth/LoginCSP.vue"),
+  },
+  {
     path: "/register",
     name: "Register",
     component: () => import("@/views/auth/Register.vue"),
@@ -84,11 +89,11 @@ const routes = [
     name: "About",
     component: () => import("@/views/AboutUs.vue"),
   },
-  {
-    path: "/test",
-    name: "Test",
-    component: () => import("@/views/auth/Test.vue"),
-  },
+  // {
+  //   path: "/test",
+  //   name: "Test",
+  //   component: () => import("@/views/auth/Test.vue"),
+  // },
   {
     path: "/faq",
     name: "FAQ",
@@ -110,26 +115,27 @@ const routes = [
   },
 
   {
-    path: "/NearYou",
+    path: "/NearMe",
     name: "Map",
-    component: () => import("@/views/maps/map.vue"),
+    component: () => import("@/views/maps/Map.vue"),
   },
   {
     path: "/shop",
     name: "Shop",
-    component: () => import("@/views/shops/shop.vue"),
-  },
-
-  {
-    path: "/NearYou",
-    name: "Map",
-    component: () => import("@/views/maps/map.vue"),
+    component: () => import("@/views/shop/products.vue"),
   },
   {
-    path: "/shop",
-    name: "Shop",
-    component: () => import("@/views/shops/shop.vue"),
+    path: "/success",
+    name: "Success",
+    component: () => import("@/views/shop/success.vue"),
   },
+  {
+    path: "/cancel",
+    name: "cancel",
+    component: () => import("@/views/shop/cancel.vue"),
+  },
+  
+  
   //rayne
   {
     path: "/profile",

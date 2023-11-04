@@ -3,7 +3,7 @@ import { ref, computed, onMounted, watch } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
-import CSPNavbar from "../CSPNavBar.vue";
+import CSPNavbar from "@/views/csp/CSPNavBar.vue";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import {
   getStorage,
@@ -31,6 +31,8 @@ const registerChecked = ref(false);
 
 const CSPImage = ref("");
 const CSPPoster = ref("");
+const desc = ref("");
+const title = ref("");
 
 const datetime12h = ref();
 
@@ -40,6 +42,26 @@ const zoomTimeOptions = ref([30, 60]);
 const dbAccessToken = ref("");
 const dbRefreshToken = ref("");
 const meetingsList = ref();
+
+const zoomRegisterVisible = ref(false);
+
+const causes = ref([
+    'Environment',
+    'Education',
+    'Youth Development',
+]);
+
+const selectedCause = ref();
+const postalCode = ref();
+const selectedSkills = ref();
+
+const skills = ref([
+    'Teaching',
+    'Event Planning',
+    'Communication',
+]);
+
+const isLocal = ref(true);
 
 function add(purpose) {
   const input = document.createElement("input");
@@ -57,10 +79,10 @@ function add(purpose) {
 }
 
 function remove(purpose) {
-  if(purpose == 'profile'){
+  if (purpose == "profile") {
     CSPImage.value = "";
     csp.value.imageURL = "";
-  }else if(purpose == 'poster'){
+  } else if (purpose == "poster") {
     CSPPoster.value = "";
     csp.value.posterURL = "";
   }
@@ -68,9 +90,9 @@ function remove(purpose) {
 
 const uploadImage = async (file, purpose) => {
   try {
-    if(purpose == 'profile'){
+    if (purpose == "profile") {
       var storageRef = sRef(storage, `images/${CSPid.value}/${file.name}`);
-    }else{
+    } else {
       var storageRef = sRef(storage, `poster/${CSPid.value}/${file.name}`);
     }
 
@@ -80,10 +102,10 @@ const uploadImage = async (file, purpose) => {
     const downloadURL = await getDownloadURL(snapshot.ref);
 
     // Update csp.imageURL with the new URL
-    if(purpose == 'profile'){
-    csp.value.imageURL = downloadURL;
-    CSPImage.value = downloadURL;
-    }else{
+    if (purpose == "profile") {
+      csp.value.imageURL = downloadURL;
+      CSPImage.value = downloadURL;
+    } else {
       csp.value.posterURL = downloadURL;
       CSPPoster.value = downloadURL;
     }
@@ -103,6 +125,11 @@ function save() {
   csp.value.title = title.value;
   csp.value.desc = desc.value;
   csp.value.registration.active = registerChecked.value;
+  csp.value.isLocal = isLocal.value;
+  csp.value.causes = selectedCause.value;
+  csp.value.skills = selectedSkills.value;
+  csp.value.postalCode = postalCode.value;
+
   axios
     .put("https://smooserve-be.vercel.app/api/csp/" + CSPid.value, csp.value)
     .then((response) => {
@@ -153,10 +180,23 @@ onMounted(async () => {
             ? (registerChecked.value = response.data.registration.active)
             : (registerChecked.value = false);
 
+          isLocal.value = csp.value.isLocal;
+          selectedCause.value = csp.value.causes;
+          selectedSkills.value = csp.value.skills;
+          postalCode.value = csp.postalCode;
+          desc.value = csp.value.desc;
+          title.value = csp.value.title;
+
+
           dbAccessToken.value = response.data.settings.zoomAccessToken;
           dbRefreshToken.value = response.data.settings.zoomRefreshToken;
-          checkIfAccessTokenValid(response.data.settings.zoomTokenIssueDT);
-          await getZoomMeetings();
+          if (dbAccessToken.value && dbRefreshToken.value) {
+            zoomRegisterVisible.value = false;
+            checkIfAccessTokenValid(response.data.settings.zoomTokenIssueDT);
+            await getZoomMeetings();
+          } else {
+            zoomRegisterVisible.value = true;
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -174,6 +214,11 @@ onMounted(async () => {
     }
   });
 });
+
+function zoomAccess() {
+  localStorage.setItem("CSPid", CSPid.value);
+  router.push({ name: "Zoom" });
+}
 
 const getZoomMeetings = async () => {
   // Access the access token from your data source, e.g., Vuex or a ref
@@ -349,25 +394,65 @@ const updateTokens = async () => {
             </div>
 
             <div class="flex flex-column gap-3 mb-3">
-              <label for="title">Registration</label>
+              <div class="formgrid grid">
+                <div class="field col">
+                  <label for="title" class="w-full mb-3">Registration {{ registerChecked ? " Open" : " Closed" }}</label>
               <InputSwitch v-model="registerChecked" />
+                </div>
+                <div class="field col">
+                  <label for="title" class="w-full mb-3">{{ isLocal ? " Local" : " Overseas" }}</label>
+              <InputSwitch v-model="isLocal" />
+                </div>
+              </div>
+              
+
+              <label for="title">Zoom Scheduler</label>
+              <Button
+                v-if="zoomRegisterVisible"
+                @click="zoomAccess()"
+                label="Enable Zoom"
+              />
+              <Button
+                v-else
+                disabled
+                @click="zoomAccess()"
+                label="Zoom Enabled"
+              />
 
               <label for="title">Username</label>
-              <InputText id="title" :value="csp.title" v-model="title" />
+              <InputText id="title" v-model="title" />
+
+              <div class="formgrid grid">
+                <div class="field col">
+                  <label for="firstname2">Cause</label>
+                  <Dropdown v-model="selectedCause" :options="causes" placeholder="Select a Cause" class="w-full" />
+                </div>
+                <div class="field col">
+                  <label for="lastname2">Skills</label>
+                  <Dropdown v-model="selectedSkills" :options="skills" placeholder="Select a Skill" class="w-full" />
+                </div>
+              </div>
 
               <label for="desc">Description</label>
               <Textarea
                 id="desc"
-                :value="csp.desc"
                 v-model="desc"
                 rows="5"
                 cols="30"
               />
+              <label for="postalCode">Postal Code</label>
+              <InputText id="postalCode"  v-model="postalCode" />
 
               <label for="Poster">Poster</label>
-              
+
               <div class="col-12 md:col-8 lg:col-6 mb-3">
-                <Image v-if="CSPPoster" :src="CSPPoster" alt="Image" width="250" preview />
+                <Image
+                  v-if="CSPPoster"
+                  :src="CSPPoster"
+                  alt="Image"
+                  width="250"
+                  preview
+                />
                 <Skeleton v-else width="250px" height="300px"></Skeleton>
               </div>
               <div class="col-12 md:col-4 lg:col-6 mb-3">
@@ -400,59 +485,6 @@ const updateTokens = async () => {
             >
           </template>
         </Card>
-        <!-- <Card class="p-3 mt-5 mb-4 card">
-          <template #title>Zoom Schedule</template>
-          <template #content>
-            <div
-              class="grid align-items-center justify-content-center mb-3"
-            ></div>
-
-            <div class="flex flex-column gap-3 mb-3">
-              <label for="topic">Meeting Topic</label>
-              <InputText id="topic" v-model="topic" />
-
-              <label for="calendar-12h" class="font-bold block">
-                12h Format
-              </label>
-              <Calendar
-                id="calendar-12h"
-                v-model="datetime12h"
-                showTime
-                hourFormat="12"
-              />
-
-              <SelectButton
-                v-model="zoomTimeSelected"
-                :options="zoomTimeOptions"
-                aria-labelledby="basic"
-              >
-                <template #option="slotProps">
-                  {{ slotProps.option + " min" }}
-                </template>
-              </SelectButton>
-            </div>
-            <Button
-              text
-              rounded
-              label="Save"
-              @click="scheduleZoomMeeting()"
-              class="w-full align-items-center justify-content-center"
-              ><i class="pi pi-save px-2"></i>Schedule</Button
-            >
-
-            <div class="card">
-              <DataTable
-                :value="meetingsList.meetings"
-                tableStyle="min-width: 50rem"
-              >
-                <Column field="id" header="ID"></Column>
-                <Column field="topic" header="Topic"></Column>
-                <Column field="start_time" header="Time"></Column>
-                <Column field="join_url" header="Link"></Column>
-              </DataTable>
-            </div>
-          </template>
-        </Card> -->
       </div>
     </div>
   </div>

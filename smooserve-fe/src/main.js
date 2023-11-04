@@ -2,6 +2,10 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
 
+
+//maps
+import Vue3Geolocation from 'vue3-geolocation';
+
 // animation things
 import ScrollAnimation from './directives/ScrollAnimation'; 
 
@@ -133,12 +137,14 @@ initializeApp(firebaseConfig);
 app.directive('scrollanimation', ScrollAnimation);
 
 
+
 app.use(router);
 
 app.use(PrimeVue, { ripple: true });
 app.use(ToastService);
 app.use(DialogService);
 app.use(ConfirmationService);
+app.use(Vue3Geolocation);
 
 app.directive('tooltip', Tooltip);
 app.directive('badge', BadgeDirective);

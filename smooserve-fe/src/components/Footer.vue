@@ -6,13 +6,11 @@
     <div class="content">
       <div class="social-media">
         <h4>Connect With Us</h4>
-        <p><a href="#"><i class="fab fa-instagram"></i> Instagram</a></p>
+        <p><a href="https://www.instagram.com/smooserve/"><i class="fab fa-instagram"></i> Instagram</a></p>
       </div>
       <div class="links">
         <h4>Explore</h4>
-        <p><a href="#">Home</a></p>
-        <p><a href="#">About</a></p>
-        <p><a href="#">Contact</a></p>
+        <p><a href="https://www.smu.edu.sg/campus-life/student-experience/community-service">Find Out More</a></p>
       </div>
       <div class="contact-details">
         <h4>Contact</h4>
@@ -21,10 +19,10 @@
       </div>
     </div>
     <footer>
-        <hr />
-        Copyright © 2023. Singapore Management University. All rights reserved.<br>
-        Report Vulnerability. Terms of Use. Privacy Statement. Supported Browsers.
-      </footer>
+      <hr />
+      Copyright © 2023. Singapore Management University. All rights reserved.<br>
+      Report Vulnerability. Terms of Use. Privacy Statement. Supported Browsers.
+    </footer>
   </div>
 </template>
 

@@ -15,8 +15,8 @@ export default {
     data() {
         return {
             segments: [
-                { text: "Welcome to Smooserve! 🌟 ", style: "color: #064273; font-size: 1.9rem;" },
-                { text: "We're thrilled to have you join us at Smooserve, where wonderful adventures and meaningful connections await! 🚀Our mission is to match you with the perfect Community Service Projects (CSP) where your unique skills will match the skills required by the CSP!✨", style: "color: black; font-size: 1.3rem;" },
+                { text: "Welcome!🌟", style: "color: #064273; font-size: 1.7rem;" },
+                { text: "Discover meaningful connections with Community Service Projects (CSPs) tailored to your skills! Our mission is to match you with CSPs that you are passionate about✨", style: "color: black; font-size: 1.2rem;" },
                 { text: "Ready to begin? Click below to start your journey! 🎉", style: "color: black; font-size: 1.25rem;" },
             ],
             typeStatus: false,
@@ -117,4 +117,5 @@ span.cursor.typing {
 }
 </style>
 
+  
   

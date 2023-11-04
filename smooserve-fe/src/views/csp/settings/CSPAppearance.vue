@@ -3,7 +3,7 @@ import { ref, computed, onMounted, watch } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
-import CSPNavbar from "../CSPNavBar.vue";
+import CSPNavbar from "@/views/csp/CSPNavBar.vue";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { collection, query, where, getDocs, limit } from "firebase/firestore";
 import { db } from "@/firebase";

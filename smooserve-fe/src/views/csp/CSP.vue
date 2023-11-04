@@ -352,7 +352,7 @@ const goToCSPSetting = (CSPid) => {
             rounded
             class="roundBtn"
             @click="registerStudent()"
-            >Register</Button
+            >{{checkIfStudentRegistered() ? "Registered" : "Register" }}</Button
           >
         </div>
 
