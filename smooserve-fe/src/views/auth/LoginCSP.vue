@@ -205,8 +205,6 @@ async function addStudent(result) {
       },
     ],
     quizPreference: {
-      first_name: "",
-      last_name: "",
       teleHandle: "",
       year_of_study: "",
       commitment: "",
@@ -242,7 +240,7 @@ async function addStudent(result) {
   <div
     class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden"
   >
-    <div class="grid flex-column align-items-center justify-content-center">
+    <div class="flex flex-column align-items-center justify-content-center">
       <router-link :to="{ name: 'Home' }"
         ><img
           :src="logoUrl"
@@ -266,47 +264,36 @@ async function addStudent(result) {
         >
           <div>
             <Divider align="center"  type="solid">
-                <span>Sign in with your SMU Google Account</span>
+                <span>Sign in with your CSP Google Account</span>
               </Divider>
             <form @submit.prevent="submit">
               <Button
-                @click="studGoogleSignIn"
-                type="button"
-                label="Sign in with Google"
-                class="w-full p-3 text-xl p-button-text mb-5"
-                rounded
-                outlined
-                icon="pi pi-google"
-              ></Button>
-              <!-- <Button
                 @click="cspGoogleSignIn"
                 type="button"
-                label="Sign in with Google (CSP)"
+                label="Sign in with Google"
                 class="w-full p-3 text-xl p-button-text mb-2"
                 rounded
                 outlined
                 icon="pi pi-google"
-              ></Button> -->
-              
-              
+              ></Button>
+
 
               <div
                 class="flex align-items-center justify-content-between mb-5"
               >
                 <div class="flex align-items-center">
-                  
+
                 </div>
                 <a
-                  @click="$router.push('LoginCSP')"
-                  class="font-medium no-underline ml-8 mr-8 text-right cursor-pointer"
+                  @click="$router.push('Login')"
+                  class="font-medium no-underline mt-3 ml-8 mr-8 text-right cursor-pointer"
                   style="color: var(--primary-color)"
-                  >Are you a CSP? Login here</a
+                  >Are you a Student? Login here</a
                 >
               </div>
-              
+             
             </form>
             <br />
-            
           </div>
         </div>
       </div>

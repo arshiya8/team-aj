@@ -4,6 +4,8 @@ import { useRoute, useRouter } from "vue-router";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { collection, query, where, getDocs, limit } from "firebase/firestore";
 import { db } from "@/firebase";
+import { getDocumentIdByEmail } from "@/helper/helperFunctions.js";
+
 //login and logout things
 const isLoggedIn = ref(false)
 
@@ -13,22 +15,15 @@ const router = useRouter();
 const route = useRoute();
 const CSPid = ref();
 
-onMounted(() => {
-  // onAuthStateChanged(auth, async (user) => {
-  //   if (user) {
-  //     isLoggedIn.value = true;
-  //     CSPid.value = await getDocumentIdByEmail(user.email, "CSPs");
-  //     console.log(CSPid.value);
-  //   } else {
-  //     isLoggedIn.value = false;
-  //   }
-  // });
-});
+const role = ref("");
 
 onMounted(() => {
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
       isLoggedIn.value = true;
+      // check if is student
+      let data = await getDocumentIdByEmail(user.email, "Users");
+      role.value = data.role;
     } else {
       isLoggedIn.value = false;
     }
@@ -109,11 +104,10 @@ const items = ref([
             <router-link :to="{ name: 'Home' }"><i class="pi pi-sign-out icon-spacing pr-2"></i>
               <span style="text-decoration: none;">LOG OUT</span></router-link>
           </a>
-          <router-link v-if="isLoggedIn" :to="{ name: 'Profile' }"><i class="pi pi-user px-4" style="font-size: 1.2rem"></i></router-link>
+          <router-link v-if="isLoggedIn && (role == 'student')" :to="{ name: 'Profile' }"><i class="pi pi-user px-4" style="font-size: 1.2rem"></i></router-link>
+          <router-link v-if="isLoggedIn && (role == 'csp')" :to="{ name: 'CSPSignup' }"><i class="pi pi-user px-4" style="font-size: 1.2rem"></i></router-link>
           <a class='line-remove' v-else>
             <i class="navbar-icon pi pi-sign-in px-2"></i><router-link :to="{ name: 'Login' }"><span class="pr-4">LOG
-                IN</span></router-link>
-            <i class="navbar-icon pi pi-user-plus px-2"></i><router-link :to="{ name: 'Register' }"><span>SIGN
                 IN</span></router-link>
           </a>
         </template>

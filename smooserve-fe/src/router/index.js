@@ -14,6 +14,11 @@ const routes = [
     component: () => import("@/views/auth/Login.vue"),
   },
   {
+    path: "/LoginCSP",
+    name: "LoginCSP",
+    component: () => import("@/views/auth/LoginCSP.vue"),
+  },
+  {
     path: "/register",
     name: "Register",
     component: () => import("@/views/auth/Register.vue"),

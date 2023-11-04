@@ -31,6 +31,8 @@ const registerChecked = ref(false);
 
 const CSPImage = ref("");
 const CSPPoster = ref("");
+const desc = ref("");
+const title = ref("");
 
 const datetime12h = ref();
 
@@ -182,6 +184,8 @@ onMounted(async () => {
           selectedCause.value = csp.value.causes;
           selectedSkills.value = csp.value.skills;
           postalCode.value = csp.postalCode;
+          desc.value = csp.value.desc;
+          title.value = csp.value.title;
 
 
           dbAccessToken.value = response.data.settings.zoomAccessToken;
@@ -416,7 +420,7 @@ const updateTokens = async () => {
               />
 
               <label for="title">Username</label>
-              <InputText id="title" :value="csp.title" v-model="title" />
+              <InputText id="title" v-model="title" />
 
               <div class="formgrid grid">
                 <div class="field col">
@@ -432,7 +436,6 @@ const updateTokens = async () => {
               <label for="desc">Description</label>
               <Textarea
                 id="desc"
-                :value="csp.desc"
                 v-model="desc"
                 rows="5"
                 cols="30"

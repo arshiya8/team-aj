@@ -19,9 +19,33 @@
         <Dialog v-model:visible="visible" modal header="CSP Information" :style="{ width: '30vw' }"
             :breakpoints="{ '960px': '75vw', '641px': '100vw' }" >
             <div class="content border-round-sm">
-                <div class="content-image bg-center"
-                    style="height: 244px; display: flex; justify-content: center; align-items: center;">
-                    <img :src="selectedCSP.imageURL" style="border-radius: 50%; width: 15rem; height: 15rem;" />
+                <div class="content-image bg-center mb-5"
+                    style="display: flex; justify-content: center; align-items: center;">
+                    <Avatar
+                  v-if="selectedCSP.imageURL != ''"
+                  shape="circle"
+                  size="xlarge"
+                  :image="selectedCSP.imageURL"
+                  :style="{
+                    backgroundColor: '#fafafa',
+                    width: '6rem',
+                    height: '6rem',
+                    border: '2px solid #d5d9ef',
+                  }"
+                />
+                <Avatar
+                  v-else
+                  :label="Array.from(selectedCSP.title)[0]"
+                  shape="circle"
+                  size="xlarge"
+                  :style="{
+                    backgroundColor: '#3F51B5',
+                    color: '#ffffff',
+                    width: '6rem',
+                    height: '6rem',
+                  }"
+                />
+                    <!-- <img :src="selectedCSP.imageURL" style="border-radius: 50%; width: 15rem; height: 15rem;" /> -->
                 </div>
                 <div class="content-info mt-2 border-round-sm bg-black-alpha-10 shadow-1 py-1"
                     style="backdropFilter: blur(27px);">
@@ -56,12 +80,12 @@
                     </div>
                 </div>
                 <div class="flex align-items-center justify-content-center pt-2 gap-2">
-                    <button @click="goToCSP(selectedCSP.id)"
+                    <Button @click="goToCSP(selectedCSP.id)"
                         class="p-3 flex align-items-center justify-content-center w-7 gap-2 border-round-sm bg-black-alpha-10 shadow-1 border-none cursor-pointer hover:bg-black-alpha-20 transition-duration-200"
                         style="backdropFilter: blur(27px);">
                         <span class="font-medium text-black black-space-nowrap">See More!</span>
                         <i class="pi pi-send text-black"></i>
-                    </button>
+                    </Button>
                 </div>
             </div>
         </Dialog>
