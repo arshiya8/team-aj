@@ -64,7 +64,7 @@
                                                     Preference
                                                 </div>
                                                 <div v-scroll class="text-500 mb-5">
-                                                    dsgdhdhds
+                                                    This information will be sent to your registered CSPs. 
                                                 </div>
                                                 <ul v-if="quizPreference" class="list-none p-0 m-0">
                                                     <li v-scrollanimation
@@ -72,7 +72,7 @@
                                                         <div v-scroll class="text-500 w-6 md:w-2 font-medium">Commitment
                                                         </div>
                                                         <div v-scroll
-                                                            class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 px-4">
+                                                            class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 px-4 text-right-sm">
                                                             {{ quizPreference.commitment }}
                                                         </div>
                                                     </li>
@@ -99,10 +99,10 @@
                                                     </li>
                                                     <li v-scrollanimation
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                                        <div v-scroll class="text-500 w-6 md:w-2 font-medium">Self Awareness
+                                                        <div v-scroll class="text-500 w-6 md:w-2 font-medium">Past Volunteering Experiences 
                                                         </div>
                                                         <div v-scroll
-                                                            class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 px-4">
+                                                            class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 px-4 text-right-sm">
                                                             {{ quizPreference.self_awareness }}
                                                         </div>
                                                     </li>
@@ -111,7 +111,7 @@
                                                         <div v-scroll class="text-500 w-6 md:w-2 font-medium">Self
                                                             Description</div>
                                                         <div v-scroll
-                                                            class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 px-4">
+                                                            class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 px-4 text-right-sm">
                                                             {{ quizPreference.self_description }}
                                                         </div>
                                                     </li>
@@ -127,8 +127,8 @@
                                                     </li>
                                                     <li v-scrollanimation
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border">
-                                                        <div v-scroll class="text-500 w-6 md:w-2 font-medium">Past
-                                                            Volunteering Experiences
+                                                        <div v-scroll class="text-500 w-6 md:w-2 font-medium">Preferred
+                                                            Volunteering Experience
                                                         </div>
                                                         <div v-scroll class="flex flex-wrap px-4">
                                                             <div v-for="exp in quizPreference.volunteering_experience"
@@ -494,6 +494,15 @@ watch(
 );
 </script>
 <style>
+.text-right-sm {
+  text-align: left; /* Default alignment, for larger screens */
+}
+
+@media screen and (max-width: 640px) {
+  .text-right-sm {
+    text-align: right; /* Alignment for small screens */
+  }
+}
 .card {
     border-radius: 12px;
 }
