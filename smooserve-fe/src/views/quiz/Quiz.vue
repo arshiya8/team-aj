@@ -137,7 +137,7 @@ export default {
           response: ''
         },
         {
-          name: "self_awareness",
+          name: "past_experience",
           text: "11. What are your past volunteering experiences?",
           type: "open-ended",
           background: "../../layout/images/quiz11.png",

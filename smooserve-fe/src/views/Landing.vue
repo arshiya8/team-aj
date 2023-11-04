@@ -147,7 +147,7 @@ export default {
 
       // console.log(auto_filter);
 
-      // selectedValue3.value = selectedValue3.value === '' ? 'choiceX' : '';
+      selectedValue3.value = selectedValue3.value === '' ? 'choiceX' : '';
     };
 
     const itemsPerPage = 6;
