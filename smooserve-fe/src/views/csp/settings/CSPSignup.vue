@@ -442,7 +442,7 @@ const updateTokens = async () => {
   <div v-if="loading" class="card">
     <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
   </div>
-  <div v-else class="surface-ground flex flex-column w-full h-screen">
+  <div v-else class="surface-ground flex flex-column w-full h-full">
     <CSPNavbar />
 
     <!-- profile -->
