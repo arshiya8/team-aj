@@ -252,6 +252,13 @@ const goToCSPSetting = (CSPid) => {
   localStorage.setItem("CSPid", id);
   router.push({ name: "CSPSetting", params: { id: CSPid } });
 };
+
+const goToHome = () => {
+  router.push({ name: "Home" });
+};
+const goToCSPHome = () => {
+  router.push({ name: "CSPSignup" });
+};
 </script>
 <template>
   <Toast></Toast>
@@ -263,8 +270,30 @@ const goToCSPSetting = (CSPid) => {
       :style="{ backgroundColor: backgroundColor }"
       class="w-full md:w-10 lg:w-9"
     >
-      <template #start> </template>
+      <template #start> 
+       
+      </template>
       <template #end>
+        <Button v-if="!cspOwner" 
+        @click="goToHome"
+        class="mr-2 roundBtn"
+          icon="pi pi-home"
+          severity="primary"
+          rounded
+          raised
+          aria-label="Home"
+        >
+        </Button>
+        <Button v-if="cspOwner" 
+        @click="goToCSPHome"
+        class="mr-2 roundBtn"
+          icon="pi pi-home"
+          severity="primary"
+          rounded
+          raised
+          aria-label="Home"
+        >
+        </Button>
         <Button
           v-if="cspOwner"
           @click="goToCSPSetting(csp.id)"
