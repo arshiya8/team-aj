@@ -5,11 +5,10 @@ import { db } from "@/firebase";
 import NavBar from "@/components/NavBar.vue";
 import CaroPics from "@/components/CaroPics.vue";
 import Footer from "@/components/Footer.vue";
-import axios from 'axios';
+import axios from "axios";
 import { useRouter } from "vue-router";
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useToast } from "primevue/usetoast";
-
 
 export default {
   setup() {
@@ -17,9 +16,9 @@ export default {
     const csps = ref([]);
     csps.original = null;
     const favoriteCSPs = ref([]);
-    const selectedValue1 = ref('');
-    const selectedValue2 = ref('');
-    const selectedValue3 = ref('');
+    const selectedValue1 = ref("");
+    const selectedValue2 = ref("");
+    const selectedValue3 = ref("");
     const auth = getAuth();
     const router = useRouter();
     let studentId = null;
@@ -53,7 +52,9 @@ export default {
 
     const toggleHeartColor = (csp) => {
       if (auth.currentUser) {
-        const index = favoriteCSPs.value.findIndex((favCSP) => favCSP.id === csp.id);
+        const index = favoriteCSPs.value.findIndex(
+          (favCSP) => favCSP.id === csp.id
+        );
         if (index === -1) {
           // CSP is not in favorites, add it
           favoriteCSPs.value.push(csp);
@@ -64,9 +65,12 @@ export default {
         // Update the student's favorite CSPs in the database
         updateStudent(favoriteCSPs.value);
         // Update localStorage with the updated favorite CSPs list
-        localStorage.setItem('favoriteCSPs', JSON.stringify(favoriteCSPs.value));
+        localStorage.setItem(
+          "favoriteCSPs",
+          JSON.stringify(favoriteCSPs.value)
+        );
       } else {
-        console.error('User is not authenticated.');
+        console.error("User is not authenticated.");
         alert("Sign in first!");
       }
     };
@@ -94,15 +98,18 @@ export default {
       try {
         // Ensure userId is not null before making the API request
         if (studentId != null) {
-          const response = await axios.put(`https://smooserve-be.vercel.app/api/student/${studentId}`, {
-            favoriteCsps: updatedFavorites,
-          });
+          const response = await axios.put(
+            `https://smooserve-be.vercel.app/api/student/${studentId}`,
+            {
+              favoriteCsps: updatedFavorites,
+            }
+          );
           console.log(response.data);
         } else {
-          console.error('User is not authenticated.');
+          console.error("User is not authenticated.");
         }
       } catch (error) {
-        console.error('Error updating favorite CSPs:', error);
+        console.error("Error updating favorite CSPs:", error);
       }
     };
 
@@ -110,22 +117,27 @@ export default {
       return favoriteCSPs.value.some((favCSP) => favCSP.id === csp.id);
     };
 
-
     const toggleAutoFilter = async () => {
-      const response = await axios.get(`https://smooserve-be.vercel.app/api/student/${studentId}`, {
-      });
+      const response = await axios.get(
+        `https://smooserve-be.vercel.app/api/student/${studentId}`,
+        {}
+      );
       // console.log(response.data.quizPreference)
-      const causes = response.data.quizPreference.passionate_about
-      const skills = response.data.quizPreference.skills
-      const location = response.data.quizPreference.isLocal
+      const causes = response.data.quizPreference.passionate_about;
+      const skills = response.data.quizPreference.skills;
+      const location = response.data.quizPreference.isLocal;
 
       if (!csps.original) {
         // Store the original csps array if it's not already stored
         csps.original = csps.value.slice();
       }
       if (csps.value.length === csps.original.length) {
-        const auto_filter = csps.value.filter(csp => {
-          return causes.includes(csp.cause) || skills.includes(csp.skills) || location === (csp.isLocal);
+        const auto_filter = csps.value.filter((csp) => {
+          return (
+            causes.includes(csp.cause) ||
+            skills.includes(csp.skills) ||
+            location === csp.isLocal
+          );
         });
         csps.value = auto_filter;
       } else {
@@ -135,7 +147,6 @@ export default {
 
       // console.log(auto_filter);
 
-
       // selectedValue3.value = selectedValue3.value === '' ? 'choiceX' : '';
     };
 
@@ -143,7 +154,9 @@ export default {
     const currentPage = ref(1);
 
     // pagination tools //
-    const totalPages = computed(() => Math.ceil(csps.value.length / itemsPerPage));
+    const totalPages = computed(() =>
+      Math.ceil(csps.value.length / itemsPerPage)
+    );
 
     const getVisibleCsps = computed(() => {
       const start = (currentPage.value - 1) * itemsPerPage;
@@ -170,9 +183,9 @@ export default {
     onMounted(async () => {
       axios
         .get("https://smooserve-be.vercel.app/api/csps")
-        .then(response => {
+        .then((response) => {
           csps.value = response.data;
-          console.log(csps.value)
+          console.log(csps.value);
         })
         .catch((error) => {
           console.log(error);
@@ -182,7 +195,7 @@ export default {
             detail: error,
             life: 3000,
           });
-        })
+        });
       // const fbCSP = [];
       // const querySnapshot = await getDocs(collection(db, "CSPs"));
 
@@ -200,11 +213,10 @@ export default {
       // });
       // csps.value = fbCSP;
 
-      const storedFavoriteCSPs = localStorage.getItem('favoriteCSPs');
+      const storedFavoriteCSPs = localStorage.getItem("favoriteCSPs");
       if (storedFavoriteCSPs) {
         favoriteCSPs.value = JSON.parse(storedFavoriteCSPs);
       }
-
     });
 
     const filterCsp = () => {
@@ -213,10 +225,13 @@ export default {
         csps.original = csps.value.slice();
       }
       if (csps.value.length === csps.original.length) {
-        const filteredCsps = csps.value.filter(csp => {
-          const causeMatch = selectedValue1.value === '' || selectedValue1.value === csp.cause;
-          const skillsMatch = selectedValue2.value === '' || selectedValue2.value === csp.skills;
-          const locationMatch = selectedValue3.value === '' || selectedValue3 === csp.isLocal;
+        const filteredCsps = csps.value.filter((csp) => {
+          const causeMatch =
+            selectedValue1.value === "" || selectedValue1.value === csp.cause;
+          const skillsMatch =
+            selectedValue2.value === "" || selectedValue2.value === csp.skills;
+          const locationMatch =
+            selectedValue3.value === "" || selectedValue3 === csp.isLocal;
           return causeMatch || skillsMatch || locationMatch;
         });
         csps.value = filteredCsps;
@@ -225,7 +240,6 @@ export default {
         csps.value = csps.original.slice();
       }
     };
-
 
     return {
       csps,
@@ -240,7 +254,6 @@ export default {
       studentId,
       favoriteCSPs,
       updateStudent,
-
 
       // pagination tools //
       itemsPerPage,
@@ -260,7 +273,6 @@ export default {
 };
 </script>
 
-
 <template>
   <!-- navbar component -->
   <NavBar />
@@ -269,44 +281,62 @@ export default {
   <div class="container-fluid">
     <CaroPics />
     <div class="row pb-3">
-      <h2 style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold;
-          text-align: center; margin-top: 30px; font-size: 2rem">
-        COMMUNITY SERVICE
-        PROJECTS</h2>
+      <h2
+        style="
+          color: black;
+          font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+          font-weight: bold;
+          text-align: center;
+          margin-top: 30px;
+          font-size: 2rem;
+        "
+      >
+      What's happening in Smooserve
+      </h2>
     </div>
 
     <!-- Instructions card -->
     <div class="surface-section px-4 py-8 md:px-6 lg:px-8 text-center">
       <div class="grid">
         <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
-          <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+          <span
+            class="p-3 shadow-2 mb-3 inline-block surface-card"
+            style="border-radius: 10px"
+          >
             <i v-scroll class="pi pi-search text-4xl text-blue-700"></i>
           </span>
           <div v-scroll class="text-900 text-xl mb-3 font-medium">Step 1</div>
           <span v-scroll class="text-700 line-height-3">
-            Ready to start your CSP search? Take a look at the displayed CSP's below that were filtered according to
-            your quiz results!
+            Ready to start your CSP search? Take a look at the displayed CSP's
+            below that were filtered according to your quiz results!
           </span>
         </div>
         <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
-          <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+          <span
+            class="p-3 shadow-2 mb-3 inline-block surface-card"
+            style="border-radius: 10px"
+          >
             <i v-scroll class="pi pi-sliders-v text-4xl text-blue-700"></i>
           </span>
           <div v-scroll class="text-900 text-xl mb-3 font-medium">Step 2</div>
           <span v-scroll class="text-700 line-height-3">
-            Not too satisfied with what you are seeing? Fret not as you can choose to manually filter the CSPs using our
-            filter functions, or use our convenient auto-filter feature, but not both at once.
+            Not too satisfied with what you are seeing? Fret not as you can
+            choose to manually filter the CSPs using our filter functions, or
+            use our convenient auto-filter feature, but not both at once.
           </span>
         </div>
         <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
-          <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+          <span
+            class="p-3 shadow-2 mb-3 inline-block surface-card"
+            style="border-radius: 10px"
+          >
             <i v-scroll class="pi pi-heart text-4xl text-blue-700"></i>
           </span>
           <div v-scroll class="text-900 text-xl mb-3 font-medium">Step 3</div>
           <span v-scroll class="text-700 line-height-3">
-            Found the CSP of your dreams? Go ahead and favourite the CSP using the heart icons on the back of the CSP
-            cards! You
-            can also click the 'See More' button to find out more about the individual CSP's!
+            Found the CSP of your dreams? Go ahead and favourite the CSP using
+            the heart icons on the back of the CSP cards! You can also click the
+            'See More' button to find out more about the individual CSP's!
           </span>
         </div>
       </div>
@@ -315,85 +345,121 @@ export default {
 
   <!-- favourites clickable heart -->
   <div>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    />
   </div>
 
-
   <!-- body -->
-  <div class="container-fluid" style="background-color: navy">
-    <div class="row">
-      <div class="col">
-        <h1 style="font-family: 'Helvetica Neue', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 600;
-            text-align: center; color:white;">
-          What's happening in Smooserve</h1>
-      </div>
-    </div>
-    <div class="row justify-content-center align-items-center" style="padding-bottom: 20px; text-align: center;
-    font-family: 'Helvetica Neue Medium', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">
-
-
-      <!-- First Dropdown List -->
-      <div class="dropdown" style="display: inline-block; margin-right: 10px;">
-        <label for="dropdown1"></label>
-        <select id="dropdown1" v-model="selectedValue1" @change="filterCsp">
-          <option value="" selected>Causes</option>
-          <option value="Environmental Conservation">Environment</option>
-          <option value="Education">Education</option>
-          <option value="Youth Development">Youth Development</option>
-        </select>
-
-        <!-- Second Dropdown List -->
-        <label for="dropdown2"></label>
-        <select id="dropdown2" v-model="selectedValue2" @change="filterCsp">
-          <option value="" selected>Skills</option>
-          <option value="Teaching">Teaching</option>
-          <option value="Event Planning">Event Planning</option>
-          <option value="Wrting and Communication">Communication</option>
-        </select>
-
-        <!-- Third Dropdown List -->
-        <label for="dropdown3"></label>
-        <select id="dropdown3" v-model="selectedValue3" @change="filterCsp">
-          <option value="" selected>Location</option>
-          <option value="true">Local</option>
-          <option value="false">Overseas</option>
-        </select>
-
-
-        <div class="toggle-button" style="display: inline-block; text-align: center; padding-left: 10px;">
-          <label
-            style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">Auto-filter:</label>
-          <button @click="toggleAutoFilter">{{ selectedValue3 === '' ? 'Off' : 'On' }}</button>
+  <div class="container-fluid">
+    <div
+      class="col-12 mb-8 p-2 md:p-8"
+      style="
+        border-radius: 20px;
+        background: linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.6),
+            rgba(255, 255, 255, 0.6)
+          ),
+          radial-gradient(
+            77.36% 256.97% at 77.36% 57.52%,
+            #b6afef 0%,
+            #0073ff 100%
+          );
+      "
+    >
+      <div
+        class="flex flex-column justify-content-center align-items-center text-center px-3 py-3 md:py-0 gap-3"
+      >
+        <h1 class="text-gray-900 mb-2">Community Service Projects</h1>
+        
+        <div
+          class="row justify-content-center align-items-center"
+        >
+          <!-- First Dropdown List -->
+          <div class="dropdown" style="display: inline-block; margin-right: 10px">
+            <label for="dropdown1"></label>
+            <select id="dropdown1" v-model="selectedValue1" @change="filterCsp">
+              <option value="" selected>Causes</option>
+              <option value="Environmental Conservation">Environment</option>
+              <option value="Education">Education</option>
+              <option value="Youth Development">Youth Development</option>
+            </select>
+    
+            <!-- Second Dropdown List -->
+            <label for="dropdown2"></label>
+            <select id="dropdown2" v-model="selectedValue2" @change="filterCsp">
+              <option value="" selected>Skills</option>
+              <option value="Teaching">Teaching</option>
+              <option value="Event Planning">Event Planning</option>
+              <option value="Wrting and Communication">Communication</option>
+            </select>
+    
+            <!-- Third Dropdown List -->
+            <label for="dropdown3"></label>
+            <select id="dropdown3" v-model="selectedValue3" @change="filterCsp">
+              <option value="" selected>Location</option>
+              <option value="true">Local</option>
+              <option value="false">Overseas</option>
+            </select>
+    
+            <div
+              class="toggle-button"
+              style="display: inline-block; text-align: center; padding-left: 10px"
+            >
+              <label
+                >Auto-filter:</label
+              >
+              <button @click="toggleAutoFilter">
+                {{ selectedValue3 === "" ? "Off" : "On" }}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <div class="row">
+      <div class="col">
+      </div>
+    </div>
   </div>
 
-
   <!-- CSP flip cards -->
-  <div class="container-fluid pt-5" style="background-color: lightblue;">
-    <div class="grid ">
+  <div class="container-fluid pt-5">
+    <div class="grid">
       <div class="card-container">
-        <div class="flex align-items-center justify-content-center sm:col-12 md:col-6 lg:col-4"
-          v-for="(csp, index) in getVisibleCsps" :key="csp.id">
+        <div
+          class="flex align-items-center justify-content-center sm:col-12 md:col-6 lg:col-4"
+          v-for="(csp, index) in getVisibleCsps"
+          :key="csp.id"
+        >
           <div v-scrollanimation class="flip-card">
             <div class="flip-card-inner">
               <div class="flip-card-front">
-                <img :src="csp.posterURL" :alt="`CSP ${csp.id}`">
+                <img :src="csp.posterURL" :alt="`CSP ${csp.id}`" />
               </div>
               <div class="flip-card-back align-items-end">
                 <div class="heart-container">
-                  <i class="fas fa-heart clickable" :class="{ 'heart-red': isCSPFavorite(csp) }"
-                    @click="toggleHeartColor(csp)"></i>
+                  <i
+                    class="fas fa-heart clickable"
+                    :class="{ 'heart-red': isCSPFavorite(csp) }"
+                    @click="toggleHeartColor(csp)"
+                  ></i>
                 </div>
                 <div class="text-center">
-                  <img :src="csp.imageURL" style="border-radius: 50%; width:150px" :alt="`CSP ${csp.id}`">
+                  <img
+                    :src="csp.imageURL"
+                    style="border-radius: 50%; width: 150px"
+                    :alt="`CSP ${csp.id}`"
+                  />
                   <h1>{{ csp.title }}</h1>
                   <p class="card-description">{{ csp.desc }}</p>
 
                   <!-- see more button link to linktree  -->
-                  <router-link :to="{ name: 'CSP', params: { id: csp.id } }"><Button
-                      label="See More"></Button></router-link>
+                  <router-link :to="{ name: 'CSP', params: { id: csp.id } }"
+                    ><Button label="See More" rounded></Button
+                  ></router-link>
                 </div>
               </div>
             </div>
@@ -403,26 +469,41 @@ export default {
     </div>
   </div>
 
-
   <!-- Pagination Controls with Styling -->
-  <div class="pagination">
-    <button @click="prevPage" :disabled="currentPage === 1" class="pagination-button">Prev</button>
+  <div class="pagination mb-5">
+    <button
+      @click="prevPage"
+      :disabled="currentPage === 1"
+      class="pagination-button"
+    >
+      Prev
+    </button>
     <span v-for="page in totalPages" :key="page">
-      <button @click="goToPage(page)" :class="{ active: page === currentPage }" class="pagination-button">{{ page
-      }}</button>
+      <button
+        @click="goToPage(page)"
+        :class="{ active: page === currentPage }"
+        class="pagination-button"
+      >
+        {{ page }}
+      </button>
     </span>
-    <button @click="nextPage" :disabled="currentPage === totalPages" class="pagination-button">Next</button>
+    <button
+      @click="nextPage"
+      :disabled="currentPage === totalPages"
+      class="pagination-button"
+    >
+      Next
+    </button>
   </div>
 
   <Footer />
 </template>
 
-
 <style>
 /* animation */
 .before-enter-flip {
   opacity: 0;
-  transform: scale(.5) rotateZ(-25deg);
+  transform: scale(0.5) rotateZ(-25deg);
   transition: all 1s ease-out;
 }
 
@@ -433,7 +514,6 @@ export default {
   opacity: 1;
   transform: scale(1) rotateZ(0deg);
 }
-
 
 /* pagination tool */
 .pagination {
@@ -471,7 +551,7 @@ export default {
 }
 
 .dropdown select {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: normal;
 }
 
@@ -484,7 +564,7 @@ export default {
   padding: 5px 20px;
   cursor: pointer;
   text-align: center;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: normal;
 }
 
@@ -525,7 +605,6 @@ export default {
 .dropdown label {
   font-size: 25px;
   padding: 5px;
-  color: white;
   font-weight: bold;
 }
 
@@ -539,7 +618,6 @@ export default {
   cursor: pointer;
   text-align: justify;
 }
-
 
 /* navbar */
 .navbar {
@@ -595,7 +673,7 @@ export default {
 }
 
 .list-inline-item::after {
-  content: '';
+  content: "";
   height: 3px;
   width: 0;
   background: rgba(6, 66, 115);
@@ -668,11 +746,12 @@ export default {
 /* Style the front side (fallback if image is missing) */
 .flip-card-front {
   color: black;
+  border: 1px solid grey;
 }
 
 /* Style the back side */
 .flip-card-back {
-  background-color: rgb(119, 166, 204);
+  background-color: #8f969d;
   color: white;
   transform: rotateY(180deg);
   display: flex;
@@ -692,5 +771,7 @@ export default {
   margin: 150px;
 }
 
+.p-galleria .p-galleria-indicators .p-galleria-indicator.p-highlight button {
+  background-color: #0053a6;
+}
 </style>
-
