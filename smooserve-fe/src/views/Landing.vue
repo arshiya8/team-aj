@@ -449,10 +449,35 @@ export default {
                 </div>
                 <div class="text-center">
                   <img
+                  v-if="csp.imageURL != ''"
                     :src="csp.imageURL"
                     style="border-radius: 50%; width: 150px"
                     :alt="`CSP ${csp.id}`"
                   />
+                  <!-- <Avatar
+            v-if="csp.imageURL != ''"
+            shape="circle"
+            size="xlarge"
+            :image="csp.imageURL"
+            :style="{
+              backgroundColor: '#fafafa',
+              width: '6rem',
+              height: '6rem',
+              border: '2px solid #d5d9ef',
+            }"
+          /> -->
+          <Avatar
+            v-else
+            :label="Array.from(csp.title)[0]"
+            shape="circle"
+            size="xlarge"
+            :style="{
+              backgroundColor: '#3F51B5',
+              color: '#ffffff',
+              width: '8rem',
+              height: '8rem',
+            }"
+          />
                   <h1>{{ csp.title }}</h1>
                   <p class="card-description">{{ csp.desc }}</p>
 
@@ -751,8 +776,9 @@ export default {
 
 /* Style the back side */
 .flip-card-back {
-  background-color: #8f969d;
-  color: white;
+  background-color: #ffffff;
+  border: 1px solid grey;
+  color: black;
   transform: rotateY(180deg);
   display: flex;
   justify-content: center;
