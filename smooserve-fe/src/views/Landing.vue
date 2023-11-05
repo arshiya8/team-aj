@@ -427,37 +427,35 @@ export default {
             #0073ff 100%
           );
       ">
+
       <div class="flex flex-column justify-content-center align-items-center text-center px-3">
         <h1 class="text-gray-900 ">Community Service Projects</h1>
       </div>
 
-      <!-- First Dropdown List -->
-
       <div class="grid align-items-center justify-content-center">
         <div class="grid">
-        <div class="w-full card-container align-items-center justify-content-center sm:gap-3 lg:gap-0">
-          <div class="flex align-items-center justify-content-center col-12 lg:col-3">
-            <Dropdown v-model="selectedValue1" editable :options="causes" optionLabel="name"
-              placeholder="Select a Cause" />
-            <!-- <Button rounded icon="pi pi-search" style="margin-left: 8px;" @click="searchByCause(selectedValue1)"></Button> -->
-          </div>
+          <div class="w-full card-container align-items-center justify-content-center sm:gap-3 lg:gap-0">
+            <div class="flex align-items-center justify-content-center col-12 lg:col-3">
+              <Dropdown v-model="selectedValue1" editable :options="causes" optionLabel="name"
+                placeholder="Select a Cause" />
+            </div>
 
-          <div class="flex align-items-center justify-content-center col-12 lg:col-3">
-            <Dropdown v-model="selectedValue2" editable :options="skills" optionLabel="name"
-              placeholder="Select a Skill" />
-            <!-- <Button rounded icon="pi pi-search" style="margin-left: 8px;" @click="searchBySkill(selectedValue2)"></Button> -->
-          </div>
+            <div class="flex align-items-center justify-content-center col-12 lg:col-3">
+              <Dropdown v-model="selectedValue2" editable :options="skills" optionLabel="name"
+                placeholder="Select a Skill" />
+            </div>
 
-          <div class="flex align-items-center justify-content-center col-12 lg:col-3">
-            <Dropdown v-model="selectedValue3" editable :options="locations" optionLabel="name"
-              placeholder="Select a location" />
+            <div class="flex align-items-center justify-content-center col-12 lg:col-3">
+              <Dropdown v-model="selectedValue3" editable :options="locations" optionLabel="name" style="margin-right: 16px;"
+                placeholder="Select a location" />
+            </div>
+            <div class="flex align-items-center justify-content-center col-12 lg:col-2">
+              <Button rounded icon="pi pi-search" label="Search" style="margin-left: 8px; min-width: 100px;"
+                @click="searchByFilters(selectedValue1, selectedValue2, selectedValue3)"></Button>
+              <Button rounded label="Reset" icon="pi pi-sync" style="margin-left: 8px; min-width: 100px;"
+                @click="reset"></Button>
+            </div>
           </div>
-          <div class="flex align-items-center justify-content-center col-12 lg:col-2">
-            <Button rounded icon="pi pi-search" label="Search" style="margin-left: 8px;"
-            @click="searchByFilters(selectedValue1, selectedValue2, selectedValue3)"></Button>
-            <Button rounded label="Reset" icon="pi pi-sync" style="margin-left: 8px;" @click="reset"></Button>
-          </div>
-        </div>
 
         </div>
         <div class=" flex align-items-center  justify-content-center ">
@@ -467,7 +465,6 @@ export default {
           </Button>
         </div>
       </div>
-
     </div>
   </div>
 
@@ -488,12 +485,8 @@ export default {
                     @click="toggleHeartColor(csp)"></i>
                 </div>
                 <div class="text-center">
-                  <img
-                  v-if="csp.imageURL != ''"
-                    :src="csp.imageURL"
-                    style="border-radius: 50%; width: 150px"
-                    :alt="`CSP ${csp.id}`"
-                  />
+                  <img v-if="csp.imageURL != ''" :src="csp.imageURL" style="border-radius: 50%; width: 150px"
+                    :alt="`CSP ${csp.id}`" />
                   <!-- <Avatar
             v-if="csp.imageURL != ''"
             shape="circle"
@@ -506,18 +499,12 @@ export default {
               border: '2px solid #d5d9ef',
             }"
           /> -->
-          <Avatar
-            v-else
-            :label="Array.from(csp.title)[0]"
-            shape="circle"
-            size="xlarge"
-            :style="{
-              backgroundColor: '#3F51B5',
-              color: '#ffffff',
-              width: '8rem',
-              height: '8rem',
-            }"
-          />
+                  <Avatar v-else :label="Array.from(csp.title)[0]" shape="circle" size="xlarge" :style="{
+                    backgroundColor: '#3F51B5',
+                    color: '#ffffff',
+                    width: '8rem',
+                    height: '8rem',
+                  }" />
                   <h1>{{ csp.title }}</h1>
                   <p class="card-description">{{ csp.desc }}</p>
 
