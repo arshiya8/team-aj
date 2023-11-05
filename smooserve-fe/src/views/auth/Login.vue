@@ -195,15 +195,15 @@ async function addStudent(result) {
   const data = {
     email: result.user.email,
     displayName: result.user.displayName,
-    favoriteCsps: [
-      {
-        imageURL: "",
-        skills: "",
-        desc: "",
-        title: "",
-        id: "",
-      },
-    ],
+    // favoriteCsps: [
+    //   {
+    //     imageURL: "",
+    //     skills: "",
+    //     desc: "",
+    //     title: "",
+    //     id: "",
+    //   },
+    // ],
     cart: [],
     quizPreference: {
       first_name: "",
