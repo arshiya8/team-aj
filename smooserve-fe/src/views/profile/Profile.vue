@@ -25,7 +25,7 @@
                                 <Avatar v-if="profilePicture !== ''" shape="circle" size="xlarge" :image="profilePicture"
                                     :style="{ backgroundColor: '#fafafa', width: '6rem', height: '6rem' }"
                                     class="col-12 md:col-4 lg:col-3 justify-content-center" />
-                                <Avatar v-else shape="circle" size="xlarge"
+                                <Avatar v-else shape="circle" size="xlarge" :label="Array.from(displayName)[0]"
                                     :style="{ backgroundColor: '#3F51B5', color: '#ffffff', width: '6rem', height: '6rem' }"
                                     class="col-12 md:col-4 lg:col-3 justify-content-center" />
                             </div>
@@ -195,20 +195,20 @@
                 </div>
             </div>
         </div>
-        <Dialog v-model:visible="visible" :style="{ width: '65vw' }">
+        <Dialog v-model:visible="visible" class="w-auto">
             <div class="grid align-items-center justify-content-center">
-                <div class="col-12 md:col-12 lg:col-6">
-                    <Card class="p-3 mt-4 mb-4 card" style="width: 40vw;">
+                <div class="col-12 md:col-12 lg:col-12">
+                    <Card class="p-3 mt-4 mb-4 card w-full lg:w-max">
                         <template #title>Edit Profile</template>
                         <template #content>
                             <div class="grid align-items-center justify-content-center mb-3">
-                                <div class="col-12 md:col-4 lg:col-3 mb-3">
+                                <div class="col-12 md:col-4 lg:col-3">
                                     <Avatar v-if="profilePicture != ''" shape="circle" size="xlarge" :image="profilePicture"
                                         :style="{ backgroundColor: '#fafafa', width: '6rem', height: '6rem' }" />
-                                    <Avatar v-else shape="circle" size="xlarge"
+                                    <Avatar v-else shape="circle" size="xlarge" :label="Array.from(displayName)[0]"
                                         :style="{ backgroundColor: '#3F51B5', color: '#ffffff', width: '6rem', height: '6rem' }" />
                                 </div>
-                                <div class="col-12 md:col-8 lg:col-9 mb-3">
+                                <div class="col-12 md:col-8 lg:col-9">
                                     <div class="grid">
                                         <label for="profilePicture" class="form-label"></label>
                                         <input type="file" style="display: none" id="profilePicture" accept="image/*" />
@@ -243,7 +243,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 import axios from "axios";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
@@ -254,6 +254,7 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import NavBar from '@/components/NavBar.vue';
 import Footer from '@/components/Footer.vue'
+import { getDocumentIdByEmail } from "@/helper/helperFunctions.js";
 
 
 // import { db, storage } from "@/firebase";
@@ -308,7 +309,7 @@ const storage = getStorage();
 
 const toast = useToast();
 
-const route = useRoute();
+const router = useRouter();
 const auth = getAuth();
 let studentId = null;
 
@@ -332,6 +333,12 @@ const contact = ref('');
 const options = ref(['Quiz Data', 'Registered CSPs', 'Favourites']);
 
 onAuthStateChanged(auth, async (student) => {
+    //check if is student
+    let data = await getDocumentIdByEmail(student.email, "Users");
+      if (data.role == "csp") {
+        router.replace({ name: "CSPSignup" });
+      }
+
     if (student) {
         try {
             loading.value = false;

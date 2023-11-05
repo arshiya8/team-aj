@@ -33,7 +33,14 @@ const CSPImage = ref("");
 const CSPPoster = ref("");
 const desc = ref("");
 const title = ref("");
-let merchItem = ref({name: "", price: null, stripePrice: "", merchPicture: "", quantity: 0,quantityPrice: 0});
+let merchItem = ref({
+  name: "",
+  price: null,
+  stripePrice: "",
+  merchPicture: "",
+  quantity: 0,
+  quantityPrice: 0,
+});
 const datetime12h = ref();
 
 // zoom things
@@ -45,21 +52,13 @@ const meetingsList = ref();
 
 const zoomRegisterVisible = ref(false);
 
-const causes = ref([
-    'Environment',
-    'Education',
-    'Youth Development',
-]);
+const causes = ref(["Environment", "Education", "Youth Development"]);
 
 const selectedCause = ref();
 const postalCode = ref();
 const selectedSkills = ref();
 
-const skills = ref([
-    'Teaching',
-    'Event Planning',
-    'Communication',
-]);
+const skills = ref(["Teaching", "Event Planning", "Communication"]);
 
 const isLocal = ref(true);
 
@@ -95,10 +94,9 @@ const uploadImage = async (file, purpose) => {
   try {
     if (purpose == "profile") {
       var storageRef = sRef(storage, `images/${CSPid.value}/${file.name}`);
-    } else if (purpose == 'merchPic'){
+    } else if (purpose == "merchPic") {
       var storageRef = sRef(storage, `merchPic/${CSPid.value}/${file.name}`);
-    } 
-    else if (purpose=='poster'){
+    } else if (purpose == "poster") {
       var storageRef = sRef(storage, `poster/${CSPid.value}/${file.name}`);
     }
 
@@ -111,10 +109,10 @@ const uploadImage = async (file, purpose) => {
     if (purpose == "profile") {
       csp.value.imageURL = downloadURL;
       CSPImage.value = downloadURL;
-    } else if(purpose=='merchPic') {
+    } else if (purpose == "merchPic") {
       merchItem.value.merchPicture = downloadURL;
       csp.value.merchItem.merchPicture = downloadURL;
-    }else if (purpose == 'poster') {
+    } else if (purpose == "poster") {
       csp.value.posterURL = downloadURL;
       CSPPoster.value = downloadURL;
     }
@@ -138,7 +136,7 @@ function save() {
   csp.value.causes = selectedCause.value;
   csp.value.skills = selectedSkills.value;
   csp.value.postalCode = postalCode.value;
-  csp.value.merchItem = merchItem.value
+  csp.value.merchItem = merchItem.value;
 
   axios
     .put("https://smooserve-be.vercel.app/api/csp/" + CSPid.value, csp.value)
@@ -197,7 +195,6 @@ onMounted(async () => {
           desc.value = csp.value.desc;
           title.value = csp.value.title;
           merchItem.value = csp.value.merchItem;
-
 
           dbAccessToken.value = response.data.settings.zoomAccessToken;
           dbRefreshToken.value = response.data.settings.zoomRefreshToken;
@@ -407,15 +404,19 @@ const updateTokens = async () => {
             <div class="flex flex-column gap-3 mb-3">
               <div class="formgrid grid">
                 <div class="field col">
-                  <label for="title" class="w-full mb-3">Registration {{ registerChecked ? " Open" : " Closed" }}</label>
-              <InputSwitch v-model="registerChecked" />
+                  <label for="title" class="w-full mb-3"
+                    >Registration
+                    {{ registerChecked ? " Open" : " Closed" }}</label
+                  >
+                  <InputSwitch v-model="registerChecked" />
                 </div>
                 <div class="field col">
-                  <label for="title" class="w-full mb-3">{{ isLocal ? " Local" : " Overseas" }}</label>
-              <InputSwitch v-model="isLocal" />
+                  <label for="title" class="w-full mb-3">{{
+                    isLocal ? " Local" : " Overseas"
+                  }}</label>
+                  <InputSwitch v-model="isLocal" />
                 </div>
               </div>
-              
 
               <label for="title">Zoom Scheduler</label>
               <Button
@@ -436,23 +437,28 @@ const updateTokens = async () => {
               <div class="formgrid grid">
                 <div class="field col">
                   <label for="firstname2">Cause</label>
-                  <Dropdown v-model="selectedCause" :options="causes" placeholder="Select a Cause" class="w-full" />
+                  <Dropdown
+                    v-model="selectedCause"
+                    :options="causes"
+                    placeholder="Select a Cause"
+                    class="w-full"
+                  />
                 </div>
                 <div class="field col">
                   <label for="lastname2">Skills</label>
-                  <Dropdown v-model="selectedSkills" :options="skills" placeholder="Select a Skill" class="w-full" />
+                  <Dropdown
+                    v-model="selectedSkills"
+                    :options="skills"
+                    placeholder="Select a Skill"
+                    class="w-full"
+                  />
                 </div>
               </div>
 
               <label for="desc">Description</label>
-              <Textarea
-                id="desc"
-                v-model="desc"
-                rows="5"
-                cols="30"
-              />
+              <Textarea id="desc" v-model="desc" rows="5" cols="30" />
               <label for="postalCode">Postal Code</label>
-              <InputText id="postalCode"  v-model="postalCode" />
+              <InputText id="postalCode" v-model="postalCode" />
 
               <label for="Poster">Poster</label>
 
@@ -486,31 +492,56 @@ const updateTokens = async () => {
                 </div>
               </div>
             </div>
-            <label for="Merch">Merchandise</label>
-            <div class="md:mx-5 py-4">
-              <div  class="col-7 lg:col-9 mb-3">
+            <Divider type="solid"></Divider>
+
+            <label class="font-bold" for="Merch">Merchandise <i class="pi pi-shopping-bag"></i></label>
+            <div class="py-2">
+              <div class="col-7 lg:col-9 mb-3">
                 <div class="grid">
                   <div class="col-12">
-                    <div class="flex flex-column gap-3 p-3">
-
-                      <label class="font-bold">Item Name</label>
-                      <InputText v-model="merchItem.name" placeholder="Merch Name"/>
-                      <label class="font-bold">Item Price</label>
-                      <InputNumber v-model="merchItem.price" placeholder="Merch Price" />
-                      <label class="font-bold">Stripe Price</label>
-                      <InputText  v-model="merchItem.stripePrice" placeholder="Stripe Price"/>
-                      <label class="font-bold">Picture</label>
+                    <div class="flex flex-column gap-3">
+                      <label >Item Name</label>
+                      <InputText
+                        v-model="merchItem.name"
+                        placeholder="Merch Name"
+                      />
+                      <label>Item Price</label>
+                      <InputNumber
+                        v-model="merchItem.price"
+                        placeholder="Merch Price"
+                      />
+                      <label >Stripe Price</label>
+                      <InputText
+                        v-model="merchItem.stripePrice"
+                        placeholder="Stripe Price"
+                      />
+                      <label>Picture</label>
                       <!-- Additional merchandise input fields -->
-                      <Image v-if="merchItem.merchPicture != ''" :src="merchItem.merchPicture" alt="Image" width="250" preview />
+                      <Image
+                        v-if="merchItem.merchPicture != ''"
+                        :src="merchItem.merchPicture"
+                        alt="Image"
+                        width="250"
+                        preview
+                      />
                       <Skeleton v-else width="250px" height="250px"></Skeleton>
                       <div class="col-12 md:col-4 lg:col-6 mb-3">
                         <div class="grid">
-                          <Button rounded @click="add('merchPic')"
-                            class="w-full align-items-center justify-content-center mb-3"><i
-                              class="pi pi-plus px-2"></i><span class="px-2">Pick an Image</span></Button>
-                          <Button rounded outlined @click="remove('merchPic')"
-                            class="w-full align-items-center justify-content-center"><i class="pi pi-trash px-2"></i><span
-                              class="px-2">Remove</span></Button>
+                          <Button
+                            rounded
+                            @click="add('merchPic')"
+                            class="w-full align-items-center justify-content-center mb-3"
+                            ><i class="pi pi-plus px-2"></i
+                            ><span class="px-2">Pick an Image</span></Button
+                          >
+                          <Button
+                            rounded
+                            outlined
+                            @click="remove('merchPic')"
+                            class="w-full align-items-center justify-content-center"
+                            ><i class="pi pi-trash px-2"></i
+                            ><span class="px-2">Remove</span></Button
+                          >
                         </div>
                       </div>
                     </div>
@@ -518,7 +549,10 @@ const updateTokens = async () => {
                 </div>
               </div>
             </div>
+            <Divider type="solid"></Divider>
+
             <Button
+              outlined
               text
               rounded
               label="Save"

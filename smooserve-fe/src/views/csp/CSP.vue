@@ -138,7 +138,7 @@ function registerStudent() {
       toast.add({
         severity: "error",
         summary: "Error",
-        detail: "Cannot register your own CSP!",
+        detail: "Cannot register your own CSP! 👎",
         life: 3000,
       });
       //if registered
@@ -150,15 +150,28 @@ function registerStudent() {
         life: 3000,
       });
     } else if (!loggedIn.value) {
-      toast.add({
-        severity: "info",
-        summary: "Info",
-        detail: "Please login first",
-        life: 3000,
-      });
+      if (!zoomToastVisible.value) {
+        toast.add({
+          severity: "info",
+          summary: "Hello there",
+          group: "bc",
+        });
+        zoomToastVisible.value = true;
+      }
     }
   }
 }
+const zoomToastVisible = ref(false);
+
+const onReply = () => {
+  toast.removeGroup("bc");
+  zoomToastVisible.value = false;
+  router.push({ name: "Login" });
+};
+
+const onClose = () => {
+  zoomToastVisible.value = false;
+};
 
 function checkIfStudentRegistered() {
   var studentEmail = "";
@@ -261,6 +274,25 @@ const goToCSPHome = () => {
 };
 </script>
 <template>
+  <Toast position="top-right" group="bc" @close="onClose">
+    <template #message="slotProps">
+      <div class="flex flex-column align-items-start" style="flex: 1">
+        <div class="flex align-items-center gap-2">
+          <Avatar image="/layout/images/logo-white.png" shape="circle" />
+          <span class="font-bold text-900">{{ slotProps.message.summary }}</span>
+        </div>
+        <div class="font-medium text-lg my-3 text-900">
+          Please login first!
+        </div>
+        <Button
+          icon="pi pi-sign-in"
+          class="p-button-sm"
+          label="Login"
+          @click="onReply()"
+        ></Button>
+      </div>
+    </template>
+  </Toast>
   <Toast></Toast>
   <div v-if="loading" class="card">
     <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
@@ -270,13 +302,12 @@ const goToCSPHome = () => {
       :style="{ backgroundColor: backgroundColor }"
       class="w-full md:w-10 lg:w-9"
     >
-      <template #start> 
-       
-      </template>
+      <template #start> </template>
       <template #end>
-        <Button v-if="!cspOwner" 
-        @click="goToHome"
-        class="mr-2 roundBtn"
+        <Button
+          v-if="!cspOwner"
+          @click="goToHome"
+          class="mr-2 roundBtn"
           icon="pi pi-home"
           severity="primary"
           rounded
@@ -284,9 +315,10 @@ const goToCSPHome = () => {
           aria-label="Home"
         >
         </Button>
-        <Button v-if="cspOwner" 
-        @click="goToCSPHome"
-        class="mr-2 roundBtn"
+        <Button
+          v-if="cspOwner"
+          @click="goToCSPHome"
+          class="mr-2 roundBtn"
           icon="pi pi-home"
           severity="primary"
           rounded
@@ -381,7 +413,9 @@ const goToCSPHome = () => {
             rounded
             class="roundBtn"
             @click="registerStudent()"
-            >{{checkIfStudentRegistered() ? "Registered" : "Register" }}</Button
+            >{{
+              checkIfStudentRegistered() ? "Registered" : "Register"
+            }}</Button
           >
         </div>
 
@@ -395,7 +429,7 @@ const goToCSPHome = () => {
               :icon="'pi pi-' + url.icon"
               type="submit"
               :label="url.title ? url.title : url.url"
-              class="w-full p-3 text-xl mb-3"
+              class="w-full p-3 text-xl mb-3 pr-5"
               v-bind="csp.settings.buttons.type"
             ></Button
           ></a>
@@ -405,6 +439,7 @@ const goToCSPHome = () => {
   </div>
 </template>
 <style scoped>
+
 Button {
   background-color: v-bind("btncolour");
   color: v-bind("btnFontcolour");

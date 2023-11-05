@@ -64,7 +64,8 @@ function validateAndSave() {
     toast.add({
       severity: "error",
       summary: "Invalid Link Format",
-      detail: "Please check that the link is in a valid format (without 'http://' or 'https://').",
+      detail:
+        "Please check that the link is in a valid format (without 'http://' or 'https://').",
       life: 3000,
     });
   } else {
@@ -91,7 +92,6 @@ function changeIcon(name, index) {
 }
 
 function save() {
-
   loading.value = true;
   csp.value.settings.urls = urlList.value;
   axios
@@ -177,11 +177,22 @@ watch(
 </script>
 <template>
   <Toast></Toast>
-  <Dialog v-model:visible="visible" modal header="Add Icon" :style="{ width: '50vw' }"
-    :breakpoints="{ '960px': '75vw', '641px': '100vw' }">
+  <Dialog
+    v-model:visible="visible"
+    modal
+    header="Add Icon"
+    :style="{ width: '50vw' }"
+    :breakpoints="{ '960px': '75vw', '641px': '100vw' }"
+  >
     <div class="card flex justify-content-center">
-      <Listbox filter v-model="selectedIcon" :options="icons" optionLabel="name" :style="{ width: '100vw' }"
-        listStyle="max-height:250px">
+      <Listbox
+        filter
+        v-model="selectedIcon"
+        :options="icons"
+        optionLabel="name"
+        :style="{ width: '100vw' }"
+        listStyle="max-height:250px"
+      >
         <template #option="slotProps">
           <div class="flex align-items-center">
             <i :class="'pi pi-' + slotProps.option.name + ' px-2'"></i>
@@ -192,8 +203,12 @@ watch(
     </div>
     <template #footer>
       <div class="card flex justify-content-center">
-        <Button rounded label="Add" icon="pi pi-plus"
-          @click="(visible = false), changeIcon(selectedIcon, currentIndex)" />
+        <Button
+          rounded
+          label="Add"
+          icon="pi pi-plus"
+          @click="(visible = false), changeIcon(selectedIcon, currentIndex)"
+        />
       </div>
     </template>
   </Dialog>
@@ -201,7 +216,7 @@ watch(
   <div v-if="loading" class="card">
     <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
   </div>
-  <div v-else class="surface-ground flex flex-column w-full h-screen">
+  <div v-else class="surface-ground flex flex-column w-full h-full">
     <!-- menu -->
     <CSPNavBar />
 
@@ -213,20 +228,47 @@ watch(
           <template #title> <span class="px-5">Links</span></template>
           <template #content>
             <div class="md:mx-5">
-              <Button rounded @click="add()" class="w-full align-items-center justify-content-center mb-3"><i
-                  class="pi pi-plus px-2"></i><span class="px-2">Add Link</span></Button>
-              <draggable class="list-group" tag="transition-group" :component-data="{
-                tag: 'ul',
-                type: 'transition-group',
-                name: !drag ? 'flip-list' : null,
-              }" v-model="urlList" v-bind="dragOptions" @start="drag = true" @end="drag = false" item-key="order"
-                handle=".handle">
+              <Divider
+                v-if="urlList == ''"
+                align="center"
+                type="solid"
+                class="mb-5"
+              >
+                <span>No links right now. Add a custom link!</span>
+              </Divider>
+              <Button
+                rounded
+                @click="add()"
+                class="w-full align-items-center justify-content-center mb-3"
+                ><i class="pi pi-plus px-2"></i
+                ><span class="px-2">Add Link</span></Button
+              >
+              <draggable
+                class="list-group"
+                tag="transition-group"
+                :component-data="{
+                  tag: 'ul',
+                  type: 'transition-group',
+                  name: !drag ? 'flip-list' : null,
+                }"
+                v-model="urlList"
+                v-bind="dragOptions"
+                @start="drag = true"
+                @end="drag = false"
+                item-key="order"
+                handle=".handle"
+              >
                 <template #item="{ element, index }">
                   <li class="mb-3" style="list-style-type: none">
                     <div class="bg-white p-2 mt-4 mb-4 card cardLink">
                       <div class="grid gap-3 align-items-center">
-                        <div class="col-1 text-center handle h-full">
-                          <i class="pi pi-sort-alt" v-tooltip.top="'Drag to re-arrange your links'"></i>
+                        <div
+                          class="col-1 text-center handle h-full cursor-move"
+                        >
+                          <i
+                            class="pi pi-sort-alt"
+                            v-tooltip.top="'Drag to re-arrange your links'"
+                          ></i>
                         </div>
                         <!-- <div class="col-1 text-center">
                           <i
@@ -244,9 +286,10 @@ watch(
                                 <label class="font-bold">Title</label>
                                 <InputText id="title" v-model="element.title" />
                                 <label class="font-bold">URL</label>
-                                <p size="small" style="font-style: italic">Format: www.website.com instead of
+                                <span size="small" style="font-style: italic">
+                                  Format: www.website.com instead of
                                   http://www.website.com
-                                </p>
+                                </span>
                                 <InputText id="link" v-model="element.url" />
                               </div>
                             </div>
@@ -255,20 +298,32 @@ watch(
                         <div class="col-1 lg:col-1 text-center">
                           <div class="grid gap-1">
                             <div class="col-12">
-                              <i :class="'hover:bg-primary-100 p-inputgroup-addon pi pi-' +
-                                element.icon
-                                " @click="
-    (visible = true), passIcon(element, index)
-    "></i>
+                              <i
+                                v-tooltip.top="'Change icon here'"
+                                :class="
+                                  'cursor-pointer hover:bg-primary-100 p-inputgroup-addon pi pi-' +
+                                  element.icon
+                                "
+                                @click="
+                                  (visible = true), passIcon(element, index)
+                                "
+                              ></i>
                             </div>
                             <div class="col-12">
-                              <InputSwitch v-model="element.active" v-tooltip.top="element.active
-                                ? 'This link is active'
-                                : 'This link is not active'
-                                " />
+                              <InputSwitch
+                                v-model="element.active"
+                                v-tooltip.top="
+                                  element.active
+                                    ? 'This link is active'
+                                    : 'This link is not active'
+                                "
+                              />
                             </div>
                             <div class="col-12">
-                              <i class="pi pi-trash close" @click="removeAt(index)"></i>
+                              <i
+                                class="pi pi-trash close cursor-pointer"
+                                @click="removeAt(index)"
+                              ></i>
                             </div>
                           </div>
                         </div>
@@ -297,12 +352,15 @@ watch(
                   </li>
                 </template>
               </draggable>
-
-              <Button text rounded label="Save" @click="validateAndSave"
-                class="w-full align-items-center justify-content-center">
+              <Button
+                outlined
+                rounded
+                label="Save"
+                @click="validateAndSave"
+                class="w-full align-items-center justify-content-center"
+              >
                 <i class="pi pi-save px-2"></i>Save
               </Button>
-
             </div>
           </template>
         </Card>

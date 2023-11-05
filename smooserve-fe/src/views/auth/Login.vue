@@ -219,6 +219,7 @@ async function addStudent(result) {
       volunteering_location: [],
     },
     registeredCSPs: [],
+    profilePicture: ""
   };
   axios
     .post("https://smooserve-be.vercel.app/api/student/", data)
