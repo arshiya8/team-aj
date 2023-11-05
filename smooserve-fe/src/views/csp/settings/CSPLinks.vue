@@ -244,7 +244,8 @@ watch(
                                 <label class="font-bold">Title</label>
                                 <InputText id="title" v-model="element.title" />
                                 <label class="font-bold">URL</label>
-                                <p size="small" style="font-style: italic">Format: www.website.com instead of http://www.website.com
+                                <p size="small" style="font-style: italic">Format: www.website.com instead of
+                                  http://www.website.com
                                 </p>
                                 <InputText id="link" v-model="element.url" />
                               </div>
@@ -262,8 +263,8 @@ watch(
                             </div>
                             <div class="col-12">
                               <InputSwitch v-model="element.active" v-tooltip.top="element.active
-                                  ? 'This link is active'
-                                  : 'This link is not active'
+                                ? 'This link is active'
+                                : 'This link is not active'
                                 " />
                             </div>
                             <div class="col-12">

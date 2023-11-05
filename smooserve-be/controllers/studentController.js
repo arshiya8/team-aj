@@ -33,6 +33,7 @@ const getAllStudents = async (req, res, next) => {
                     doc.data().registeredCsps,
                     doc.data().achievements,
                     doc.data().statusOfCompletion,
+                    doc.data().cart
                 );
                 studentsArray.push(student);
             });

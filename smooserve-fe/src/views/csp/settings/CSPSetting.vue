@@ -33,7 +33,7 @@ const CSPImage = ref("");
 const CSPPoster = ref("");
 const desc = ref("");
 const title = ref("");
-
+let merchItem = ref({name: "", price: null, stripePrice: "", merchPicture: "", quantity: 0,quantityPrice: 0});
 const datetime12h = ref();
 
 // zoom things
@@ -85,6 +85,9 @@ function remove(purpose) {
   } else if (purpose == "poster") {
     CSPPoster.value = "";
     csp.value.posterURL = "";
+  } else if (purpose == "merchPic") {
+    merchItem.value.merchPicture = "";
+    csp.value.posterURL = "";
   }
 }
 
@@ -92,7 +95,10 @@ const uploadImage = async (file, purpose) => {
   try {
     if (purpose == "profile") {
       var storageRef = sRef(storage, `images/${CSPid.value}/${file.name}`);
-    } else {
+    } else if (purpose == 'merchPic'){
+      var storageRef = sRef(storage, `merchPic/${CSPid.value}/${file.name}`);
+    } 
+    else if (purpose=='poster'){
       var storageRef = sRef(storage, `poster/${CSPid.value}/${file.name}`);
     }
 
@@ -105,7 +111,10 @@ const uploadImage = async (file, purpose) => {
     if (purpose == "profile") {
       csp.value.imageURL = downloadURL;
       CSPImage.value = downloadURL;
-    } else {
+    } else if(purpose=='merchPic') {
+      merchItem.value.merchPicture = downloadURL;
+      csp.value.merchItem.merchPicture = downloadURL;
+    }else if (purpose == 'poster') {
       csp.value.posterURL = downloadURL;
       CSPPoster.value = downloadURL;
     }
@@ -129,6 +138,7 @@ function save() {
   csp.value.causes = selectedCause.value;
   csp.value.skills = selectedSkills.value;
   csp.value.postalCode = postalCode.value;
+  csp.value.merchItem = merchItem.value
 
   axios
     .put("https://smooserve-be.vercel.app/api/csp/" + CSPid.value, csp.value)
@@ -186,6 +196,7 @@ onMounted(async () => {
           postalCode.value = csp.postalCode;
           desc.value = csp.value.desc;
           title.value = csp.value.title;
+          merchItem.value = csp.value.merchItem;
 
 
           dbAccessToken.value = response.data.settings.zoomAccessToken;
@@ -472,6 +483,38 @@ const updateTokens = async () => {
                     ><i class="pi pi-trash px-2"></i
                     ><span class="px-2">Remove</span></Button
                   >
+                </div>
+              </div>
+            </div>
+            <label for="Merch">Merchandise</label>
+            <div class="md:mx-5 py-4">
+              <div  class="col-7 lg:col-9 mb-3">
+                <div class="grid">
+                  <div class="col-12">
+                    <div class="flex flex-column gap-3 p-3">
+
+                      <label class="font-bold">Item Name</label>
+                      <InputText v-model="merchItem.name" placeholder="Merch Name"/>
+                      <label class="font-bold">Item Price</label>
+                      <InputNumber v-model="merchItem.price" placeholder="Merch Price" />
+                      <label class="font-bold">Stripe Price</label>
+                      <InputText  v-model="merchItem.stripePrice" placeholder="Stripe Price"/>
+                      <label class="font-bold">Picture</label>
+                      <!-- Additional merchandise input fields -->
+                      <Image v-if="merchItem.merchPicture != ''" :src="merchItem.merchPicture" alt="Image" width="250" preview />
+                      <Skeleton v-else width="250px" height="250px"></Skeleton>
+                      <div class="col-12 md:col-4 lg:col-6 mb-3">
+                        <div class="grid">
+                          <Button rounded @click="add('merchPic')"
+                            class="w-full align-items-center justify-content-center mb-3"><i
+                              class="pi pi-plus px-2"></i><span class="px-2">Pick an Image</span></Button>
+                          <Button rounded outlined @click="remove('merchPic')"
+                            class="w-full align-items-center justify-content-center"><i class="pi pi-trash px-2"></i><span
+                              class="px-2">Remove</span></Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

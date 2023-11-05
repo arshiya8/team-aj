@@ -127,6 +127,7 @@ async function addCSP(result) {
     title: result.user.displayName,
     igURL: "",
     views: 0,
+    merchItem: {name: "", price: null, stripePrice: "", merchPicture: "", quantity: 0, quantityPrice: 0},
     telehandle: "",
     registration: {
       registeredStudents: [],
@@ -162,10 +163,6 @@ async function addCSP(result) {
     signupFormURL: "",
     causes: "",
     isLocal: true,
-    location: {
-      lat: 0,
-      long: 0,
-    },
   };
   axios
     .post("https://smooserve-be.vercel.app/api/csp/", data)

@@ -7,7 +7,7 @@ const config = require("./config");
 const studentRoutes = require("./routes/student-routes");
 const cspRoutes = require("./routes/csp-routes");
 const zoomRoutes = require("./routes/zoom-routes");
-// const stripe = require("stripe")('sk_test_51O2xN2Alv9o8wDQ6TVmtjDWdmWlrmZwIXsXaOmxarWnjDH48KNuvwiCEGwtsNkEtuAMNyCJ71izX8uEjUvXM1gRu00cl9eyumN');
+// 
 
 const app = express();
 

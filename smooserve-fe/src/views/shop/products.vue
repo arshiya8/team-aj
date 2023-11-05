@@ -15,7 +15,7 @@
                 <div class="col-12">
                     <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
                         <img class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
-                            :src="`${slotProps.data.pic}`" :alt="slotProps.data.name" />
+                            :src="`${slotProps.data.merchPicture}`" :alt="slotProps.data.name" />
                         <div
                             class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
                             <div class="flex flex-column align-items-center sm:align-items-start gap-3">
@@ -66,11 +66,11 @@
                 style="background: var(--style-cards-fancy-bg); border: 1px solid rgba(255, 255, 255, 0.1); backgroundBlendMode: normal, color-dodge; width: 300px;background-color: black;">
                 <div class="content border-round-sm">
                     <div class="content-image bg-cover bg-no-repeat bg-center relative" style="height: 244px; ">
-                        <img :src="product.pic" style="width: 14em; margin-left: 30px;" />
-                        <div class="heart-container">
+                        <img :src="product.merchPicture" style="width: 14em; margin-left: 30px;" />
+                        <!-- <div class="heart-container">
                             <i class="fas fa-heart clickable" :class="{ 'heart-red': isProductFavorite(product) }"
                                 @click="toggleHeartColor(product)"></i>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="content-info mt-2 border-round-sm bg-white-alpha-10 shadow-1 py-1"
                         style="backdropFilter: blur(27px);">
@@ -117,6 +117,10 @@ import CaroPics from '@/components/CaroPics.vue';
 import Footer from '@/components/Footer.vue';
 import { ref, watch, onMounted } from 'vue';
 import { loadStripe } from "@stripe/stripe-js";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/firebase";
+import axios from "axios";
 
 export default {
     components: {
@@ -126,18 +130,41 @@ export default {
     },
     setup() {
         const visible = ref(false);
-        const favProducts = ref([]);
+
         const cart = ref([]);
         const totalPrice = ref(null);
         let stripe = null;
         let loading = ref(true);
-        let elements = null;
+        const auth = getAuth();
+        let studentId = null;
+        const csps = ref([]);
+        const products = ref([])
+
         onMounted(async () => {
             // const ELEMENT_TYPE = "card";
 
             stripe = await loadStripe(import.meta.env.VITE_STRIPE_KEY);
-
-
+            axios
+                .get("https://smooserve-be.vercel.app/api/csps")
+                .then((response) => {
+                    csps.value = response.data;
+                    console.log(csps.value);
+                    csps.value.forEach((csp) => {
+                        if (csp.merchItem.name != "") {
+                            products.value.push(csp.merchItem);
+                        }
+                    });
+                    console.log(products.value);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    toast.add({
+                        severity: "error",
+                        summary: "Error",
+                        detail: error,
+                        life: 3000,
+                    });
+                });
             // elements = stripe.elements();
             // const element = elements.create(ELEMENT_TYPE, style);
             // element.mount("#stripe-element-mount-point");
@@ -145,8 +172,8 @@ export default {
         });
         function redirect() {
             stripe.redirectToCheckout({
-                successUrl: "http://localhost:8080/success",
-                cancelUrl: "http://localhost:8080/cancel",
+                successUrl: "http://localhost:5173/#/success",
+                cancelUrl: "http://localhost:5173/#/cancel",
                 lineItems: cart.value.map((item) => {
                     return {
                         price: item.stripePrice,
@@ -157,31 +184,76 @@ export default {
             })
         }
 
+        onAuthStateChanged(auth, async (student) => {
+            if (student) {
+                try {
+                    const querySnapshot = await getDocs(collection(db, "students"));
+                    querySnapshot.forEach((doc) => {
+                        const studentEmail = doc.data().email;
+                        if (studentEmail === student.email) {
+                            studentId = doc.id;
+                            cart.value = doc.data().cart || [];
+                        }
+                    });
 
-
-        const toggleHeartColor = (product) => {
-            //   if (auth.currentUser) {
-            const index = favProducts.value.findIndex((favProduct) => favProduct.name === product.name);
-            if (index === -1) {
-                // CSP is not in favorites, add it
-                favProducts.value.push(product);
+                    // If studentId is still null, no matching email was found in the collection
+                    if (studentId === null) {
+                        console.log("No matching id found in the database.");
+                    } else {
+                        console.log("Student ID found:", studentId);
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
             } else {
-                // CSP is already in favorites, remove it
-                favProducts.value.splice(index, 1);
+                studentId = null;
+                cart.value = []; // Clear favorites for non-authenticated users
             }
-            // Update the student's favorite CSPs in the database
-            // updateStudent(favoriteCSPs.value);
-            // Update localStorage with the updated favorite CSPs list
-            // localStorage.setItem('favoriteCSPs', JSON.stringify(favoriteCSPs.value));
-            //   } else {
-            //     console.error('User is not authenticated.');
-            //     alert("Sign in first!");
-            //   }
+        });
+
+
+        // const toggleHeartColor = (product) => {
+        //     if (auth.currentUser) {
+        //         const index = favProducts.value.findIndex((favProduct) => favProduct.name === product.name);
+        //         if (index === -1) {
+        //             // CSP is not in favorites, add it
+        //             favProducts.value.push(product);
+        //         } else {
+        //             // CSP is already in favorites, remove it
+        //             favProducts.value.splice(index, 1);
+        //         }
+        //         // Update the student's favorite Products in the database
+        //         updateStudent(favProducts.value);
+        //         // Update localStorage with the updated favorite CSPs list
+        //         localStorage.setItem('favoriteProducts', JSON.stringify(favProducts.value));
+        //     } else {
+        //         console.error('User is not authenticated.');
+        //         alert("Sign in first!");
+        //     }
+        // };
+
+        const updateStudent = async (updatedProducts) => {
+            try {
+                // Ensure userId is not null before making the API request
+                if (studentId != null) {
+                    const response = await axios.put(
+                        `https://smooserve-be.vercel.app/api/student/${studentId}`,
+                        {
+                            cart: updatedProducts
+                        }
+                    );
+                    console.log(response.data);
+                } else {
+                    console.error("User is not authenticated.");
+                }
+            } catch (error) {
+                console.error("Error updating to cart:", error);
+            }
         };
 
-        const isProductFavorite = (product) => {
-            return favProducts.value.some((favProduct) => favProduct.name === product.name);
-        };
+        // const isProductFavorite = (product) => {
+        //     return favProducts.value.some((favProduct) => favProduct.name === product.name);
+        // };
 
         const addToCart = (product) => {
             // Check if the product is already in the cart
@@ -196,7 +268,8 @@ export default {
                 cart.value.push({ ...product, quantity: 1, quantityPrice: product.price });
 
             }
-
+            // Update the cart in the database
+            updateStudent(cart.value);
             // Optionally, you can save the cart in local storage for persistence
             localStorage.setItem('cart', JSON.stringify(cart.value));
         };
@@ -207,10 +280,14 @@ export default {
             if (index !== -1) {
                 cart.value[index].quantity++;
                 cart.value[index].quantityPrice = cart.value[index].quantity * cart.value[index].price;
+                updateStudent(cart.value);
+                localStorage.setItem('cart', JSON.stringify(cart.value));
             } else {
                 // If the product is not in the cart, add it with a quantity of 1 and calculate quantityPrice
                 const newItem = { ...product, quantity: 1, quantityPrice: product.price };
                 cart.value.push(newItem);
+                updateStudent(cart.value);
+                localStorage.setItem('cart', JSON.stringify(cart.value));
             }
         };
         const decreaseItem = (product) => {
@@ -219,8 +296,12 @@ export default {
                 if (cart.value[index].quantity > 1) {
                     cart.value[index].quantity--;
                     cart.value[index].quantityPrice = cart.value[index].quantity * cart.value[index].price;
+                    updateStudent(cart.value);
+                    localStorage.setItem('cart', JSON.stringify(cart.value));
                 } else {
                     cart.value.splice(index, 1);
+                    updateStudent(cart.value);
+                    localStorage.setItem('cart', JSON.stringify(cart.value));
                 }
             }
 
@@ -230,6 +311,8 @@ export default {
             const index = cart.value.findIndex((item) => item.name === product.name);
             if (index !== -1) {
                 cart.value.splice(index, 1);
+                updateStudent(cart.value);
+                localStorage.setItem('cart', JSON.stringify(cart.value));
             }
         }
 
@@ -238,60 +321,60 @@ export default {
             totalPrice.value = cart.value.reduce((total, item) => total + item.quantityPrice, 0);
         }, { deep: true });
 
-        const products = [
-            {
-                name: 'Name Tent',
-                price: 2,
-                stripePrice: 'price_1O8OHbAlv9o8wDQ6gBNPnCuD',
-                pic: '/layout/shopImg/cap.jpg',
-                quantity: 0,
-                quantityPrice: 0
-            },
-            {
-                name: 'PNK T-shirt',
-                price: 15,
-                stripePrice: 'price_1O8OIRAlv9o8wDQ6clLitvqh',
-                pic: '/layout/shopImg/shirt1.jpg',
-                quantity: 0,
-                quantityPrice: 0
-            },
-            {
-                name: 'Capybara T shirt',
-                price: 15,
-                stripePrice: 'price_1O8OJ5Alv9o8wDQ6qt03SQIZ',
-                pic: '/layout/shopImg/capy.jpg',
-                quantity: 0,
-                quantityPrice: 0
-            },
-            {
-                name: 'Tote bag',
-                price: 12,
-                stripePrice: 'price_1O8OEcAlv9o8wDQ6jyoCfbXf',
-                pic: '/layout/shopImg/tote.jpg',
-                quantity: 0,
-                quantityPrice: 0
-            },
-            {
-                name: 'Handmade Terranium',
-                price: 12,
-                stripePrice: 'price_1O8OFtAlv9o8wDQ6sLp8Hrs1',
-                pic: '/layout/shopImg/terranium.jpg',
-                quantity: 0,
-                quantityPrice: 0
-            },
-            {
-                name: 'Ankle Socks',
-                price: 4,
-                stripePrice: 'price_1O8OGZAlv9o8wDQ6UE6OfrS8',
-                pic: '/layout/shopImg/socks.jpg',
-                quantity: 0,
-                quantityPrice: 0
-            },
-        ]
+        // const products = [
+        //     {
+        //         name: 'Name Tent',
+        //         price: 2,
+        //         stripePrice: 'price_1O8OHbAlv9o8wDQ6gBNPnCuD',
+        //         pic: '/layout/shopImg/cap.jpg',
+        //         quantity: 0,
+        //         quantityPrice: 0
+        //     },
+        //     {
+        //         name: 'PNK T-shirt',
+        //         price: 15,
+        //         stripePrice: 'price_1O8OIRAlv9o8wDQ6clLitvqh',
+        //         pic: '/layout/shopImg/shirt1.jpg',
+        //         quantity: 0,
+        //         quantityPrice: 0
+        //     },
+        //     {
+        //         name: 'Capybara T shirt',
+        //         price: 15,
+        //         stripePrice: 'price_1O8OJ5Alv9o8wDQ6qt03SQIZ',
+        //         pic: '/layout/shopImg/capy.jpg',
+        //         quantity: 0,
+        //         quantityPrice: 0
+        //     },
+        //     {
+        //         name: 'Tote bag',
+        //         price: 12,
+        //         stripePrice: 'price_1O8OEcAlv9o8wDQ6jyoCfbXf',
+        //         pic: '/layout/shopImg/tote.jpg',
+        //         quantity: 0,
+        //         quantityPrice: 0
+        //     },
+        //     {
+        //         name: 'Handmade Terranium',
+        //         price: 12,
+        //         stripePrice: 'price_1O8OFtAlv9o8wDQ6sLp8Hrs1',
+        //         pic: '/layout/shopImg/terranium.jpg',
+        //         quantity: 0,
+        //         quantityPrice: 0
+        //     },
+        //     {
+        //         name: 'Ankle Socks',
+        //         price: 4,
+        //         stripePrice: 'price_1O8OGZAlv9o8wDQ6UE6OfrS8',
+        //         pic: '/layout/shopImg/socks.jpg',
+        //         quantity: 0,
+        //         quantityPrice: 0
+        //     },
+        // ]
         return {
             products,
-            isProductFavorite,
-            toggleHeartColor,
+            // isProductFavorite,
+            // toggleHeartColor,
             addToCart,
             visible,
             cart,

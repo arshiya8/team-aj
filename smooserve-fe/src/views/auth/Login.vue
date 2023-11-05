@@ -204,6 +204,7 @@ async function addStudent(result) {
         id: "",
       },
     ],
+    cart: [],
     quizPreference: {
       first_name: "",
       last_name: "",

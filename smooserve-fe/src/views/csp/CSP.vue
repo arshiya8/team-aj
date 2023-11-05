@@ -110,7 +110,7 @@ function registerStudent() {
     // update registration for csp
     csp.value.registration.registeredStudents.push({
       email: studentEmail,
-      status: "registered",
+      status: "Registered",
     });
     axios
       .put("https://smooserve-be.vercel.app/api/csp/" + id, csp.value)
