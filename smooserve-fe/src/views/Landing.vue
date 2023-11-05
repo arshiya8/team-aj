@@ -76,8 +76,8 @@ export default {
       } else {
         console.error("User is not authenticated.");
         toast.add({
-          severity: "error",
-          summary: "error",
+          severity: "info",
+          summary: "Info",
           detail: "Please login first",
           life: 3000,
         });
@@ -133,8 +133,8 @@ export default {
     const toggleAutoFilter = async () => {
       if (!loggedIn.value) {
         toast.add({
-          severity: "error",
-          summary: "error",
+          severity: "info",
+          summary: "Info",
           detail: "Please login first",
           life: 3000,
         });

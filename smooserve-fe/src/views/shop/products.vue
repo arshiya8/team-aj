@@ -163,8 +163,8 @@ export default {
                 .catch((error) => {
                     console.log(error);
                     toast.add({
-                        severity: "error",
-                        summary: "Error",
+                        severity: "info",
+                        summary: "Info",
                         detail: error,
                         life: 3000,
                     });
@@ -224,8 +224,8 @@ export default {
                 visible.value = true
             } else {
                 toast.add({
-                        severity: "error",
-                        summary: "error",
+                        severity: "info",
+                        summary: "Info",
                         detail: "Please login first",
                         life: 3000,
                     });
@@ -266,8 +266,8 @@ export default {
                 } else {
                     console.error("User is not authenticated.");
                     toast.add({
-                        severity: "error",
-                        summary: "error",
+                        severity: "info",
+                        summary: "Info",
                         detail: "Please login first",
                         life: 3000,
                     });
@@ -286,8 +286,8 @@ export default {
 
             if (!loggedIn.value) {
                 toast.add({
-                    severity: "error",
-                    summary: "error",
+                    severity: "info",
+                    summary: "Info",
                     detail: "Please login first",
                     life: 3000,
                 });
@@ -432,19 +432,7 @@ export default {
 </script>
 
 <style>
-.heart-container {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    z-index: 1;
-    color: white
-}
-
-.heart-red {
-    color: red;
-}
-
-.clickable {
-    cursor: pointer;
+.p-galleria .p-galleria-indicators .p-galleria-indicator.p-highlight button {
+  background-color: #0053a6;
 }
 </style>
