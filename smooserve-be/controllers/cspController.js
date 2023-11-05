@@ -40,6 +40,8 @@ const getAllCsps = async (req, res, next) => {
                     doc.data().settings,
                     doc.data().posterURL,
                     doc.data().postalCode,
+                    doc.data().merchItem,
+                    doc.data().registration,
                 );
                 cspsArray.push(csp);
             });
