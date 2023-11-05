@@ -23,6 +23,7 @@ export default {
     const auth = getAuth();
     const router = useRouter();
     let studentId = null;
+    const loggedIn = ref(false);
 
     onAuthStateChanged(auth, async (student) => {
       if (student) {
@@ -41,6 +42,7 @@ export default {
             console.log("No matching id found in the database.");
           } else {
             console.log("Student ID found:", studentId);
+            loggedIn.value = true
           }
         } catch (error) {
           console.error(error);
@@ -48,6 +50,7 @@ export default {
       } else {
         studentId = null;
         favoriteCSPs.value = []; // Clear favorites for non-authenticated users
+        loggedIn.value = false
       }
     });
 
@@ -72,7 +75,12 @@ export default {
         );
       } else {
         console.error("User is not authenticated.");
-        alert("Sign in first!");
+        toast.add({
+          severity: "error",
+          summary: "error",
+          detail: "Please login first",
+          life: 3000,
+        });
       }
     };
     // const toggleHeartColor = (csp) => {
@@ -123,31 +131,41 @@ export default {
     };
 
     const toggleAutoFilter = async () => {
-      const response = await axios.get(
-        `https://smooserve-be.vercel.app/api/student/${studentId}`,
-        {}
-      );
-      console.log(response.data.quizPreference)
-      const causes = response.data.quizPreference.passionate_about;
-      const skills = response.data.quizPreference.skills;
-      const location = response.data.quizPreference.isLocal;
-
-
-      const auto_filter = csps.value.filter((csp) => {
-        return (
-          causes.includes(csp.cause) ||
-          skills.includes(csp.skills) ||
-          location === csp.isLocal
+      if (!loggedIn.value) {
+        toast.add({
+          severity: "error",
+          summary: "error",
+          detail: "Please login first",
+          life: 3000,
+        });
+      } else {
+        const response = await axios.get(
+          `https://smooserve-be.vercel.app/api/student/${studentId}`,
+          {}
         );
-      });
-      csps.value = auto_filter;
+        console.log(response.data.quizPreference)
+        const causes = response.data.quizPreference.passionate_about;
+        const skills = response.data.quizPreference.skills;
+        const location = response.data.quizPreference.isLocal;
 
-      // console.log(auto_filter);
 
-      selectedValue4.value = selectedValue4.value === '' ? 'choiceX' : '';
-      if (selectedValue4.value === "") {
-        csps.value = cspsOriginal.value
+        const auto_filter = csps.value.filter((csp) => {
+          return (
+            causes.includes(csp.cause) ||
+            skills.includes(csp.skills) ||
+            location === csp.isLocal
+          );
+        });
+        csps.value = auto_filter;
+
+        // console.log(auto_filter);
+
+        selectedValue4.value = selectedValue4.value === '' ? 'choiceX' : '';
+        if (selectedValue4.value === "") {
+          csps.value = cspsOriginal.value
+        }
       }
+
     };
 
 
@@ -350,6 +368,7 @@ export default {
 
 <template>
   <!-- navbar component -->
+  <Toast></Toast>
   <NavBar />
 
   <!-- headers -->
@@ -446,8 +465,8 @@ export default {
             </div>
 
             <div class="flex align-items-center justify-content-center col-12 lg:col-3">
-              <Dropdown v-model="selectedValue3" editable :options="locations" optionLabel="name" style="margin-right: 16px;"
-                placeholder="Select a location" />
+              <Dropdown v-model="selectedValue3" editable :options="locations" optionLabel="name"
+                style="margin-right: 16px;" placeholder="Select a location" />
             </div>
             <div class="flex align-items-center justify-content-center col-12 lg:col-2">
               <Button rounded icon="pi pi-search" label="Search" style="margin-left: 8px; min-width: 100px;"

@@ -1,4 +1,5 @@
 <template>
+    <Toast></Toast>
     <Navbar />
     <CaroPics />
     <div class="row pb-3">
@@ -6,7 +7,7 @@
           text-align: center; margin-top: 30px; font-size: 2rem">
             WHAT'S NEW AT SMOOSHOP!</h2>
     </div>
-    <Button style="margin-bottom: 5px" @click="visible = true">Check cart <i class="px-2 pi pi-shopping-cart"></i> </Button>
+    <Button style="margin-bottom: 5px" @click="checkCart">Check cart <i class="px-2 pi pi-shopping-cart"></i> </Button>
 
     <Dialog v-model:visible="visible" modal header="Cart Items" :style="{ width: '50rem' }"
         :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
@@ -121,6 +122,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/firebase";
 import axios from "axios";
+import { useToast } from "primevue/usetoast";
 
 export default {
     components: {
@@ -139,6 +141,8 @@ export default {
         let studentId = null;
         const csps = ref([]);
         const products = ref([])
+        const loggedIn = ref(false);
+        const toast = useToast();
 
         onMounted(async () => {
             // const ELEMENT_TYPE = "card";
@@ -193,14 +197,17 @@ export default {
                         if (studentEmail === student.email) {
                             studentId = doc.id;
                             cart.value = doc.data().cart || [];
+                            loggedIn.value = true;
                         }
                     });
 
                     // If studentId is still null, no matching email was found in the collection
                     if (studentId === null) {
                         console.log("No matching id found in the database.");
+
                     } else {
                         console.log("Student ID found:", studentId);
+                        loggedIn.value = true;
                     }
                 } catch (error) {
                     console.error(error);
@@ -208,10 +215,22 @@ export default {
             } else {
                 studentId = null;
                 cart.value = []; // Clear favorites for non-authenticated users
+                loggedIn.value = false;
+
             }
         });
-
-
+        const checkCart = () => {
+            if (loggedIn.value) {
+                visible.value = true
+            } else {
+                toast.add({
+                        severity: "error",
+                        summary: "error",
+                        detail: "Please login first",
+                        life: 3000,
+                    });
+            }
+        }
         // const toggleHeartColor = (product) => {
         //     if (auth.currentUser) {
         //         const index = favProducts.value.findIndex((favProduct) => favProduct.name === product.name);
@@ -235,6 +254,7 @@ export default {
         const updateStudent = async (updatedProducts) => {
             try {
                 // Ensure userId is not null before making the API request
+
                 if (studentId != null) {
                     const response = await axios.put(
                         `https://smooserve-be.vercel.app/api/student/${studentId}`,
@@ -245,9 +265,16 @@ export default {
                     console.log(response.data);
                 } else {
                     console.error("User is not authenticated.");
+                    toast.add({
+                        severity: "error",
+                        summary: "error",
+                        detail: "Please login first",
+                        life: 3000,
+                    });
                 }
             } catch (error) {
                 console.error("Error updating to cart:", error);
+
             }
         };
 
@@ -256,22 +283,33 @@ export default {
         // };
 
         const addToCart = (product) => {
-            // Check if the product is already in the cart
-            const existingProductIndex = cart.value.findIndex((item) => item.name === product.name);
 
-            if (existingProductIndex !== -1) {
-                // If the product is already in the cart, increase its quantity
-                cart.value[existingProductIndex].quantity++;
-                cart.value[existingProductIndex].quantityPrice = cart.value[existingProductIndex].quantity * cart.value[existingProductIndex].price;
+            if (!loggedIn.value) {
+                toast.add({
+                    severity: "error",
+                    summary: "error",
+                    detail: "Please login first",
+                    life: 3000,
+                });
             } else {
-                // If the product is not in the cart, add it with a quantity of 1
-                cart.value.push({ ...product, quantity: 1, quantityPrice: product.price });
+                // Check if the product is already in the cart
+                const existingProductIndex = cart.value.findIndex((item) => item.name === product.name);
 
+                if (existingProductIndex !== -1) {
+                    // If the product is already in the cart, increase its quantity
+                    cart.value[existingProductIndex].quantity++;
+                    cart.value[existingProductIndex].quantityPrice = cart.value[existingProductIndex].quantity * cart.value[existingProductIndex].price;
+                } else {
+                    // If the product is not in the cart, add it with a quantity of 1
+                    cart.value.push({ ...product, quantity: 1, quantityPrice: product.price });
+
+                }
+                // Update the cart in the database
+                updateStudent(cart.value);
+                // Optionally, you can save the cart in local storage for persistence
+                localStorage.setItem('cart', JSON.stringify(cart.value));
             }
-            // Update the cart in the database
-            updateStudent(cart.value);
-            // Optionally, you can save the cart in local storage for persistence
-            localStorage.setItem('cart', JSON.stringify(cart.value));
+
         };
         console.log(cart)
 
@@ -382,7 +420,9 @@ export default {
             decreaseItem,
             removeItem,
             totalPrice,
-            redirect
+            redirect,
+            toast,
+            checkCart
 
         }
     }
