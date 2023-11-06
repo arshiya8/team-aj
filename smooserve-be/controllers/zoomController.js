@@ -54,7 +54,7 @@ const getZoomRedirect = async (req, res) => {
       .then(function (response) {
         console.log(response.data);
         res.redirect(
-          `http://localhost:5173/#/csp/zoom?&access_token=${response.data.access_token}&refresh_token=${response.data.refresh_token}`
+          `https://smooserve-fe.vercel.app/#/csp/zoom?&access_token=${response.data.access_token}&refresh_token=${response.data.refresh_token}`
         );
       })
       .catch(function (error) {
