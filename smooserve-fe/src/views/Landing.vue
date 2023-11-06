@@ -468,9 +468,9 @@ export default {
                         placeholder="Select a Skill" />
             </div>
 
-            <div class="flex align-items-center justify-content-center col-12 lg:col-3">
+            <div class="flex align-items-center justify-content-center col-12 lg:col-3 lg:mr-5">
               <Dropdown v-model="selectedValue3" editable :options="locations" optionLabel="name"
-                        style="margin-right: 16px;" placeholder="Select a location" />
+                placeholder="Select a location" />
             </div>
             <div class="flex align-items-center justify-content-center col-12 lg:col-2">
               <Button rounded icon="pi pi-search" label="Search" style="margin-left: 8px; min-width: 100px;"
