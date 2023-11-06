@@ -137,7 +137,6 @@ initializeApp(firebaseConfig);
 app.directive('scroll-animation', ScrollAnimation);
 
 
-
 app.use(router);
 
 app.use(PrimeVue, { ripple: true });

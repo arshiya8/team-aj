@@ -58,7 +58,7 @@ export default {
     const toggleHeartColor = (csp) => {
       if (auth.currentUser) {
         const index = favoriteCSPs.value.findIndex(
-          (favCSP) => favCSP.id === csp.id
+            (favCSP) => favCSP.id === csp.id
         );
         if (index === -1) {
           // CSP is not in favorites, add it
@@ -71,8 +71,8 @@ export default {
         updateStudent(favoriteCSPs.value);
         // Update localStorage with the updated favorite CSPs list
         localStorage.setItem(
-          "favoriteCSPs",
-          JSON.stringify(favoriteCSPs.value)
+            "favoriteCSPs",
+            JSON.stringify(favoriteCSPs.value)
         );
       } else {
         console.error("User is not authenticated.");
@@ -109,10 +109,10 @@ export default {
         // Ensure userId is not null before making the API request
         if (studentId != null) {
           const response = await axios.put(
-            `https://smooserve-be.vercel.app/api/student/${studentId}`,
-            {
-              favoriteCsps: updatedFavorites,
-            }
+              `https://smooserve-be.vercel.app/api/student/${studentId}`,
+              {
+                favoriteCsps: updatedFavorites,
+              }
           );
           console.log(response.data);
         } else {
@@ -141,8 +141,8 @@ export default {
         });
       } else {
         const response = await axios.get(
-          `https://smooserve-be.vercel.app/api/student/${studentId}`,
-          {}
+            `https://smooserve-be.vercel.app/api/student/${studentId}`,
+            {}
         );
         console.log(response.data.quizPreference)
         const causes = response.data.quizPreference.passionate_about;
@@ -152,9 +152,9 @@ export default {
 
         const auto_filter = csps.value.filter((csp) => {
           return (
-            causes.includes(csp.cause) ||
-            skills.includes(csp.skills) ||
-            location === csp.isLocal
+              causes.includes(csp.cause) ||
+              skills.includes(csp.skills) ||
+              location === csp.isLocal
           );
         });
         csps.value = auto_filter;
@@ -175,7 +175,7 @@ export default {
 
     // pagination tools //
     const totalPages = computed(() =>
-      Math.ceil(csps.value.length / itemsPerPage)
+        Math.ceil(csps.value.length / itemsPerPage)
     );
 
     const getVisibleCsps = computed(() => {
@@ -202,21 +202,21 @@ export default {
 
     onMounted(async () => {
       axios
-        .get("https://smooserve-be.vercel.app/api/csps")
-        .then((response) => {
-          csps.value = response.data;
-          cspsOriginal.value = response.data;
-          console.log(csps.value);
-        })
-        .catch((error) => {
-          console.log(error);
-          toast.add({
-            severity: "error",
-            summary: "Error",
-            detail: error,
-            life: 3000,
+          .get("https://smooserve-be.vercel.app/api/csps")
+          .then((response) => {
+            csps.value = response.data;
+            cspsOriginal.value = response.data;
+            console.log(csps.value);
+          })
+          .catch((error) => {
+            console.log(error);
+            toast.add({
+              severity: "error",
+              summary: "Error",
+              detail: error,
+              life: 3000,
+            });
           });
-        });
       // const fbCSP = [];
       // const querySnapshot = await getDocs(collection(db, "CSPs"));
 
@@ -301,16 +301,16 @@ export default {
       var location = null;
       const filteredCsps = csps.value.filter((csp) => {
         const causeMatch =
-          option1.name === csp.causes || option1.name === "";
+            option1.name === csp.causes || option1.name === "";
         const skillsMatch =
-          option2.name === csp.skills || option2.name === "";
+            option2.name === csp.skills || option2.name === "";
         if (option3.name === 'Local') {
           location = true;
         } else {
           location = false;
         }
         const locationMatch =
-          location === csp.isLocal || location === "";
+            location === csp.isLocal || location === "";
         return causeMatch || skillsMatch || locationMatch;
       });
       csps.value = filteredCsps;
@@ -460,23 +460,23 @@ export default {
           <div class="w-full card-container align-items-center justify-content-center sm:gap-3 lg:gap-0">
             <div class="flex align-items-center justify-content-center col-12 lg:col-3">
               <Dropdown v-model="selectedValue1" editable :options="causes" optionLabel="name"
-                placeholder="Select a Cause" />
+                        placeholder="Select a Cause" />
             </div>
 
             <div class="flex align-items-center justify-content-center col-12 lg:col-3">
               <Dropdown v-model="selectedValue2" editable :options="skills" optionLabel="name"
-                placeholder="Select a Skill" />
+                        placeholder="Select a Skill" />
             </div>
 
             <div class="flex align-items-center justify-content-center col-12 lg:col-3">
               <Dropdown v-model="selectedValue3" editable :options="locations" optionLabel="name"
-                style="margin-right: 16px;" placeholder="Select a location" />
+                        style="margin-right: 16px;" placeholder="Select a location" />
             </div>
             <div class="flex align-items-center justify-content-center col-12 lg:col-2">
               <Button rounded icon="pi pi-search" label="Search" style="margin-left: 8px; min-width: 100px;"
-                @click="searchByFilters(selectedValue1, selectedValue2, selectedValue3)"></Button>
+                      @click="searchByFilters(selectedValue1, selectedValue2, selectedValue3)"></Button>
               <Button rounded label="Reset" icon="pi pi-sync" style="margin-left: 8px; min-width: 100px;"
-                @click="reset"></Button>
+                      @click="reset"></Button>
             </div>
           </div>
 
@@ -496,7 +496,7 @@ export default {
     <div class="grid">
       <div class="card-container mt-5">
         <div class="flex align-items-center justify-content-center pb-5 sm:col-12 md:col-6 lg:col-4"
-          v-for="(csp, index) in getVisibleCsps" :key="csp.id">
+             v-for="(csp, index) in getVisibleCsps" :key="csp.id">
           <div v-scroll-animation="'first-page'" class="flip-card">
             <div class="flip-card-inner">
               <div class="flip-card-front">
@@ -505,11 +505,11 @@ export default {
               <div class="flip-card-back align-items-end">
                 <div class="heart-container">
                   <i class="fas fa-heart clickable" :class="{ 'heart-red': isCSPFavorite(csp) }"
-                    @click="toggleHeartColor(csp)"></i>
+                     @click="toggleHeartColor(csp)"></i>
                 </div>
                 <div class="text-center">
                   <img v-if="csp.imageURL != ''" :src="csp.imageURL" style="border-radius: 50%; width: 150px"
-                    :alt="`CSP ${csp.id}`" />
+                       :alt="`CSP ${csp.id}`" />
                   <!-- <Avatar
             v-if="csp.imageURL != ''"
             shape="circle"
@@ -533,7 +533,7 @@ export default {
 
                   <!-- see more button link to linktree  -->
                   <router-link :to="{ name: 'CSP', params: { id: csp.id } }"><Button label="See More"
-                      rounded></Button></router-link>
+                                                                                     rounded></Button></router-link>
                 </div>
               </div>
             </div>
@@ -577,17 +577,17 @@ export default {
   transform: scale(1) rotateZ(0deg);
 }
 .before-pf {
-    opacity: 0;
-    transform: translateY(100px);
-    transition: all 2s ease-out;
+  opacity: 0;
+  transform: translateY(100px);
+  transition: all 2s ease-out;
 }
 
 /* 
   If the element intersects with the viewport, the before-enter class is added.
 */
 .pf {
-    opacity: 1;
-    transform: translateY(0px);
+  opacity: 1;
+  transform: translateY(0px);
 }
 /* pagination tool */
 .pagination {

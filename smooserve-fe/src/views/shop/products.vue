@@ -1,117 +1,3 @@
-<template>
-    <Toast></Toast>
-    <Navbar />
-    <CaroPics />
-    <div class="row pb-3">
-        <h2 style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold;
-          text-align: center; margin-top: 30px; font-size: 2rem">
-            WHAT'S NEW AT SMOOSHOP!</h2>
-    </div>
-    <Button style="margin-bottom: 5px" @click="checkCart">Check cart <i class="px-2 pi pi-shopping-cart"></i> </Button>
-
-    <Dialog v-model:visible="visible" modal header="Cart Items" :style="{ width: '50rem' }"
-        :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-        <DataView :value="cart">
-            <template #list="slotProps">
-                <div class="col-12">
-                    <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
-                        <img class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
-                            :src="`${slotProps.data.merchPicture}`" :alt="slotProps.data.name" />
-                        <div
-                            class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
-                            <div class="flex flex-column align-items-center sm:align-items-start gap-3">
-                                <div class="text-2xl font-bold text-900">{{ slotProps.data.name }}</div>
-                                <div class="flex align-items-center gap-3">
-                                    <span class="flex align-items-center gap-2">
-                                        <span class="text-xl font-semibold">Price: <i class="pi pi-tag px-2"></i>${{
-                                            slotProps.data.price }}</span>
-                                        <span class="font-semibold"></span>
-                                    </span>
-                                </div>
-                                <div class="flex align-items-center gap-3">
-                                    <span class="text-xl font-semibold">Quantity: <i class="pi pi-inbox px-2"></i>{{
-                                        slotProps.data.quantity }}
-                                        <span class="font-semibold"></span>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-                                <span class="text-2xl font-semibold">${{ slotProps.data.quantityPrice }}</span>
-                                <div class="flex gap-2"> <!-- Use a flex container to position buttons side by side -->
-                                    <Button icon="pi pi-trash" rounded @click="removeItem(slotProps.data)"></Button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </template>
-        </DataView>
-        <div class="text-2xl font-bold text-900">Total Price: {{ totalPrice }}</div>
-        <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-            <div class="flex gap-2"> <!-- Use a flex container to position buttons side by side -->
-                <Button label="Proceed to checkout" @click="redirect"></Button>
-            </div>
-        </div>
-
-    </Dialog>
-    <!-- favourites clickable heart -->
-    <div>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
-    </div>
-
-
-    <div class="grid">
-        <div v-for="product in products" class="flex align-items-center justify-content-center sm:col-12 md:col-6 lg:col-4">
-            <div class="p-2 border-round-xl"
-                style="background: var(--style-cards-fancy-bg); border: 1px solid rgba(255, 255, 255, 0.1); backgroundBlendMode: normal, color-dodge; width: 300px;background-color: black;">
-                <div class="content border-round-sm">
-                    <div class="content-image bg-cover bg-no-repeat bg-center relative" style="height: 244px; ">
-                        <img :src="product.merchPicture" style="width: 14em; margin-left: 30px;" />
-                        <!-- <div class="heart-container">
-                            <i class="fas fa-heart clickable" :class="{ 'heart-red': isProductFavorite(product) }"
-                                @click="toggleHeartColor(product)"></i>
-                        </div> -->
-                    </div>
-                    <div class="content-info mt-2 border-round-sm bg-white-alpha-10 shadow-1 py-1"
-                        style="backdropFilter: blur(27px);">
-                        <div class="flex align-items-center justify-content-between py-2 px-3">
-                            <span class="font-medium text-white">{{ product.name }}</span>
-                            <i class="pi pi-verified text-white"></i>
-                        </div>
-                        <div class="flex align-items-center justify-content-between py-2 px-3 gap-2">
-                            <div class="flex align-items-center gap-2">
-                                <i class="pi pi-tag p-mr-2 text-white"></i>
-                                <span class="font-small text-white white-space-nowrap"> Price: {{ product.price }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center pt-2 gap-2">
-                        <button
-                            class="p-3 flex align-items-center justify-content-center w-7 gap-2 border-round-sm bg-white-alpha-10 shadow-1 border-none cursor-pointer hover:bg-white-alpha-20 transition-duration-200"
-                            style="backdropFilter: blur(27px);" @click="addToCart(product)">
-                            <span class="font-medium text-white white-space-nowrap">Add to cart</span>
-                            <i class="pi pi-cart-plus text-white"></i>
-                        </button>
-
-                        <button
-                            class="p-3 flex align-items-center justify-content-center w-7 gap-2 border-round-sm bg-white-alpha-10 shadow-1 border-none cursor-pointer hover:bg-white-alpha-20 transition-duration-200"
-                            style="backdropFilter: blur(27px);" rounded @click="decreaseItem(product)"> <i
-                                class="pi pi-minus text-white"></i></button>
-                        <button
-                            class="p-3 flex align-items-center justify-content-center w-7 gap-2 border-round-sm bg-white-alpha-10 shadow-1 border-none cursor-pointer hover:bg-white-alpha-20 transition-duration-200"
-                            style="backdropFilter: blur(27px);" rounded @click="increaseItem(product)"> <i
-                                class="pi pi-plus text-white"></i></button>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <Footer />
-</template>
-
 <script>
 import Navbar from '@/components/NavBar.vue';
 import CaroPics from '@/components/CaroPics.vue';
@@ -224,11 +110,11 @@ export default {
                 visible.value = true
             } else {
                 toast.add({
-                        severity: "info",
-                        summary: "Info",
-                        detail: "Please login first",
-                        life: 3000,
-                    });
+                    severity: "info",
+                    summary: "Info",
+                    detail: "Please login first",
+                    life: 3000,
+                });
             }
         }
         // const toggleHeartColor = (product) => {
@@ -426,13 +312,179 @@ export default {
 
         }
     }
-
-
 }
 </script>
 
+
+<template>
+    <Toast></Toast>
+    <Navbar />
+    <CaroPics />
+    <div class="row pb-3">
+        <h2 style="color:black; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold;
+          text-align: center; margin-top: 30px; font-size: 2rem">
+            WHAT'S NEW AT SMOOSHOP!</h2>
+    </div>
+
+    <!-- <div class="grid px-5 align-items-center justify-content-between">
+        <div class="flex items-center ml-auto">
+            <Button style="margin-bottom: 5px" @click="checkCart">
+                Check cart <i class="px-2 pi pi-shopping-cart"></i>
+            </Button>
+        </div>
+    </div> -->
+
+    <Dialog v-model:visible="visible" modal header="Cart Items" :style="{ width: '50rem' }"
+        :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+        <DataView :value="cart">
+            <template #list="slotProps">
+                <div class="col-12">
+                    <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
+                        <img class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
+                            :src="`${slotProps.data.merchPicture}`" :alt="slotProps.data.name" />
+                        <div
+                            class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                            <div class="flex flex-column align-items-center sm:align-items-start gap-3">
+                                <div class="text-2xl font-bold text-900">{{ slotProps.data.name }}</div>
+                                <div class="flex align-items-center gap-3">
+                                    <span class="flex align-items-center gap-2">
+                                        <span class="text-xl font-semibold">Price: <i class="pi pi-tag px-2"></i>${{
+                                            slotProps.data.price }}</span>
+                                        <span class="font-semibold"></span>
+                                    </span>
+                                </div>
+                                <div class="flex align-items-center gap-3">
+                                    <span class="text-xl font-semibold">Quantity: <i class="pi pi-inbox px-2"></i>{{
+                                        slotProps.data.quantity }}
+                                        <span class="font-semibold"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
+                                <span class="text-2xl font-semibold">${{ slotProps.data.quantityPrice }}</span>
+                                <div class="flex gap-2"> <!-- Use a flex container to position buttons side by side -->
+                                    <Button icon="pi pi-trash" rounded @click="removeItem(slotProps.data)"></Button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </template>
+        </DataView>
+        <div class="text-2xl font-bold text-900">Total Price: {{ totalPrice }}</div>
+        <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
+            <div class="flex gap-2"> <!-- Use a flex container to position buttons side by side -->
+                <Button label="Proceed to checkout" @click="redirect"></Button>
+            </div>
+        </div>
+
+    </Dialog>
+    <!-- favourites clickable heart -->
+    <div>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+    </div>
+
+    <div class="grid-container">
+        <div class="button-container">
+            <Button @click="checkCart">
+                Check cart <i class="px-2 pi pi-shopping-cart"></i>
+            </Button>
+        </div>
+
+        <div class="grid">
+            <div v-for="product in products"
+                class="flex align-items-center justify-content-center card-container sm:col-12 md:col-6 lg:col-4">
+                <div class="p-2 border-round-xl"
+                    style="background: var(--style-cards-fancy-bg); border: 1px solid rgba(255, 255, 255, 0.1); backgroundBlendMode: normal, color-dodge; width: 300px;background-color: black;">
+                    <div class="content border-round-sm">
+                        <div class="content-image bg-cover bg-no-repeat bg-center relative" style="height: 244px; ">
+                            <img :src="product.merchPicture" style="width: 14em; margin-left: 30px;" />
+                            <!-- <div class="heart-container">
+                            <i class="fas fa-heart clickable" :class="{ 'heart-red': isProductFavorite(product) }"
+                                @click="toggleHeartColor(product)"></i>
+                        </div> -->
+                        </div>
+                        <div class="content-info mt-2 border-round-sm bg-white-alpha-10 shadow-1 py-1"
+                            style="backdropFilter: blur(27px);">
+                            <div class="flex align-items-center justify-content-between py-2 px-3">
+                                <span class="font-medium text-white">{{ product.name }}</span>
+                                <i class="pi pi-verified text-white"></i>
+                            </div>
+                            <div class="flex align-items-center justify-content-between py-2 px-3 gap-2">
+                                <div class="flex align-items-center gap-2">
+                                    <i class="pi pi-tag p-mr-2 text-white"></i>
+                                    <span class="font-small text-white white-space-nowrap"> Price: {{ product.price
+                                    }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex align-items-center justify-content-center pt-2 gap-2">
+                            <button
+                                class="p-3 flex align-items-center justify-content-center w-7 gap-2 border-round-sm bg-white-alpha-10 shadow-1 border-none cursor-pointer hover:bg-white-alpha-20 transition-duration-200"
+                                style="backdropFilter: blur(27px);" @click="addToCart(product)">
+                                <span class="font-medium text-white white-space-nowrap">Add to cart</span>
+                                <i class="pi pi-cart-plus text-white"></i>
+                            </button>
+
+                            <button
+                                class="p-3 flex align-items-center justify-content-center w-7 gap-2 border-round-sm bg-white-alpha-10 shadow-1 border-none cursor-pointer hover:bg-white-alpha-20 transition-duration-200"
+                                style="backdropFilter: blur(27px);" rounded @click="decreaseItem(product)"> <i
+                                    class="pi pi-minus text-white"></i></button>
+                            <button
+                                class="p-3 flex align-items-center justify-content-center w-7 gap-2 border-round-sm bg-white-alpha-10 shadow-1 border-none cursor-pointer hover:bg-white-alpha-20 transition-duration-200"
+                                style="backdropFilter: blur(27px);" rounded @click="increaseItem(product)"> <i
+                                    class="pi pi-plus text-white"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <Footer />
+</template>
+
+
 <style>
 .p-galleria .p-galleria-indicators .p-galleria-indicator.p-highlight button {
-  background-color: #0053a6;
+    background-color: #0053a6;
 }
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    /* Center the cards horizontally */
+}
+
+.grid-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-container {
+  flex: 0 0 calc(100% - 20px); /* Adjust the width as needed */
+  margin: 10px; /* Add margin for spacing between cards */
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin: 10px; /* Adjust margin as needed */
+}
+
+@media (min-width: 576px) {
+  .card-container {
+    flex: 0 0 calc(50% - 20px); /* 2 cards in a row at medium breakpoint */
+  }
+}
+
+@media (min-width: 992px) {
+  .card-container {
+    flex: 0 0 calc(33.33% - 20px); /* 3 cards in a row for larger screens */
+  }
+}
+
 </style>
