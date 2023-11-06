@@ -119,17 +119,14 @@
             </div>
           </div>
         </div>
-        <div class="flex align-items-center justify-content-center pt-2 gap-2">
+        <div class="flex align-items-center justify-content-center mt-2 gap-2">
           <Button
             @click="goToCSP(selectedCSP.id)"
-            icon="pi pi-send"
             rounded
-            class="w-full p-3 text-xl"
+            class="w-full p-3 text-xl mt-3"
             style="backdropfilter: blur(27px)"
+            label="See More!"
           >
-            <span class="font-medium text-black black-space-nowrap"
-              >See More!</span
-            >
           </Button>
         </div>
       </div>
