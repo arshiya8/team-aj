@@ -167,7 +167,6 @@ onMounted(async () => {
       // User is signed in
       loading.value = true;
       CSPid.value = await getDocumentIdByEmail(user.email, "CSPs", "id");
-      console.log(CSPid.value);
 
       // check if is student
       let data = await getDocumentIdByEmail(user.email, "Users");
@@ -231,7 +230,6 @@ function zoomAccess() {
 const getZoomMeetings = async () => {
   // Access the access token from your data source, e.g., Vuex or a ref
   const accessToken = dbAccessToken.value;
-  console.log(accessToken);
 
   try {
     const response = await axios.post(
@@ -242,7 +240,6 @@ const getZoomMeetings = async () => {
     );
 
     // Handle a successful response
-    console.log(response);
     meetingsList.value = response.data;
   } catch (error) {
     // Handle any errors
@@ -404,22 +401,23 @@ const updateTokens = async () => {
             <div class="flex flex-column gap-3 mb-3">
               <div class="formgrid grid">
                 <div class="field col">
-                  <label for="title" class="w-full mb-3"
+                  <label class="w-full mb-3"
                     >Registration
                     {{ registerChecked ? " Open" : " Closed" }}</label
                   >
                   <InputSwitch v-model="registerChecked" />
                 </div>
                 <div class="field col">
-                  <label for="title" class="w-full mb-3">{{
+                  <label class="w-full mb-3">{{
                     isLocal ? " Local" : " Overseas"
                   }}</label>
                   <InputSwitch v-model="isLocal" />
                 </div>
               </div>
 
-              <label for="title">Zoom Scheduler</label>
+              <label>Zoom Scheduler</label>
               <Button
+                v-tooltip.top="'FOR DEMO: USE SMOOSERVECSP@GMAIL.COM'"
                 v-if="zoomRegisterVisible"
                 @click="zoomAccess()"
                 label="Enable Zoom"
