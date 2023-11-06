@@ -176,8 +176,8 @@ export default {
         });
         function redirect() {
             stripe.redirectToCheckout({
-                successUrl: "https://smooserve-fe.vercel.app/#/success",
-                cancelUrl: "https://smooserve-fe.vercel.app/#/cancel",
+                successUrl: "http://localhost:5173/#/success",
+                cancelUrl: "http://localhost:5173/#/cancel",
                 lineItems: cart.value.map((item) => {
                     return {
                         price: item.stripePrice,
