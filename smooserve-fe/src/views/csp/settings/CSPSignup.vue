@@ -170,7 +170,6 @@ async function getProfile(email) {
     "students",
     "profile"
   );
-  console.log(selectedProfile.value);
   visibleProfile.value = true;
 }
 
@@ -183,12 +182,11 @@ async function scheduleZoomMeeting() {
       start_time: formatDateTimeToISOString(datetime12h.value),
     })
     .then((response) => {
-      console.log(response.data);
       registeredStudents.value[selectedStudent.value].start_time =
         datetime12h.value;
       registeredStudents.value[selectedStudent.value].duration =
         zoomTimeSelected.value;
-      registeredStudents.value[selectedStudent.value].status = "scheduled";
+      registeredStudents.value[selectedStudent.value].status = "Scheduled";
       registeredStudents.value[selectedStudent.value].link =
         response.data.join_url;
       csp.value.registration.registeredStudents = registeredStudents.value;
@@ -587,7 +585,7 @@ const updateTokens = async () => {
                   <div class="text-900 font-medium text-xl">
                     {{
                       registeredStudents.filter(
-                        (student) => student.status === "accepted"
+                        (student) => student.status === "Accepted"
                       ).length
                     }}
                   </div>
@@ -648,7 +646,7 @@ const updateTokens = async () => {
                   <!-- if registered -->
                   <div v-if="checkIfZoomEnabled">
                     <Button
-                      v-if="slotProps.data.status == 'registered'"
+                      v-if="slotProps.data.status == 'Registered'"
                       rounded
                       label="Schedule Interview"
                       @click="
@@ -658,24 +656,24 @@ const updateTokens = async () => {
                     />
                     <!-- if scheduled -->
                     <Button
-                      v-if="slotProps.data.status == 'scheduled'"
+                      v-if="slotProps.data.status == 'Scheduled'"
                       rounded
                       severity="success"
                       label="Accept"
                       class="mr-3"
                       @click="
                         (selectedStudent = slotProps.index),
-                          acceptRejectStudent('accepted')
+                          acceptRejectStudent('Accepted')
                       "
                     />
                     <Button
-                      v-if="slotProps.data.status == 'scheduled'"
+                      v-if="slotProps.data.status == 'Scheduled'"
                       rounded
                       severity="danger"
                       label="Reject"
                       @click="
                         (selectedStudent = slotProps.index),
-                          acceptRejectStudent('rejected')
+                          acceptRejectStudent('Rejected')
                       "
                     />
                   </div>

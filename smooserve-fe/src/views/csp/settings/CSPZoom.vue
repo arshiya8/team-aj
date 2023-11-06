@@ -117,8 +117,6 @@ function scheduleZoomMeeting() {
     window.location.href = "https://smooserve-be.vercel.app/api/zoomAuth";
   } else {
     // Now, you have the access_token and refresh_token for further use
-    console.log("Access Token:", accessToken);
-    console.log("Refresh Token:", refreshToken);
     axios
       .post("https://smooserve-be.vercel.app/api/createMeeting", {
         accessToken: accessToken,

@@ -18,7 +18,6 @@ onMounted(() => {
     if (user) {
       isLoggedIn.value = true;
       CSPid.value = await getDocumentIdByEmail(user.email, "CSPs");
-      console.log(CSPid.value);
     } else {
       isLoggedIn.value = false;
     }
