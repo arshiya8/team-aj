@@ -29,7 +29,7 @@ onMounted(async () => {
       "https://smooserve-be.vercel.app/api/getNewAccessToken/" + dbRefreshToken;
   } else if (accessToken && refreshToken) {
     updateTokens(accessToken, refreshToken);
-    router.push({ name: "CSPSetting" });
+    window.location.href = "https://smooserve-fe.vercel.app/#/csp/settings/";
 
   } else {
     window.location.href = "https://smooserve-be.vercel.app/api/zoomAuth";
