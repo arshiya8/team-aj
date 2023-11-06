@@ -29,8 +29,6 @@ onMounted(async () => {
       "https://smooserve-be.vercel.app/api/getNewAccessToken/" + dbRefreshToken;
   } else if (accessToken && refreshToken) {
     updateTokens(accessToken, refreshToken);
-    window.location.href = "https://smooserve-fe.vercel.app/#/csp/settings/";
-
   } else {
     window.location.href = "https://smooserve-be.vercel.app/api/zoomAuth";
   }
@@ -76,6 +74,7 @@ const updateTokens = async (accessToken, refreshToken) => {
             detail: response.statusText,
             life: 3000,
           });
+          
         })
         .catch((error) => {
           console.log(error);
@@ -88,6 +87,8 @@ const updateTokens = async (accessToken, refreshToken) => {
         })
         .finally(() => {
           loading.value = false;
+          window.location.href =
+            "https://smooserve-fe.vercel.app/#/csp/settings/";
         });
     })
     .catch((error) => {
@@ -145,7 +146,6 @@ function scheduleZoomMeeting() {
 </script>
 
 <template>
-
   <toast></toast>
   <div v-if="loading" class="card">
     <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
