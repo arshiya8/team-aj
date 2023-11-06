@@ -84,11 +84,11 @@ const routes = [
     component: () => import("@/views/NotFound.vue"),
   },
   //jessa
-  {
-    path: "/about",
-    name: "About",
-    component: () => import("@/views/AboutUs.vue"),
-  },
+  // {
+  //   path: "/about",
+  //   name: "About",
+  //    () => import("@/views/AboutUs.vue"),
+  // },
   // {
   //   path: "/test",
   //   name: "Test",

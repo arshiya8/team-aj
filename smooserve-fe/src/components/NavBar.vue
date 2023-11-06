@@ -47,11 +47,11 @@ const items = ref([
     icon: "pi pi-home",
     routeName: "Home",
   },
-  {
-    label: "ABOUT US",
-    icon: "pi pi-info-circle",
-    routeName: "About",
-  },
+  // {
+  //   label: "ABOUT US",
+  //   icon: "pi pi-info-circle",
+  //   routeName: "About",
+  // },
   {
     label: "NEAR ME",
     icon: "pi pi-map-marker",

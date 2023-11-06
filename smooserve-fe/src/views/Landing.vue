@@ -616,10 +616,10 @@ export default {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: normal;
 } */
-.dropdown-container {
+/* .dropdown-container {
   margin-right: 10px;
-  /* Set the right margin to space out the dropdown lists */
-}
+  /* Set the right margin to space out the dropdown lists 
+} */
 
 @media (min-width: 768px) {
   .md\:w-14rem {
@@ -668,7 +668,7 @@ export default {
   cursor: pointer;
 }
 
-.dropdown {
+/* .dropdown {
   display: inline;
   margin-right: 15px;
   border-radius: 15px;
@@ -690,16 +690,16 @@ export default {
   outline: none;
   cursor: pointer;
   text-align: justify;
-}
+} */
 
 /* navbar */
-.navbar {
+/* .navbar {
   width: 100%;
   margin: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
+} */
 
 /* logo */
 .logo {
@@ -708,7 +708,7 @@ export default {
 }
 
 /* the search and login */
-.navbar ul li {
+/* .navbar ul li {
   list-style: none;
   display: inline-block;
   margin: 0 20px;
@@ -726,13 +726,13 @@ export default {
 .navbar-list {
   display: flex;
   padding-left: 190px;
-  /* Align items to the left by default */
+  /* Align items to the left by default 
 }
 
 @media (max-width: 991.98px) {
   .navbar-list {
     padding-left: 0px;
-    /* Align items to the right when the page is collapsed */
+    /* Align items to the right when the page is collapsed 
   }
 }
 
@@ -767,7 +767,7 @@ export default {
     width: 15%;
     bottom: 0;
   }
-}
+} */
 
 /* flip cards  */
 .card-container {

@@ -446,8 +446,8 @@ export default {
           </div>
 
           <!-- "Take Me to Homepage" button -->
-          <router-link v-if="showHomepageButton" :to="{ name: 'Home' }">
-            <Button label="Take Me To Homepage"></Button>
+          <router-link v-if="showHomepageButton" :to="{ name: 'Profile' }">
+            <Button label="Take Me To My Profile"></Button>
           </router-link>
         </div>
       </form>
@@ -469,16 +469,16 @@ export default {
   text-align: center;
   color: black;
   font-size: 25px;
-  background-color: rgba(255, 255, 255, 0.7);
+  /* background-color: rgba(255, 255, 255, 0.7); */
   /* Add a semi-transparent background color */
 }
 
-body {
+/* body {
   background-color: #f7f7f7;
   /* Light gray background */
-  font-family: Arial, sans-serif;
-  /* Change the font to a sans-serif font like Arial */
-}
+  /* font-family: Arial, sans-serif; */
+  /* Change the font to a sans-serif font like Arial 
+} */
 
 /* Style the container c1 */
 .container {
