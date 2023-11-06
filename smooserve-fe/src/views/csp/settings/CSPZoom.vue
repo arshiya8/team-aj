@@ -151,7 +151,5 @@ function scheduleZoomMeeting() {
     <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
   </div>
   <div v-else>
-    <CSPNavbar />
-    <Button @click="scheduleZoomMeeting">Schedule Zoom Meeting</Button>
   </div>
 </template>
