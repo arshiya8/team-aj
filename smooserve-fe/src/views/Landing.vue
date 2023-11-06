@@ -394,7 +394,7 @@ export default {
     <!-- Instructions card -->
     <div class="surface-section px-4 py-8 md:px-6 lg:px-8 text-center">
       <div class="grid">
-        <div v-scroll-animation="'first-page'" class="col-12 md:col-4 mb-4 px-5">
+        <div v-scroll-animation="'second-page'" class="col-12 md:col-4 mb-4 px-5">
           <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
             <i v-scroll class="pi pi-search text-4xl text-blue-700"></i>
           </span>
@@ -404,7 +404,7 @@ export default {
             below that were filtered according to your quiz results!
           </span>
         </div>
-        <div v-scroll-animation="'first-page'" class="col-12 md:col-4 mb-4 px-5">
+        <div v-scroll-animation="'second-page'" class="col-12 md:col-4 mb-4 px-5">
           <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
             <i v-scroll class="pi pi-sliders-v text-4xl text-blue-700"></i>
           </span>
@@ -415,7 +415,7 @@ export default {
             use our convenient auto-filter feature, but not both at once.
           </span>
         </div>
-        <div v-scroll-animation="'first-page'" class="col-12 md:col-4 mb-4 px-5">
+        <div v-scroll-animation="'second-page'" class="col-12 md:col-4 mb-4 px-5">
           <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
             <i v-scroll class="pi pi-heart text-4xl text-blue-700"></i>
           </span>
@@ -576,7 +576,19 @@ export default {
   opacity: 1;
   transform: scale(1) rotateZ(0deg);
 }
+.before-pf {
+    opacity: 0;
+    transform: translateY(100px);
+    transition: all 2s ease-out;
+}
 
+/* 
+  If the element intersects with the viewport, the before-enter class is added.
+*/
+.pf {
+    opacity: 1;
+    transform: translateY(0px);
+}
 /* pagination tool */
 .pagination {
   display: flex;
