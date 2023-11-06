@@ -58,7 +58,7 @@
                                       <div v-else>
                                           <p>Loading quiz data...</p>
                                       </div> -->
-                                        <div v-scrollanimation class="p-3 mt-2 mb-2 card">
+                                        <div v-scroll-animation="'second-page'" class="p-3 mt-2 mb-2 card">
                                             <div class="surface-section">
                                                 <div v-scroll class="font-medium text-3xl text-900 mb-3">Volunteering
                                                     Preference
@@ -67,7 +67,7 @@
                                                     This information will be sent to your registered CSPs. 
                                                 </div>
                                                 <ul v-if="quizPreference" class="list-none p-0 m-0">
-                                                    <li v-scrollanimation
+                                                    <li v-scroll-animation="'second-page'"
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
                                                         <div v-scroll class="text-500 w-6 md:w-2 font-medium">Commitment
                                                         </div>
@@ -86,7 +86,7 @@
                                                           <Chip :label="cause" class="mr-2 mb-2"></Chip>
                                                       </div>
                                                   </li> -->
-                                                    <li v-scrollanimation
+                                                    <li v-scroll-animation="'second-page'"
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border">
                                                         <div v-scroll class="text-500 w-6 md:w-2 font-medium">Passionate
                                                             About</div>
@@ -97,7 +97,7 @@
                                                             </div>
                                                         </div>
                                                     </li>
-                                                    <li v-scrollanimation
+                                                    <li v-scroll-animation="'second-page'"
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
                                                         <div v-scroll class="text-500 w-6 md:w-2 font-medium">Past Volunteering Experiences 
                                                         </div>
@@ -106,7 +106,7 @@
                                                             {{ quizPreference.past_experience }}
                                                         </div>
                                                     </li>
-                                                    <li v-scrollanimation
+                                                    <li v-scroll-animation="'second-page'"
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
                                                         <div v-scroll class="text-500 w-6 md:w-2 font-medium">Self
                                                             Description</div>
@@ -115,7 +115,7 @@
                                                             {{ quizPreference.self_description }}
                                                         </div>
                                                     </li>
-                                                    <li v-scrollanimation
+                                                    <li v-scroll-animation="'second-page'"
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border">
                                                         <div v-scroll class="text-500 w-6 md:w-2 font-medium">Skills</div>
                                                         <div v-scroll class="flex flex-wrap px-4">
@@ -125,7 +125,7 @@
                                                             </div>
                                                         </div>
                                                     </li>
-                                                    <li v-scrollanimation
+                                                    <li v-scroll-animation="'second-page'"
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border">
                                                         <div v-scroll class="text-500 w-6 md:w-2 font-medium">Preferred
                                                             Volunteering Experience
@@ -137,7 +137,7 @@
                                                             </div>
                                                         </div>
                                                     </li>
-                                                    <li v-scrollanimation
+                                                    <li v-scroll-animation="'second-page'"
                                                         class="flex align-items-center py-3 px-2 border-top-1 surface-border">
                                                         <div v-scroll class="text-500 w-6 md:w-2 font-medium">Location
                                                             Preference</div>
@@ -149,14 +149,14 @@
                                                         </div>
                                                     </li>
                                                 </ul>
-                                                <router-link :to="{ name: 'Quiz' }"><Button v-scrollanimation v-scroll
+                                                <router-link :to="{ name: 'Quiz' }"><Button v-scroll-animation="'second-page'" v-scroll
                                                         label="Retake Quiz"></Button></router-link>
                                             </div>
                                         </div>
                                     </TabPanel>
                                     <TabPanel header="Registered CSPs">
 
-                                        <div v-scrollanimation v-if="registeredCSPs.length === 0"
+                                        <div v-scroll-animation="'second-page'" v-if="registeredCSPs.length === 0"
                                             style="display: flex; flex-direction: column;justify-content: center; align-items: center; margin: 0px auto;">
 
                                             <h3 v-scroll>No registered CSPs.. </h3>
@@ -165,7 +165,7 @@
 
                                         </div>
 
-                                        <DataTable v-else v-scrollanimation :value="registeredCSPs"
+                                        <DataTable v-else v-scroll-animation="'second-page'" :value="registeredCSPs"
                                             tableStyle="min-width: 50rem">
                                             <Column v-scroll field="title" header="Registered CSP"></Column>
                                             <Column v-scroll field="status" header="Status"></Column>
@@ -255,6 +255,7 @@ import Column from 'primevue/column';
 import NavBar from '@/components/NavBar.vue';
 import Footer from '@/components/Footer.vue'
 import { getDocumentIdByEmail } from "@/helper/helperFunctions.js";
+import ScrollAnimation from '@/directives/ScrollAnimation.js';
 
 
 // import { db, storage } from "@/firebase";
@@ -522,7 +523,7 @@ watch(
     /* Semi-transparent white */
 }
 
-.before-enter-flip {
+.before-pf {
     opacity: 0;
     transform: translateY(100px);
     transition: all 2s ease-out;
@@ -531,7 +532,7 @@ watch(
 /* 
   If the element intersects with the viewport, the before-enter class is added.
 */
-.enter-flip {
+.pf {
     opacity: 1;
     transform: translateY(0px);
 }

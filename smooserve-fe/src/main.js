@@ -134,7 +134,7 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 // animation 
-app.directive('scrollanimation', ScrollAnimation);
+app.directive('scroll-animation', ScrollAnimation);
 
 
 

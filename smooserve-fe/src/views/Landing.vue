@@ -9,6 +9,7 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useToast } from "primevue/usetoast";
+import ScrollAnimation from '@/directives/ScrollAnimation.js';
 
 export default {
   setup() {
@@ -363,6 +364,9 @@ export default {
     CaroPics,
     Footer,
   },
+  directives: {
+    ScrollAnimation
+  }
 };
 </script>
 
@@ -390,7 +394,7 @@ export default {
     <!-- Instructions card -->
     <div class="surface-section px-4 py-8 md:px-6 lg:px-8 text-center">
       <div class="grid">
-        <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
+        <div v-scroll-animation="'first-page'" class="col-12 md:col-4 mb-4 px-5">
           <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
             <i v-scroll class="pi pi-search text-4xl text-blue-700"></i>
           </span>
@@ -400,7 +404,7 @@ export default {
             below that were filtered according to your quiz results!
           </span>
         </div>
-        <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
+        <div v-scroll-animation="'first-page'" class="col-12 md:col-4 mb-4 px-5">
           <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
             <i v-scroll class="pi pi-sliders-v text-4xl text-blue-700"></i>
           </span>
@@ -411,7 +415,7 @@ export default {
             use our convenient auto-filter feature, but not both at once.
           </span>
         </div>
-        <div v-scrollanimation class="col-12 md:col-4 mb-4 px-5">
+        <div v-scroll-animation="'first-page'" class="col-12 md:col-4 mb-4 px-5">
           <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
             <i v-scroll class="pi pi-heart text-4xl text-blue-700"></i>
           </span>
@@ -493,7 +497,7 @@ export default {
       <div class="card-container mt-5">
         <div class="flex align-items-center justify-content-center pb-5 sm:col-12 md:col-6 lg:col-4"
           v-for="(csp, index) in getVisibleCsps" :key="csp.id">
-          <div v-scrollanimation class="flip-card">
+          <div v-scroll-animation="'first-page'" class="flip-card">
             <div class="flip-card-inner">
               <div class="flip-card-front">
                 <img :src="csp.posterURL" :alt="`CSP ${csp.id}`" />

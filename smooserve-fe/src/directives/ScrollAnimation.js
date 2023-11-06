@@ -1,18 +1,35 @@
-// ScrollAnimation.js
-const animatedScrollObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('enter-flip');
-        }
-      });
-    }
-  );
-  
-  export default {
-    mounted(el) {
+// // ScrollAnimation.js
+
+// observer for landing page 
+const firstPageObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('enter-flip');
+      }
+    });
+  }
+);
+
+// Observer for the profile page
+const secondPageObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('pf');
+      }
+    });
+  }
+);
+
+export default {
+  mounted(el, { value }) {
+    if (value === 'first-page') {
       el.classList.add('before-enter-flip');
-      animatedScrollObserver.observe(el);
+      firstPageObserver.observe(el);
+    } else if (value === 'second-page') {
+      el.classList.add('before-pf');
+      secondPageObserver.observe(el);
     }
-  };
-  
+  }
+};
