@@ -26,17 +26,14 @@
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
+      <a href="#Technologies">Technologies</a>
     </li>
     <li>
-      <a href="#getting-started">Getting Started</a>
+      <a href="#Getting Started">Getting Started</a>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
+      <li><a href="#Test Accounts">Test Accounts</a></li>
+    <li><a href="#License">License</a></li>
+    <li><a href="#Contact">Contact</a></li>
   </ol>
 </details>
 
@@ -119,7 +116,19 @@ node index.js
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+<!-- LICENSE -->
+## Test Accounts
+##### For Google Student accounts
+> You may use any Google account to test 
 
+ ##### For Google CSPs accounts
+> See **testAccountsCSP.txt** for more information.
+ 
+ ##### To enable Zoom to schedule interviews
+> smooservecsp@gmail.com (zoom developer account)
+ 
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LICENSE -->
 ## License
