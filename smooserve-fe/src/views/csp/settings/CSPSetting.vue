@@ -492,7 +492,7 @@ const updateTokens = async () => {
             </div>
             <Divider type="solid"></Divider>
 
-            <label class="font-bold" for="Merch">Merchandise <i class="pi pi-shopping-bag"></i></label>
+            <label class="font-bold" for="Merch">Merchandise (Optional) <i class="pi pi-shopping-bag"></i></label>
             <div class="py-2">
               <div class="col-7 lg:col-9 mb-3">
                 <div class="grid">
