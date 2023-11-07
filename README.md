@@ -15,6 +15,8 @@
     <br />
     <a href="http://smooserve-fe.vercel.app/">View Demo</a>
     ·
+      <a href="http://smooserve-be.vercel.app/">Backend server</a>
+    ·
     <a href="https://github.com/jontohh/team-aj/issues">Report Bug</a>
 
 </div>
@@ -32,7 +34,6 @@
       <a href="#Getting Started">Getting Started</a>
     </li>
       <li><a href="#Test Accounts">Test Accounts</a></li>
-    <li><a href="#License">License</a></li>
     <li><a href="#Contact">Contact</a></li>
   </ol>
 </details>
@@ -123,10 +124,25 @@ node index.js
 > You may use any Google account to test 
 
  ##### For Google CSPs accounts
-> See **testAccountsCSP.txt** for more information.
+> Password: smooserve123
+> Emails:
+> smukin321@gmail.com
+> otrlistens321@gmail.com
+> cahayacommunity321@gmail.com
+> projectbright5@gmail.com
+> projectheartstohuts321@gmail.com
+> projectsmilemanila321@gmail.com 
+> projectxingfu321@gmail.com 
+> projectwanmai321@gmail.com 
+> heartware321@gmail.com 
+> southcentralcommunity321@gmail.com 
+> smuember321@gmail.com 
+> salvationarmycsp@gmail.com 
+
  
  ##### To enable Zoom to schedule interviews
 > smooservecsp@gmail.com (zoom developer account)
+> Password: ilovewad2
 
  ##### To make payment for Shop
     Dummy test card:
