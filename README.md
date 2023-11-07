@@ -48,6 +48,7 @@
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![PrimeVue](https://img.shields.io/badge/PrimeVue-6DA55F?style=for-the-badge&logo=linode&logoColor=white)](http://primevue.org)
 * ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+* ![Express](https://img.shields.io/badge/Express-000000.svg?style=for-the-badge&logo=Express&logoColor=white)
 
 ### Cloud Hosting
 * [![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com)
@@ -126,17 +127,17 @@ node index.js
  
  ##### To enable Zoom to schedule interviews
 > smooservecsp@gmail.com (zoom developer account)
+
+ ##### To make payment for Shop
+    Dummy test card:
+    jenny@gmail.com 
+    Card number : 4242 4242 4242 4242
+    Expiry date: 08/27
+    Cvc: 123
+    Cardholdername : jenny
  
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- CONTACT -->
