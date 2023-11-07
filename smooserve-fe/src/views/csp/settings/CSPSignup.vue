@@ -140,12 +140,26 @@ function checkZoomConflicts(newStartTime) {
   return false;
 }
 
-function acceptRejectStudent(status) {
+async function acceptRejectStudent(status, studentEmail) {
   registeredStudents.value[selectedStudent.value].status = status;
   csp.value.registration.registeredStudents = registeredStudents.value;
   axios
     .put("https://smooserve-be.vercel.app/api/csp/" + CSPid.value, csp.value)
-    .then((response) => {
+    .then(async (response) => {
+      let studentID = await getDocumentIdByEmail(
+        studentEmail,
+        "students",
+        "id"
+      );
+      let data = await getDocumentIdByEmail(studentEmail, "students");
+      for (let item of data.registeredCSPs) {
+        if (item.cspid === CSPid.value) {
+          item.status = status;
+        }
+      }
+      axios.put("https://smooserve-be.vercel.app/api/student/" + studentID, {
+        registeredCSPs: data.registeredCSPs,
+      });
       toast.add({
         severity: "success",
         summary: status,
@@ -173,55 +187,87 @@ async function getProfile(email) {
   visibleProfile.value = true;
 }
 
-async function scheduleZoomMeeting() {
-  axios
-    .post("https://smooserve-be.vercel.app/api/createMeeting", {
-      accessToken: dbAccessToken.value,
-      topic: topic.value,
-      duration: zoomTimeSelected.value,
-      start_time: formatDateTimeToISOString(datetime12h.value),
-    })
-    .then((response) => {
-      registeredStudents.value[selectedStudent.value].start_time =
-        datetime12h.value;
-      registeredStudents.value[selectedStudent.value].duration =
-        zoomTimeSelected.value;
-      registeredStudents.value[selectedStudent.value].status = "Scheduled";
-      registeredStudents.value[selectedStudent.value].link =
-        response.data.join_url;
-      csp.value.registration.registeredStudents = registeredStudents.value;
-      axios
-        .put(
-          "https://smooserve-be.vercel.app/api/csp/" + CSPid.value,
-          csp.value
-        )
-        .then((response) => {})
-        .catch((error) => {
-          console.log(error);
-          toast.add({
-            severity: "error",
-            summary: "Error",
-            detail: error,
-            life: 3000,
+async function scheduleZoomMeeting(studentEmail) {
+  if (datetime12h.value && zoomTimeSelected.value && topic.value) {
+    axios
+      .post("https://smooserve-be.vercel.app/api/createMeeting", {
+        accessToken: dbAccessToken.value,
+        topic: topic.value,
+        duration: zoomTimeSelected.value,
+        start_time: formatDateTimeToISOString(datetime12h.value),
+      })
+      .then(async (response) => {
+        registeredStudents.value[selectedStudent.value].start_time =
+          datetime12h.value;
+        registeredStudents.value[selectedStudent.value].duration =
+          zoomTimeSelected.value;
+        registeredStudents.value[selectedStudent.value].status = "Scheduled";
+        registeredStudents.value[selectedStudent.value].link =
+          response.data.join_url;
+        csp.value.registration.registeredStudents = registeredStudents.value;
+        axios
+          .put(
+            "https://smooserve-be.vercel.app/api/csp/" + CSPid.value,
+            csp.value
+          )
+          .then((response) => {
+            // axios.put(
+            //   "https://smooserve-be.vercel.app/api/student/" + studentID,
+            //   {registeredCSPs: registeredCSPs}
+            // );
+          })
+          .catch((error) => {
+            console.log(error);
+            toast.add({
+              severity: "error",
+              summary: "Error",
+              detail: error,
+              life: 3000,
+            });
           });
+        toast.add({
+          severity: "success",
+          summary: "Meeting Scheduled",
+          detail: response.statusText,
+          life: 3000,
         });
-      toast.add({
-        severity: "success",
-        summary: "Meeting Scheduled",
-        detail: response.statusText,
-        life: 3000,
+        let studentID = await getDocumentIdByEmail(
+          studentEmail,
+          "students",
+          "id"
+        );
+        let data = await getDocumentIdByEmail(studentEmail, "students");
+        for (let item of data.registeredCSPs) {
+          if (item.cspid === CSPid.value) {
+            item.status = "Scheduled";
+            item.link = response.data.join_url;
+          }
+        }
+        axios.put("https://smooserve-be.vercel.app/api/student/" + studentID, {
+          registeredCSPs: data.registeredCSPs,
+        });
+
+        console.log(studentID);
+        console.log(data.registeredCSPs);
+        visibleInterview.value = false;
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: error,
+          life: 3000,
+        });
       });
-      visibleInterview.value = false;
-    })
-    .catch((error) => {
-      console.log(error);
-      toast.add({
-        severity: "error",
-        summary: "Error",
-        detail: error,
-        life: 3000,
-      });
+  } else {
+    toast.add({
+      severity: "error",
+      summary: "Required",
+      detail: "Fill in all fields",
+      life: 3000,
     });
+  }
 }
 
 function formatDateTimeToISOString(dateTime) {
@@ -395,7 +441,7 @@ const updateTokens = async () => {
       </div>
       <Button
         rounded
-        @click="scheduleZoomMeeting()"
+        @click="scheduleZoomMeeting(registeredStudents[selectedStudent].email)"
         class="w-full align-items-center justify-content-center"
         ><i class="pi pi-save px-2"></i>Schedule</Button
       >
@@ -663,7 +709,7 @@ const updateTokens = async () => {
                       class="mr-3"
                       @click="
                         (selectedStudent = slotProps.index),
-                          acceptRejectStudent('Accepted')
+                          acceptRejectStudent('Accepted', registeredStudents[selectedStudent].email)
                       "
                     />
                     <Button
@@ -673,7 +719,7 @@ const updateTokens = async () => {
                       label="Reject"
                       @click="
                         (selectedStudent = slotProps.index),
-                          acceptRejectStudent('Rejected')
+                          acceptRejectStudent('Rejected', registeredStudents[selectedStudent].email)
                       "
                     />
                   </div>
