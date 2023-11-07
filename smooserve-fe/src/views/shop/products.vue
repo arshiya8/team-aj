@@ -385,16 +385,16 @@ export default {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
     </div>
 
-    <div class="grid-container">
-        <div class="button-container">
-            <Button @click="checkCart">
+ 
+        <div >
+            <Button class="mb-4" @click="checkCart">
                 Check cart <i class="px-2 pi pi-shopping-cart"></i>
             </Button>
-        </div>
+       
 
-        <div class="grid">
+        <div class="grid mx-4">
             <div v-for="product in products"
-                class="flex align-items-center justify-content-center card-container sm:col-12 md:col-6 lg:col-4">
+                class="flex align-items-center justify-content-center mb-4 sm:col-12 md:col-6 lg:col-4">
                 <div class="p-2 border-round-xl"
                     style="background: var(--style-cards-fancy-bg); border: 1px solid rgba(255, 255, 255, 0.1); backgroundBlendMode: normal, color-dodge; width: 300px;background-color: black;">
                     <div class="content border-round-sm">
@@ -450,11 +450,11 @@ export default {
     background-color: #0053a6;
 }
 
-.grid {
+/* .grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    /* Center the cards horizontally */
+    /* Center the cards horizontally 
 }
 
 .grid-container {
@@ -466,25 +466,25 @@ export default {
 
 .card-container {
   flex: 0 0 calc(100% - 20px); /* Adjust the width as needed */
-  margin: 10px; /* Add margin for spacing between cards */
+  margin: 10px; /* Add margin for spacing between cards 
 }
 
 .button-container {
   display: flex;
   justify-content: center;
-  margin: 10px; /* Adjust margin as needed */
+  margin: 10px; /* Adjust margin as needed 
 }
 
 @media (min-width: 576px) {
   .card-container {
-    flex: 0 0 calc(50% - 20px); /* 2 cards in a row at medium breakpoint */
+    flex: 0 0 calc(50% - 20px); /* 2 cards in a row at medium breakpoint 
   }
 }
 
 @media (min-width: 992px) {
   .card-container {
-    flex: 0 0 calc(33.33% - 20px); /* 3 cards in a row for larger screens */
+    flex: 0 0 calc(33.33% - 20px); /* 3 cards in a row for larger screens 
   }
-}
+} */
 
 </style>

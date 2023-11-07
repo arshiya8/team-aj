@@ -492,7 +492,7 @@ export default {
   </div>
 
   <!-- CSP flip cards -->
-  <div class="container-fluid">
+  <div class="container-fluid mx-3">
     <div class="grid">
       <div class="card-container mt-5">
         <div class="flex align-items-center justify-content-center pb-5 sm:col-12 md:col-6 lg:col-4"
@@ -853,9 +853,7 @@ export default {
   border-radius: 15px;
 }
 
-.centralise {
-  margin: 150px;
-}
+
 
 .p-galleria .p-galleria-indicators .p-galleria-indicator.p-highlight button {
   background-color: #0053a6;
