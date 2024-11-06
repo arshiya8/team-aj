@@ -5,7 +5,7 @@ import 'firebase/auth';
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAgKx3_LJ7p6gVydWXtKbzXJcaBBnYLkjY",
+    apiKey: "",
     authDomain: "smooserve.firebaseapp.com",
     projectId: "smooserve",
     storageBucket: "smooserve.appspot.com",
